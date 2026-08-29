@@ -60,15 +60,6 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
           ),
           const SizedBox(width: Gap.xs),
         ],
-        bottom: _showingProgress
-            ? null
-            : TabBar(
-                controller: _tabs,
-                tabs: [
-                  for (final frequency in HabitFrequency.values)
-                    Tab(text: l10n.frequencyName(frequency)),
-                ],
-              ),
       ),
       // Creating a habit belongs to the list, not to looking back at it.
       floatingActionButton: _showingProgress
@@ -91,6 +82,15 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
           : Column(
               children: [
                 const StreaksSection(),
+                // The frequency tabs sit under the streaks band: they steer
+                // the list below them, not the screen as a whole.
+                TabBar(
+                  controller: _tabs,
+                  tabs: [
+                    for (final frequency in HabitFrequency.values)
+                      Tab(text: l10n.frequencyName(frequency)),
+                  ],
+                ),
                 Expanded(
                   child: TabBarView(
                     controller: _tabs,
