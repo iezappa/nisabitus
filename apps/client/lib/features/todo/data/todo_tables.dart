@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 /// A node of the project tree, limited to three levels deep.
+@DataClassName('ProjectRow')
 class Projects extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 255)();
@@ -14,6 +15,7 @@ class Projects extends Table {
 
 /// A unit of work belonging to a project.
 @TableIndex(name: 'task_project_lookup', columns: {#projectId, #status})
+@DataClassName('TodoTaskRow')
 class TodoTasks extends Table {
   @override
   String get tableName => 'todo_tasks';
@@ -37,6 +39,7 @@ class TodoTasks extends Table {
 
 /// A progress note attached to a task.
 @TableIndex(name: 'task_comment_lookup', columns: {#taskId, #createdAt})
+@DataClassName('TaskCommentRow')
 class TaskComments extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get taskId =>

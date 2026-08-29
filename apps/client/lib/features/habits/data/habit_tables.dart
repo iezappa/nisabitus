@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 /// A habit the user intends to repeat over time.
+@DataClassName('HabitRow')
 class Habits extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 255)();
@@ -38,6 +39,7 @@ class Habits extends Table {
 /// This history is never deleted when the day rolls over: it is the source of
 /// every progress chart.
 @TableIndex(name: 'habit_completion_lookup', columns: {#habitId, #completionDate})
+@DataClassName('HabitCompletionRow')
 class HabitCompletions extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get habitId =>

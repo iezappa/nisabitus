@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 ///
 /// At most one entry per day. The six fields of the entry are serialized into
 /// [content] as markdown-style sections.
+@DataClassName('MoodEntryRow')
 class MoodEntries extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get content => text()();

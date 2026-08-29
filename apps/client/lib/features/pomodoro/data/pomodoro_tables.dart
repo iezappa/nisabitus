@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 /// A focus session made of alternating focus and break phases.
+@DataClassName('PomodoroSessionRow')
 class PomodoroSessions extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 255)();

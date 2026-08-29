@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 /// A counter of consecutive repetitions, with its historical record.
+@DataClassName('StreakRow')
 class Streaks extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 255)();
@@ -11,6 +12,7 @@ class Streaks extends Table {
 
 /// One point of a streak's evolution, appended on every increment.
 @TableIndex(name: 'streak_history_lookup', columns: {#streakId, #reachedAt})
+@DataClassName('StreakHistoryRow')
 class StreakHistoryEntries extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get streakId =>
