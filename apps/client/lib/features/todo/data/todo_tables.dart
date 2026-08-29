@@ -35,6 +35,12 @@ class TodoTasks extends Table {
 
   IntColumn get projectId =>
       integer().references(Projects, #id, onDelete: KeyAction.cascade)();
+
+  /// When the task reached DONE.
+  ///
+  /// Status alone cannot answer "what did I finish last week": it says where
+  /// a task is, not when it got there. Cleared if the task is reopened.
+  DateTimeColumn get completedAt => dateTime().nullable()();
 }
 
 /// A progress note attached to a task.

@@ -2149,6 +2149,126 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Activá algo de la lista de abajo'**
   String get medsNoneActiveHint;
+
+  /// No description provided for @progressEntries.
+  ///
+  /// In es, this message translates to:
+  /// **'Registros'**
+  String get progressEntries;
+
+  /// No description provided for @progressPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Por día'**
+  String get progressPerDay;
+
+  /// No description provided for @nutritionCaloriesPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Calorías por día'**
+  String get nutritionCaloriesPerDay;
+
+  /// No description provided for @nutritionAverageDaily.
+  ///
+  /// In es, this message translates to:
+  /// **'Promedio diario'**
+  String get nutritionAverageDaily;
+
+  /// No description provided for @nutritionDaysLogged.
+  ///
+  /// In es, this message translates to:
+  /// **'Días registrados'**
+  String get nutritionDaysLogged;
+
+  /// No description provided for @exerciseVolumePerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Volumen por día'**
+  String get exerciseVolumePerDay;
+
+  /// No description provided for @exerciseDaysTrained.
+  ///
+  /// In es, this message translates to:
+  /// **'Días entrenados'**
+  String get exerciseDaysTrained;
+
+  /// No description provided for @medsAdherence.
+  ///
+  /// In es, this message translates to:
+  /// **'Cumplimiento'**
+  String get medsAdherence;
+
+  /// No description provided for @medsAdherencePerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Cumplimiento por día'**
+  String get medsAdherencePerDay;
+
+  /// No description provided for @medsDaysComplete.
+  ///
+  /// In es, this message translates to:
+  /// **'Días completos'**
+  String get medsDaysComplete;
+
+  /// No description provided for @journalEntriesWritten.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas escritas'**
+  String get journalEntriesWritten;
+
+  /// No description provided for @journalDaysWritten.
+  ///
+  /// In es, this message translates to:
+  /// **'Días escritos'**
+  String get journalDaysWritten;
+
+  /// No description provided for @journalWordsAverage.
+  ///
+  /// In es, this message translates to:
+  /// **'Palabras por entrada'**
+  String get journalWordsAverage;
+
+  /// No description provided for @journalPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas por día'**
+  String get journalPerDay;
+
+  /// No description provided for @todoProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'Progreso'**
+  String get todoProgress;
+
+  /// No description provided for @todoCompletedPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Tareas completadas por día'**
+  String get todoCompletedPerDay;
+
+  /// No description provided for @todoCompleted.
+  ///
+  /// In es, this message translates to:
+  /// **'Completadas'**
+  String get todoCompleted;
+
+  /// No description provided for @todoOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Abiertas'**
+  String get todoOpen;
+
+  /// No description provided for @todoOverdue.
+  ///
+  /// In es, this message translates to:
+  /// **'Vencidas'**
+  String get todoOverdue;
+
+  /// No description provided for @sleepHoursPerNight.
+  ///
+  /// In es, this message translates to:
+  /// **'Horas por noche'**
+  String get sleepHoursPerNight;
 }
 
 class _AppLocalizationsDelegate

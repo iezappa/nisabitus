@@ -1115,4 +1115,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get medsNoneActiveHint => 'Activá algo de la lista de abajo';
+
+  @override
+  String get progressEntries => 'Registros';
+
+  @override
+  String get progressPerDay => 'Por día';
+
+  @override
+  String get nutritionCaloriesPerDay => 'Calorías por día';
+
+  @override
+  String get nutritionAverageDaily => 'Promedio diario';
+
+  @override
+  String get nutritionDaysLogged => 'Días registrados';
+
+  @override
+  String get exerciseVolumePerDay => 'Volumen por día';
+
+  @override
+  String get exerciseDaysTrained => 'Días entrenados';
+
+  @override
+  String get medsAdherence => 'Cumplimiento';
+
+  @override
+  String get medsAdherencePerDay => 'Cumplimiento por día';
+
+  @override
+  String get medsDaysComplete => 'Días completos';
+
+  @override
+  String get journalEntriesWritten => 'Entradas escritas';
+
+  @override
+  String get journalDaysWritten => 'Días escritos';
+
+  @override
+  String get journalWordsAverage => 'Palabras por entrada';
+
+  @override
+  String get journalPerDay => 'Entradas por día';
+
+  @override
+  String get todoProgress => 'Progreso';
+
+  @override
+  String get todoCompletedPerDay => 'Tareas completadas por día';
+
+  @override
+  String get todoCompleted => 'Completadas';
+
+  @override
+  String get todoOpen => 'Abiertas';
+
+  @override
+  String get todoOverdue => 'Vencidas';
+
+  @override
+  String get sleepHoursPerNight => 'Horas por noche';
 }

@@ -1112,4 +1112,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medsNoneActiveHint => 'Activate something from the list below';
+
+  @override
+  String get progressEntries => 'Records';
+
+  @override
+  String get progressPerDay => 'Per day';
+
+  @override
+  String get nutritionCaloriesPerDay => 'Calories per day';
+
+  @override
+  String get nutritionAverageDaily => 'Daily average';
+
+  @override
+  String get nutritionDaysLogged => 'Days logged';
+
+  @override
+  String get exerciseVolumePerDay => 'Volume per day';
+
+  @override
+  String get exerciseDaysTrained => 'Days trained';
+
+  @override
+  String get medsAdherence => 'Adherence';
+
+  @override
+  String get medsAdherencePerDay => 'Adherence per day';
+
+  @override
+  String get medsDaysComplete => 'Complete days';
+
+  @override
+  String get journalEntriesWritten => 'Entries written';
+
+  @override
+  String get journalDaysWritten => 'Days written';
+
+  @override
+  String get journalWordsAverage => 'Words per entry';
+
+  @override
+  String get journalPerDay => 'Entries per day';
+
+  @override
+  String get todoProgress => 'Progress';
+
+  @override
+  String get todoCompletedPerDay => 'Tasks completed per day';
+
+  @override
+  String get todoCompleted => 'Completed';
+
+  @override
+  String get todoOpen => 'Open';
+
+  @override
+  String get todoOverdue => 'Overdue';
+
+  @override
+  String get sleepHoursPerNight => 'Hours per night';
 }

@@ -591,5 +591,25 @@
         "type": "int"
       }
     }
-  }
+  },
+  "progressEntries": "Registros",
+  "progressPerDay": "Por día",
+  "nutritionCaloriesPerDay": "Calorías por día",
+  "nutritionAverageDaily": "Promedio diario",
+  "nutritionDaysLogged": "Días registrados",
+  "exerciseVolumePerDay": "Volumen por día",
+  "exerciseDaysTrained": "Días entrenados",
+  "medsAdherence": "Cumplimiento",
+  "medsAdherencePerDay": "Cumplimiento por día",
+  "medsDaysComplete": "Días completos",
+  "journalEntriesWritten": "Entradas escritas",
+  "journalDaysWritten": "Días escritos",
+  "journalWordsAverage": "Palabras por entrada",
+  "journalPerDay": "Entradas por día",
+  "todoProgress": "Progreso",
+  "todoCompletedPerDay": "Tareas completadas por día",
+  "todoCompleted": "Completadas",
+  "todoOpen": "Abiertas",
+  "todoOverdue": "Vencidas",
+  "sleepHoursPerNight": "Horas por noche"
 }

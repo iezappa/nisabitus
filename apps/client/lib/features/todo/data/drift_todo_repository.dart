@@ -180,6 +180,9 @@ class DriftTodoRepository implements TodoRepository {
             priority: validated.priority.wireName,
             status: validated.status.wireName,
             projectId: validated.projectId,
+            completedAt: Value(
+              validated.status == TaskStatus.done ? DateTime.now() : null,
+            ),
           ),
         );
 
@@ -189,6 +192,11 @@ class DriftTodoRepository implements TodoRepository {
   @override
   Future<Task> updateTask(int id, TaskDraft draft) async {
     final validated = _fromDraft(draft, id: id);
+    // Editing a task that was already done keeps the original moment; only
+    // a change of status moves it.
+    final existing = await (_db.select(
+      _db.todoTasks,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
 
     await (_db.update(_db.todoTasks)..where((t) => t.id.equals(id))).write(
       TodoTasksCompanion(
@@ -200,6 +208,11 @@ class DriftTodoRepository implements TodoRepository {
         priority: Value(validated.priority.wireName),
         status: Value(validated.status.wireName),
         projectId: Value(validated.projectId),
+        completedAt: Value(
+          validated.status == TaskStatus.done
+              ? (existing?.completedAt ?? DateTime.now())
+              : null,
+        ),
       ),
     );
 
@@ -214,7 +227,14 @@ class DriftTodoRepository implements TodoRepository {
   @override
   Future<Task> setTaskStatus(int id, TaskStatus status) async {
     await (_db.update(_db.todoTasks)..where((t) => t.id.equals(id))).write(
-      TodoTasksCompanion(status: Value(status.wireName)),
+      TodoTasksCompanion(
+        status: Value(status.wireName),
+        // Stamped on the way into DONE and cleared on the way out, so
+        // reopening a task takes it back off the chart it was counted on.
+        completedAt: Value(
+          status == TaskStatus.done ? DateTime.now() : null,
+        ),
+      ),
     );
 
     return (await _taskById(id))!;

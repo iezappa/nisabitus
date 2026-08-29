@@ -44,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -61,6 +61,12 @@ class AppDatabase extends _$AppDatabase {
       if (from < 3) {
         await m.createTable(medications);
         await m.createTable(medicationIntakes);
+      }
+      // v4 records when a task was finished. Existing tasks keep a null
+      // date: their status is known, the moment is not, and inventing one
+      // would put fictional work on the chart.
+      if (from < 4) {
+        await m.addColumn(todoTasks, todoTasks.completedAt);
       }
     },
     beforeOpen: (details) async {

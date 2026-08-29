@@ -3242,6 +3242,17 @@ class $TodoTasksTable extends TodoTasks
       'REFERENCES projects (id) ON DELETE CASCADE',
     ),
   );
+  static const VerificationMeta _completedAtMeta = const VerificationMeta(
+    'completedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+    'completed_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3253,6 +3264,7 @@ class $TodoTasksTable extends TodoTasks
     priority,
     status,
     projectId,
+    completedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3328,6 +3340,15 @@ class $TodoTasksTable extends TodoTasks
     } else if (isInserting) {
       context.missing(_projectIdMeta);
     }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+        _completedAtMeta,
+        completedAt.isAcceptableOrUnknown(
+          data['completed_at']!,
+          _completedAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -3373,6 +3394,10 @@ class $TodoTasksTable extends TodoTasks
         DriftSqlType.int,
         data['${effectivePrefix}project_id'],
       )!,
+      completedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}completed_at'],
+      ),
     );
   }
 
@@ -3396,6 +3421,12 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
   /// Stored as the canonical wire name of TaskStatus.
   final String status;
   final int projectId;
+
+  /// When the task reached DONE.
+  ///
+  /// Status alone cannot answer "what did I finish last week": it says where
+  /// a task is, not when it got there. Cleared if the task is reopened.
+  final DateTime? completedAt;
   const TodoTaskRow({
     required this.id,
     required this.title,
@@ -3406,6 +3437,7 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
     required this.priority,
     required this.status,
     required this.projectId,
+    this.completedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3427,6 +3459,9 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
     map['priority'] = Variable<String>(priority);
     map['status'] = Variable<String>(status);
     map['project_id'] = Variable<int>(projectId);
+    if (!nullToAbsent || completedAt != null) {
+      map['completed_at'] = Variable<DateTime>(completedAt);
+    }
     return map;
   }
 
@@ -3449,6 +3484,9 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
       priority: Value(priority),
       status: Value(status),
       projectId: Value(projectId),
+      completedAt: completedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedAt),
     );
   }
 
@@ -3467,6 +3505,7 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
       priority: serializer.fromJson<String>(json['priority']),
       status: serializer.fromJson<String>(json['status']),
       projectId: serializer.fromJson<int>(json['projectId']),
+      completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
     );
   }
   @override
@@ -3482,6 +3521,7 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
       'priority': serializer.toJson<String>(priority),
       'status': serializer.toJson<String>(status),
       'projectId': serializer.toJson<int>(projectId),
+      'completedAt': serializer.toJson<DateTime?>(completedAt),
     };
   }
 
@@ -3495,6 +3535,7 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
     String? priority,
     String? status,
     int? projectId,
+    Value<DateTime?> completedAt = const Value.absent(),
   }) => TodoTaskRow(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -3505,6 +3546,7 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
     priority: priority ?? this.priority,
     status: status ?? this.status,
     projectId: projectId ?? this.projectId,
+    completedAt: completedAt.present ? completedAt.value : this.completedAt,
   );
   TodoTaskRow copyWithCompanion(TodoTasksCompanion data) {
     return TodoTaskRow(
@@ -3519,6 +3561,9 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
       priority: data.priority.present ? data.priority.value : this.priority,
       status: data.status.present ? data.status.value : this.status,
       projectId: data.projectId.present ? data.projectId.value : this.projectId,
+      completedAt: data.completedAt.present
+          ? data.completedAt.value
+          : this.completedAt,
     );
   }
 
@@ -3533,7 +3578,8 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
           ..write('dueDate: $dueDate, ')
           ..write('priority: $priority, ')
           ..write('status: $status, ')
-          ..write('projectId: $projectId')
+          ..write('projectId: $projectId, ')
+          ..write('completedAt: $completedAt')
           ..write(')'))
         .toString();
   }
@@ -3549,6 +3595,7 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
     priority,
     status,
     projectId,
+    completedAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -3562,7 +3609,8 @@ class TodoTaskRow extends DataClass implements Insertable<TodoTaskRow> {
           other.dueDate == this.dueDate &&
           other.priority == this.priority &&
           other.status == this.status &&
-          other.projectId == this.projectId);
+          other.projectId == this.projectId &&
+          other.completedAt == this.completedAt);
 }
 
 class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
@@ -3575,6 +3623,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
   final Value<String> priority;
   final Value<String> status;
   final Value<int> projectId;
+  final Value<DateTime?> completedAt;
   const TodoTasksCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -3585,6 +3634,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
     this.priority = const Value.absent(),
     this.status = const Value.absent(),
     this.projectId = const Value.absent(),
+    this.completedAt = const Value.absent(),
   });
   TodoTasksCompanion.insert({
     this.id = const Value.absent(),
@@ -3596,6 +3646,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
     required String priority,
     required String status,
     required int projectId,
+    this.completedAt = const Value.absent(),
   }) : title = Value(title),
        priority = Value(priority),
        status = Value(status),
@@ -3610,6 +3661,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
     Expression<String>? priority,
     Expression<String>? status,
     Expression<int>? projectId,
+    Expression<DateTime>? completedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3621,6 +3673,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
       if (priority != null) 'priority': priority,
       if (status != null) 'status': status,
       if (projectId != null) 'project_id': projectId,
+      if (completedAt != null) 'completed_at': completedAt,
     });
   }
 
@@ -3634,6 +3687,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
     Value<String>? priority,
     Value<String>? status,
     Value<int>? projectId,
+    Value<DateTime?>? completedAt,
   }) {
     return TodoTasksCompanion(
       id: id ?? this.id,
@@ -3645,6 +3699,7 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
       priority: priority ?? this.priority,
       status: status ?? this.status,
       projectId: projectId ?? this.projectId,
+      completedAt: completedAt ?? this.completedAt,
     );
   }
 
@@ -3678,6 +3733,9 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
     if (projectId.present) {
       map['project_id'] = Variable<int>(projectId.value);
     }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
     return map;
   }
 
@@ -3692,7 +3750,8 @@ class TodoTasksCompanion extends UpdateCompanion<TodoTaskRow> {
           ..write('dueDate: $dueDate, ')
           ..write('priority: $priority, ')
           ..write('status: $status, ')
-          ..write('projectId: $projectId')
+          ..write('projectId: $projectId, ')
+          ..write('completedAt: $completedAt')
           ..write(')'))
         .toString();
   }
@@ -8722,6 +8781,7 @@ typedef $$TodoTasksTableCreateCompanionBuilder = TodoTasksCompanion Function({
   required String priority,
   required String status,
   required int projectId,
+  Value<DateTime?> completedAt,
 });
 typedef $$TodoTasksTableUpdateCompanionBuilder = TodoTasksCompanion Function({
   Value<int> id,
@@ -8733,6 +8793,7 @@ typedef $$TodoTasksTableUpdateCompanionBuilder = TodoTasksCompanion Function({
   Value<String> priority,
   Value<String> status,
   Value<int> projectId,
+  Value<DateTime?> completedAt,
 });
 
 final class $$TodoTasksTableReferences
@@ -8821,6 +8882,11 @@ class $$TodoTasksTableFilterComposer
 
   ColumnFilters<String> get status => $composableBuilder(
     column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8922,6 +8988,11 @@ class $$TodoTasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$ProjectsTableOrderingComposer get projectId {
     final $$ProjectsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -8980,6 +9051,11 @@ class $$TodoTasksTableAnnotationComposer
 
   GeneratedColumn<String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => column,
+  );
 
   $$ProjectsTableAnnotationComposer get projectId {
     final $$ProjectsTableAnnotationComposer composer = $composerBuilder(
@@ -9067,6 +9143,7 @@ class $$TodoTasksTableTableManager
                 Value<String> priority = const Value.absent(),
                 Value<String> status = const Value.absent(),
                 Value<int> projectId = const Value.absent(),
+                Value<DateTime?> completedAt = const Value.absent(),
               }) => TodoTasksCompanion(
                 id: id,
                 title: title,
@@ -9077,6 +9154,7 @@ class $$TodoTasksTableTableManager
                 priority: priority,
                 status: status,
                 projectId: projectId,
+                completedAt: completedAt,
               ),
           createCompanionCallback:
               ({
@@ -9089,6 +9167,7 @@ class $$TodoTasksTableTableManager
                 required String priority,
                 required String status,
                 required int projectId,
+                Value<DateTime?> completedAt = const Value.absent(),
               }) => TodoTasksCompanion.insert(
                 id: id,
                 title: title,
@@ -9099,6 +9178,7 @@ class $$TodoTasksTableTableManager
                 priority: priority,
                 status: status,
                 projectId: projectId,
+                completedAt: completedAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(
