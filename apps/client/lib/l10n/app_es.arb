@@ -178,5 +178,40 @@
         "type": "String"
       }
     }
+  },
+  "journalTitle": "Journal",
+  "journalMood": "Estado emocional",
+  "journalMoodHint": "¿Cómo te sentiste?",
+  "journalEnergy": "Energía",
+  "journalEnergyLow": "Baja",
+  "journalEnergyMedium": "Media",
+  "journalEnergyHigh": "Alta",
+  "journalGratitude": "Gratitud",
+  "journalGratitudeHint": "¿Qué agradecés de hoy?",
+  "journalFocus": "Foco del día",
+  "journalFocusHint": "¿En qué pusiste tu atención?",
+  "journalReflection": "Reflexión",
+  "journalReflectionHint": "Escribí lo que quieras. Sin apuro.",
+  "journalIntention": "Intención para mañana",
+  "journalIntentionHint": "¿Con qué querés empezar mañana?",
+  "journalSave": "Guardar",
+  "journalUpdate": "Actualizar",
+  "journalSaved": "Guardado",
+  "journalEntry": "Entrada del día",
+  "journalHistory": "Entradas anteriores",
+  "journalHistoryEmpty": "Todavía no hay entradas",
+  "journalHistoryEmptyHint": "Lo que escribas va a aparecer acá",
+  "journalNoPreview": "Sin contenido",
+  "journalPage": "{page} de {total}",
+  "journalDeleteTitle": "¿Borrar la entrada?",
+  "@journalPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }

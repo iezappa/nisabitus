@@ -711,6 +711,156 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ingresá un número entre 0 y 24'**
   String get sleepValidationHours;
+
+  /// No description provided for @journalTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Journal'**
+  String get journalTitle;
+
+  /// No description provided for @journalMood.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado emocional'**
+  String get journalMood;
+
+  /// No description provided for @journalMoodHint.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo te sentiste?'**
+  String get journalMoodHint;
+
+  /// No description provided for @journalEnergy.
+  ///
+  /// In es, this message translates to:
+  /// **'Energía'**
+  String get journalEnergy;
+
+  /// No description provided for @journalEnergyLow.
+  ///
+  /// In es, this message translates to:
+  /// **'Baja'**
+  String get journalEnergyLow;
+
+  /// No description provided for @journalEnergyMedium.
+  ///
+  /// In es, this message translates to:
+  /// **'Media'**
+  String get journalEnergyMedium;
+
+  /// No description provided for @journalEnergyHigh.
+  ///
+  /// In es, this message translates to:
+  /// **'Alta'**
+  String get journalEnergyHigh;
+
+  /// No description provided for @journalGratitude.
+  ///
+  /// In es, this message translates to:
+  /// **'Gratitud'**
+  String get journalGratitude;
+
+  /// No description provided for @journalGratitudeHint.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué agradecés de hoy?'**
+  String get journalGratitudeHint;
+
+  /// No description provided for @journalFocus.
+  ///
+  /// In es, this message translates to:
+  /// **'Foco del día'**
+  String get journalFocus;
+
+  /// No description provided for @journalFocusHint.
+  ///
+  /// In es, this message translates to:
+  /// **'¿En qué pusiste tu atención?'**
+  String get journalFocusHint;
+
+  /// No description provided for @journalReflection.
+  ///
+  /// In es, this message translates to:
+  /// **'Reflexión'**
+  String get journalReflection;
+
+  /// No description provided for @journalReflectionHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribí lo que quieras. Sin apuro.'**
+  String get journalReflectionHint;
+
+  /// No description provided for @journalIntention.
+  ///
+  /// In es, this message translates to:
+  /// **'Intención para mañana'**
+  String get journalIntention;
+
+  /// No description provided for @journalIntentionHint.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Con qué querés empezar mañana?'**
+  String get journalIntentionHint;
+
+  /// No description provided for @journalSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get journalSave;
+
+  /// No description provided for @journalUpdate.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get journalUpdate;
+
+  /// No description provided for @journalSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardado'**
+  String get journalSaved;
+
+  /// No description provided for @journalEntry.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrada del día'**
+  String get journalEntry;
+
+  /// No description provided for @journalHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas anteriores'**
+  String get journalHistory;
+
+  /// No description provided for @journalHistoryEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay entradas'**
+  String get journalHistoryEmpty;
+
+  /// No description provided for @journalHistoryEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que escribas va a aparecer acá'**
+  String get journalHistoryEmptyHint;
+
+  /// No description provided for @journalNoPreview.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin contenido'**
+  String get journalNoPreview;
+
+  /// No description provided for @journalPage.
+  ///
+  /// In es, this message translates to:
+  /// **'{page} de {total}'**
+  String journalPage(int page, int total);
+
+  /// No description provided for @journalDeleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Borrar la entrada?'**
+  String get journalDeleteTitle;
 }
 
 class _AppLocalizationsDelegate

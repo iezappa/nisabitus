@@ -343,4 +343,81 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sleepValidationHours => 'Ingresá un número entre 0 y 24';
+
+  @override
+  String get journalTitle => 'Journal';
+
+  @override
+  String get journalMood => 'Estado emocional';
+
+  @override
+  String get journalMoodHint => '¿Cómo te sentiste?';
+
+  @override
+  String get journalEnergy => 'Energía';
+
+  @override
+  String get journalEnergyLow => 'Baja';
+
+  @override
+  String get journalEnergyMedium => 'Media';
+
+  @override
+  String get journalEnergyHigh => 'Alta';
+
+  @override
+  String get journalGratitude => 'Gratitud';
+
+  @override
+  String get journalGratitudeHint => '¿Qué agradecés de hoy?';
+
+  @override
+  String get journalFocus => 'Foco del día';
+
+  @override
+  String get journalFocusHint => '¿En qué pusiste tu atención?';
+
+  @override
+  String get journalReflection => 'Reflexión';
+
+  @override
+  String get journalReflectionHint => 'Escribí lo que quieras. Sin apuro.';
+
+  @override
+  String get journalIntention => 'Intención para mañana';
+
+  @override
+  String get journalIntentionHint => '¿Con qué querés empezar mañana?';
+
+  @override
+  String get journalSave => 'Guardar';
+
+  @override
+  String get journalUpdate => 'Actualizar';
+
+  @override
+  String get journalSaved => 'Guardado';
+
+  @override
+  String get journalEntry => 'Entrada del día';
+
+  @override
+  String get journalHistory => 'Entradas anteriores';
+
+  @override
+  String get journalHistoryEmpty => 'Todavía no hay entradas';
+
+  @override
+  String get journalHistoryEmptyHint => 'Lo que escribas va a aparecer acá';
+
+  @override
+  String get journalNoPreview => 'Sin contenido';
+
+  @override
+  String journalPage(int page, int total) {
+    return '$page de $total';
+  }
+
+  @override
+  String get journalDeleteTitle => '¿Borrar la entrada?';
 }
