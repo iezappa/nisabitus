@@ -43,6 +43,7 @@ class StreakCard extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.delete_outline, size: 18),
                   tooltip: l10n.actionDelete,
+                  visualDensity: VisualDensity.compact,
                   onPressed: onDelete,
                 ),
               ],
@@ -74,16 +75,31 @@ class StreakCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
+            // The card is narrow by design, so both buttons share the width
+            // instead of claiming their natural size and overflowing it.
             Row(
               children: [
-                FilledButton(
-                  onPressed: onIncrement,
-                  child: Text(l10n.streakIncrement),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: onIncrement,
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                    ),
+                    child: Text(l10n.streakIncrement),
+                  ),
                 ),
                 const SizedBox(width: 8),
-                TextButton(
-                  onPressed: onReset,
-                  child: Text(l10n.streakReset),
+                Expanded(
+                  child: TextButton(
+                    onPressed: onReset,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                    ),
+                    child: Text(
+                      l10n.streakReset,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
               ],
             ),

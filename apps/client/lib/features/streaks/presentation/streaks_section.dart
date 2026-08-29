@@ -58,7 +58,7 @@ class StreaksSection extends ConsumerWidget {
                   hint: l10n.streaksEmptyHint,
                 )
               : SizedBox(
-                  height: 168,
+                  height: 196,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
