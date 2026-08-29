@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/centered_content.dart';
+import '../../../core/widgets/disclaimer.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../shared/support_actions.dart';
@@ -89,6 +90,11 @@ class SettingsScreen extends ConsumerWidget {
                 child: const _ProfileNameField(),
               ),
             ),
+          ),
+          SectionHeader(label: l10n.settingsDisclaimer),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: Gap.lg),
+            child: DisclaimerCard(),
           ),
           SectionHeader(label: l10n.settingsAbout),
           Padding(

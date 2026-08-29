@@ -1024,4 +1024,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exercisePickOne => 'Pick an exercise';
+
+  @override
+  String get disclaimerTitle => 'This is a log, not medical advice';
+
+  @override
+  String get disclaimerBody =>
+      'Nísabit is not a medical or nutritional application. It is a log: it keeps what you write down and hands it back to you in order.\n\nIt does not diagnose, interpret symptoms, calculate doses, or recommend treatments, diets or routines. The targets you set are your own, not a professional instruction.\n\nBefore starting, changing or stopping a medication, a supplement, a diet or a training plan, talk to a health professional. If any symptom worries you, seek advice without delay.';
+
+  @override
+  String get disclaimerAction => 'Understood';
+
+  @override
+  String get disclaimerTooltip => 'About this data';
+
+  @override
+  String get settingsDisclaimer => 'Important notice';
+
+  @override
+  String get settingsDisclaimerShort =>
+      'Nísabit records what you write down. It does not replace a health professional.';
+
+  @override
+  String get settingsDisclaimerRead => 'Read the full notice';
+
+  @override
+  String get healthMeds => 'Medication';
+
+  @override
+  String get medsTitle => 'Medication and supplements';
+
+  @override
+  String get medsToday => 'For that day';
+
+  @override
+  String get medsCatalogue => 'What you take';
+
+  @override
+  String get medsNew => 'Add';
+
+  @override
+  String get medsEdit => 'Edit';
+
+  @override
+  String get medsEmpty => 'Nothing added yet';
+
+  @override
+  String get medsEmptyHint => 'Add what you take and tick it off each day';
+
+  @override
+  String get medsKind => 'Kind';
+
+  @override
+  String get medsKindMedication => 'Medication';
+
+  @override
+  String get medsKindSupplement => 'Supplement';
+
+  @override
+  String get medsDose => 'Dose';
+
+  @override
+  String get medsDoseHint => '500 mg, 2 capsules, 10 drops';
+
+  @override
+  String get medsSchedule => 'When';
+
+  @override
+  String get medsScheduleHint => 'Morning, every 8 h, with dinner';
+
+  @override
+  String get medsNotes => 'Notes';
+
+  @override
+  String get medsActive => 'Active';
+
+  @override
+  String get medsInactiveHint => 'Anything paused stays out of the day';
+
+  @override
+  String medsTakenCount(int done, int total) {
+    return '$done of $total';
+  }
+
+  @override
+  String get medsNoneActive => 'Nothing active to tick off';
+
+  @override
+  String get medsNoneActiveHint => 'Activate something from the list below';
 }

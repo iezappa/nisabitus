@@ -1981,6 +1981,174 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Elegí un ejercicio'**
   String get exercisePickOne;
+
+  /// No description provided for @disclaimerTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Esto es un registro, no un consejo médico'**
+  String get disclaimerTitle;
+
+  /// No description provided for @disclaimerBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Nísabit no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.'**
+  String get disclaimerBody;
+
+  /// No description provided for @disclaimerAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Entendido'**
+  String get disclaimerAction;
+
+  /// No description provided for @disclaimerTooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre estos datos'**
+  String get disclaimerTooltip;
+
+  /// No description provided for @settingsDisclaimer.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso importante'**
+  String get settingsDisclaimer;
+
+  /// No description provided for @settingsDisclaimerShort.
+  ///
+  /// In es, this message translates to:
+  /// **'Nísabit registra lo que anotás. No reemplaza a un profesional de la salud.'**
+  String get settingsDisclaimerShort;
+
+  /// No description provided for @settingsDisclaimerRead.
+  ///
+  /// In es, this message translates to:
+  /// **'Leer el aviso completo'**
+  String get settingsDisclaimerRead;
+
+  /// No description provided for @healthMeds.
+  ///
+  /// In es, this message translates to:
+  /// **'Medicación'**
+  String get healthMeds;
+
+  /// No description provided for @medsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Medicación y suplementos'**
+  String get medsTitle;
+
+  /// No description provided for @medsToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Para ese día'**
+  String get medsToday;
+
+  /// No description provided for @medsCatalogue.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que tomás'**
+  String get medsCatalogue;
+
+  /// No description provided for @medsNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar'**
+  String get medsNew;
+
+  /// No description provided for @medsEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar'**
+  String get medsEdit;
+
+  /// No description provided for @medsEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no cargaste nada'**
+  String get medsEmpty;
+
+  /// No description provided for @medsEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregá lo que tomás y marcalo cada día'**
+  String get medsEmptyHint;
+
+  /// No description provided for @medsKind.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get medsKind;
+
+  /// No description provided for @medsKindMedication.
+  ///
+  /// In es, this message translates to:
+  /// **'Medicación'**
+  String get medsKindMedication;
+
+  /// No description provided for @medsKindSupplement.
+  ///
+  /// In es, this message translates to:
+  /// **'Suplemento'**
+  String get medsKindSupplement;
+
+  /// No description provided for @medsDose.
+  ///
+  /// In es, this message translates to:
+  /// **'Dosis'**
+  String get medsDose;
+
+  /// No description provided for @medsDoseHint.
+  ///
+  /// In es, this message translates to:
+  /// **'500 mg, 2 cápsulas, 10 gotas'**
+  String get medsDoseHint;
+
+  /// No description provided for @medsSchedule.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuándo'**
+  String get medsSchedule;
+
+  /// No description provided for @medsScheduleHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Mañana, cada 8 h, con la cena'**
+  String get medsScheduleHint;
+
+  /// No description provided for @medsNotes.
+  ///
+  /// In es, this message translates to:
+  /// **'Notas'**
+  String get medsNotes;
+
+  /// No description provided for @medsActive.
+  ///
+  /// In es, this message translates to:
+  /// **'Activo'**
+  String get medsActive;
+
+  /// No description provided for @medsInactiveHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo pausado no aparece en el día'**
+  String get medsInactiveHint;
+
+  /// No description provided for @medsTakenCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total}'**
+  String medsTakenCount(int done, int total);
+
+  /// No description provided for @medsNoneActive.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada activo para marcar'**
+  String get medsNoneActive;
+
+  /// No description provided for @medsNoneActiveHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Activá algo de la lista de abajo'**
+  String get medsNoneActiveHint;
 }
 
 class _AppLocalizationsDelegate

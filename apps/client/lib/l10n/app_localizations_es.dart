@@ -1027,4 +1027,92 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exercisePickOne => 'Elegí un ejercicio';
+
+  @override
+  String get disclaimerTitle => 'Esto es un registro, no un consejo médico';
+
+  @override
+  String get disclaimerBody =>
+      'Nísabit no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.';
+
+  @override
+  String get disclaimerAction => 'Entendido';
+
+  @override
+  String get disclaimerTooltip => 'Sobre estos datos';
+
+  @override
+  String get settingsDisclaimer => 'Aviso importante';
+
+  @override
+  String get settingsDisclaimerShort =>
+      'Nísabit registra lo que anotás. No reemplaza a un profesional de la salud.';
+
+  @override
+  String get settingsDisclaimerRead => 'Leer el aviso completo';
+
+  @override
+  String get healthMeds => 'Medicación';
+
+  @override
+  String get medsTitle => 'Medicación y suplementos';
+
+  @override
+  String get medsToday => 'Para ese día';
+
+  @override
+  String get medsCatalogue => 'Lo que tomás';
+
+  @override
+  String get medsNew => 'Agregar';
+
+  @override
+  String get medsEdit => 'Editar';
+
+  @override
+  String get medsEmpty => 'Todavía no cargaste nada';
+
+  @override
+  String get medsEmptyHint => 'Agregá lo que tomás y marcalo cada día';
+
+  @override
+  String get medsKind => 'Tipo';
+
+  @override
+  String get medsKindMedication => 'Medicación';
+
+  @override
+  String get medsKindSupplement => 'Suplemento';
+
+  @override
+  String get medsDose => 'Dosis';
+
+  @override
+  String get medsDoseHint => '500 mg, 2 cápsulas, 10 gotas';
+
+  @override
+  String get medsSchedule => 'Cuándo';
+
+  @override
+  String get medsScheduleHint => 'Mañana, cada 8 h, con la cena';
+
+  @override
+  String get medsNotes => 'Notas';
+
+  @override
+  String get medsActive => 'Activo';
+
+  @override
+  String get medsInactiveHint => 'Lo pausado no aparece en el día';
+
+  @override
+  String medsTakenCount(int done, int total) {
+    return '$done de $total';
+  }
+
+  @override
+  String get medsNoneActive => 'Nada activo para marcar';
+
+  @override
+  String get medsNoneActiveHint => 'Activá algo de la lista de abajo';
 }

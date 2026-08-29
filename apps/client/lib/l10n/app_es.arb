@@ -553,5 +553,43 @@
         "type": "String"
       }
     }
+  },
+  "disclaimerTitle": "Esto es un registro, no un consejo médico",
+  "disclaimerBody": "Nísabit no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.",
+  "disclaimerAction": "Entendido",
+  "disclaimerTooltip": "Sobre estos datos",
+  "settingsDisclaimer": "Aviso importante",
+  "settingsDisclaimerShort": "Nísabit registra lo que anotás. No reemplaza a un profesional de la salud.",
+  "settingsDisclaimerRead": "Leer el aviso completo",
+  "healthMeds": "Medicación",
+  "medsTitle": "Medicación y suplementos",
+  "medsToday": "Para ese día",
+  "medsCatalogue": "Lo que tomás",
+  "medsNew": "Agregar",
+  "medsEdit": "Editar",
+  "medsEmpty": "Todavía no cargaste nada",
+  "medsEmptyHint": "Agregá lo que tomás y marcalo cada día",
+  "medsKind": "Tipo",
+  "medsKindMedication": "Medicación",
+  "medsKindSupplement": "Suplemento",
+  "medsDose": "Dosis",
+  "medsDoseHint": "500 mg, 2 cápsulas, 10 gotas",
+  "medsSchedule": "Cuándo",
+  "medsScheduleHint": "Mañana, cada 8 h, con la cena",
+  "medsNotes": "Notas",
+  "medsActive": "Activo",
+  "medsInactiveHint": "Lo pausado no aparece en el día",
+  "medsTakenCount": "{done} de {total}",
+  "medsNoneActive": "Nada activo para marcar",
+  "medsNoneActiveHint": "Activá algo de la lista de abajo",
+  "@medsTakenCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }
