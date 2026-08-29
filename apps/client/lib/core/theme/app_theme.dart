@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../features/settings/domain/accent_color.dart';
+
 /// The visual identity of the app: serene and firm, never competing for
 /// attention.
 ///
@@ -8,10 +10,6 @@ import 'package:flutter/material.dart';
 /// is used for harmony, then the roles that define the look are pinned to
 /// exact values rather than left to the algorithm.
 abstract final class AppTheme {
-  /// The deep forest green that carries every accent in the app.
-  static const _green = Color(0xFF3E5641);
-  static const _greenSoft = Color(0xFF6B8F71);
-
   /// Warm paper, not the blue-grey Material defaults to.
   static const _paper = Color(0xFFFAF9F5);
   static const _card = Color(0xFFFFFFFF);
@@ -26,24 +24,25 @@ abstract final class AppTheme {
   static const _inkDark = Color(0xFFECEFEA);
   static const _inkMutedDark = Color(0xFF9AA09A);
 
-  static ThemeData light() => _build(Brightness.light);
-  static ThemeData dark() => _build(Brightness.dark);
+  static ThemeData light(AccentColor accent) =>
+      _build(Brightness.light, accent);
+  static ThemeData dark(AccentColor accent) => _build(Brightness.dark, accent);
 
-  static ThemeData _build(Brightness brightness) {
+  static ThemeData _build(Brightness brightness, AccentColor accent) {
     final isLight = brightness == Brightness.light;
     final paper = isLight ? _paper : _paperDark;
     final card = isLight ? _card : _cardDark;
     final line = isLight ? _line : _lineDark;
     final ink = isLight ? _ink : _inkDark;
     final inkMuted = isLight ? _inkMuted : _inkMutedDark;
-    final accent = isLight ? _green : _greenSoft;
+    final tint = accent.resolve(brightness);
 
     final scheme =
         ColorScheme.fromSeed(
-          seedColor: _green,
+          seedColor: accent.light,
           brightness: brightness,
         ).copyWith(
-          primary: accent,
+          primary: tint,
           onPrimary: isLight ? Colors.white : _paperDark,
           surface: paper,
           onSurface: ink,
@@ -88,7 +87,7 @@ abstract final class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: card,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: accent.withValues(alpha: 0.14),
+        indicatorColor: tint.withValues(alpha: 0.14),
         elevation: 0,
         height: 68,
         labelTextStyle: WidgetStatePropertyAll(
@@ -97,9 +96,9 @@ abstract final class AppTheme {
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: card,
-        indicatorColor: accent.withValues(alpha: 0.14),
+        indicatorColor: tint.withValues(alpha: 0.14),
         selectedLabelTextStyle: base.textTheme.labelSmall?.copyWith(
-          color: accent,
+          color: tint,
           fontWeight: FontWeight.w600,
         ),
         unselectedLabelTextStyle: base.textTheme.labelSmall?.copyWith(
@@ -107,9 +106,9 @@ abstract final class AppTheme {
         ),
       ),
       tabBarTheme: TabBarThemeData(
-        labelColor: accent,
+        labelColor: tint,
         unselectedLabelColor: inkMuted,
-        indicatorColor: accent,
+        indicatorColor: tint,
         indicatorSize: TabBarIndicatorSize.label,
         dividerColor: line,
         labelStyle: base.textTheme.labelLarge?.copyWith(
@@ -119,7 +118,7 @@ abstract final class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: accent,
+          backgroundColor: tint,
           foregroundColor: isLight ? Colors.white : _paperDark,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
@@ -134,7 +133,7 @@ abstract final class AppTheme {
         style: TextButton.styleFrom(foregroundColor: inkMuted),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: accent,
+        backgroundColor: tint,
         foregroundColor: isLight ? Colors.white : _paperDark,
         elevation: 2,
         shape: const CircleBorder(),

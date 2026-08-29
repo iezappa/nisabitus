@@ -420,4 +420,123 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get journalDeleteTitle => '¿Borrar la entrada?';
+
+  @override
+  String get supportTitle => 'Apoyar el proyecto';
+
+  @override
+  String get supportBody =>
+      'Nísabit es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.';
+
+  @override
+  String get supportCafecito => 'Cafecito';
+
+  @override
+  String get supportPatreon => 'Patreon';
+
+  @override
+  String get supportLinkFailed => 'No se pudo abrir el enlace';
+
+  @override
+  String get settingsTitle => 'Configuración';
+
+  @override
+  String get settingsAppearance => 'Apariencia';
+
+  @override
+  String get settingsAccent => 'Color de acento';
+
+  @override
+  String get settingsTabs => 'Pestañas visibles';
+
+  @override
+  String get settingsTabsHint =>
+      'Elegí qué secciones querés ver. Siempre queda al menos una.';
+
+  @override
+  String get settingsProfile => 'Perfil';
+
+  @override
+  String get settingsProfileName => 'Tu nombre';
+
+  @override
+  String get settingsTutorial => 'Ver el tutorial';
+
+  @override
+  String get settingsAbout => 'Acerca de';
+
+  @override
+  String get accentForest => 'Bosque';
+
+  @override
+  String get accentGold => 'Dorado';
+
+  @override
+  String get accentClay => 'Arcilla';
+
+  @override
+  String get accentIndigo => 'Índigo';
+
+  @override
+  String get accentPlum => 'Ciruela';
+
+  @override
+  String get accentSlate => 'Pizarra';
+
+  @override
+  String get tabSettings => 'Ajustes';
+
+  @override
+  String get tutorialSkip => 'Saltar';
+
+  @override
+  String get tutorialNext => 'Siguiente';
+
+  @override
+  String get tutorialDone => 'Empezar';
+
+  @override
+  String get tutorialBack => 'Atrás';
+
+  @override
+  String get onboardingWelcome => 'Bienvenido a Nísabit';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'El esfuerzo que te eleva. Tus datos viven en tu equipo: sin cuentas, sin nube, sin telemetría.';
+
+  @override
+  String get onboardingNameTitle => '¿Cómo te llamamos?';
+
+  @override
+  String get onboardingNameBody =>
+      'Solo para saludarte. No sale de este dispositivo.';
+
+  @override
+  String get onboardingTabsTitle => '¿Qué querés ver?';
+
+  @override
+  String get onboardingTabsBody =>
+      'Podés cambiarlo cuando quieras desde Configuración.';
+
+  @override
+  String get tutorialHabitsTitle => 'Hábitos y rachas';
+
+  @override
+  String get tutorialHabitsBody =>
+      'Definí lo que querés sostener y resolvelo cada día. Las rachas cuentan los días seguidos.';
+
+  @override
+  String get tutorialTrackTitle => 'Sueño y journal';
+
+  @override
+  String get tutorialTrackBody =>
+      'Anotá cuánto dormiste y cómo estuvo tu día. La tira semanal te deja completar días que te salteaste.';
+
+  @override
+  String get tutorialFocusTitle => 'Foco y tareas';
+
+  @override
+  String get tutorialFocusBody =>
+      'Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.';
 }

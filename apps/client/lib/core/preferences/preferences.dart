@@ -29,3 +29,31 @@ class BoolPreference extends StateNotifier<bool> {
 
   void toggle() => set(!state);
 }
+
+/// A single remembered string, such as the chosen accent.
+class StringPreference extends StateNotifier<String> {
+  StringPreference(this._prefs, this._key, {required String fallback})
+    : super(_prefs.getString(_key) ?? fallback);
+
+  final SharedPreferences _prefs;
+  final String _key;
+
+  void set(String value) {
+    state = value;
+    _prefs.setString(_key, value);
+  }
+}
+
+/// A remembered set of identifiers, such as which tabs stay visible.
+class StringSetPreference extends StateNotifier<Set<String>> {
+  StringSetPreference(this._prefs, this._key, {required Set<String> fallback})
+    : super(_prefs.getStringList(_key)?.toSet() ?? fallback);
+
+  final SharedPreferences _prefs;
+  final String _key;
+
+  void set(Set<String> value) {
+    state = value;
+    _prefs.setStringList(_key, value.toList());
+  }
+}

@@ -861,6 +861,228 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'¿Borrar la entrada?'**
   String get journalDeleteTitle;
+
+  /// No description provided for @supportTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Apoyar el proyecto'**
+  String get supportTitle;
+
+  /// No description provided for @supportBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Nísabit es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.'**
+  String get supportBody;
+
+  /// No description provided for @supportCafecito.
+  ///
+  /// In es, this message translates to:
+  /// **'Cafecito'**
+  String get supportCafecito;
+
+  /// No description provided for @supportPatreon.
+  ///
+  /// In es, this message translates to:
+  /// **'Patreon'**
+  String get supportPatreon;
+
+  /// No description provided for @supportLinkFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo abrir el enlace'**
+  String get supportLinkFailed;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Configuración'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In es, this message translates to:
+  /// **'Apariencia'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsAccent.
+  ///
+  /// In es, this message translates to:
+  /// **'Color de acento'**
+  String get settingsAccent;
+
+  /// No description provided for @settingsTabs.
+  ///
+  /// In es, this message translates to:
+  /// **'Pestañas visibles'**
+  String get settingsTabs;
+
+  /// No description provided for @settingsTabsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí qué secciones querés ver. Siempre queda al menos una.'**
+  String get settingsTabsHint;
+
+  /// No description provided for @settingsProfile.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfil'**
+  String get settingsProfile;
+
+  /// No description provided for @settingsProfileName.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu nombre'**
+  String get settingsProfileName;
+
+  /// No description provided for @settingsTutorial.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver el tutorial'**
+  String get settingsTutorial;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In es, this message translates to:
+  /// **'Acerca de'**
+  String get settingsAbout;
+
+  /// No description provided for @accentForest.
+  ///
+  /// In es, this message translates to:
+  /// **'Bosque'**
+  String get accentForest;
+
+  /// No description provided for @accentGold.
+  ///
+  /// In es, this message translates to:
+  /// **'Dorado'**
+  String get accentGold;
+
+  /// No description provided for @accentClay.
+  ///
+  /// In es, this message translates to:
+  /// **'Arcilla'**
+  String get accentClay;
+
+  /// No description provided for @accentIndigo.
+  ///
+  /// In es, this message translates to:
+  /// **'Índigo'**
+  String get accentIndigo;
+
+  /// No description provided for @accentPlum.
+  ///
+  /// In es, this message translates to:
+  /// **'Ciruela'**
+  String get accentPlum;
+
+  /// No description provided for @accentSlate.
+  ///
+  /// In es, this message translates to:
+  /// **'Pizarra'**
+  String get accentSlate;
+
+  /// No description provided for @tabSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustes'**
+  String get tabSettings;
+
+  /// No description provided for @tutorialSkip.
+  ///
+  /// In es, this message translates to:
+  /// **'Saltar'**
+  String get tutorialSkip;
+
+  /// No description provided for @tutorialNext.
+  ///
+  /// In es, this message translates to:
+  /// **'Siguiente'**
+  String get tutorialNext;
+
+  /// No description provided for @tutorialDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Empezar'**
+  String get tutorialDone;
+
+  /// No description provided for @tutorialBack.
+  ///
+  /// In es, this message translates to:
+  /// **'Atrás'**
+  String get tutorialBack;
+
+  /// No description provided for @onboardingWelcome.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienvenido a Nísabit'**
+  String get onboardingWelcome;
+
+  /// No description provided for @onboardingWelcomeBody.
+  ///
+  /// In es, this message translates to:
+  /// **'El esfuerzo que te eleva. Tus datos viven en tu equipo: sin cuentas, sin nube, sin telemetría.'**
+  String get onboardingWelcomeBody;
+
+  /// No description provided for @onboardingNameTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo te llamamos?'**
+  String get onboardingNameTitle;
+
+  /// No description provided for @onboardingNameBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo para saludarte. No sale de este dispositivo.'**
+  String get onboardingNameBody;
+
+  /// No description provided for @onboardingTabsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué querés ver?'**
+  String get onboardingTabsTitle;
+
+  /// No description provided for @onboardingTabsBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Podés cambiarlo cuando quieras desde Configuración.'**
+  String get onboardingTabsBody;
+
+  /// No description provided for @tutorialHabitsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Hábitos y rachas'**
+  String get tutorialHabitsTitle;
+
+  /// No description provided for @tutorialHabitsBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Definí lo que querés sostener y resolvelo cada día. Las rachas cuentan los días seguidos.'**
+  String get tutorialHabitsBody;
+
+  /// No description provided for @tutorialTrackTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Sueño y journal'**
+  String get tutorialTrackTitle;
+
+  /// No description provided for @tutorialTrackBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá cuánto dormiste y cómo estuvo tu día. La tira semanal te deja completar días que te salteaste.'**
+  String get tutorialTrackBody;
+
+  /// No description provided for @tutorialFocusTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Foco y tareas'**
+  String get tutorialFocusTitle;
+
+  /// No description provided for @tutorialFocusBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.'**
+  String get tutorialFocusBody;
 }
 
 class _AppLocalizationsDelegate
