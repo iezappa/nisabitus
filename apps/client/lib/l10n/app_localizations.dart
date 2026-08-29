@@ -1705,6 +1705,282 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sistema'**
   String get languageSystem;
+
+  /// No description provided for @tabHealth.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get tabHealth;
+
+  /// No description provided for @healthSleep.
+  ///
+  /// In es, this message translates to:
+  /// **'Sueño'**
+  String get healthSleep;
+
+  /// No description provided for @healthNutrition.
+  ///
+  /// In es, this message translates to:
+  /// **'Alimentación'**
+  String get healthNutrition;
+
+  /// No description provided for @healthExercise.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejercicio'**
+  String get healthExercise;
+
+  /// No description provided for @nutritionGoals.
+  ///
+  /// In es, this message translates to:
+  /// **'Objetivos diarios'**
+  String get nutritionGoals;
+
+  /// No description provided for @nutritionEditGoals.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar objetivos'**
+  String get nutritionEditGoals;
+
+  /// No description provided for @nutritionCalories.
+  ///
+  /// In es, this message translates to:
+  /// **'Calorías'**
+  String get nutritionCalories;
+
+  /// No description provided for @nutritionProtein.
+  ///
+  /// In es, this message translates to:
+  /// **'Proteínas'**
+  String get nutritionProtein;
+
+  /// No description provided for @nutritionCarbs.
+  ///
+  /// In es, this message translates to:
+  /// **'Carbohidratos'**
+  String get nutritionCarbs;
+
+  /// No description provided for @nutritionFat.
+  ///
+  /// In es, this message translates to:
+  /// **'Grasas'**
+  String get nutritionFat;
+
+  /// No description provided for @nutritionGrams.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} g'**
+  String nutritionGrams(int value);
+
+  /// No description provided for @nutritionKcal.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} kcal'**
+  String nutritionKcal(int value);
+
+  /// No description provided for @nutritionOfTarget.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} de {target}'**
+  String nutritionOfTarget(int value, int target);
+
+  /// No description provided for @nutritionRemaining.
+  ///
+  /// In es, this message translates to:
+  /// **'Te quedan {value} kcal'**
+  String nutritionRemaining(int value);
+
+  /// No description provided for @nutritionOver.
+  ///
+  /// In es, this message translates to:
+  /// **'Te pasaste por {value} kcal'**
+  String nutritionOver(int value);
+
+  /// No description provided for @nutritionToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que comiste'**
+  String get nutritionToday;
+
+  /// No description provided for @nutritionEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin registros ese día'**
+  String get nutritionEmpty;
+
+  /// No description provided for @nutritionEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá lo que comiste y se suma solo'**
+  String get nutritionEmptyHint;
+
+  /// No description provided for @nutritionAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar alimento'**
+  String get nutritionAdd;
+
+  /// No description provided for @nutritionEditEntry.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar alimento'**
+  String get nutritionEditEntry;
+
+  /// No description provided for @nutritionPortion.
+  ///
+  /// In es, this message translates to:
+  /// **'Porción'**
+  String get nutritionPortion;
+
+  /// No description provided for @nutritionPortionHint.
+  ///
+  /// In es, this message translates to:
+  /// **'150 g, 1 plato, 2 unidades'**
+  String get nutritionPortionHint;
+
+  /// No description provided for @nutritionValidationNumber.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 0 y {max}'**
+  String nutritionValidationNumber(int max);
+
+  /// No description provided for @exerciseCatalogue.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejercicios'**
+  String get exerciseCatalogue;
+
+  /// No description provided for @exerciseNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo ejercicio'**
+  String get exerciseNew;
+
+  /// No description provided for @exerciseEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar ejercicio'**
+  String get exerciseEdit;
+
+  /// No description provided for @exerciseNoneYet.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay ejercicios'**
+  String get exerciseNoneYet;
+
+  /// No description provided for @exerciseNoneYetHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Creá uno y empezá a registrar tus series'**
+  String get exerciseNoneYetHint;
+
+  /// No description provided for @exerciseMuscleGroup.
+  ///
+  /// In es, this message translates to:
+  /// **'Grupo muscular'**
+  String get exerciseMuscleGroup;
+
+  /// No description provided for @exerciseDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get exerciseDescription;
+
+  /// No description provided for @exerciseWorkout.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrenamiento'**
+  String get exerciseWorkout;
+
+  /// No description provided for @exerciseNoSets.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin series ese día'**
+  String get exerciseNoSets;
+
+  /// No description provided for @exerciseNoSetsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí un ejercicio y anotá tu primera serie'**
+  String get exerciseNoSetsHint;
+
+  /// No description provided for @exerciseAddSet.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar serie'**
+  String get exerciseAddSet;
+
+  /// No description provided for @exerciseEditSet.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar serie'**
+  String get exerciseEditSet;
+
+  /// No description provided for @exerciseReps.
+  ///
+  /// In es, this message translates to:
+  /// **'Repeticiones'**
+  String get exerciseReps;
+
+  /// No description provided for @exerciseWeight.
+  ///
+  /// In es, this message translates to:
+  /// **'Peso (kg)'**
+  String get exerciseWeight;
+
+  /// No description provided for @exerciseBodyweight.
+  ///
+  /// In es, this message translates to:
+  /// **'Peso corporal'**
+  String get exerciseBodyweight;
+
+  /// No description provided for @exerciseSetLine.
+  ///
+  /// In es, this message translates to:
+  /// **'{reps} reps'**
+  String exerciseSetLine(int reps);
+
+  /// No description provided for @exerciseSetLineWeighted.
+  ///
+  /// In es, this message translates to:
+  /// **'{reps} reps × {weight} kg'**
+  String exerciseSetLineWeighted(int reps, String weight);
+
+  /// No description provided for @exerciseTotalSets.
+  ///
+  /// In es, this message translates to:
+  /// **'Series'**
+  String get exerciseTotalSets;
+
+  /// No description provided for @exerciseTotalReps.
+  ///
+  /// In es, this message translates to:
+  /// **'Repeticiones'**
+  String get exerciseTotalReps;
+
+  /// No description provided for @exerciseVolume.
+  ///
+  /// In es, this message translates to:
+  /// **'Volumen'**
+  String get exerciseVolume;
+
+  /// No description provided for @exerciseVolumeValue.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} kg'**
+  String exerciseVolumeValue(String value);
+
+  /// No description provided for @exerciseTopWeight.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo: {weight} kg'**
+  String exerciseTopWeight(String weight);
+
+  /// No description provided for @exercisePickOne.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí un ejercicio'**
+  String get exercisePickOne;
 }
 
 class _AppLocalizationsDelegate

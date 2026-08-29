@@ -8,7 +8,7 @@ import '../../features/journal/presentation/journal_screen.dart';
 import '../../features/pomodoro/presentation/pomodoro_screen.dart';
 import '../../features/settings/presentation/settings_providers.dart';
 import '../../features/settings/presentation/settings_screen.dart';
-import '../../features/sleep/presentation/sleep_screen.dart';
+import '../../features/health/presentation/health_screen.dart';
 import '../../features/todo/presentation/todo_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/settings_button.dart';
@@ -29,7 +29,7 @@ GoRouter buildRouter() => GoRouter(
             builder: (context, _) => switch (tab) {
               AppTab.dashboard => const DashboardScreen(),
               AppTab.habits => const HabitsScreen(),
-              AppTab.sleep => const SleepScreen(),
+              AppTab.health => const HealthScreen(),
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
               AppTab.todo => const TodoScreen(),

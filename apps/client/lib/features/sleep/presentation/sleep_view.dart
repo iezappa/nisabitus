@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
-import '../../../core/time/selected_day_provider.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/range_selector.dart';
 import '../../../core/widgets/section_header.dart';
-import '../../../core/widgets/settings_button.dart';
 import '../../../core/widgets/stat_tile.dart';
-import '../../../core/widgets/week_date_selector.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/sleep_log.dart';
 import '../domain/sleep_stats.dart';
@@ -18,31 +15,21 @@ import 'widgets/sleep_chart.dart';
 import 'widgets/sleep_insights_card.dart';
 import 'widgets/sleep_log_form.dart';
 
-/// The Sueño tab: pick a day, record the night, then look at the trend.
-class SleepScreen extends ConsumerWidget {
-  const SleepScreen({super.key});
+/// The sleep half of the health section: record the night, read the trend.
+///
+/// The day comes from the week strip the health screen owns, so this view
+/// starts at the record itself.
+class SleepView extends ConsumerWidget {
+  const SleepView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final selected = ref.watch(selectedDayProvider);
-    final today = ref.watch(todayProvider);
     final night = ref.watch(sleepForSelectedDayProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: const SettingsButton(),
-        title: Text(l10n.sleepTitle),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: Gap.xxl),
-        children: [
-          WeekDateSelector(
-            selected: selected,
-            today: today,
-            onSelected: (day) =>
-                ref.read(selectedDayProvider.notifier).state = day,
-          ),
+    return ListView(
+      padding: const EdgeInsets.only(bottom: Gap.xxl),
+      children: [
           night.when(
             loading: () => const Padding(
               padding: EdgeInsets.all(Gap.xxl),
@@ -76,8 +63,7 @@ class SleepScreen extends ConsumerWidget {
             ),
           ),
           const _History(),
-        ],
-      ),
+      ],
     );
   }
 }

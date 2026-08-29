@@ -11,7 +11,7 @@ enum AppTab {
   dashboard('/panel', Icons.dashboard_outlined, Icons.dashboard),
   habits('/habitos', Icons.checklist_outlined, Icons.checklist),
   journal('/journal', Icons.menu_book_outlined, Icons.menu_book),
-  sleep('/sueno', Icons.bedtime_outlined, Icons.bedtime),
+  health('/salud', Icons.favorite_outline, Icons.favorite),
   pomodoro('/pomodoro', Icons.timer_outlined, Icons.timer),
   todo('/todo', Icons.task_alt_outlined, Icons.task_alt);
 
@@ -25,7 +25,7 @@ enum AppTab {
     AppTab.dashboard => l10n.tabDashboard,
     AppTab.habits => l10n.tabHabits,
     AppTab.journal => l10n.tabJournal,
-    AppTab.sleep => l10n.tabSleep,
+    AppTab.health => l10n.tabHealth,
     AppTab.pomodoro => l10n.tabPomodoro,
     AppTab.todo => l10n.tabTodo,
   };

@@ -866,4 +866,162 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageSystem => 'System';
+
+  @override
+  String get tabHealth => 'Health';
+
+  @override
+  String get healthSleep => 'Sleep';
+
+  @override
+  String get healthNutrition => 'Nutrition';
+
+  @override
+  String get healthExercise => 'Exercise';
+
+  @override
+  String get nutritionGoals => 'Daily targets';
+
+  @override
+  String get nutritionEditGoals => 'Edit targets';
+
+  @override
+  String get nutritionCalories => 'Calories';
+
+  @override
+  String get nutritionProtein => 'Protein';
+
+  @override
+  String get nutritionCarbs => 'Carbs';
+
+  @override
+  String get nutritionFat => 'Fat';
+
+  @override
+  String nutritionGrams(int value) {
+    return '$value g';
+  }
+
+  @override
+  String nutritionKcal(int value) {
+    return '$value kcal';
+  }
+
+  @override
+  String nutritionOfTarget(int value, int target) {
+    return '$value of $target';
+  }
+
+  @override
+  String nutritionRemaining(int value) {
+    return '$value kcal left';
+  }
+
+  @override
+  String nutritionOver(int value) {
+    return '$value kcal over';
+  }
+
+  @override
+  String get nutritionToday => 'What you ate';
+
+  @override
+  String get nutritionEmpty => 'Nothing logged that day';
+
+  @override
+  String get nutritionEmptyHint => 'Note what you ate and it adds itself up';
+
+  @override
+  String get nutritionAdd => 'Add food';
+
+  @override
+  String get nutritionEditEntry => 'Edit food';
+
+  @override
+  String get nutritionPortion => 'Portion';
+
+  @override
+  String get nutritionPortionHint => '150 g, 1 plate, 2 units';
+
+  @override
+  String nutritionValidationNumber(int max) {
+    return 'Enter a number between 0 and $max';
+  }
+
+  @override
+  String get exerciseCatalogue => 'Exercises';
+
+  @override
+  String get exerciseNew => 'New exercise';
+
+  @override
+  String get exerciseEdit => 'Edit exercise';
+
+  @override
+  String get exerciseNoneYet => 'No exercises yet';
+
+  @override
+  String get exerciseNoneYetHint => 'Create one and start logging your sets';
+
+  @override
+  String get exerciseMuscleGroup => 'Muscle group';
+
+  @override
+  String get exerciseDescription => 'Description';
+
+  @override
+  String get exerciseWorkout => 'Workout';
+
+  @override
+  String get exerciseNoSets => 'No sets that day';
+
+  @override
+  String get exerciseNoSetsHint => 'Pick an exercise and log your first set';
+
+  @override
+  String get exerciseAddSet => 'Add set';
+
+  @override
+  String get exerciseEditSet => 'Edit set';
+
+  @override
+  String get exerciseReps => 'Reps';
+
+  @override
+  String get exerciseWeight => 'Weight (kg)';
+
+  @override
+  String get exerciseBodyweight => 'Bodyweight';
+
+  @override
+  String exerciseSetLine(int reps) {
+    return '$reps reps';
+  }
+
+  @override
+  String exerciseSetLineWeighted(int reps, String weight) {
+    return '$reps reps × $weight kg';
+  }
+
+  @override
+  String get exerciseTotalSets => 'Sets';
+
+  @override
+  String get exerciseTotalReps => 'Reps';
+
+  @override
+  String get exerciseVolume => 'Volume';
+
+  @override
+  String exerciseVolumeValue(String value) {
+    return '$value kg';
+  }
+
+  @override
+  String exerciseTopWeight(String weight) {
+    return 'Top: $weight kg';
+  }
+
+  @override
+  String get exercisePickOne => 'Pick an exercise';
 }

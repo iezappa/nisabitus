@@ -9,7 +9,7 @@ import 'package:nisabit/core/database/app_database.dart';
 import 'package:nisabit/core/database/database_provider.dart';
 import 'package:nisabit/core/widgets/settings_button.dart';
 import 'package:nisabit/features/settings/presentation/settings_providers.dart';
-import 'package:nisabit/features/sleep/presentation/sleep_screen.dart';
+import 'package:nisabit/features/health/presentation/health_screen.dart';
 import 'package:nisabit/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,7 +65,7 @@ void main() {
           // Pinned: these assertions read the Spanish copy, and the
           // test binding would otherwise pick the device default.
           locale: Locale('es'),
-          home: SleepScreen(),
+          home: HealthScreen(),
         ),
       ),
     );

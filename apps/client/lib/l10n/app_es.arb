@@ -431,5 +431,127 @@
   "settingsLanguage": "Idioma",
   "languageSpanish": "Español",
   "languageEnglish": "English",
-  "languageSystem": "Sistema"
+  "languageSystem": "Sistema",
+  "tabHealth": "Salud",
+  "healthSleep": "Sueño",
+  "healthNutrition": "Alimentación",
+  "healthExercise": "Ejercicio",
+  "nutritionGoals": "Objetivos diarios",
+  "nutritionEditGoals": "Editar objetivos",
+  "nutritionCalories": "Calorías",
+  "nutritionProtein": "Proteínas",
+  "nutritionCarbs": "Carbohidratos",
+  "nutritionFat": "Grasas",
+  "nutritionGrams": "{value} g",
+  "nutritionKcal": "{value} kcal",
+  "nutritionOfTarget": "{value} de {target}",
+  "nutritionRemaining": "Te quedan {value} kcal",
+  "nutritionOver": "Te pasaste por {value} kcal",
+  "nutritionToday": "Lo que comiste",
+  "nutritionEmpty": "Sin registros ese día",
+  "nutritionEmptyHint": "Anotá lo que comiste y se suma solo",
+  "nutritionAdd": "Agregar alimento",
+  "nutritionEditEntry": "Editar alimento",
+  "nutritionPortion": "Porción",
+  "nutritionPortionHint": "150 g, 1 plato, 2 unidades",
+  "nutritionValidationNumber": "Ingresá un número entre 0 y {max}",
+  "exerciseCatalogue": "Ejercicios",
+  "exerciseNew": "Nuevo ejercicio",
+  "exerciseEdit": "Editar ejercicio",
+  "exerciseNoneYet": "Todavía no hay ejercicios",
+  "exerciseNoneYetHint": "Creá uno y empezá a registrar tus series",
+  "exerciseMuscleGroup": "Grupo muscular",
+  "exerciseDescription": "Descripción",
+  "exerciseWorkout": "Entrenamiento",
+  "exerciseNoSets": "Sin series ese día",
+  "exerciseNoSetsHint": "Elegí un ejercicio y anotá tu primera serie",
+  "exerciseAddSet": "Agregar serie",
+  "exerciseEditSet": "Editar serie",
+  "exerciseReps": "Repeticiones",
+  "exerciseWeight": "Peso (kg)",
+  "exerciseBodyweight": "Peso corporal",
+  "exerciseSetLine": "{reps} reps",
+  "exerciseSetLineWeighted": "{reps} reps × {weight} kg",
+  "exerciseTotalSets": "Series",
+  "exerciseTotalReps": "Repeticiones",
+  "exerciseVolume": "Volumen",
+  "exerciseVolumeValue": "{value} kg",
+  "exerciseTopWeight": "Máximo: {weight} kg",
+  "exercisePickOne": "Elegí un ejercicio",
+  "@nutritionGrams": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "@nutritionKcal": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "@nutritionOfTarget": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "@nutritionRemaining": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "@nutritionOver": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "@nutritionValidationNumber": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@exerciseSetLine": {
+    "placeholders": {
+      "reps": {
+        "type": "int"
+      }
+    }
+  },
+  "@exerciseSetLineWeighted": {
+    "placeholders": {
+      "reps": {
+        "type": "int"
+      },
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "@exerciseVolumeValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@exerciseTopWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  }
 }

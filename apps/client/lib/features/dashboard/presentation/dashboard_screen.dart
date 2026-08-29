@@ -188,7 +188,7 @@ class _Health extends StatelessWidget {
                 sleep == null ? '—' : l10n.sleepHours(formatHours(sleep.hours)),
                 style: theme.textTheme.titleMedium,
               ),
-              onTap: () => context.go(AppTab.sleep.path),
+              onTap: () => context.go(AppTab.health.path),
             ),
             const Divider(height: 1),
             ListTile(
