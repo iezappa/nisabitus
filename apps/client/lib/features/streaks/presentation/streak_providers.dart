@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
+import '../../../core/time/progress_range.dart';
 import '../data/drift_streak_repository.dart';
 import '../domain/streak.dart';
 import '../domain/streak_repository.dart';
@@ -11,6 +12,20 @@ final streakRepositoryProvider = Provider<StreakRepository>(
 
 /// Incremented after every write so dependent queries refetch.
 final streaksRevisionProvider = StateProvider<int>((ref) => 0);
+
+/// The window the progress view is looking at.
+final streakProgressRangeProvider = StateProvider<ProgressRange>(
+  (ref) => ProgressRange.defaultRange,
+);
+
+/// One line per streak that moved inside the window.
+final streakSeriesProvider = FutureProvider<List<StreakSeries>>((ref) {
+  ref.watch(streaksRevisionProvider);
+
+  return ref
+      .watch(streakRepositoryProvider)
+      .chartSeries(ref.watch(streakProgressRangeProvider).toDateRange());
+});
 
 final streaksProvider = FutureProvider<List<Streak>>((ref) {
   ref.watch(streaksRevisionProvider);
