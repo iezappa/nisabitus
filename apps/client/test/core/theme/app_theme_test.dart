@@ -137,10 +137,23 @@ void main() {
       expect(_luminance(ground), lessThan(0.02));
     });
 
-    test('is warm, keeping more red than blue like the paper it inverts', () {
-      final ground = AppTheme.dark(AccentColor.forest).scaffoldBackgroundColor;
+    test('stays neutral so nothing competes with the accent', () {
+      // Colour belongs to the accent. A tinted ground reads as a second
+      // colour and muddies whichever accent the user picked.
+      for (final theme in [
+        AppTheme.dark(AccentColor.forest),
+        AppTheme.light(AccentColor.forest),
+      ]) {
+        final ground = theme.scaffoldBackgroundColor;
+        final channels = [ground.r, ground.g, ground.b];
+        final spread = channels.reduce(math.max) - channels.reduce(math.min);
 
-      expect(ground.r, greaterThan(ground.b));
+        expect(
+          spread,
+          lessThan(0.04),
+          reason: 'the ground carries a colour cast of $spread',
+        );
+      }
     });
 
     test('hairlines are visible without being loud', () {

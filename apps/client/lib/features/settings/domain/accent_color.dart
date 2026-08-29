@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 /// The accent the whole interface is tinted with.
 ///
 /// A closed set rather than a free colour picker: every option is checked to
-/// stay legible on warm paper and in the dark scheme, which an arbitrary hex
-/// value would not be.
+/// stay legible on both grounds, which an arbitrary hex value would not be.
+///
+/// The tones are saturated enough to read as a deliberate colour against a
+/// neutral surface. The first pass used muted earth tones that suited warm
+/// paper and looked merely dull once the background stopped being tinted.
 enum AccentColor {
-  forest('forest', Color(0xFF3E5641), Color(0xFF6B8F71)),
-  gold('gold', Color(0xFF9A7734), Color(0xFFC9A65C)),
-  clay('clay', Color(0xFF9C5A3C), Color(0xFFC98A6B)),
-  indigo('indigo', Color(0xFF3F4E7A), Color(0xFF8492C4)),
-  plum('plum', Color(0xFF6E4460), Color(0xFFB287A6)),
-  slate('slate', Color(0xFF41595F), Color(0xFF86A6AD));
+  forest('forest', Color(0xFF1F6B4C), Color(0xFF4FBF8B)),
+  gold('gold', Color(0xFF8A6A16), Color(0xFFD4A93F)),
+  clay('clay', Color(0xFFA8442A), Color(0xFFE08668)),
+  indigo('indigo', Color(0xFF3B49C4), Color(0xFF8E9BF5)),
+  plum('plum', Color(0xFF7C3A72), Color(0xFFC589BC)),
+  slate('slate', Color(0xFF2F6070), Color(0xFF74AEC2));
 
   const AccentColor(this.id, this.light, this.dark);
 

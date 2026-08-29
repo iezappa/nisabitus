@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -91,7 +92,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get streaksEmpty => 'No streaks yet';
 
   @override
-  String get streaksEmptyHint => 'A streak counts the days in a row you keep something up';
+  String get streaksEmptyHint =>
+      'A streak counts the days in a row you keep something up';
 
   @override
   String get streakNew => 'New streak';
@@ -238,10 +240,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chartEmpty => 'No data in this range';
 
   @override
-  String get chartEmptyHint => 'Tick off a habit and your progress shows up here';
+  String get chartEmptyHint =>
+      'Tick off a habit and your progress shows up here';
 
   @override
-  String get chartStreaksEmptyHint => 'Add to a streak and its evolution shows up here';
+  String get chartStreaksEmptyHint =>
+      'Add to a streak and its evolution shows up here';
 
   @override
   String get habitsCompletionsPerDay => 'Completions per day';
@@ -317,10 +321,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepInsights => 'Wellbeing';
 
   @override
-  String get sleepInsightAverageGood => 'Your average sits in the recommended band. Keep it up.';
+  String get sleepInsightAverageGood =>
+      'Your average sits in the recommended band. Keep it up.';
 
   @override
-  String get sleepInsightAverageLow => 'You are sleeping below what is recommended.';
+  String get sleepInsightAverageLow =>
+      'You are sleeping below what is recommended.';
 
   @override
   String get sleepInsightAverageHigh => 'You are sleeping more than usual.';
@@ -332,7 +338,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepInsightConsistencySteady => 'Your nights are steady.';
 
   @override
-  String get sleepInsightConsistencyErratic => 'Your hours swing quite a bit from night to night.';
+  String get sleepInsightConsistencyErratic =>
+      'Your hours swing quite a bit from night to night.';
 
   @override
   String get sleepValidationHours => 'Enter a number between 0 and 24';
@@ -418,7 +425,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportTitle => 'Support the project';
 
   @override
-  String get supportBody => 'Nísabit is free, account-free and ad-free. If it helps you, you can chip in to keep it that way.';
+  String get supportBody =>
+      'Nísabit is free, account-free and ad-free. If it helps you, you can chip in to keep it that way.';
 
   @override
   String get supportCafecito => 'Cafecito';
@@ -442,7 +450,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTabs => 'Visible tabs';
 
   @override
-  String get settingsTabsHint => 'Pick the sections you want to see. At least one always stays.';
+  String get settingsTabsHint =>
+      'Pick the sections you want to see. At least one always stays.';
 
   @override
   String get settingsProfile => 'Profile';
@@ -811,22 +820,28 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get onboardingWelcomeDetail => 'Nísabit brings habits, streaks, sleep, journal and tasks together in one place that lives on your device. No accounts, no cloud, no telemetry: your data never leaves your machine, and the app works just the same offline.';
+  String get onboardingWelcomeDetail =>
+      'Nísabit brings habits, streaks, sleep, journal and tasks together in one place that lives on your device. No accounts, no cloud, no telemetry: your data never leaves your machine, and the app works just the same offline.';
 
   @override
-  String get tutorialHabitsDetail => 'Define what you want to repeat and settle it each day with one tap. Choose whether it is daily, weekly, monthly or yearly, and which days you expect to keep it.\n\nStreaks count separately: they track the days in a row of something and hold on to your record, even after you go back to zero.';
+  String get tutorialHabitsDetail =>
+      'Define what you want to repeat and settle it each day with one tap. Choose whether it is daily, weekly, monthly or yearly, and which days you expect to keep it.\n\nStreaks count separately: they track the days in a row of something and hold on to your record, even after you go back to zero.';
 
   @override
-  String get tutorialTrackDetail => 'Note how many hours you slept and the app tells you how the night went, works out your average and shows you the trend.\n\nThe journal offers six short fields to close the day: how you were, what you are grateful for, where you put your focus and what you want to start with tomorrow.\n\nThe week strip lets you fill in days you skipped.';
+  String get tutorialTrackDetail =>
+      'Note how many hours you slept and the app tells you how the night went, works out your average and shows you the trend.\n\nThe journal offers six short fields to close the day: how you were, what you are grateful for, where you put your focus and what you want to start with tomorrow.\n\nThe week strip lets you fill in days you skipped.';
 
   @override
-  String get tutorialFocusDetail => 'The pomodoro splits your work into focus and break cycles, and keeps count of the minutes you actually concentrated.\n\nTo-Do organises your tasks into projects up to three levels deep, and you move them between To do, In progress and Done by dragging them across the board.';
+  String get tutorialFocusDetail =>
+      'The pomodoro splits your work into focus and break cycles, and keeps count of the minutes you actually concentrated.\n\nTo-Do organises your tasks into projects up to three levels deep, and you move them between To do, In progress and Done by dragging them across the board.';
 
   @override
-  String get onboardingNameDetail => 'We only use it to greet you on the panel. It never leaves this device, and you can change or clear it whenever you like.';
+  String get onboardingNameDetail =>
+      'We only use it to greet you on the panel. It never leaves this device, and you can change or clear it whenever you like.';
 
   @override
-  String get onboardingTabsDetail => 'Pick the sections that serve you and leave out the ones that do not. You can change this any time from Settings, which is always within reach at the top left.';
+  String get onboardingTabsDetail =>
+      'Pick the sections that serve you and leave out the ones that do not. You can change this any time from Settings, which is always within reach at the top left.';
 
   @override
   String get settingsTheme => 'Theme';
