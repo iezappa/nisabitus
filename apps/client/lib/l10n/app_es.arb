@@ -1,0 +1,95 @@
+{
+  "@@locale": "es",
+  "appTitle": "Nísabit",
+  "appTagline": "El esfuerzo que te eleva",
+  "tabDashboard": "Panel",
+  "tabHabits": "Hábitos",
+  "tabJournal": "Journal",
+  "tabSleep": "Sueño",
+  "tabPomodoro": "Pomodoro",
+  "tabTodo": "To-Do",
+  "habitsTitle": "Hábitos",
+  "habitsList": "Lista",
+  "habitsProgress": "Progreso",
+  "frequencyDaily": "Diario",
+  "frequencyWeekly": "Semanal",
+  "frequencyMonthly": "Mensual",
+  "frequencyYearly": "Anual",
+  "habitsEmpty": "Todavía no hay hábitos acá",
+  "habitsEmptyHint": "Creá el primero y empezá a sostenerlo",
+  "habitNew": "Nuevo hábito",
+  "habitDone": "Hecho",
+  "habitCancel": "Cancelar",
+  "habitCompleted": "Completado",
+  "habitCancelled": "Cancelado",
+  "habitFinishedOn": "Finalizado el {date}",
+  "@habitFinishedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "habitTargetBadge": "{count}x",
+  "@habitTargetBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streaksTitle": "Rachas",
+  "streaksEmpty": "Todavía no hay rachas",
+  "streaksEmptyHint": "Una racha cuenta los días seguidos que sostenés algo",
+  "streakNew": "Nueva racha",
+  "streakDays": "días",
+  "streakRecord": "Récord: {count}",
+  "@streakRecord": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streakIncrement": "+1",
+  "streakReset": "Reiniciar",
+  "actionSave": "Guardar",
+  "actionCancel": "Cancelar",
+  "actionDelete": "Borrar",
+  "actionEdit": "Editar",
+  "fieldName": "Nombre",
+  "fieldCategory": "Categoría",
+  "fieldFrequency": "Frecuencia",
+  "fieldTarget": "Objetivo por período",
+  "validationNameRequired": "El nombre es obligatorio",
+  "deleteConfirmTitle": "¿Borrar {name}?",
+  "@deleteConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteConfirmBody": "Esta acción no se puede deshacer.",
+  "comingSoon": "En construcción",
+  "comingSoonHint": "Este módulo todavía no está implementado.",
+  "weekdayShortMonday": "L",
+  "weekdayShortTuesday": "M",
+  "weekdayShortWednesday": "X",
+  "weekdayShortThursday": "J",
+  "weekdayShortFriday": "V",
+  "weekdayShortSaturday": "S",
+  "weekdayShortSunday": "D",
+  "habitRepeatForever": "Repetir por siempre",
+  "habitEndDate": "Fecha de fin",
+  "habitRepeatDays": "Días de repetición",
+  "habitEdit": "Editar hábito",
+  "habitScheduledOn": "Programado: {days}",
+  "@habitScheduledOn": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  }
+}
