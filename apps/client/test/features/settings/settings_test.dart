@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/preferences/preferences.dart';
 import 'package:nisabit/core/router/app_tab.dart';
+import 'package:nisabit/core/widgets/centered_content.dart';
 import 'package:nisabit/features/settings/domain/accent_color.dart';
 import 'package:nisabit/features/settings/domain/theme_preference.dart';
 import 'package:nisabit/features/settings/presentation/settings_providers.dart';
@@ -269,6 +270,80 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(container.read(themeChoiceProvider), ThemeChoice.dark);
+    });
+  });
+
+  group('layout', () {
+    testWidgets('keeps its content at a readable width on a wide window', (
+      tester,
+    ) async {
+      await boot();
+      await tester.binding.setSurfaceSize(const Size(1600, 1200));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final width = tester.getSize(find.byType(CenteredContent)).width;
+      final inner = tester.getSize(
+        find.descendant(
+          of: find.byType(CenteredContent),
+          matching: find.byType(ListView),
+        ),
+      );
+
+      expect(width, 1600, reason: 'the wrapper spans the window');
+      expect(
+        inner.width,
+        lessThanOrEqualTo(640),
+        reason: 'the content itself stays narrow',
+      );
+    });
+
+    testWidgets('still fills a narrow window edge to edge', (tester) async {
+      await boot();
+      await tester.binding.setSurfaceSize(const Size(420, 1200));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final inner = tester.getSize(
+        find.descendant(
+          of: find.byType(CenteredContent),
+          matching: find.byType(ListView),
+        ),
+      );
+
+      expect(inner.width, 420);
     });
   });
 }

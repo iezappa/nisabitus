@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/centered_content.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../shared/support_actions.dart';
@@ -20,9 +21,10 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: Gap.xxl),
-        children: [
+      body: CenteredContent(
+        child: ListView(
+          padding: const EdgeInsets.only(bottom: Gap.xxl),
+          children: [
           SectionHeader(label: l10n.settingsAppearance),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
@@ -93,11 +95,12 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: Gap.lg),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: Gap.lg),
-            child: SupportProjectsCard(),
-          ),
-        ],
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: SupportProjectsCard(),
+            ),
+          ],
+        ),
       ),
     );
   }
