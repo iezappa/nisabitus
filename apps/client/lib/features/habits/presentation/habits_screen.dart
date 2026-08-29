@@ -172,7 +172,11 @@ class _HabitList extends ConsumerWidget {
                 onRevert: () =>
                     actions.changeStatus(habit.id, HabitStatus.pending),
                 onEdit: () async {
-                  final draft = await showHabitForm(context, existing: habit);
+                  final draft = await showHabitForm(
+                    context,
+                    existing: habit,
+                    onDelete: () => actions.delete(habit.id),
+                  );
                   if (draft != null) await actions.update(habit.id, draft);
                 },
                 onDelete: () async {

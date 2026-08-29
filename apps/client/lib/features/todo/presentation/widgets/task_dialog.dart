@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/confirm_dialog.dart';
+import '../../../../core/widgets/dialog_title.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/task.dart';
 import '../../domain/todo_repository.dart';
@@ -99,7 +100,13 @@ class _TaskDialogState extends ConsumerState<_TaskDialog> {
     final existing = widget.existing;
 
     return AlertDialog(
-      title: Text(existing == null ? l10n.todoNewTask : l10n.todoEditTask),
+      title: DialogTitle(
+        text: existing == null ? l10n.todoNewTask : l10n.todoEditTask,
+        deleteLabel: existing?.title,
+        onDelete: existing == null
+            ? null
+            : () => ref.read(todoActionsProvider).deleteTask(existing.id),
+      ),
       content: SizedBox(
         width: 460,
         child: SingleChildScrollView(
@@ -183,16 +190,6 @@ class _TaskDialogState extends ConsumerState<_TaskDialog> {
         ),
       ),
       actions: [
-        if (existing != null)
-          TextButton(
-            onPressed: () async {
-              if (await confirmDelete(context, existing.title)) {
-                await ref.read(todoActionsProvider).deleteTask(existing.id);
-                if (context.mounted) Navigator.of(context).pop();
-              }
-            },
-            child: Text(l10n.actionDelete),
-          ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(l10n.actionCancel),

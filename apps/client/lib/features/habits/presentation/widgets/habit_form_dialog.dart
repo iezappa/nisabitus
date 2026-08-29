@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/widgets/dialog_title.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/habit.dart';
 import '../../domain/habit_draft.dart';
@@ -12,11 +13,13 @@ Future<HabitDraft?> showHabitForm(
   BuildContext context, {
   Habit? existing,
   HabitFrequency initialFrequency = HabitFrequency.daily,
+  Future<void> Function()? onDelete,
 }) => showDialog<HabitDraft>(
   context: context,
   builder: (context) => _HabitFormDialog(
     existing: existing,
     initialFrequency: initialFrequency,
+    onDelete: onDelete,
   ),
 );
 
@@ -24,10 +27,12 @@ class _HabitFormDialog extends StatefulWidget {
   const _HabitFormDialog({
     required this.existing,
     required this.initialFrequency,
+    this.onDelete,
   });
 
   final Habit? existing;
   final HabitFrequency initialFrequency;
+  final Future<void> Function()? onDelete;
 
   @override
   State<_HabitFormDialog> createState() => _HabitFormDialogState();
@@ -98,7 +103,11 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: Text(widget.existing == null ? l10n.habitNew : l10n.habitEdit),
+      title: DialogTitle(
+        text: widget.existing == null ? l10n.habitNew : l10n.habitEdit,
+        deleteLabel: widget.existing?.name,
+        onDelete: widget.onDelete,
+      ),
       content: SizedBox(
         width: 420,
         child: SingleChildScrollView(

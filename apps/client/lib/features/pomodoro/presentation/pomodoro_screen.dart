@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/range_selector.dart';
 import '../../../core/widgets/section_header.dart';
@@ -211,7 +210,15 @@ class _Sessions extends ConsumerWidget {
                 onTap: () => ref
                     .read(selectedSessionIdProvider.notifier)
                     .state = session.id,
-                onLongPress: () => _showActions(context, ref, session),
+                onLongPress: () async {
+                  final actions = ref.read(pomodoroActionsProvider);
+                  final draft = await showPomodoroForm(
+                    context,
+                    existing: session,
+                    onDelete: () => actions.delete(session.id),
+                  );
+                  if (draft != null) await actions.update(session.id, draft);
+                },
               ),
             ),
           ),
@@ -244,53 +251,6 @@ class _Sessions extends ConsumerWidget {
       ],
     );
   }
-}
-
-/// Edit and delete, kept off the row so tapping it means one thing: run it.
-Future<void> _showActions(
-  BuildContext context,
-  WidgetRef ref,
-  PomodoroSession session,
-) async {
-  final l10n = AppLocalizations.of(context);
-  final actions = ref.read(pomodoroActionsProvider);
-
-  await showModalBottomSheet<void>(
-    context: context,
-    showDragHandle: true,
-    builder: (sheet) => SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.edit_outlined),
-            title: Text(l10n.actionEdit),
-            onTap: () async {
-              Navigator.of(sheet).pop();
-              final draft = await showPomodoroForm(
-                context,
-                existing: session,
-              );
-              if (draft != null) await actions.update(session.id, draft);
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.delete_outline,
-              color: Theme.of(sheet).colorScheme.error,
-            ),
-            title: Text(l10n.actionDelete),
-            onTap: () async {
-              Navigator.of(sheet).pop();
-              if (await confirmDelete(context, session.name)) {
-                await actions.delete(session.id);
-              }
-            },
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 class _ProgressBadge extends StatelessWidget {

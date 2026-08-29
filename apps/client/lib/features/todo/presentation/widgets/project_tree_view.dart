@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/confirm_dialog.dart';
 import '../../../../core/widgets/name_prompt_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/project.dart';
@@ -97,6 +96,7 @@ class _Node extends ConsumerWidget {
                       context,
                       title: l10n.actionEdit,
                       initialValue: project.name,
+                      onDelete: () => actions.deleteProject(project.id),
                     );
                     if (name != null) {
                       await actions.updateProject(
@@ -107,15 +107,6 @@ class _Node extends ConsumerWidget {
                     }
                   },
                   child: Text(l10n.actionEdit),
-                ),
-                MenuItemButton(
-                  leadingIcon: const Icon(Icons.delete_outline, size: 18),
-                  onPressed: () async {
-                    if (await confirmDelete(context, project.name)) {
-                      await actions.deleteProject(project.id);
-                    }
-                  },
-                  child: Text(l10n.actionDelete),
                 ),
               ],
               builder: (context, controller, _) => IconButton(

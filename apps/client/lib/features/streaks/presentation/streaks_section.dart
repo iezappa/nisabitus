@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/name_prompt_dialog.dart';
 import '../../../core/widgets/section_header.dart';
+import '../../../core/widgets/wheel_scroll_area.dart';
 import '../../../l10n/app_localizations.dart';
 import 'streak_providers.dart';
 import 'widgets/streak_card.dart';
@@ -57,13 +57,8 @@ class StreaksSection extends ConsumerWidget {
                   hint: l10n.streaksEmptyHint,
                 )
               : SizedBox(
-                  height: 160,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-                    itemCount: items.length,
-                    separatorBuilder: (_, _) => const SizedBox(width: Gap.md),
-                    itemBuilder: (context, index) {
+                  height: 200,
+                  child: _StreakStrip(count: items.length, builder: (context, index) {
                       final streak = items[index];
                       return SizedBox(
                         width: 200,
@@ -76,23 +71,60 @@ class StreaksSection extends ConsumerWidget {
                               context,
                               title: l10n.actionEdit,
                               initialValue: streak.name,
+                              onDelete: () => actions.delete(streak.id),
                             );
                             if (name != null) {
                               await actions.rename(streak.id, name);
                             }
                           },
-                          onDelete: () async {
-                            if (await confirmDelete(context, streak.name)) {
-                              await actions.delete(streak.id);
-                            }
-                          },
                         ),
                       );
-                    },
-                  ),
+                  }),
                 ),
         ),
       ],
     );
   }
+}
+
+/// The horizontal band of streak cards.
+///
+/// Wrapped so a mouse wheel moves it: without that, any card past the right
+/// edge of the window cannot be reached with a mouse at all.
+class _StreakStrip extends StatefulWidget {
+  const _StreakStrip({required this.count, required this.builder});
+
+  final int count;
+  final Widget Function(BuildContext, int) builder;
+
+  @override
+  State<_StreakStrip> createState() => _StreakStripState();
+}
+
+class _StreakStripState extends State<_StreakStrip> {
+  final _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => WheelScrollArea(
+    controller: _controller,
+    child: Scrollbar(
+      controller: _controller,
+      // Always shown: a band that scrolls needs to say so, or nobody tries.
+      thumbVisibility: true,
+      child: ListView.separated(
+        controller: _controller,
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(Gap.lg, 0, Gap.lg, Gap.md),
+        itemCount: widget.count,
+        separatorBuilder: (_, _) => const SizedBox(width: Gap.md),
+        itemBuilder: widget.builder,
+      ),
+    ),
+  );
 }

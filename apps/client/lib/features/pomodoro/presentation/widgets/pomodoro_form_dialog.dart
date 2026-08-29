@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/dialog_title.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/pomodoro_draft.dart';
 import '../../domain/pomodoro_session.dart';
@@ -9,15 +10,18 @@ import '../../domain/pomodoro_session.dart';
 Future<PomodoroDraft?> showPomodoroForm(
   BuildContext context, {
   PomodoroSession? existing,
+  Future<void> Function()? onDelete,
 }) => showDialog<PomodoroDraft>(
   context: context,
-  builder: (context) => _PomodoroFormDialog(existing: existing),
+  builder: (context) =>
+      _PomodoroFormDialog(existing: existing, onDelete: onDelete),
 );
 
 class _PomodoroFormDialog extends StatefulWidget {
-  const _PomodoroFormDialog({this.existing});
+  const _PomodoroFormDialog({this.existing, this.onDelete});
 
   final PomodoroSession? existing;
+  final Future<void> Function()? onDelete;
 
   @override
   State<_PomodoroFormDialog> createState() => _PomodoroFormDialogState();
@@ -73,8 +77,10 @@ class _PomodoroFormDialogState extends State<_PomodoroFormDialog> {
     final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: Text(
-        widget.existing == null ? l10n.pomodoroNew : l10n.pomodoroEdit,
+      title: DialogTitle(
+        text: widget.existing == null ? l10n.pomodoroNew : l10n.pomodoroEdit,
+        deleteLabel: widget.existing?.name,
+        onDelete: widget.onDelete,
       ),
       content: SizedBox(
         width: 420,
