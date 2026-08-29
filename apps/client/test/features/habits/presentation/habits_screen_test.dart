@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/database/app_database.dart';
 import 'package:nisabit/core/database/database_provider.dart';
+import 'package:nisabit/core/widgets/stat_tile.dart';
 import 'package:nisabit/features/habits/domain/habit_draft.dart';
 import 'package:nisabit/features/habits/domain/habit_frequency.dart';
 import 'package:nisabit/features/habits/presentation/habit_providers.dart';
@@ -148,5 +149,89 @@ void main() {
 
     expect(find.text('1'), findsOneWidget);
     expect(find.text('Récord: 1'), findsOneWidget);
+  });
+
+  group('progress view', () {
+    Future<void> openProgress(WidgetTester tester) async {
+      await tester.tap(find.byTooltip('Progreso'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('offers the four range presets', (tester) async {
+      await pumpScreen(tester);
+      await openProgress(tester);
+
+      expect(find.text('Día'), findsOneWidget);
+      expect(find.text('Semana'), findsOneWidget);
+      expect(find.text('Mes'), findsOneWidget);
+      expect(find.text('Año'), findsOneWidget);
+    });
+
+    testWidgets('starts on the thirty day window', (tester) async {
+      await pumpScreen(tester);
+      await openProgress(tester);
+
+      expect(find.text('Últimos 30 días'), findsNWidgets(2));
+    });
+
+    testWidgets('shows an empty chart before anything is completed', (
+      tester,
+    ) async {
+      await container
+          .read(habitActionsProvider)
+          .create(
+            const HabitDraft(name: 'Leer', frequency: HabitFrequency.daily),
+          );
+      await pumpScreen(tester);
+      await openProgress(tester);
+
+      expect(find.text('COMPLETADOS'), findsOneWidget);
+      expect(find.text('Sin datos en este rango'), findsNWidgets(2));
+    });
+
+    testWidgets('counts a completion and estimates the rate', (tester) async {
+      await container
+          .read(habitActionsProvider)
+          .create(
+            const HabitDraft(name: 'Leer', frequency: HabitFrequency.daily),
+          );
+      await pumpScreen(tester);
+      await tester.tap(find.byTooltip('Hecho'));
+      await tester.pumpAndSettle();
+
+      await openProgress(tester);
+
+      // Scoped to the tile: the chart's y axis also renders a "1".
+      expect(
+        find.descendant(
+          of: find.widgetWithText(StatTile, 'COMPLETADOS'),
+          matching: find.text('1'),
+        ),
+        findsOneWidget,
+      );
+      // One completion over one habit reads as a full rate.
+      expect(find.text('100%'), findsOneWidget);
+    });
+
+    testWidgets('hides the create button while looking at progress', (
+      tester,
+    ) async {
+      await pumpScreen(tester);
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+
+      await openProgress(tester);
+
+      expect(find.byType(FloatingActionButton), findsNothing);
+    });
+
+    testWidgets('goes back to the list', (tester) async {
+      await pumpScreen(tester);
+      await openProgress(tester);
+
+      await tester.tap(find.byTooltip('Lista'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Diario'), findsOneWidget);
+    });
   });
 }

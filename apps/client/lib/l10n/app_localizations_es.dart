@@ -207,4 +207,48 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get streakLongest => 'Récord';
+
+  @override
+  String get rangeDay => 'Día';
+
+  @override
+  String get rangeWeek => 'Semana';
+
+  @override
+  String get rangeMonth => 'Mes';
+
+  @override
+  String get rangeYear => 'Año';
+
+  @override
+  String get statsCompleted => 'Completados';
+
+  @override
+  String get statsSuccessRate => 'Tasa de éxito';
+
+  @override
+  String statsPercent(int value) {
+    return '$value%';
+  }
+
+  @override
+  String statsRangeCaption(int days) {
+    return 'Últimos $days días';
+  }
+
+  @override
+  String get chartEmpty => 'Sin datos en este rango';
+
+  @override
+  String get chartEmptyHint => 'Resolvé algún hábito y el progreso aparece acá';
+
+  @override
+  String get chartStreaksEmptyHint =>
+      'Sumá a una racha y su evolución aparece acá';
+
+  @override
+  String get habitsCompletionsPerDay => 'Cumplimientos por día';
+
+  @override
+  String get streaksEvolution => 'Evolución';
 }

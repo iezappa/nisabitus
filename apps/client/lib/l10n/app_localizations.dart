@@ -465,6 +465,84 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Récord'**
   String get streakLongest;
+
+  /// No description provided for @rangeDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Día'**
+  String get rangeDay;
+
+  /// No description provided for @rangeWeek.
+  ///
+  /// In es, this message translates to:
+  /// **'Semana'**
+  String get rangeWeek;
+
+  /// No description provided for @rangeMonth.
+  ///
+  /// In es, this message translates to:
+  /// **'Mes'**
+  String get rangeMonth;
+
+  /// No description provided for @rangeYear.
+  ///
+  /// In es, this message translates to:
+  /// **'Año'**
+  String get rangeYear;
+
+  /// No description provided for @statsCompleted.
+  ///
+  /// In es, this message translates to:
+  /// **'Completados'**
+  String get statsCompleted;
+
+  /// No description provided for @statsSuccessRate.
+  ///
+  /// In es, this message translates to:
+  /// **'Tasa de éxito'**
+  String get statsSuccessRate;
+
+  /// No description provided for @statsPercent.
+  ///
+  /// In es, this message translates to:
+  /// **'{value}%'**
+  String statsPercent(int value);
+
+  /// No description provided for @statsRangeCaption.
+  ///
+  /// In es, this message translates to:
+  /// **'Últimos {days} días'**
+  String statsRangeCaption(int days);
+
+  /// No description provided for @chartEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin datos en este rango'**
+  String get chartEmpty;
+
+  /// No description provided for @chartEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Resolvé algún hábito y el progreso aparece acá'**
+  String get chartEmptyHint;
+
+  /// No description provided for @chartStreaksEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Sumá a una racha y su evolución aparece acá'**
+  String get chartStreaksEmptyHint;
+
+  /// No description provided for @habitsCompletionsPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Cumplimientos por día'**
+  String get habitsCompletionsPerDay;
+
+  /// No description provided for @streaksEvolution.
+  ///
+  /// In es, this message translates to:
+  /// **'Evolución'**
+  String get streaksEvolution;
 }
 
 class _AppLocalizationsDelegate

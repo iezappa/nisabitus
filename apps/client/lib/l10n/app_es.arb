@@ -106,5 +106,32 @@
     }
   },
   "streakCurrent": "Racha actual",
-  "streakLongest": "Récord"
+  "streakLongest": "Récord",
+  "rangeDay": "Día",
+  "rangeWeek": "Semana",
+  "rangeMonth": "Mes",
+  "rangeYear": "Año",
+  "statsCompleted": "Completados",
+  "statsSuccessRate": "Tasa de éxito",
+  "statsPercent": "{value}%",
+  "statsRangeCaption": "Últimos {days} días",
+  "chartEmpty": "Sin datos en este rango",
+  "chartEmptyHint": "Resolvé algún hábito y el progreso aparece acá",
+  "chartStreaksEmptyHint": "Sumá a una racha y su evolución aparece acá",
+  "habitsCompletionsPerDay": "Cumplimientos por día",
+  "streaksEvolution": "Evolución",
+  "@statsPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "@statsRangeCaption": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }
