@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/preferences/preferences.dart';
 import 'package:nisabit/core/router/app_tab.dart';
 import 'package:nisabit/features/settings/domain/accent_color.dart';
+import 'package:nisabit/features/settings/domain/theme_preference.dart';
 import 'package:nisabit/features/settings/presentation/settings_providers.dart';
 import 'package:nisabit/features/settings/presentation/settings_screen.dart';
 import 'package:nisabit/features/shared/support_actions.dart';
@@ -223,6 +224,51 @@ void main() {
       container.read(profileNameProvider.notifier).set('Zeke');
 
       expect(container.read(profileNameProvider), 'Zeke');
+    });
+  });
+
+  group('theme choice', () {
+    test('follows the system until told otherwise', () async {
+      await boot();
+
+      expect(container.read(themeChoiceProvider), ThemeChoice.system);
+      expect(container.read(themeChoiceProvider).mode, ThemeMode.system);
+    });
+
+    test('round-trips through its stored id', () {
+      for (final choice in ThemeChoice.values) {
+        expect(ThemeChoice.parse(choice.id), choice);
+      }
+    });
+
+    test('falls back when the stored value is unknown', () {
+      expect(ThemeChoice.parse('sepia'), ThemeChoice.system);
+      expect(ThemeChoice.parse(null), ThemeChoice.system);
+    });
+
+    test('remembers being pinned to dark', () async {
+      await boot();
+
+      container.read(themePreferenceProvider.notifier).set(ThemeChoice.dark.id);
+
+      expect(container.read(themeChoiceProvider).mode, ThemeMode.dark);
+      expect(prefs.getString('settings.theme'), 'dark');
+    });
+
+    test('survives a restart', () async {
+      await boot({'settings.theme': 'dark'});
+
+      expect(container.read(themeChoiceProvider), ThemeChoice.dark);
+    });
+
+    testWidgets('is switched from the settings screen', (tester) async {
+      await boot();
+      await pump(tester, const SettingsScreen());
+
+      await tester.tap(find.text('Oscuro'));
+      await tester.pumpAndSettle();
+
+      expect(container.read(themeChoiceProvider), ThemeChoice.dark);
     });
   });
 }

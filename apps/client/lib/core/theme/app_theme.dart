@@ -15,14 +15,21 @@ abstract final class AppTheme {
   static const _card = Color(0xFFFFFFFF);
   static const _line = Color(0xFFE8E6DF);
   static const _ink = Color(0xFF1A1D1A);
-  static const _inkMuted = Color(0xFF7A7F7A);
+  // Warm, and dark enough to clear 4.5:1 on a white card. The first pass
+  // used a lighter grey-green that looked right and measured 4.1:1.
+  static const _inkMuted = Color(0xFF6C6862);
 
   /// Dark counterparts: the same relationship, inverted.
-  static const _paperDark = Color(0xFF141714);
-  static const _cardDark = Color(0xFF1D211D);
-  static const _lineDark = Color(0xFF2E332E);
-  static const _inkDark = Color(0xFFECEFEA);
-  static const _inkMutedDark = Color(0xFF9AA09A);
+  ///
+  /// Warm near-black rather than pure black or a grey with a green cast.
+  /// The light scheme's character comes from paper being warm, so the dark
+  /// one keeps that warmth instead of turning clinical, and the ground stays
+  /// off black so the cards above it have somewhere to sit.
+  static const _paperDark = Color(0xFF12100E);
+  static const _cardDark = Color(0xFF1B1815);
+  static const _lineDark = Color(0xFF2C2723);
+  static const _inkDark = Color(0xFFF0EBE3);
+  static const _inkMutedDark = Color(0xFF9C948A);
 
   static ThemeData light(AccentColor accent) =>
       _build(Brightness.light, accent);
@@ -50,7 +57,7 @@ abstract final class AppTheme {
           surfaceContainer: card,
           surfaceContainerHighest: isLight
               ? const Color(0xFFF1EFE8)
-              : const Color(0xFF262B26),
+              : const Color(0xFF262220),
           onSurfaceVariant: inkMuted,
           outlineVariant: line,
           outline: line,

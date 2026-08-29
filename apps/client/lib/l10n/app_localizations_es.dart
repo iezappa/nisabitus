@@ -844,4 +844,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get onboardingTabsDetail =>
       'Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.';
+
+  @override
+  String get settingsTheme => 'Tema';
+
+  @override
+  String get themeSystem => 'Sistema';
+
+  @override
+  String get themeLight => 'Claro';
+
+  @override
+  String get themeDark => 'Oscuro';
 }

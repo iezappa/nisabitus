@@ -423,5 +423,9 @@
         "type": "int"
       }
     }
-  }
+  },
+  "settingsTheme": "Tema",
+  "themeSystem": "Sistema",
+  "themeLight": "Claro",
+  "themeDark": "Oscuro"
 }

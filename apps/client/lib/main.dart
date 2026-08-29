@@ -39,12 +39,14 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
   @override
   Widget build(BuildContext context) {
     final accent = ref.watch(accentColorProvider);
+    final theme = ref.watch(themeChoiceProvider);
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       routerConfig: _router,
       theme: AppTheme.light(accent),
       darkTheme: AppTheme.dark(accent),
+      themeMode: theme.mode,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

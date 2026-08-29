@@ -6,6 +6,7 @@ import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../shared/support_actions.dart';
 import '../domain/accent_color.dart';
+import '../domain/theme_preference.dart';
 import 'settings_providers.dart';
 import 'widgets/tutorial_dialog.dart';
 
@@ -31,6 +32,13 @@ class SettingsScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      l10n.settingsTheme,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: Gap.md),
+                    const _ThemePicker(),
+                    const SizedBox(height: Gap.xl),
                     Text(
                       l10n.settingsAccent,
                       style: Theme.of(context).textTheme.titleSmall,
@@ -91,6 +99,45 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Light, dark, or whatever the system is doing.
+class _ThemePicker extends ConsumerWidget {
+  const _ThemePicker();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final current = ref.watch(themeChoiceProvider);
+
+    String label(ThemeChoice choice) => switch (choice) {
+      ThemeChoice.system => l10n.themeSystem,
+      ThemeChoice.light => l10n.themeLight,
+      ThemeChoice.dark => l10n.themeDark,
+    };
+
+    IconData icon(ThemeChoice choice) => switch (choice) {
+      ThemeChoice.system => Icons.brightness_auto_outlined,
+      ThemeChoice.light => Icons.light_mode_outlined,
+      ThemeChoice.dark => Icons.dark_mode_outlined,
+    };
+
+    return SegmentedButton<ThemeChoice>(
+      showSelectedIcon: false,
+      segments: [
+        for (final choice in ThemeChoice.values)
+          ButtonSegment(
+            value: choice,
+            icon: Icon(icon(choice), size: 18),
+            label: Text(label(choice)),
+          ),
+      ],
+      selected: {current},
+      onSelectionChanged: (selection) => ref
+          .read(themePreferenceProvider.notifier)
+          .set(selection.first.id),
     );
   }
 }

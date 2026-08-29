@@ -1653,6 +1653,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.'**
   String get onboardingTabsDetail;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In es, this message translates to:
+  /// **'Tema'**
+  String get settingsTheme;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In es, this message translates to:
+  /// **'Sistema'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In es, this message translates to:
+  /// **'Claro'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In es, this message translates to:
+  /// **'Oscuro'**
+  String get themeDark;
 }
 
 class _AppLocalizationsDelegate
