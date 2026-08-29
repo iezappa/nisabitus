@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/preferences/preferences.dart';
 import '../../../core/router/app_tab.dart';
 import '../domain/accent_color.dart';
+import '../domain/language_preference.dart';
 import '../domain/theme_preference.dart';
 
 /// The accent the interface is tinted with.
@@ -30,6 +31,20 @@ final themePreferenceProvider = StateNotifierProvider<StringPreference, String>(
 
 final themeChoiceProvider = Provider<ThemeChoice>(
   (ref) => ThemeChoice.parse(ref.watch(themePreferenceProvider)),
+);
+
+/// Which language the interface is shown in.
+final languagePreferenceProvider =
+    StateNotifierProvider<StringPreference, String>(
+      (ref) => StringPreference(
+        ref.watch(sharedPreferencesProvider),
+        'settings.language',
+        fallback: LanguageChoice.fallback.id,
+      ),
+    );
+
+final languageChoiceProvider = Provider<LanguageChoice>(
+  (ref) => LanguageChoice.parse(ref.watch(languagePreferenceProvider)),
 );
 
 /// The name shown in the greeting. Empty until onboarding runs.

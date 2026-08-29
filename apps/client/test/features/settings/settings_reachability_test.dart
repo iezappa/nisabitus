@@ -62,6 +62,9 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
+          // Pinned: these assertions read the Spanish copy, and the
+          // test binding would otherwise pick the device default.
+          locale: Locale('es'),
           home: SleepScreen(),
         ),
       ),

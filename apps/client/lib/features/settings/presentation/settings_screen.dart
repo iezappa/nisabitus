@@ -7,6 +7,7 @@ import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../shared/support_actions.dart';
 import '../domain/accent_color.dart';
+import '../domain/language_preference.dart';
 import '../domain/theme_preference.dart';
 import 'settings_providers.dart';
 import 'widgets/tutorial_dialog.dart';
@@ -47,6 +48,13 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: Gap.md),
                     const _AccentPicker(),
+                    const SizedBox(height: Gap.xl),
+                    Text(
+                      l10n.settingsLanguage,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: Gap.md),
+                    const _LanguagePicker(),
                   ],
                 ),
               ),
@@ -102,6 +110,35 @@ class SettingsScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Spanish, English, or whatever the device is set to.
+class _LanguagePicker extends ConsumerWidget {
+  const _LanguagePicker();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final current = ref.watch(languageChoiceProvider);
+
+    String label(LanguageChoice choice) => switch (choice) {
+      LanguageChoice.system => l10n.languageSystem,
+      LanguageChoice.spanish => l10n.languageSpanish,
+      LanguageChoice.english => l10n.languageEnglish,
+    };
+
+    return SegmentedButton<LanguageChoice>(
+      showSelectedIcon: false,
+      segments: [
+        for (final choice in LanguageChoice.values)
+          ButtonSegment(value: choice, label: Text(label(choice))),
+      ],
+      selected: {current},
+      onSelectionChanged: (selection) => ref
+          .read(languagePreferenceProvider.notifier)
+          .set(selection.first.id),
     );
   }
 }

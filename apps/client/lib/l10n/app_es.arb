@@ -427,5 +427,9 @@
   "settingsTheme": "Tema",
   "themeSystem": "Sistema",
   "themeLight": "Claro",
-  "themeDark": "Oscuro"
+  "themeDark": "Oscuro",
+  "settingsLanguage": "Idioma",
+  "languageSpanish": "Español",
+  "languageEnglish": "English",
+  "languageSystem": "Sistema"
 }

@@ -40,6 +40,7 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
   Widget build(BuildContext context) {
     final accent = ref.watch(accentColorProvider);
     final theme = ref.watch(themeChoiceProvider);
+    final language = ref.watch(languageChoiceProvider);
 
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
@@ -54,6 +55,8 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      // Null hands the choice back to the device.
+      locale: language.locale,
       debugShowCheckedModeBanner: false,
       builder: (context, child) => _FirstRunGate(child: child ?? const SizedBox()),
     );
