@@ -502,43 +502,37 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingWelcome => 'Bienvenido a Nísabit';
 
   @override
-  String get onboardingWelcomeBody =>
-      'El esfuerzo que te eleva. Tus datos viven en tu equipo: sin cuentas, sin nube, sin telemetría.';
+  String get onboardingWelcomeBody => 'El esfuerzo que te eleva.';
 
   @override
   String get onboardingNameTitle => '¿Cómo te llamamos?';
 
   @override
-  String get onboardingNameBody =>
-      'Solo para saludarte. No sale de este dispositivo.';
+  String get onboardingNameBody => '¿Cómo te llamamos?';
 
   @override
   String get onboardingTabsTitle => '¿Qué querés ver?';
 
   @override
-  String get onboardingTabsBody =>
-      'Podés cambiarlo cuando quieras desde Configuración.';
+  String get onboardingTabsBody => '¿Qué querés ver?';
 
   @override
   String get tutorialHabitsTitle => 'Hábitos y rachas';
 
   @override
-  String get tutorialHabitsBody =>
-      'Definí lo que querés sostener y resolvelo cada día. Las rachas cuentan los días seguidos.';
+  String get tutorialHabitsBody => 'Sostener, no arrancar.';
 
   @override
   String get tutorialTrackTitle => 'Sueño y journal';
 
   @override
-  String get tutorialTrackBody =>
-      'Anotá cuánto dormiste y cómo estuvo tu día. La tira semanal te deja completar días que te salteaste.';
+  String get tutorialTrackBody => 'Registrar es entenderse.';
 
   @override
   String get tutorialFocusTitle => 'Foco y tareas';
 
   @override
-  String get tutorialFocusBody =>
-      'Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.';
+  String get tutorialFocusBody => 'Una cosa a la vez.';
 
   @override
   String get pomodoroTitle => 'Pomodoro';
@@ -821,4 +815,33 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dashboardNoDue => 'Sin fecha';
+
+  @override
+  String tutorialPageOf(int page, int total) {
+    return '$page de $total';
+  }
+
+  @override
+  String get onboardingWelcomeDetail =>
+      'Nísabit reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.';
+
+  @override
+  String get tutorialHabitsDetail =>
+      'Definí lo que querés repetir y resolvelo cada día con un toque. Elegí si es diario, semanal, mensual o anual, y en qué días esperás cumplirlo.\n\nLas rachas cuentan aparte: llevan los días seguidos de algo y guardan tu récord, aunque después vuelvas a cero.';
+
+  @override
+  String get tutorialTrackDetail =>
+      'Anotá cuántas horas dormiste y la app te dice cómo estuvo la noche, saca tu promedio y te muestra la tendencia.\n\nEl journal te propone seis campos cortos para cerrar el día: cómo estuviste, qué agradecés, en qué pusiste el foco y con qué querés empezar mañana.\n\nLa tira semanal te deja completar días que te salteaste.';
+
+  @override
+  String get tutorialFocusDetail =>
+      'El pomodoro parte tu trabajo en ciclos de foco y descanso, y lleva la cuenta de los minutos que realmente concentraste.\n\nEl To-Do organiza tus tareas en proyectos con hasta tres niveles, y las movés entre Por hacer, En curso y Hecho arrastrándolas por el tablero.';
+
+  @override
+  String get onboardingNameDetail =>
+      'Solo lo usamos para saludarte en el panel. No sale de este dispositivo y podés cambiarlo o borrarlo cuando quieras.';
+
+  @override
+  String get onboardingTabsDetail =>
+      'Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.';
 }

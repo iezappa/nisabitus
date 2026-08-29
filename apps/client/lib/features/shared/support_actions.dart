@@ -54,26 +54,37 @@ class SupportProjectsCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     final body = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: compact
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(l10n.supportTitle.toUpperCase(), style: theme.textTheme.labelSmall),
         const SizedBox(height: Gap.sm),
-        Text(l10n.supportBody, style: theme.textTheme.bodyMedium),
+        Text(
+          l10n.supportBody,
+          style: theme.textTheme.bodyMedium,
+          textAlign: compact ? TextAlign.center : TextAlign.start,
+        ),
         const SizedBox(height: Gap.lg),
-        Wrap(
-          spacing: Gap.md,
-          runSpacing: Gap.sm,
+        // Both platforms get the identical treatment: the user picks by
+        // country, not by which button looks more like the real one.
+        Row(
           children: [
-            FilledButton.icon(
-              onPressed: () => _open(context, cafecito),
-              icon: const Icon(Icons.local_cafe_outlined, size: 18),
-              label: Text(l10n.supportCafecito),
+            Expanded(
+              child: _SupportButton(
+                icon: Icons.local_cafe_outlined,
+                label: l10n.supportCafecito,
+                onPressed: () => _open(context, cafecito),
+              ),
             ),
-            OutlinedButton.icon(
-              onPressed: () => _open(context, patreon),
-              icon: const Icon(Icons.favorite_outline, size: 18),
-              label: Text(l10n.supportPatreon),
+            const SizedBox(width: Gap.md),
+            Expanded(
+              child: _SupportButton(
+                icon: Icons.favorite_outline,
+                label: l10n.supportPatreon,
+                onPressed: () => _open(context, patreon),
+              ),
             ),
           ],
         ),
@@ -86,4 +97,25 @@ class SupportProjectsCard extends StatelessWidget {
       child: Padding(padding: const EdgeInsets.all(Gap.lg), child: body),
     );
   }
+}
+
+/// One of the two support buttons. They are deliberately indistinguishable
+/// apart from their label.
+class _SupportButton extends StatelessWidget {
+  const _SupportButton({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => FilledButton.icon(
+    onPressed: onPressed,
+    icon: Icon(icon, size: 18),
+    label: Text(label, overflow: TextOverflow.ellipsis),
+  );
 }

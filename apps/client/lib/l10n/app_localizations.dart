@@ -1021,7 +1021,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWelcomeBody.
   ///
   /// In es, this message translates to:
-  /// **'El esfuerzo que te eleva. Tus datos viven en tu equipo: sin cuentas, sin nube, sin telemetría.'**
+  /// **'El esfuerzo que te eleva.'**
   String get onboardingWelcomeBody;
 
   /// No description provided for @onboardingNameTitle.
@@ -1033,7 +1033,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingNameBody.
   ///
   /// In es, this message translates to:
-  /// **'Solo para saludarte. No sale de este dispositivo.'**
+  /// **'¿Cómo te llamamos?'**
   String get onboardingNameBody;
 
   /// No description provided for @onboardingTabsTitle.
@@ -1045,7 +1045,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingTabsBody.
   ///
   /// In es, this message translates to:
-  /// **'Podés cambiarlo cuando quieras desde Configuración.'**
+  /// **'¿Qué querés ver?'**
   String get onboardingTabsBody;
 
   /// No description provided for @tutorialHabitsTitle.
@@ -1057,7 +1057,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialHabitsBody.
   ///
   /// In es, this message translates to:
-  /// **'Definí lo que querés sostener y resolvelo cada día. Las rachas cuentan los días seguidos.'**
+  /// **'Sostener, no arrancar.'**
   String get tutorialHabitsBody;
 
   /// No description provided for @tutorialTrackTitle.
@@ -1069,7 +1069,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialTrackBody.
   ///
   /// In es, this message translates to:
-  /// **'Anotá cuánto dormiste y cómo estuvo tu día. La tira semanal te deja completar días que te salteaste.'**
+  /// **'Registrar es entenderse.'**
   String get tutorialTrackBody;
 
   /// No description provided for @tutorialFocusTitle.
@@ -1081,7 +1081,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialFocusBody.
   ///
   /// In es, this message translates to:
-  /// **'Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.'**
+  /// **'Una cosa a la vez.'**
   String get tutorialFocusBody;
 
   /// No description provided for @pomodoroTitle.
@@ -1611,6 +1611,48 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sin fecha'**
   String get dashboardNoDue;
+
+  /// No description provided for @tutorialPageOf.
+  ///
+  /// In es, this message translates to:
+  /// **'{page} de {total}'**
+  String tutorialPageOf(int page, int total);
+
+  /// No description provided for @onboardingWelcomeDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'Nísabit reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.'**
+  String get onboardingWelcomeDetail;
+
+  /// No description provided for @tutorialHabitsDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'Definí lo que querés repetir y resolvelo cada día con un toque. Elegí si es diario, semanal, mensual o anual, y en qué días esperás cumplirlo.\n\nLas rachas cuentan aparte: llevan los días seguidos de algo y guardan tu récord, aunque después vuelvas a cero.'**
+  String get tutorialHabitsDetail;
+
+  /// No description provided for @tutorialTrackDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá cuántas horas dormiste y la app te dice cómo estuvo la noche, saca tu promedio y te muestra la tendencia.\n\nEl journal te propone seis campos cortos para cerrar el día: cómo estuviste, qué agradecés, en qué pusiste el foco y con qué querés empezar mañana.\n\nLa tira semanal te deja completar días que te salteaste.'**
+  String get tutorialTrackDetail;
+
+  /// No description provided for @tutorialFocusDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'El pomodoro parte tu trabajo en ciclos de foco y descanso, y lleva la cuenta de los minutos que realmente concentraste.\n\nEl To-Do organiza tus tareas en proyectos con hasta tres niveles, y las movés entre Por hacer, En curso y Hecho arrastrándolas por el tablero.'**
+  String get tutorialFocusDetail;
+
+  /// No description provided for @onboardingNameDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo lo usamos para saludarte en el panel. No sale de este dispositivo y podés cambiarlo o borrarlo cuando quieras.'**
+  String get onboardingNameDetail;
+
+  /// No description provided for @onboardingTabsDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.'**
+  String get onboardingTabsDetail;
 }
 
 class _AppLocalizationsDelegate

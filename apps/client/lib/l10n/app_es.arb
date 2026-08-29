@@ -240,17 +240,17 @@
   "tutorialDone": "Empezar",
   "tutorialBack": "Atrás",
   "onboardingWelcome": "Bienvenido a Nísabit",
-  "onboardingWelcomeBody": "El esfuerzo que te eleva. Tus datos viven en tu equipo: sin cuentas, sin nube, sin telemetría.",
+  "onboardingWelcomeBody": "El esfuerzo que te eleva.",
   "onboardingNameTitle": "¿Cómo te llamamos?",
-  "onboardingNameBody": "Solo para saludarte. No sale de este dispositivo.",
+  "onboardingNameBody": "¿Cómo te llamamos?",
   "onboardingTabsTitle": "¿Qué querés ver?",
-  "onboardingTabsBody": "Podés cambiarlo cuando quieras desde Configuración.",
+  "onboardingTabsBody": "¿Qué querés ver?",
   "tutorialHabitsTitle": "Hábitos y rachas",
-  "tutorialHabitsBody": "Definí lo que querés sostener y resolvelo cada día. Las rachas cuentan los días seguidos.",
+  "tutorialHabitsBody": "Sostener, no arrancar.",
   "tutorialTrackTitle": "Sueño y journal",
-  "tutorialTrackBody": "Anotá cuánto dormiste y cómo estuvo tu día. La tira semanal te deja completar días que te salteaste.",
+  "tutorialTrackBody": "Registrar es entenderse.",
   "tutorialFocusTitle": "Foco y tareas",
-  "tutorialFocusBody": "Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.",
+  "tutorialFocusBody": "Una cosa a la vez.",
   "pomodoroTitle": "Pomodoro",
   "pomodoroSessions": "Sesiones",
   "pomodoroNew": "Nueva sesión",
@@ -400,6 +400,23 @@
   "@dashboardHabitsRatio": {
     "placeholders": {
       "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tutorialPageOf": "{page} de {total}",
+  "onboardingWelcomeDetail": "Nísabit reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.",
+  "tutorialHabitsDetail": "Definí lo que querés repetir y resolvelo cada día con un toque. Elegí si es diario, semanal, mensual o anual, y en qué días esperás cumplirlo.\n\nLas rachas cuentan aparte: llevan los días seguidos de algo y guardan tu récord, aunque después vuelvas a cero.",
+  "tutorialTrackDetail": "Anotá cuántas horas dormiste y la app te dice cómo estuvo la noche, saca tu promedio y te muestra la tendencia.\n\nEl journal te propone seis campos cortos para cerrar el día: cómo estuviste, qué agradecés, en qué pusiste el foco y con qué querés empezar mañana.\n\nLa tira semanal te deja completar días que te salteaste.",
+  "tutorialFocusDetail": "El pomodoro parte tu trabajo en ciclos de foco y descanso, y lleva la cuenta de los minutos que realmente concentraste.\n\nEl To-Do organiza tus tareas en proyectos con hasta tres niveles, y las movés entre Por hacer, En curso y Hecho arrastrándolas por el tablero.",
+  "onboardingNameDetail": "Solo lo usamos para saludarte en el panel. No sale de este dispositivo y podés cambiarlo o borrarlo cuando quieras.",
+  "onboardingTabsDetail": "Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.",
+  "@tutorialPageOf": {
+    "placeholders": {
+      "page": {
         "type": "int"
       },
       "total": {

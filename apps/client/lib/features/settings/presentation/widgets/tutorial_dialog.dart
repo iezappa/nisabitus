@@ -57,49 +57,60 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
     Navigator.of(context).pop();
   }
 
+  void _move(int delta) => _controller.animateToPage(
+    _page + delta,
+    duration: const Duration(milliseconds: 240),
+    curve: Curves.easeOut,
+  );
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     final slides = <Widget>[
       _Slide(
+        art: Image.asset('assets/branding/logo.png', height: 88),
         title: l10n.onboardingWelcome,
-        body: l10n.onboardingWelcomeBody,
-        art: Image.asset('assets/branding/logo.png', height: 96),
+        lead: l10n.onboardingWelcomeBody,
+        detail: l10n.onboardingWelcomeDetail,
         extra: const SupportProjectsCard(compact: true),
       ),
       _Slide(
+        art: const _Glyph(icon: Icons.checklist),
         title: l10n.tutorialHabitsTitle,
-        body: l10n.tutorialHabitsBody,
-        art: _Glyph(icon: Icons.checklist),
+        lead: l10n.tutorialHabitsBody,
+        detail: l10n.tutorialHabitsDetail,
       ),
       _Slide(
+        art: const _Glyph(icon: Icons.bedtime_outlined),
         title: l10n.tutorialTrackTitle,
-        body: l10n.tutorialTrackBody,
-        art: _Glyph(icon: Icons.bedtime_outlined),
+        lead: l10n.tutorialTrackBody,
+        detail: l10n.tutorialTrackDetail,
       ),
       _Slide(
+        art: const _Glyph(icon: Icons.timer_outlined),
         title: l10n.tutorialFocusTitle,
-        body: l10n.tutorialFocusBody,
-        art: _Glyph(icon: Icons.timer_outlined),
+        lead: l10n.tutorialFocusBody,
+        detail: l10n.tutorialFocusDetail,
       ),
       if (widget.onboarding) ...[
         _Slide(
+          art: const _Glyph(icon: Icons.person_outline),
           title: l10n.onboardingNameTitle,
-          body: l10n.onboardingNameBody,
-          art: _Glyph(icon: Icons.person_outline),
+          lead: l10n.onboardingNameBody,
+          detail: l10n.onboardingNameDetail,
           extra: TextField(
             controller: _name,
-            autofocus: true,
+            textAlign: TextAlign.center,
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(labelText: l10n.settingsProfileName),
           ),
         ),
         _Slide(
+          art: const _Glyph(icon: Icons.tune),
           title: l10n.onboardingTabsTitle,
-          body: l10n.onboardingTabsBody,
-          art: _Glyph(icon: Icons.tune),
+          lead: l10n.onboardingTabsBody,
+          detail: l10n.onboardingTabsDetail,
           extra: const TabVisibilityPicker(),
         ),
       ],
@@ -108,10 +119,10 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
     final isLast = _page == slides.length - 1;
 
     return AlertDialog(
-      contentPadding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xl, Gap.lg, 0),
+      contentPadding: const EdgeInsets.fromLTRB(Gap.xl, Gap.xl, Gap.xl, 0),
       content: SizedBox(
-        width: 420,
-        height: 420,
+        width: 460,
+        height: 520,
         child: Column(
           children: [
             Expanded(
@@ -121,50 +132,70 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
                 children: slides,
               ),
             ),
-            const SizedBox(height: Gap.md),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < slides.length; i++)
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: i == _page ? 18 : 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: i == _page
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.outlineVariant,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                  ),
-              ],
-            ),
+            const SizedBox(height: Gap.lg),
+            _PageIndicator(page: _page, total: slides.length),
           ],
         ),
       ),
+      actionsPadding: const EdgeInsets.fromLTRB(Gap.xl, Gap.md, Gap.xl, Gap.lg),
       actions: [
         if (_page > 0)
-          TextButton(
-            onPressed: () => _controller.previousPage(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOut,
-            ),
-            child: Text(l10n.tutorialBack),
-          )
+          TextButton(onPressed: () => _move(-1), child: Text(l10n.tutorialBack))
         else if (!widget.onboarding)
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(l10n.tutorialSkip),
-          ),
+          )
+        else
+          const SizedBox.shrink(),
         FilledButton(
-          onPressed: isLast
-              ? _finish
-              : () => _controller.nextPage(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOut,
-                ),
+          onPressed: isLast ? _finish : () => _move(1),
           child: Text(isLast ? l10n.tutorialDone : l10n.tutorialNext),
+        ),
+      ],
+    );
+  }
+}
+
+/// Dots plus a spelled-out count.
+///
+/// The dots alone read as decoration; the number is what actually answers
+/// "how much of this is left".
+class _PageIndicator extends StatelessWidget {
+  const _PageIndicator({required this.page, required this.total});
+
+  final int page;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var i = 0; i < total; i++)
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: i == page ? 20 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: i == page
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outlineVariant,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: Gap.sm),
+        Text(
+          l10n.tutorialPageOf(page + 1, total),
+          style: theme.textTheme.labelSmall,
         ),
       ],
     );
@@ -173,15 +204,22 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
 
 class _Slide extends StatelessWidget {
   const _Slide({
-    required this.title,
-    required this.body,
     required this.art,
+    required this.title,
+    required this.lead,
+    required this.detail,
     this.extra,
   });
 
-  final String title;
-  final String body;
   final Widget art;
+  final String title;
+
+  /// One short line that says what this screen is for.
+  final String lead;
+
+  /// The paragraph under it.
+  final String detail;
+
   final Widget? extra;
 
   @override
@@ -190,13 +228,30 @@ class _Slide extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(child: art),
+          art,
           const SizedBox(height: Gap.xl),
-          Text(title, style: theme.textTheme.titleLarge),
+          Text(
+            title,
+            style: theme.textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: Gap.sm),
-          Text(body, style: theme.textTheme.bodyMedium),
+          Text(
+            lead,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: Gap.md),
+          Text(
+            detail,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+            textAlign: TextAlign.center,
+          ),
           if (extra != null) ...[const SizedBox(height: Gap.xl), extra!],
         ],
       ),
@@ -214,13 +269,13 @@ class _Glyph extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      width: 84,
-      height: 84,
+      width: 88,
+      height: 88,
       decoration: BoxDecoration(
         color: theme.colorScheme.primary.withValues(alpha: 0.10),
         shape: BoxShape.circle,
       ),
-      child: Icon(icon, size: 36, color: theme.colorScheme.primary),
+      child: Icon(icon, size: 38, color: theme.colorScheme.primary),
     );
   }
 }
@@ -236,6 +291,7 @@ class TabVisibilityPicker extends ConsumerWidget {
     final actions = ref.read(tabVisibilityActionsProvider);
 
     return Wrap(
+      alignment: WrapAlignment.center,
       spacing: Gap.sm,
       runSpacing: Gap.sm,
       children: [
