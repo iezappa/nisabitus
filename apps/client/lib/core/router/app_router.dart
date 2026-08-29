@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/habits/presentation/habits_screen.dart';
+import '../../features/sleep/presentation/sleep_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/coming_soon_screen.dart';
 
@@ -40,11 +41,13 @@ GoRouter buildRouter() => GoRouter(
         for (final tab in AppTab.values)
           GoRoute(
             path: tab.path,
-            builder: (context, _) => tab == AppTab.habits
-                ? const HabitsScreen()
-                : ComingSoonScreen(
-                    title: tab.label(AppLocalizations.of(context)),
-                  ),
+            builder: (context, _) => switch (tab) {
+              AppTab.habits => const HabitsScreen(),
+              AppTab.sleep => const SleepScreen(),
+              _ => ComingSoonScreen(
+                title: tab.label(AppLocalizations.of(context)),
+              ),
+            },
           ),
       ],
     ),

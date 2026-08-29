@@ -543,6 +543,174 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Evolución'**
   String get streaksEvolution;
+
+  /// No description provided for @weekPrevious.
+  ///
+  /// In es, this message translates to:
+  /// **'Semana anterior'**
+  String get weekPrevious;
+
+  /// No description provided for @weekNext.
+  ///
+  /// In es, this message translates to:
+  /// **'Semana siguiente'**
+  String get weekNext;
+
+  /// No description provided for @sleepTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Sueño'**
+  String get sleepTitle;
+
+  /// No description provided for @sleepLastNight.
+  ///
+  /// In es, this message translates to:
+  /// **'Esa noche'**
+  String get sleepLastNight;
+
+  /// No description provided for @sleepHours.
+  ///
+  /// In es, this message translates to:
+  /// **'{hours} h'**
+  String sleepHours(String hours);
+
+  /// No description provided for @sleepNoRecord.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin registro'**
+  String get sleepNoRecord;
+
+  /// No description provided for @sleepNoRecordHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá cuántas horas dormiste ese día'**
+  String get sleepNoRecordHint;
+
+  /// No description provided for @sleepQualityOptimal.
+  ///
+  /// In es, this message translates to:
+  /// **'Óptimo'**
+  String get sleepQualityOptimal;
+
+  /// No description provided for @sleepQualityAcceptable.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptable'**
+  String get sleepQualityAcceptable;
+
+  /// No description provided for @sleepQualityPoor.
+  ///
+  /// In es, this message translates to:
+  /// **'A mejorar'**
+  String get sleepQualityPoor;
+
+  /// No description provided for @sleepLog.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrar sueño'**
+  String get sleepLog;
+
+  /// No description provided for @sleepFieldHours.
+  ///
+  /// In es, this message translates to:
+  /// **'Horas dormidas'**
+  String get sleepFieldHours;
+
+  /// No description provided for @sleepSave.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrar'**
+  String get sleepSave;
+
+  /// No description provided for @sleepUpdate.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get sleepUpdate;
+
+  /// No description provided for @sleepHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial'**
+  String get sleepHistory;
+
+  /// No description provided for @sleepAverage.
+  ///
+  /// In es, this message translates to:
+  /// **'Promedio'**
+  String get sleepAverage;
+
+  /// No description provided for @sleepRecords.
+  ///
+  /// In es, this message translates to:
+  /// **'Registros'**
+  String get sleepRecords;
+
+  /// No description provided for @sleepOptimalNights.
+  ///
+  /// In es, this message translates to:
+  /// **'Noches óptimas'**
+  String get sleepOptimalNights;
+
+  /// No description provided for @sleepRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Rango'**
+  String get sleepRange;
+
+  /// No description provided for @sleepRangeValue.
+  ///
+  /// In es, this message translates to:
+  /// **'{min} – {max} h'**
+  String sleepRangeValue(String min, String max);
+
+  /// No description provided for @sleepInsights.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar'**
+  String get sleepInsights;
+
+  /// No description provided for @sleepInsightAverageGood.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu promedio está en la franja recomendada. Sostenelo.'**
+  String get sleepInsightAverageGood;
+
+  /// No description provided for @sleepInsightAverageLow.
+  ///
+  /// In es, this message translates to:
+  /// **'Estás durmiendo por debajo de lo recomendado.'**
+  String get sleepInsightAverageLow;
+
+  /// No description provided for @sleepInsightAverageHigh.
+  ///
+  /// In es, this message translates to:
+  /// **'Estás durmiendo por encima de lo habitual.'**
+  String get sleepInsightAverageHigh;
+
+  /// No description provided for @sleepInsightConsistency.
+  ///
+  /// In es, this message translates to:
+  /// **'Consistencia'**
+  String get sleepInsightConsistency;
+
+  /// No description provided for @sleepInsightConsistencySteady.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus noches son parejas.'**
+  String get sleepInsightConsistencySteady;
+
+  /// No description provided for @sleepInsightConsistencyErratic.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus horas varían bastante de una noche a otra.'**
+  String get sleepInsightConsistencyErratic;
+
+  /// No description provided for @sleepValidationHours.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 0 y 24'**
+  String get sleepValidationHours;
 }
 
 class _AppLocalizationsDelegate

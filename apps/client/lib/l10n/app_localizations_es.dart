@@ -251,4 +251,96 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get streaksEvolution => 'Evolución';
+
+  @override
+  String get weekPrevious => 'Semana anterior';
+
+  @override
+  String get weekNext => 'Semana siguiente';
+
+  @override
+  String get sleepTitle => 'Sueño';
+
+  @override
+  String get sleepLastNight => 'Esa noche';
+
+  @override
+  String sleepHours(String hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get sleepNoRecord => 'Sin registro';
+
+  @override
+  String get sleepNoRecordHint => 'Anotá cuántas horas dormiste ese día';
+
+  @override
+  String get sleepQualityOptimal => 'Óptimo';
+
+  @override
+  String get sleepQualityAcceptable => 'Aceptable';
+
+  @override
+  String get sleepQualityPoor => 'A mejorar';
+
+  @override
+  String get sleepLog => 'Registrar sueño';
+
+  @override
+  String get sleepFieldHours => 'Horas dormidas';
+
+  @override
+  String get sleepSave => 'Registrar';
+
+  @override
+  String get sleepUpdate => 'Actualizar';
+
+  @override
+  String get sleepHistory => 'Historial';
+
+  @override
+  String get sleepAverage => 'Promedio';
+
+  @override
+  String get sleepRecords => 'Registros';
+
+  @override
+  String get sleepOptimalNights => 'Noches óptimas';
+
+  @override
+  String get sleepRange => 'Rango';
+
+  @override
+  String sleepRangeValue(String min, String max) {
+    return '$min – $max h';
+  }
+
+  @override
+  String get sleepInsights => 'Bienestar';
+
+  @override
+  String get sleepInsightAverageGood =>
+      'Tu promedio está en la franja recomendada. Sostenelo.';
+
+  @override
+  String get sleepInsightAverageLow =>
+      'Estás durmiendo por debajo de lo recomendado.';
+
+  @override
+  String get sleepInsightAverageHigh =>
+      'Estás durmiendo por encima de lo habitual.';
+
+  @override
+  String get sleepInsightConsistency => 'Consistencia';
+
+  @override
+  String get sleepInsightConsistencySteady => 'Tus noches son parejas.';
+
+  @override
+  String get sleepInsightConsistencyErratic =>
+      'Tus horas varían bastante de una noche a otra.';
+
+  @override
+  String get sleepValidationHours => 'Ingresá un número entre 0 y 24';
 }

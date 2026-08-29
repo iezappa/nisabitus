@@ -133,5 +133,50 @@
         "type": "int"
       }
     }
+  },
+  "weekPrevious": "Semana anterior",
+  "weekNext": "Semana siguiente",
+  "sleepTitle": "Sueño",
+  "sleepLastNight": "Esa noche",
+  "sleepHours": "{hours} h",
+  "sleepNoRecord": "Sin registro",
+  "sleepNoRecordHint": "Anotá cuántas horas dormiste ese día",
+  "sleepQualityOptimal": "Óptimo",
+  "sleepQualityAcceptable": "Aceptable",
+  "sleepQualityPoor": "A mejorar",
+  "sleepLog": "Registrar sueño",
+  "sleepFieldHours": "Horas dormidas",
+  "sleepSave": "Registrar",
+  "sleepUpdate": "Actualizar",
+  "sleepHistory": "Historial",
+  "sleepAverage": "Promedio",
+  "sleepRecords": "Registros",
+  "sleepOptimalNights": "Noches óptimas",
+  "sleepRange": "Rango",
+  "sleepRangeValue": "{min} – {max} h",
+  "sleepInsights": "Bienestar",
+  "sleepInsightAverageGood": "Tu promedio está en la franja recomendada. Sostenelo.",
+  "sleepInsightAverageLow": "Estás durmiendo por debajo de lo recomendado.",
+  "sleepInsightAverageHigh": "Estás durmiendo por encima de lo habitual.",
+  "sleepInsightConsistency": "Consistencia",
+  "sleepInsightConsistencySteady": "Tus noches son parejas.",
+  "sleepInsightConsistencyErratic": "Tus horas varían bastante de una noche a otra.",
+  "sleepValidationHours": "Ingresá un número entre 0 y 24",
+  "@sleepHours": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "@sleepRangeValue": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
   }
 }
