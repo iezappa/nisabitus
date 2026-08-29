@@ -58,7 +58,7 @@ class StreaksSection extends ConsumerWidget {
                   hint: l10n.streaksEmptyHint,
                 )
               : SizedBox(
-                  height: 168,
+                  height: 124,
                   child: _StreakStrip(count: items.length, builder: (context, index) {
                       final streak = items[index];
                       return SizedBox(

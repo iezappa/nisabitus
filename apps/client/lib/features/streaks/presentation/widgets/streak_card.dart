@@ -31,7 +31,7 @@ class StreakCard extends StatelessWidget {
       child: InkWell(
         onTap: onRename,
         child: Padding(
-          padding: const EdgeInsets.all(Gap.lg),
+          padding: const EdgeInsets.fromLTRB(Gap.md, Gap.md, Gap.md, Gap.sm),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -42,14 +42,17 @@ class StreakCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: Gap.sm),
+              const SizedBox(height: Gap.xs),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
                     '${streak.count}',
-                    style: theme.textTheme.displaySmall?.copyWith(
+                    // Still the largest thing on the card, without the
+                    // empty half a card underneath it.
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                       color: theme.colorScheme.primary,
                     ),
                   ),
@@ -57,7 +60,6 @@ class StreakCard extends StatelessWidget {
                   Text(l10n.streakDays, style: theme.textTheme.bodySmall),
                 ],
               ),
-              const SizedBox(height: Gap.xs),
               Row(
                 children: [
                   Expanded(

@@ -113,6 +113,14 @@ class FoodEntry {
     }
     return trimmed;
   }
+
+  FoodEntry copyWith({int? id}) => FoodEntry(
+    id: id ?? this.id,
+    date: date,
+    name: name,
+    portion: portion,
+    macros: macros,
+  );
 }
 
 /// What one day of eating adds up to, against the targets.

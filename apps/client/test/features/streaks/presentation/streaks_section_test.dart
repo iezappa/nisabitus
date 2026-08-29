@@ -65,6 +65,29 @@ void main() {
       expect(find.text('Reiniciar'), findsNothing);
     });
 
+    testWidgets('fills the band instead of leaving a hole under it', (
+      tester,
+    ) async {
+      await seed(1);
+      await pump(tester);
+
+      final card = tester.getSize(find.byType(Card).first);
+      final band = tester.getSize(
+        find.ancestor(
+          of: find.byType(ListView),
+          matching: find.byType(SizedBox),
+        ).first,
+      );
+
+      // The card is sized by its content; a band much taller than that is
+      // the empty space the layout should not have.
+      expect(
+        band.height - card.height,
+        lessThan(16),
+        reason: 'the band is ${band.height - card.height} taller than the card',
+      );
+    });
+
     testWidgets('adds to the streak', (tester) async {
       await seed(1);
       await pump(tester);
