@@ -1,0 +1,17 @@
+# Internal working documents — never published
+Estandarización/
+HABITS_SECTOR_SPEC.md
+About Nísabit.txt
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Windows Explorer metadata left by copied files
+*:Zone.Identifier
+
+# Local tooling caches
+.atl/
+.codegraph/
