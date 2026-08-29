@@ -539,4 +539,108 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get tutorialFocusBody =>
       'Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.';
+
+  @override
+  String get pomodoroTitle => 'Pomodoro';
+
+  @override
+  String get pomodoroSessions => 'Sesiones';
+
+  @override
+  String get pomodoroNew => 'Nueva sesión';
+
+  @override
+  String get pomodoroEdit => 'Editar sesión';
+
+  @override
+  String get pomodoroEmpty => 'Todavía no hay sesiones';
+
+  @override
+  String get pomodoroEmptyHint => 'Creá una y entrá en modo foco';
+
+  @override
+  String get pomodoroStatePending => 'Pendiente';
+
+  @override
+  String get pomodoroStateInProgress => 'En progreso';
+
+  @override
+  String get pomodoroStateCompleted => 'Completada';
+
+  @override
+  String get pomodoroStateCancelled => 'Cancelada';
+
+  @override
+  String get pomodoroCycles => 'Ciclos';
+
+  @override
+  String get pomodoroFocusMinutes => 'Minutos de foco';
+
+  @override
+  String get pomodoroBreakMinutes => 'Minutos de descanso';
+
+  @override
+  String get pomodoroPurpose => 'Propósito';
+
+  @override
+  String get pomodoroCurrentSession => 'Sesión actual';
+
+  @override
+  String get pomodoroPhaseFocus => 'Foco';
+
+  @override
+  String get pomodoroPhaseRest => 'Descanso';
+
+  @override
+  String pomodoroCycleOf(int done, int total) {
+    return 'Ciclo $done de $total';
+  }
+
+  @override
+  String get pomodoroStart => 'Iniciar';
+
+  @override
+  String get pomodoroPause => 'Pausar';
+
+  @override
+  String get pomodoroSkip => 'Siguiente fase';
+
+  @override
+  String get pomodoroFinish => 'Finalizar';
+
+  @override
+  String get pomodoroCancel => 'Cancelar sesión';
+
+  @override
+  String get pomodoroClose => 'Cerrar sin guardar';
+
+  @override
+  String get pomodoroStats => 'Estadísticas';
+
+  @override
+  String get pomodoroTotalFocus => 'Foco total';
+
+  @override
+  String get pomodoroTotalCycles => 'Ciclos completados';
+
+  @override
+  String get pomodoroByCategory => 'Por categoría';
+
+  @override
+  String get pomodoroMinutesPerDay => 'Minutos por día';
+
+  @override
+  String pomodoroMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String pomodoroHoursMinutes(int hours, int minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String pomodoroValidationRange(int min, int max) {
+    return 'Entre $min y $max';
+  }
 }

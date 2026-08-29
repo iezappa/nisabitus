@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/habits/presentation/habits_screen.dart';
 import '../../features/journal/presentation/journal_screen.dart';
+import '../../features/pomodoro/presentation/pomodoro_screen.dart';
 import '../../features/settings/presentation/settings_providers.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/sleep/presentation/sleep_screen.dart';
@@ -27,6 +28,7 @@ GoRouter buildRouter() => GoRouter(
               AppTab.habits => const HabitsScreen(),
               AppTab.sleep => const SleepScreen(),
               AppTab.journal => const JournalScreen(),
+              AppTab.pomodoro => const PomodoroScreen(),
               AppTab.settings => const SettingsScreen(),
               _ => ComingSoonScreen(
                 title: tab.label(AppLocalizations.of(context)),

@@ -250,5 +250,74 @@
   "tutorialTrackTitle": "Sueño y journal",
   "tutorialTrackBody": "Anotá cuánto dormiste y cómo estuvo tu día. La tira semanal te deja completar días que te salteaste.",
   "tutorialFocusTitle": "Foco y tareas",
-  "tutorialFocusBody": "Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo."
+  "tutorialFocusBody": "Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.",
+  "pomodoroTitle": "Pomodoro",
+  "pomodoroSessions": "Sesiones",
+  "pomodoroNew": "Nueva sesión",
+  "pomodoroEdit": "Editar sesión",
+  "pomodoroEmpty": "Todavía no hay sesiones",
+  "pomodoroEmptyHint": "Creá una y entrá en modo foco",
+  "pomodoroStatePending": "Pendiente",
+  "pomodoroStateInProgress": "En progreso",
+  "pomodoroStateCompleted": "Completada",
+  "pomodoroStateCancelled": "Cancelada",
+  "pomodoroCycles": "Ciclos",
+  "pomodoroFocusMinutes": "Minutos de foco",
+  "pomodoroBreakMinutes": "Minutos de descanso",
+  "pomodoroPurpose": "Propósito",
+  "pomodoroCurrentSession": "Sesión actual",
+  "pomodoroPhaseFocus": "Foco",
+  "pomodoroPhaseRest": "Descanso",
+  "pomodoroCycleOf": "Ciclo {done} de {total}",
+  "pomodoroStart": "Iniciar",
+  "pomodoroPause": "Pausar",
+  "pomodoroSkip": "Siguiente fase",
+  "pomodoroFinish": "Finalizar",
+  "pomodoroCancel": "Cancelar sesión",
+  "pomodoroClose": "Cerrar sin guardar",
+  "pomodoroStats": "Estadísticas",
+  "pomodoroTotalFocus": "Foco total",
+  "pomodoroTotalCycles": "Ciclos completados",
+  "pomodoroByCategory": "Por categoría",
+  "pomodoroMinutesPerDay": "Minutos por día",
+  "pomodoroMinutes": "{minutes} min",
+  "pomodoroHoursMinutes": "{hours} h {minutes} min",
+  "pomodoroValidationRange": "Entre {min} y {max}",
+  "@pomodoroCycleOf": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@pomodoroMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@pomodoroHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@pomodoroValidationRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -1083,6 +1083,198 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sesiones de pomodoro para concentrarte, y proyectos con tareas para no perder el hilo.'**
   String get tutorialFocusBody;
+
+  /// No description provided for @pomodoroTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Pomodoro'**
+  String get pomodoroTitle;
+
+  /// No description provided for @pomodoroSessions.
+  ///
+  /// In es, this message translates to:
+  /// **'Sesiones'**
+  String get pomodoroSessions;
+
+  /// No description provided for @pomodoroNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva sesión'**
+  String get pomodoroNew;
+
+  /// No description provided for @pomodoroEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar sesión'**
+  String get pomodoroEdit;
+
+  /// No description provided for @pomodoroEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay sesiones'**
+  String get pomodoroEmpty;
+
+  /// No description provided for @pomodoroEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Creá una y entrá en modo foco'**
+  String get pomodoroEmptyHint;
+
+  /// No description provided for @pomodoroStatePending.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get pomodoroStatePending;
+
+  /// No description provided for @pomodoroStateInProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'En progreso'**
+  String get pomodoroStateInProgress;
+
+  /// No description provided for @pomodoroStateCompleted.
+  ///
+  /// In es, this message translates to:
+  /// **'Completada'**
+  String get pomodoroStateCompleted;
+
+  /// No description provided for @pomodoroStateCancelled.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelada'**
+  String get pomodoroStateCancelled;
+
+  /// No description provided for @pomodoroCycles.
+  ///
+  /// In es, this message translates to:
+  /// **'Ciclos'**
+  String get pomodoroCycles;
+
+  /// No description provided for @pomodoroFocusMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'Minutos de foco'**
+  String get pomodoroFocusMinutes;
+
+  /// No description provided for @pomodoroBreakMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'Minutos de descanso'**
+  String get pomodoroBreakMinutes;
+
+  /// No description provided for @pomodoroPurpose.
+  ///
+  /// In es, this message translates to:
+  /// **'Propósito'**
+  String get pomodoroPurpose;
+
+  /// No description provided for @pomodoroCurrentSession.
+  ///
+  /// In es, this message translates to:
+  /// **'Sesión actual'**
+  String get pomodoroCurrentSession;
+
+  /// No description provided for @pomodoroPhaseFocus.
+  ///
+  /// In es, this message translates to:
+  /// **'Foco'**
+  String get pomodoroPhaseFocus;
+
+  /// No description provided for @pomodoroPhaseRest.
+  ///
+  /// In es, this message translates to:
+  /// **'Descanso'**
+  String get pomodoroPhaseRest;
+
+  /// No description provided for @pomodoroCycleOf.
+  ///
+  /// In es, this message translates to:
+  /// **'Ciclo {done} de {total}'**
+  String pomodoroCycleOf(int done, int total);
+
+  /// No description provided for @pomodoroStart.
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciar'**
+  String get pomodoroStart;
+
+  /// No description provided for @pomodoroPause.
+  ///
+  /// In es, this message translates to:
+  /// **'Pausar'**
+  String get pomodoroPause;
+
+  /// No description provided for @pomodoroSkip.
+  ///
+  /// In es, this message translates to:
+  /// **'Siguiente fase'**
+  String get pomodoroSkip;
+
+  /// No description provided for @pomodoroFinish.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizar'**
+  String get pomodoroFinish;
+
+  /// No description provided for @pomodoroCancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar sesión'**
+  String get pomodoroCancel;
+
+  /// No description provided for @pomodoroClose.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sin guardar'**
+  String get pomodoroClose;
+
+  /// No description provided for @pomodoroStats.
+  ///
+  /// In es, this message translates to:
+  /// **'Estadísticas'**
+  String get pomodoroStats;
+
+  /// No description provided for @pomodoroTotalFocus.
+  ///
+  /// In es, this message translates to:
+  /// **'Foco total'**
+  String get pomodoroTotalFocus;
+
+  /// No description provided for @pomodoroTotalCycles.
+  ///
+  /// In es, this message translates to:
+  /// **'Ciclos completados'**
+  String get pomodoroTotalCycles;
+
+  /// No description provided for @pomodoroByCategory.
+  ///
+  /// In es, this message translates to:
+  /// **'Por categoría'**
+  String get pomodoroByCategory;
+
+  /// No description provided for @pomodoroMinutesPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Minutos por día'**
+  String get pomodoroMinutesPerDay;
+
+  /// No description provided for @pomodoroMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'{minutes} min'**
+  String pomodoroMinutes(int minutes);
+
+  /// No description provided for @pomodoroHoursMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String pomodoroHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @pomodoroValidationRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Entre {min} y {max}'**
+  String pomodoroValidationRange(int min, int max);
 }
 
 class _AppLocalizationsDelegate
