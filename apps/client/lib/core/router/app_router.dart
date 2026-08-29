@@ -8,6 +8,7 @@ import '../../features/pomodoro/presentation/pomodoro_screen.dart';
 import '../../features/settings/presentation/settings_providers.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/sleep/presentation/sleep_screen.dart';
+import '../../features/todo/presentation/todo_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/coming_soon_screen.dart';
 import '../widgets/settings_button.dart';
@@ -30,6 +31,7 @@ GoRouter buildRouter() => GoRouter(
               AppTab.sleep => const SleepScreen(),
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
+              AppTab.todo => const TodoScreen(),
               _ => ComingSoonScreen(
                 title: tab.label(AppLocalizations.of(context)),
               ),

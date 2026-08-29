@@ -643,4 +643,122 @@ class AppLocalizationsEs extends AppLocalizations {
   String pomodoroValidationRange(int min, int max) {
     return 'Entre $min y $max';
   }
+
+  @override
+  String get todoTitle => 'To-Do';
+
+  @override
+  String get todoProjects => 'Proyectos';
+
+  @override
+  String get todoNewProject => 'Nuevo proyecto';
+
+  @override
+  String get todoNewSubproject => 'Nuevo subproyecto';
+
+  @override
+  String get todoNoProjects => 'Todavía no hay proyectos';
+
+  @override
+  String get todoNoProjectsHint =>
+      'Creá uno para empezar a organizar tus tareas';
+
+  @override
+  String get todoPickProject => 'Elegí un proyecto';
+
+  @override
+  String get todoPickProjectHint => 'Sus tareas van a aparecer acá';
+
+  @override
+  String get todoIncludeSubprojects => 'Incluir subproyectos';
+
+  @override
+  String get todoViewKanban => 'Tablero';
+
+  @override
+  String get todoViewList => 'Lista';
+
+  @override
+  String get todoNewTask => 'Nueva tarea';
+
+  @override
+  String get todoEditTask => 'Editar tarea';
+
+  @override
+  String get todoNoTasks => 'Sin tareas';
+
+  @override
+  String get todoNoTasksHint => 'Agregá la primera con el botón de abajo';
+
+  @override
+  String get todoStatusTodo => 'Por hacer';
+
+  @override
+  String get todoStatusInProgress => 'En curso';
+
+  @override
+  String get todoStatusDone => 'Hecho';
+
+  @override
+  String get todoPriorityLow => 'Baja';
+
+  @override
+  String get todoPriorityMedium => 'Media';
+
+  @override
+  String get todoPriorityHigh => 'Alta';
+
+  @override
+  String get todoPriorityUrgent => 'Urgente';
+
+  @override
+  String get todoDueOverdue => 'Vencida';
+
+  @override
+  String get todoDueToday => 'Vence hoy';
+
+  @override
+  String get todoDueUpcoming => 'Próxima';
+
+  @override
+  String get todoFieldTitle => 'Título';
+
+  @override
+  String get todoFieldDescription => 'Descripción';
+
+  @override
+  String get todoFieldDue => 'Vencimiento';
+
+  @override
+  String get todoFieldPriority => 'Prioridad';
+
+  @override
+  String get todoFieldStatus => 'Estado';
+
+  @override
+  String get todoComments => 'Avances';
+
+  @override
+  String get todoCommentHint => 'Anotá un avance';
+
+  @override
+  String get todoNoComments => 'Sin avances todavía';
+
+  @override
+  String get todoFilters => 'Filtros';
+
+  @override
+  String get todoFilterCategory => 'Categoría contiene';
+
+  @override
+  String get todoFilterClear => 'Limpiar';
+
+  @override
+  String todoTaskCount(int count) {
+    return '$count tareas';
+  }
+
+  @override
+  String get todoMoveNotAllowed =>
+      'Ese movimiento rompería el árbol de proyectos';
 }

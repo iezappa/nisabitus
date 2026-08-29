@@ -1275,6 +1275,234 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Entre {min} y {max}'**
   String pomodoroValidationRange(int min, int max);
+
+  /// No description provided for @todoTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'To-Do'**
+  String get todoTitle;
+
+  /// No description provided for @todoProjects.
+  ///
+  /// In es, this message translates to:
+  /// **'Proyectos'**
+  String get todoProjects;
+
+  /// No description provided for @todoNewProject.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo proyecto'**
+  String get todoNewProject;
+
+  /// No description provided for @todoNewSubproject.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo subproyecto'**
+  String get todoNewSubproject;
+
+  /// No description provided for @todoNoProjects.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay proyectos'**
+  String get todoNoProjects;
+
+  /// No description provided for @todoNoProjectsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Creá uno para empezar a organizar tus tareas'**
+  String get todoNoProjectsHint;
+
+  /// No description provided for @todoPickProject.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí un proyecto'**
+  String get todoPickProject;
+
+  /// No description provided for @todoPickProjectHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Sus tareas van a aparecer acá'**
+  String get todoPickProjectHint;
+
+  /// No description provided for @todoIncludeSubprojects.
+  ///
+  /// In es, this message translates to:
+  /// **'Incluir subproyectos'**
+  String get todoIncludeSubprojects;
+
+  /// No description provided for @todoViewKanban.
+  ///
+  /// In es, this message translates to:
+  /// **'Tablero'**
+  String get todoViewKanban;
+
+  /// No description provided for @todoViewList.
+  ///
+  /// In es, this message translates to:
+  /// **'Lista'**
+  String get todoViewList;
+
+  /// No description provided for @todoNewTask.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva tarea'**
+  String get todoNewTask;
+
+  /// No description provided for @todoEditTask.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar tarea'**
+  String get todoEditTask;
+
+  /// No description provided for @todoNoTasks.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin tareas'**
+  String get todoNoTasks;
+
+  /// No description provided for @todoNoTasksHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregá la primera con el botón de abajo'**
+  String get todoNoTasksHint;
+
+  /// No description provided for @todoStatusTodo.
+  ///
+  /// In es, this message translates to:
+  /// **'Por hacer'**
+  String get todoStatusTodo;
+
+  /// No description provided for @todoStatusInProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'En curso'**
+  String get todoStatusInProgress;
+
+  /// No description provided for @todoStatusDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Hecho'**
+  String get todoStatusDone;
+
+  /// No description provided for @todoPriorityLow.
+  ///
+  /// In es, this message translates to:
+  /// **'Baja'**
+  String get todoPriorityLow;
+
+  /// No description provided for @todoPriorityMedium.
+  ///
+  /// In es, this message translates to:
+  /// **'Media'**
+  String get todoPriorityMedium;
+
+  /// No description provided for @todoPriorityHigh.
+  ///
+  /// In es, this message translates to:
+  /// **'Alta'**
+  String get todoPriorityHigh;
+
+  /// No description provided for @todoPriorityUrgent.
+  ///
+  /// In es, this message translates to:
+  /// **'Urgente'**
+  String get todoPriorityUrgent;
+
+  /// No description provided for @todoDueOverdue.
+  ///
+  /// In es, this message translates to:
+  /// **'Vencida'**
+  String get todoDueOverdue;
+
+  /// No description provided for @todoDueToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Vence hoy'**
+  String get todoDueToday;
+
+  /// No description provided for @todoDueUpcoming.
+  ///
+  /// In es, this message translates to:
+  /// **'Próxima'**
+  String get todoDueUpcoming;
+
+  /// No description provided for @todoFieldTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Título'**
+  String get todoFieldTitle;
+
+  /// No description provided for @todoFieldDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get todoFieldDescription;
+
+  /// No description provided for @todoFieldDue.
+  ///
+  /// In es, this message translates to:
+  /// **'Vencimiento'**
+  String get todoFieldDue;
+
+  /// No description provided for @todoFieldPriority.
+  ///
+  /// In es, this message translates to:
+  /// **'Prioridad'**
+  String get todoFieldPriority;
+
+  /// No description provided for @todoFieldStatus.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get todoFieldStatus;
+
+  /// No description provided for @todoComments.
+  ///
+  /// In es, this message translates to:
+  /// **'Avances'**
+  String get todoComments;
+
+  /// No description provided for @todoCommentHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá un avance'**
+  String get todoCommentHint;
+
+  /// No description provided for @todoNoComments.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin avances todavía'**
+  String get todoNoComments;
+
+  /// No description provided for @todoFilters.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtros'**
+  String get todoFilters;
+
+  /// No description provided for @todoFilterCategory.
+  ///
+  /// In es, this message translates to:
+  /// **'Categoría contiene'**
+  String get todoFilterCategory;
+
+  /// No description provided for @todoFilterClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar'**
+  String get todoFilterClear;
+
+  /// No description provided for @todoTaskCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} tareas'**
+  String todoTaskCount(int count);
+
+  /// No description provided for @todoMoveNotAllowed.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese movimiento rompería el árbol de proyectos'**
+  String get todoMoveNotAllowed;
 }
 
 class _AppLocalizationsDelegate

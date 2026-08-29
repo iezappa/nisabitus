@@ -319,5 +319,50 @@
         "type": "int"
       }
     }
+  },
+  "todoTitle": "To-Do",
+  "todoProjects": "Proyectos",
+  "todoNewProject": "Nuevo proyecto",
+  "todoNewSubproject": "Nuevo subproyecto",
+  "todoNoProjects": "Todavía no hay proyectos",
+  "todoNoProjectsHint": "Creá uno para empezar a organizar tus tareas",
+  "todoPickProject": "Elegí un proyecto",
+  "todoPickProjectHint": "Sus tareas van a aparecer acá",
+  "todoIncludeSubprojects": "Incluir subproyectos",
+  "todoViewKanban": "Tablero",
+  "todoViewList": "Lista",
+  "todoNewTask": "Nueva tarea",
+  "todoEditTask": "Editar tarea",
+  "todoNoTasks": "Sin tareas",
+  "todoNoTasksHint": "Agregá la primera con el botón de abajo",
+  "todoStatusTodo": "Por hacer",
+  "todoStatusInProgress": "En curso",
+  "todoStatusDone": "Hecho",
+  "todoPriorityLow": "Baja",
+  "todoPriorityMedium": "Media",
+  "todoPriorityHigh": "Alta",
+  "todoPriorityUrgent": "Urgente",
+  "todoDueOverdue": "Vencida",
+  "todoDueToday": "Vence hoy",
+  "todoDueUpcoming": "Próxima",
+  "todoFieldTitle": "Título",
+  "todoFieldDescription": "Descripción",
+  "todoFieldDue": "Vencimiento",
+  "todoFieldPriority": "Prioridad",
+  "todoFieldStatus": "Estado",
+  "todoComments": "Avances",
+  "todoCommentHint": "Anotá un avance",
+  "todoNoComments": "Sin avances todavía",
+  "todoFilters": "Filtros",
+  "todoFilterCategory": "Categoría contiene",
+  "todoFilterClear": "Limpiar",
+  "todoTaskCount": "{count} tareas",
+  "todoMoveNotAllowed": "Ese movimiento rompería el árbol de proyectos",
+  "@todoTaskCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
