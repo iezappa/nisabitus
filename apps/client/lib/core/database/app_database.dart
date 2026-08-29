@@ -1,8 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
+import '../../features/exercise/data/exercise_tables.dart';
 import '../../features/habits/data/habit_tables.dart';
 import '../../features/journal/data/journal_tables.dart';
+import '../../features/nutrition/data/nutrition_tables.dart';
 import '../../features/pomodoro/data/pomodoro_tables.dart';
 import '../../features/sleep/data/sleep_tables.dart';
 import '../../features/streaks/data/streak_tables.dart';
@@ -26,6 +28,10 @@ part 'app_database.g.dart';
     Projects,
     TodoTasks,
     TaskComments,
+    NutritionGoals,
+    FoodEntries,
+    Exercises,
+    ExerciseSets,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -35,10 +41,20 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      // v2 added the nutrition and exercise tables. Everything already
+      // stored is untouched: this only creates what did not exist.
+      if (from < 2) {
+        await m.createTable(nutritionGoals);
+        await m.createTable(foodEntries);
+        await m.createTable(exercises);
+        await m.createTable(exerciseSets);
+      }
+    },
     beforeOpen: (details) async {
       // SQLite disables foreign keys per connection by default, which would
       // make every ON DELETE CASCADE above silently do nothing.

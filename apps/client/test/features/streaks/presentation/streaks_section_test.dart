@@ -55,10 +55,38 @@ void main() {
     }
   }
 
-  group('the reset button', () {
-    testWidgets('sits on the card, not behind a long press', (tester) async {
+  group('the card', () {
+    testWidgets('offers adding and nothing else', (tester) async {
       await seed(1);
       await pump(tester);
+
+      expect(find.byTooltip('+1'), findsOneWidget);
+      // Resetting lives in the editor, so the resting card stays quiet.
+      expect(find.text('Reiniciar'), findsNothing);
+    });
+
+    testWidgets('adds to the streak', (tester) async {
+      await seed(1);
+      await pump(tester);
+
+      await tester.tap(find.byTooltip('+1'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('1'), findsOneWidget);
+    });
+  });
+
+  group('resetting', () {
+    Future<void> openEditor(WidgetTester tester) async {
+      await tester.tap(find.text('RACHA 1'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('is offered inside the editor', (tester) async {
+      await seed(1);
+      await pump(tester);
+
+      await openEditor(tester);
 
       expect(find.text('Reiniciar'), findsOneWidget);
     });
@@ -68,8 +96,8 @@ void main() {
       await pump(tester);
       await tester.tap(find.byTooltip('+1'));
       await tester.pumpAndSettle();
-      expect(find.text('1'), findsOneWidget);
 
+      await openEditor(tester);
       await tester.tap(find.text('Reiniciar'));
       await tester.pumpAndSettle();
 
@@ -79,11 +107,12 @@ void main() {
     testWidgets('keeps the record the streak had reached', (tester) async {
       await seed(1);
       await pump(tester);
-      await tester.tap(find.byTooltip('+1'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('+1'));
-      await tester.pumpAndSettle();
+      for (var i = 0; i < 2; i++) {
+        await tester.tap(find.byTooltip('+1'));
+        await tester.pumpAndSettle();
+      }
 
+      await openEditor(tester);
       await tester.tap(find.text('Reiniciar'));
       await tester.pumpAndSettle();
 
@@ -143,11 +172,11 @@ void main() {
       expect(position.pixels, position.maxScrollExtent);
     });
 
-    testWidgets('shows a scrollbar so the overflow is visible', (tester) async {
+    testWidgets('carries no scrollbar of its own', (tester) async {
       await seed(6);
       await pump(tester);
 
-      expect(find.byType(Scrollbar), findsOneWidget);
+      expect(find.byType(Scrollbar), findsNothing);
     });
   });
 

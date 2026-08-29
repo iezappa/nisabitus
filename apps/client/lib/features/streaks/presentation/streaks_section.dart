@@ -9,6 +9,7 @@ import '../../../core/widgets/wheel_scroll_area.dart';
 import '../../../l10n/app_localizations.dart';
 import 'streak_providers.dart';
 import 'widgets/streak_card.dart';
+import 'widgets/streak_editor_dialog.dart';
 
 /// The streaks band above the habit list, per the spec's layout where one
 /// tab holds both modules.
@@ -57,7 +58,7 @@ class StreaksSection extends ConsumerWidget {
                   hint: l10n.streaksEmptyHint,
                 )
               : SizedBox(
-                  height: 200,
+                  height: 168,
                   child: _StreakStrip(count: items.length, builder: (context, index) {
                       final streak = items[index];
                       return SizedBox(
@@ -65,12 +66,11 @@ class StreaksSection extends ConsumerWidget {
                         child: StreakCard(
                           streak: streak,
                           onIncrement: () => actions.increment(streak.id),
-                          onReset: () => actions.reset(streak.id),
                           onRename: () async {
-                            final name = await promptForName(
+                            final name = await showStreakEditor(
                               context,
-                              title: l10n.actionEdit,
-                              initialValue: streak.name,
+                              streak: streak,
+                              onReset: () => actions.reset(streak.id),
                               onDelete: () => actions.delete(streak.id),
                             );
                             if (name != null) {
@@ -113,18 +113,13 @@ class _StreakStripState extends State<_StreakStrip> {
   @override
   Widget build(BuildContext context) => WheelScrollArea(
     controller: _controller,
-    child: Scrollbar(
+    child: ListView.separated(
       controller: _controller,
-      // Always shown: a band that scrolls needs to say so, or nobody tries.
-      thumbVisibility: true,
-      child: ListView.separated(
-        controller: _controller,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.fromLTRB(Gap.lg, 0, Gap.lg, Gap.md),
-        itemCount: widget.count,
-        separatorBuilder: (_, _) => const SizedBox(width: Gap.md),
-        itemBuilder: widget.builder,
-      ),
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+      itemCount: widget.count,
+      separatorBuilder: (_, _) => const SizedBox(width: Gap.md),
+      itemBuilder: widget.builder,
     ),
   );
 }
