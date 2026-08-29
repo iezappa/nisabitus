@@ -91,5 +91,20 @@
         "type": "String"
       }
     }
-  }
+  },
+  "habitRevert": "Volver a pendiente",
+  "habitsToday": "Progreso de hoy",
+  "habitsTodayCount": "{done} de {total}",
+  "@habitsTodayCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "streakCurrent": "Racha actual",
+  "streakLongest": "Récord"
 }

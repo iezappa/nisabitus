@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/streak.dart';
 
-/// One streak: its name, the big current count, and the two actions that
-/// move it.
+/// One streak as a compact tile: its name, the current count as the largest
+/// figure, the record underneath, and a single button that moves it.
+///
+/// Reset and delete live behind a long press, so the resting card offers one
+/// obvious action instead of three competing ones.
 class StreakCard extends StatelessWidget {
   const StreakCard({
     required this.streak,
     required this.onIncrement,
     required this.onReset,
+    required this.onRename,
     required this.onDelete,
     super.key,
   });
@@ -17,7 +22,51 @@ class StreakCard extends StatelessWidget {
   final Streak streak;
   final VoidCallback onIncrement;
   final VoidCallback onReset;
+  final VoidCallback onRename;
   final VoidCallback onDelete;
+
+  Future<void> _showActions(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheet) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: Text(l10n.actionEdit),
+              onTap: () {
+                Navigator.of(sheet).pop();
+                onRename();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.restart_alt),
+              title: Text(l10n.streakReset),
+              onTap: () {
+                Navigator.of(sheet).pop();
+                onReset();
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.delete_outline,
+                color: Theme.of(sheet).colorScheme.error,
+              ),
+              title: Text(l10n.actionDelete),
+              onTap: () {
+                Navigator.of(sheet).pop();
+                onDelete();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,85 +74,56 @@ class StreakCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    streak.name,
-                    style: theme.textTheme.titleSmall,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 18),
-                  tooltip: l10n.actionDelete,
-                  visualDensity: VisualDensity.compact,
-                  onPressed: onDelete,
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  '${streak.count}',
-                  style: theme.textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  l10n.streakDays,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              l10n.streakRecord(streak.maxStreak),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+      child: InkWell(
+        onLongPress: () => _showActions(context),
+        child: Padding(
+          padding: const EdgeInsets.all(Gap.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                streak.name.toUpperCase(),
+                style: theme.textTheme.labelSmall,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            const SizedBox(height: 8),
-            // The card is narrow by design, so both buttons share the width
-            // instead of claiming their natural size and overflowing it.
-            Row(
-              children: [
-                Expanded(
-                  child: FilledButton(
-                    onPressed: onIncrement,
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+              const SizedBox(height: Gap.sm),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    '${streak.count}',
+                    style: theme.textTheme.displaySmall?.copyWith(
+                      color: theme.colorScheme.primary,
                     ),
-                    child: Text(l10n.streakIncrement),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextButton(
-                    onPressed: onReset,
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                    ),
+                  const SizedBox(width: Gap.xs),
+                  Text(l10n.streakDays, style: theme.textTheme.bodySmall),
+                ],
+              ),
+              const SizedBox(height: Gap.xs),
+              Row(
+                children: [
+                  Expanded(
                     child: Text(
-                      l10n.streakReset,
+                      l10n.streakRecord(streak.maxStreak),
+                      style: theme.textTheme.bodySmall,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  IconButton.filled(
+                    onPressed: onIncrement,
+                    icon: const Icon(Icons.add, size: 18),
+                    tooltip: l10n.streakIncrement,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -435,6 +435,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Programado: {days}'**
   String habitScheduledOn(String days);
+
+  /// No description provided for @habitRevert.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a pendiente'**
+  String get habitRevert;
+
+  /// No description provided for @habitsToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Progreso de hoy'**
+  String get habitsToday;
+
+  /// No description provided for @habitsTodayCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total}'**
+  String habitsTodayCount(int done, int total);
+
+  /// No description provided for @streakCurrent.
+  ///
+  /// In es, this message translates to:
+  /// **'Racha actual'**
+  String get streakCurrent;
+
+  /// No description provided for @streakLongest.
+  ///
+  /// In es, this message translates to:
+  /// **'Récord'**
+  String get streakLongest;
 }
 
 class _AppLocalizationsDelegate

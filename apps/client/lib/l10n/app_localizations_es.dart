@@ -190,4 +190,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String habitScheduledOn(String days) {
     return 'Programado: $days';
   }
+
+  @override
+  String get habitRevert => 'Volver a pendiente';
+
+  @override
+  String get habitsToday => 'Progreso de hoy';
+
+  @override
+  String habitsTodayCount(int done, int total) {
+    return '$done de $total';
+  }
+
+  @override
+  String get streakCurrent => 'Racha actual';
+
+  @override
+  String get streakLongest => 'Récord';
 }

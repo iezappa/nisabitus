@@ -76,8 +76,9 @@ void main() {
     await pumpScreen(tester);
 
     expect(find.text('Meditar 10 minutos'), findsOneWidget);
-    expect(find.text('SALUD'), findsOneWidget);
-    expect(find.text('Hecho'), findsOneWidget);
+    // Category and frequency share one muted line under the name.
+    expect(find.text('Salud · Diario'), findsOneWidget);
+    expect(find.byTooltip('Hecho'), findsOneWidget);
   });
 
   testWidgets('marks a habit as done when its button is tapped', (
@@ -90,14 +91,14 @@ void main() {
         );
     await pumpScreen(tester);
 
-    await tester.tap(find.text('Hecho'));
+    await tester.tap(find.byTooltip('Hecho'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Completado'), findsOneWidget);
-    expect(find.text('Hecho'), findsNothing);
+    expect(find.byTooltip('Completado'), findsOneWidget);
+    expect(find.byTooltip('Hecho'), findsNothing);
   });
 
-  testWidgets('reverts a completed habit when the chip is tapped', (
+  testWidgets('reverts a completed habit when the circle is tapped again', (
     tester,
   ) async {
     await container
@@ -106,13 +107,13 @@ void main() {
           const HabitDraft(name: 'Leer', frequency: HabitFrequency.daily),
         );
     await pumpScreen(tester);
-    await tester.tap(find.text('Hecho'));
+    await tester.tap(find.byTooltip('Hecho'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Completado'));
+    await tester.tap(find.byTooltip('Completado'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Hecho'), findsOneWidget);
+    expect(find.byTooltip('Hecho'), findsOneWidget);
   });
 
   testWidgets('keeps a weekly habit out of the daily tab', (tester) async {
@@ -138,10 +139,11 @@ void main() {
     await container.read(streakActionsProvider).create('Días sin azúcar');
     await pumpScreen(tester);
 
-    expect(find.text('Días sin azúcar'), findsOneWidget);
+    // The streak name is rendered as the tracked uppercase micro-label.
+    expect(find.text('DÍAS SIN AZÚCAR'), findsOneWidget);
     expect(find.text('0'), findsOneWidget);
 
-    await tester.tap(find.text('+1'));
+    await tester.tap(find.byTooltip('+1'));
     await tester.pumpAndSettle();
 
     expect(find.text('1'), findsOneWidget);
