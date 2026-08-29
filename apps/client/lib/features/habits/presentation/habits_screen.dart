@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
+import '../../../core/widgets/settings_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../streaks/presentation/streaks_section.dart';
 import '../domain/habit.dart';
@@ -48,6 +49,7 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
 
     return Scaffold(
       appBar: AppBar(
+        leading: const SettingsButton(),
         title: Text(l10n.habitsTitle),
         actions: [
           IconButton(

@@ -8,6 +8,7 @@ import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/range_selector.dart';
 import '../../../core/widgets/section_header.dart';
+import '../../../core/widgets/settings_button.dart';
 import '../../../core/widgets/stat_tile.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/pomodoro_repository.dart';
@@ -27,7 +28,10 @@ class PomodoroScreen extends ConsumerWidget {
     final selected = ref.watch(selectedSessionProvider).value;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.pomodoroTitle)),
+      appBar: AppBar(
+        leading: const SettingsButton(),
+        title: Text(l10n.pomodoroTitle),
+      ),
       floatingActionButton: selected != null
           ? null
           : FloatingActionButton(

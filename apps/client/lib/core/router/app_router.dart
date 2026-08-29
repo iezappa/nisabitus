@@ -10,6 +10,7 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/sleep/presentation/sleep_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/coming_soon_screen.dart';
+import '../widgets/settings_button.dart';
 import 'app_tab.dart';
 
 GoRouter buildRouter() => GoRouter(
@@ -29,13 +30,19 @@ GoRouter buildRouter() => GoRouter(
               AppTab.sleep => const SleepScreen(),
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
-              AppTab.settings => const SettingsScreen(),
               _ => ComingSoonScreen(
                 title: tab.label(AppLocalizations.of(context)),
               ),
             },
           ),
       ],
+    ),
+    // Outside the shell on purpose: it is pushed over whatever tab is open,
+    // gets a real back arrow, and never depends on a navigation destination
+    // that the user may have hidden.
+    GoRoute(
+      path: SettingsButton.route,
+      builder: (context, _) => const SettingsScreen(),
     ),
   ],
 );

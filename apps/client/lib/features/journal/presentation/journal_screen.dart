@@ -8,6 +8,7 @@ import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/range_selector.dart';
 import '../../../core/widgets/section_header.dart';
+import '../../../core/widgets/settings_button.dart';
 import '../../../core/widgets/week_date_selector.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/journal_content.dart';
@@ -27,7 +28,10 @@ class JournalScreen extends ConsumerWidget {
     final actions = ref.read(journalActionsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.journalTitle)),
+      appBar: AppBar(
+        leading: const SettingsButton(),
+        title: Text(l10n.journalTitle),
+      ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: Gap.xxl),
         children: [
