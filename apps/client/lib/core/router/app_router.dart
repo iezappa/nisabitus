@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/habits/presentation/habits_screen.dart';
 import '../../features/journal/presentation/journal_screen.dart';
 import '../../features/pomodoro/presentation/pomodoro_screen.dart';
@@ -10,7 +11,6 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/sleep/presentation/sleep_screen.dart';
 import '../../features/todo/presentation/todo_screen.dart';
 import '../../l10n/app_localizations.dart';
-import '../widgets/coming_soon_screen.dart';
 import '../widgets/settings_button.dart';
 import 'app_tab.dart';
 
@@ -27,14 +27,12 @@ GoRouter buildRouter() => GoRouter(
           GoRoute(
             path: tab.path,
             builder: (context, _) => switch (tab) {
+              AppTab.dashboard => const DashboardScreen(),
               AppTab.habits => const HabitsScreen(),
               AppTab.sleep => const SleepScreen(),
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
               AppTab.todo => const TodoScreen(),
-              _ => ComingSoonScreen(
-                title: tab.label(AppLocalizations.of(context)),
-              ),
             },
           ),
       ],

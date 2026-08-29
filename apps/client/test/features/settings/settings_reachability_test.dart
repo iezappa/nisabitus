@@ -4,9 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/preferences/preferences.dart';
 import 'package:nisabit/core/router/app_tab.dart';
-import 'package:nisabit/core/widgets/coming_soon_screen.dart';
+import 'package:drift/native.dart';
+import 'package:nisabit/core/database/app_database.dart';
+import 'package:nisabit/core/database/database_provider.dart';
 import 'package:nisabit/core/widgets/settings_button.dart';
 import 'package:nisabit/features/settings/presentation/settings_providers.dart';
+import 'package:nisabit/features/sleep/presentation/sleep_screen.dart';
 import 'package:nisabit/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,10 +19,15 @@ void main() {
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
     container = ProviderContainer(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        databaseProvider.overrideWithValue(db),
+      ],
     );
     addTearDown(container.dispose);
+    addTearDown(db.close);
   });
 
   test('settings is not one of the hideable tabs', () {
@@ -40,7 +48,7 @@ void main() {
     expect(container.read(visibleTabsProvider), hasLength(1));
   });
 
-  testWidgets('a screen with nothing in it still offers a way into settings', (
+  testWidgets('an ordinary screen still offers a way into settings', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -54,7 +62,7 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: ComingSoonScreen(title: 'Panel'),
+          home: SleepScreen(),
         ),
       ),
     );

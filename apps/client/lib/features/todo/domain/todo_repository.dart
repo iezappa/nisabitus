@@ -50,6 +50,12 @@ abstract interface class TodoRepository {
   /// subprojects.
   Future<List<Task>> tasks(int projectId, {bool includeDescendants});
 
+  /// Every task in the store, whatever project it belongs to.
+  ///
+  /// The dashboard summarises across projects, so it cannot go project by
+  /// project without knowing them all first.
+  Future<List<Task>> allTasks();
+
   Future<Task> createTask(TaskDraft draft);
 
   Future<Task> updateTask(int id, TaskDraft draft);

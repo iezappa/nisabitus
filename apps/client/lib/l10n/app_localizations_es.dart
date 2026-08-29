@@ -761,4 +761,64 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get todoMoveNotAllowed =>
       'Ese movimiento rompería el árbol de proyectos';
+
+  @override
+  String dashboardGreeting(String name) {
+    return 'Hola, $name';
+  }
+
+  @override
+  String get dashboardGreetingAnonymous => 'Hola';
+
+  @override
+  String get dashboardSubtitle => 'Esto es lo de hoy.';
+
+  @override
+  String get dashboardRefresh => 'Actualizar';
+
+  @override
+  String get dashboardPendingTasks => 'Tareas pendientes';
+
+  @override
+  String dashboardOverdue(int count) {
+    return '$count vencidas';
+  }
+
+  @override
+  String get dashboardNoOverdue => 'Ninguna vencida';
+
+  @override
+  String get dashboardHabitsToday => 'Hábitos de hoy';
+
+  @override
+  String dashboardHabitsRatio(int done, int total) {
+    return '$done de $total';
+  }
+
+  @override
+  String get dashboardFocus => 'Foco';
+
+  @override
+  String get dashboardFocusEmpty => 'Nada pendiente. Disfrutalo.';
+
+  @override
+  String get dashboardHealth => 'Salud y journal';
+
+  @override
+  String get dashboardSleepToday => 'Sueño de hoy';
+
+  @override
+  String get dashboardJournalReady => 'Listo';
+
+  @override
+  String get dashboardJournalPending => 'Pendiente';
+
+  @override
+  String get dashboardNoJournal => 'Sin entrada';
+
+  @override
+  String get dashboardQuickActions => 'Accesos rápidos';
+
+  @override
+  String get dashboardNoDue => 'Sin fecha';
 }

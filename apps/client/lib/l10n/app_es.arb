@@ -364,5 +364,47 @@
         "type": "int"
       }
     }
+  },
+  "dashboardGreeting": "Hola, {name}",
+  "dashboardGreetingAnonymous": "Hola",
+  "dashboardSubtitle": "Esto es lo de hoy.",
+  "dashboardRefresh": "Actualizar",
+  "dashboardPendingTasks": "Tareas pendientes",
+  "dashboardOverdue": "{count} vencidas",
+  "dashboardNoOverdue": "Ninguna vencida",
+  "dashboardHabitsToday": "Hábitos de hoy",
+  "dashboardHabitsRatio": "{done} de {total}",
+  "dashboardFocus": "Foco",
+  "dashboardFocusEmpty": "Nada pendiente. Disfrutalo.",
+  "dashboardHealth": "Salud y journal",
+  "dashboardSleepToday": "Sueño de hoy",
+  "dashboardJournalReady": "Listo",
+  "dashboardJournalPending": "Pendiente",
+  "dashboardNoJournal": "Sin entrada",
+  "dashboardQuickActions": "Accesos rápidos",
+  "dashboardNoDue": "Sin fecha",
+  "@dashboardGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dashboardOverdue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@dashboardHabitsRatio": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }

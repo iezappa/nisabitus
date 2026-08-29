@@ -1503,6 +1503,114 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ese movimiento rompería el árbol de proyectos'**
   String get todoMoveNotAllowed;
+
+  /// No description provided for @dashboardGreeting.
+  ///
+  /// In es, this message translates to:
+  /// **'Hola, {name}'**
+  String dashboardGreeting(String name);
+
+  /// No description provided for @dashboardGreetingAnonymous.
+  ///
+  /// In es, this message translates to:
+  /// **'Hola'**
+  String get dashboardGreetingAnonymous;
+
+  /// No description provided for @dashboardSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Esto es lo de hoy.'**
+  String get dashboardSubtitle;
+
+  /// No description provided for @dashboardRefresh.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get dashboardRefresh;
+
+  /// No description provided for @dashboardPendingTasks.
+  ///
+  /// In es, this message translates to:
+  /// **'Tareas pendientes'**
+  String get dashboardPendingTasks;
+
+  /// No description provided for @dashboardOverdue.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} vencidas'**
+  String dashboardOverdue(int count);
+
+  /// No description provided for @dashboardNoOverdue.
+  ///
+  /// In es, this message translates to:
+  /// **'Ninguna vencida'**
+  String get dashboardNoOverdue;
+
+  /// No description provided for @dashboardHabitsToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Hábitos de hoy'**
+  String get dashboardHabitsToday;
+
+  /// No description provided for @dashboardHabitsRatio.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total}'**
+  String dashboardHabitsRatio(int done, int total);
+
+  /// No description provided for @dashboardFocus.
+  ///
+  /// In es, this message translates to:
+  /// **'Foco'**
+  String get dashboardFocus;
+
+  /// No description provided for @dashboardFocusEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada pendiente. Disfrutalo.'**
+  String get dashboardFocusEmpty;
+
+  /// No description provided for @dashboardHealth.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud y journal'**
+  String get dashboardHealth;
+
+  /// No description provided for @dashboardSleepToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Sueño de hoy'**
+  String get dashboardSleepToday;
+
+  /// No description provided for @dashboardJournalReady.
+  ///
+  /// In es, this message translates to:
+  /// **'Listo'**
+  String get dashboardJournalReady;
+
+  /// No description provided for @dashboardJournalPending.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get dashboardJournalPending;
+
+  /// No description provided for @dashboardNoJournal.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin entrada'**
+  String get dashboardNoJournal;
+
+  /// No description provided for @dashboardQuickActions.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesos rápidos'**
+  String get dashboardQuickActions;
+
+  /// No description provided for @dashboardNoDue.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin fecha'**
+  String get dashboardNoDue;
 }
 
 class _AppLocalizationsDelegate

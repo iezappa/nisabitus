@@ -150,6 +150,21 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
+  Future<List<Task>> allTasks() async {
+    final names = {
+      for (final project in await projects()) project.id: project.name,
+    };
+    final rows = await (_db.select(
+      _db.todoTasks,
+    )..orderBy([(t) => OrderingTerm.asc(t.id)])).get();
+
+    return [
+      for (final row in rows)
+        _toTask(row, projectName: names[row.projectId]),
+    ];
+  }
+
+  @override
   Future<Task> createTask(TaskDraft draft) async {
     final validated = _fromDraft(draft, id: 0);
 
