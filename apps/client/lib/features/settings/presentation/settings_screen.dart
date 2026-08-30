@@ -6,6 +6,7 @@ import '../../../core/widgets/centered_content.dart';
 import '../../../core/widgets/disclaimer.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../backup/presentation/widgets/backup_card.dart';
 import '../../shared/support_actions.dart';
 import '../domain/accent_color.dart';
 import '../domain/language_preference.dart';
@@ -27,88 +28,93 @@ class SettingsScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.only(bottom: Gap.xxl),
           children: [
-          SectionHeader(label: l10n.settingsAppearance),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(Gap.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsTheme,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: Gap.md),
-                    const _ThemePicker(),
-                    const SizedBox(height: Gap.xl),
-                    Text(
-                      l10n.settingsAccent,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: Gap.md),
-                    const _AccentPicker(),
-                    const SizedBox(height: Gap.xl),
-                    Text(
-                      l10n.settingsLanguage,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: Gap.md),
-                    const _LanguagePicker(),
-                  ],
+            SectionHeader(label: l10n.settingsAppearance),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.settingsTheme,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: Gap.md),
+                      const _ThemePicker(),
+                      const SizedBox(height: Gap.xl),
+                      Text(
+                        l10n.settingsAccent,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: Gap.md),
+                      const _AccentPicker(),
+                      const SizedBox(height: Gap.xl),
+                      Text(
+                        l10n.settingsLanguage,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: Gap.md),
+                      const _LanguagePicker(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          SectionHeader(label: l10n.settingsTabs),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(Gap.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsTabsHint,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: Gap.md),
-                    const TabVisibilityPicker(),
-                  ],
+            SectionHeader(label: l10n.settingsTabs),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.settingsTabsHint,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: Gap.md),
+                      const TabVisibilityPicker(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          SectionHeader(label: l10n.settingsProfile),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(Gap.lg),
-                child: const _ProfileNameField(),
+            SectionHeader(label: l10n.settingsProfile),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  child: const _ProfileNameField(),
+                ),
               ),
             ),
-          ),
-          SectionHeader(label: l10n.settingsDisclaimer),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: Gap.lg),
-            child: DisclaimerCard(),
-          ),
-          SectionHeader(label: l10n.settingsAbout),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-            child: Card(
-              child: ListTile(
-                leading: const Icon(Icons.school_outlined),
-                title: Text(l10n.settingsTutorial),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => showTutorial(context),
+            SectionHeader(label: l10n.settingsBackup),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: BackupCard(),
+            ),
+            SectionHeader(label: l10n.settingsDisclaimer),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: DisclaimerCard(),
+            ),
+            SectionHeader(label: l10n.settingsAbout),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+              child: Card(
+                child: ListTile(
+                  leading: const Icon(Icons.school_outlined),
+                  title: Text(l10n.settingsTutorial),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => showTutorial(context),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: Gap.lg),
+            const SizedBox(height: Gap.lg),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: Gap.lg),
               child: SupportProjectsCard(),
@@ -142,9 +148,8 @@ class _LanguagePicker extends ConsumerWidget {
           ButtonSegment(value: choice, label: Text(label(choice))),
       ],
       selected: {current},
-      onSelectionChanged: (selection) => ref
-          .read(languagePreferenceProvider.notifier)
-          .set(selection.first.id),
+      onSelectionChanged: (selection) =>
+          ref.read(languagePreferenceProvider.notifier).set(selection.first.id),
     );
   }
 }
@@ -181,9 +186,8 @@ class _ThemePicker extends ConsumerWidget {
           ),
       ],
       selected: {current},
-      onSelectionChanged: (selection) => ref
-          .read(themePreferenceProvider.notifier)
-          .set(selection.first.id),
+      onSelectionChanged: (selection) =>
+          ref.read(themePreferenceProvider.notifier).set(selection.first.id),
     );
   }
 }

@@ -362,9 +362,37 @@
   "todoOpen": "Open",
   "todoOverdue": "Overdue",
   "sleepHoursPerNight": "Hours per night",
-  "progressDays": "{count} days",
+  "progressDays": "{count, plural, =1{1 day} other{{count} days}}",
   "todoProgressEmptyHint": "Finish a task and it shows up here",
   "@progressDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackup": "Backup",
+  "backupHint": "Everything you have recorded, in a file of your own. It is not uploaded anywhere: it stays wherever you put it.",
+  "backupExport": "Export",
+  "backupImport": "Import",
+  "backupReplaceWarning": "Importing replaces everything you have now.",
+  "backupConfirmTitle": "Replace everything you have?",
+  "backupConfirmBody": "What is stored now is deleted and replaced by whatever the file holds. It cannot be undone, so export first if you are unsure.",
+  "backupConfirmAction": "Replace",
+  "backupExported": "{count, plural, =1{Backup saved: 1 record} other{Backup saved: {count} records}}",
+  "backupImported": "{count, plural, =1{Data restored: 1 record} other{Data restored: {count} records}}",
+  "backupNotABackup": "That file is not a Nísabit backup",
+  "backupNewerVersion": "The backup comes from a newer version of Nísabit",
+  "backupCorrupt": "The backup is damaged and cannot be read",
+  "backupFailed": "It could not be completed",
+  "@backupExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@backupImported": {
     "placeholders": {
       "count": {
         "type": "int"

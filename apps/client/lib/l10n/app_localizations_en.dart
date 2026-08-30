@@ -1175,9 +1175,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String progressDays(int count) {
-    return '$count days';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
   }
 
   @override
   String get todoProgressEmptyHint => 'Finish a task and it shows up here';
+
+  @override
+  String get settingsBackup => 'Backup';
+
+  @override
+  String get backupHint =>
+      'Everything you have recorded, in a file of your own. It is not uploaded anywhere: it stays wherever you put it.';
+
+  @override
+  String get backupExport => 'Export';
+
+  @override
+  String get backupImport => 'Import';
+
+  @override
+  String get backupReplaceWarning =>
+      'Importing replaces everything you have now.';
+
+  @override
+  String get backupConfirmTitle => 'Replace everything you have?';
+
+  @override
+  String get backupConfirmBody =>
+      'What is stored now is deleted and replaced by whatever the file holds. It cannot be undone, so export first if you are unsure.';
+
+  @override
+  String get backupConfirmAction => 'Replace';
+
+  @override
+  String backupExported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Backup saved: $count records',
+      one: 'Backup saved: 1 record',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String backupImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Data restored: $count records',
+      one: 'Data restored: 1 record',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get backupNotABackup => 'That file is not a Nísabit backup';
+
+  @override
+  String get backupNewerVersion =>
+      'The backup comes from a newer version of Nísabit';
+
+  @override
+  String get backupCorrupt => 'The backup is damaged and cannot be read';
+
+  @override
+  String get backupFailed => 'It could not be completed';
 }

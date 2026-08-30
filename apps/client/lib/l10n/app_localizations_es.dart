@@ -1178,9 +1178,77 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String progressDays(int count) {
-    return '$count días';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count días',
+      one: '1 día',
+    );
+    return '$_temp0';
   }
 
   @override
   String get todoProgressEmptyHint => 'Completá una tarea y aparece acá';
+
+  @override
+  String get settingsBackup => 'Copia de seguridad';
+
+  @override
+  String get backupHint =>
+      'Todo lo que anotaste, en un archivo tuyo. No se sube a ningún lado: queda donde vos lo guardes.';
+
+  @override
+  String get backupExport => 'Exportar';
+
+  @override
+  String get backupImport => 'Importar';
+
+  @override
+  String get backupReplaceWarning =>
+      'Importar reemplaza todo lo que tenés ahora.';
+
+  @override
+  String get backupConfirmTitle => '¿Reemplazar todos tus datos?';
+
+  @override
+  String get backupConfirmBody =>
+      'Se borra lo que hay ahora y queda lo que traiga el archivo. No se puede deshacer, así que exportá antes si tenés dudas.';
+
+  @override
+  String get backupConfirmAction => 'Reemplazar';
+
+  @override
+  String backupExported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Copia guardada: $count registros',
+      one: 'Copia guardada: 1 registro',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String backupImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Datos restaurados: $count registros',
+      one: 'Datos restaurados: 1 registro',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get backupNotABackup => 'Ese archivo no es una copia de Nísabit';
+
+  @override
+  String get backupNewerVersion =>
+      'La copia viene de una versión más nueva de Nísabit';
+
+  @override
+  String get backupCorrupt => 'La copia está dañada y no se puede leer';
+
+  @override
+  String get backupFailed => 'No se pudo completar la operación';
 }

@@ -2273,7 +2273,7 @@ abstract class AppLocalizations {
   /// No description provided for @progressDays.
   ///
   /// In es, this message translates to:
-  /// **'{count} días'**
+  /// **'{count, plural, =1{1 día} other{{count} días}}'**
   String progressDays(int count);
 
   /// No description provided for @todoProgressEmptyHint.
@@ -2281,6 +2281,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Completá una tarea y aparece acá'**
   String get todoProgressEmptyHint;
+
+  /// No description provided for @settingsBackup.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia de seguridad'**
+  String get settingsBackup;
+
+  /// No description provided for @backupHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo lo que anotaste, en un archivo tuyo. No se sube a ningún lado: queda donde vos lo guardes.'**
+  String get backupHint;
+
+  /// No description provided for @backupExport.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar'**
+  String get backupExport;
+
+  /// No description provided for @backupImport.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar'**
+  String get backupImport;
+
+  /// No description provided for @backupReplaceWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar reemplaza todo lo que tenés ahora.'**
+  String get backupReplaceWarning;
+
+  /// No description provided for @backupConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Reemplazar todos tus datos?'**
+  String get backupConfirmTitle;
+
+  /// No description provided for @backupConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se borra lo que hay ahora y queda lo que traiga el archivo. No se puede deshacer, así que exportá antes si tenés dudas.'**
+  String get backupConfirmBody;
+
+  /// No description provided for @backupConfirmAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Reemplazar'**
+  String get backupConfirmAction;
+
+  /// No description provided for @backupExported.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Copia guardada: 1 registro} other{Copia guardada: {count} registros}}'**
+  String backupExported(int count);
+
+  /// No description provided for @backupImported.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Datos restaurados: 1 registro} other{Datos restaurados: {count} registros}}'**
+  String backupImported(int count);
+
+  /// No description provided for @backupNotABackup.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese archivo no es una copia de Nísabit'**
+  String get backupNotABackup;
+
+  /// No description provided for @backupNewerVersion.
+  ///
+  /// In es, this message translates to:
+  /// **'La copia viene de una versión más nueva de Nísabit'**
+  String get backupNewerVersion;
+
+  /// No description provided for @backupCorrupt.
+  ///
+  /// In es, this message translates to:
+  /// **'La copia está dañada y no se puede leer'**
+  String get backupCorrupt;
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo completar la operación'**
+  String get backupFailed;
 }
 
 class _AppLocalizationsDelegate

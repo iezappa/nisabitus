@@ -612,9 +612,37 @@
   "todoOpen": "Abiertas",
   "todoOverdue": "Vencidas",
   "sleepHoursPerNight": "Horas por noche",
-  "progressDays": "{count} días",
+  "progressDays": "{count, plural, =1{1 día} other{{count} días}}",
   "todoProgressEmptyHint": "Completá una tarea y aparece acá",
   "@progressDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsBackup": "Copia de seguridad",
+  "backupHint": "Todo lo que anotaste, en un archivo tuyo. No se sube a ningún lado: queda donde vos lo guardes.",
+  "backupExport": "Exportar",
+  "backupImport": "Importar",
+  "backupReplaceWarning": "Importar reemplaza todo lo que tenés ahora.",
+  "backupConfirmTitle": "¿Reemplazar todos tus datos?",
+  "backupConfirmBody": "Se borra lo que hay ahora y queda lo que traiga el archivo. No se puede deshacer, así que exportá antes si tenés dudas.",
+  "backupConfirmAction": "Reemplazar",
+  "backupExported": "{count, plural, =1{Copia guardada: 1 registro} other{Copia guardada: {count} registros}}",
+  "backupImported": "{count, plural, =1{Datos restaurados: 1 registro} other{Datos restaurados: {count} registros}}",
+  "backupNotABackup": "Ese archivo no es una copia de Nísabit",
+  "backupNewerVersion": "La copia viene de una versión más nueva de Nísabit",
+  "backupCorrupt": "La copia está dañada y no se puede leer",
+  "backupFailed": "No se pudo completar la operación",
+  "@backupExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@backupImported": {
     "placeholders": {
       "count": {
         "type": "int"
