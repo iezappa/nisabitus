@@ -6,47 +6,44 @@ English.
 
 ---
 
-## 1. Finish the progress pass (in flight)
+## 1. The progress pass — done
 
-The groundwork landed in `073bc0f`. What exists:
+Every module now wears `ModuleScaffold` and reviews itself through
+`ProgressLayout` and the one `DailyAreaChart`. The bespoke chart code in
+`habits_progress_view.dart`, `sleep_chart.dart` and `pomodoro_screen.dart` is
+gone, and the repeated loading-or-error block became
+`core/widgets/async_section.dart`.
 
-- `core/widgets/daily_area_chart.dart` — the one area chart.
-- `core/widgets/progress_layout.dart` — window picker, figures, chart.
-- `core/widgets/module_scaffold.dart` — settings, health notice and the
-  doing/reviewing toggle in the same place on every screen.
-- `TodoTasks.completedAt` (schema v4) — so "what did I finish last week"
-  can be answered at all.
-
-What is left:
-
-- [ ] Add `statsFor(DateRange)` to the repositories that lack it:
-      nutrition, exercise, medication, journal, to-do.
-- [ ] Build the progress view for each: Journal, Pomodoro, To-Do, and the
-      four Salud views (Sueño, Alimentación, Ejercicio, Medicación).
-- [ ] Move Habits onto `ModuleScaffold`. It has the pattern already but
-      wired by hand, which is the copy the refactor exists to remove.
-- [ ] Salud needs the toggle to apply to the **selected sub-tab**, not the
-      section, since each of its four views has its own list and progress.
-- [ ] Retire the bespoke chart code left in `habits_progress_view.dart`,
-      `sleep_chart.dart` and `pomodoro_screen.dart` in favour of
-      `DailyAreaChart`.
-
-Suggested figures per module, to keep them comparable:
+`statsFor(DateRange)` now exists on every repository, each returning a domain
+stats object with a dense per-day series: one point for every day of the
+window, so a gap reads as a gap rather than as a straight line between two
+distant days.
 
 | Module | Tiles | Chart |
 |---|---|---|
 | Sueño | average, records, optimal %, range | hours per night, y pinned 0–12 |
 | Alimentación | daily average kcal, days logged | calories per day, target line |
-| Ejercicio | sets, reps, volume, days trained | volume per day |
-| Medicación | adherence %, complete days | adherence per day |
-| Journal | entries written, days written | entries per day |
-| Pomodoro | focus minutes, cycles | minutes per day (already computed) |
+| Ejercicio | volume, days trained, sets, reps | volume per day |
+| Medicación | adherence %, complete days | adherence per day, y pinned 0–100 |
+| Journal | entries, coverage %, longest run | days written |
+| Pomodoro | focus minutes, cycles | minutes per day |
 | To-Do | completed, open, overdue | tasks completed per day |
 
-Medication adherence is measured against the **currently** active list. The
-schema does not record when something was activated, so a long window will
-misread a regimen that changed inside it. Either accept and document that,
-or add an `activeFrom` column.
+Two decisions worth remembering:
+
+- Journal reports coverage and the longest run rather than "days written":
+  the schema allows one entry per day, so entries and days written are the
+  same number and printing both twice says nothing.
+- Salud keeps one flag per sub-tab, so flipping Sueño to progress leaves
+  Ejercicio where the user left it.
+
+Still open, carried over:
+
+- [ ] Medication adherence is measured against the **currently** active list.
+      The schema does not record when something was activated, so a long
+      window will misread a regimen that changed inside it. Either accept and
+      document that — it is documented in `MedicationStats` — or add an
+      `activeFrom` column.
 
 ---
 
