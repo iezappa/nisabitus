@@ -34,6 +34,15 @@ class DateRange {
 
   int get dayCount => end.difference(start).inDays + 1;
 
+  /// Every calendar day of the window, ascending.
+  ///
+  /// Built by stepping the calendar rather than adding 24-hour durations, so
+  /// a daylight saving change cannot swallow or duplicate a day.
+  List<DateTime> get days => [
+    for (var i = 0; i < dayCount; i++)
+      DateTime(start.year, start.month, start.day + i),
+  ];
+
   @override
   bool operator ==(Object other) =>
       other is DateRange && other.start == start && other.end == end;

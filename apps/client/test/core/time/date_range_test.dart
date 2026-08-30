@@ -48,5 +48,31 @@ void main() {
       expect(range.end, DateTime(2026, 3, 30));
       expect(range.dayCount, 30);
     });
+
+    test('days lists every calendar day of the window, ascending', () {
+      final range = DateRange(DateTime(2026, 3, 10), DateTime(2026, 3, 13));
+
+      expect(range.days, [
+        DateTime(2026, 3, 10),
+        DateTime(2026, 3, 11),
+        DateTime(2026, 3, 12),
+        DateTime(2026, 3, 13),
+      ]);
+    });
+
+    test('days holds a single entry for a one-day window', () {
+      final range = DateRange(DateTime(2026, 3, 10), DateTime(2026, 3, 10));
+
+      expect(range.days, [DateTime(2026, 3, 10)]);
+    });
+
+    test('days crosses a daylight saving boundary without losing a day', () {
+      // Built by adding whole days to a DateTime, which is not the same as
+      // adding 24-hour Durations once the clock shifts.
+      final range = DateRange(DateTime(2026, 10, 30), DateTime(2026, 11, 3));
+
+      expect(range.days, hasLength(5));
+      expect(range.days.last, DateTime(2026, 11, 3));
+    });
   });
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../theme/app_theme.dart';
+import '../time/daily_point.dart';
 
-/// One value attached to one day.
-typedef DailyPoint = ({DateTime day, double value});
+export '../time/daily_point.dart';
 
 /// The one area chart every progress view uses.
 ///

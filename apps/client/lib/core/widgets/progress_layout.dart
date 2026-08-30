@@ -33,7 +33,7 @@ class ProgressLayout extends ConsumerWidget {
   final ProgressRange range;
   final ValueChanged<ProgressRange> onRangeChanged;
 
-  /// Two or three figures, side by side.
+  /// The figures, laid out two to a row.
   final List<StatTile> tiles;
 
   final String chartLabel;
@@ -57,13 +57,25 @@ class ProgressLayout extends ConsumerWidget {
       padding: const EdgeInsets.only(top: Gap.lg, bottom: 96),
       children: [
         RangeSelector(value: range, onChanged: onRangeChanged),
-        if (tiles.isNotEmpty)
+        // Two to a row: three or four figures crammed side by side turn the
+        // number, which is what the user came to read, into the smallest
+        // thing on screen. An odd last one takes the whole width.
+        for (var row = 0; row * 2 < tiles.length; row++)
           Padding(
-            padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.lg, Gap.lg, 0),
+            padding: EdgeInsets.fromLTRB(
+              Gap.lg,
+              row == 0 ? Gap.lg : Gap.md,
+              Gap.lg,
+              0,
+            ),
             child: Row(
               children: [
-                for (var i = 0; i < tiles.length; i++) ...[
-                  if (i > 0) const SizedBox(width: Gap.md),
+                for (
+                  var i = row * 2;
+                  i < tiles.length && i < row * 2 + 2;
+                  i++
+                ) ...[
+                  if (i > row * 2) const SizedBox(width: Gap.md),
                   Expanded(child: tiles[i]),
                 ],
               ],
