@@ -4,12 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../../../core/widgets/disclaimer.dart';
+import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/settings_button.dart';
 import '../../../core/widgets/week_date_selector.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../exercise/presentation/exercise_progress_view.dart';
 import '../../exercise/presentation/exercise_view.dart';
+import '../../medication/presentation/medication_progress_view.dart';
 import '../../medication/presentation/medication_view.dart';
+import '../../nutrition/presentation/nutrition_progress_view.dart';
 import '../../nutrition/presentation/nutrition_view.dart';
+import '../../sleep/presentation/sleep_progress_view.dart';
 import '../../sleep/presentation/sleep_view.dart';
 
 /// The Salud tab: sleep, nutrition, training and medication for one chosen
@@ -19,6 +24,10 @@ import '../../sleep/presentation/sleep_view.dart';
 /// answer the same question about the same day and moving it once should
 /// move all of them. The notice sits in the app bar for the same reason: it
 /// applies to everything under this tab.
+///
+/// The progress toggle does not: each sub-tab has its own list and its own
+/// figures, so switching Sueño to progress must leave Ejercicio where the
+/// user left it.
 class HealthScreen extends ConsumerStatefulWidget {
   const HealthScreen({super.key});
 
@@ -28,7 +37,20 @@ class HealthScreen extends ConsumerStatefulWidget {
 
 class _HealthScreenState extends ConsumerState<HealthScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 4, vsync: this);
+  static const _views = [
+    (list: SleepView(), progress: SleepProgressView()),
+    (list: NutritionView(), progress: NutritionProgressView()),
+    (list: ExerciseView(), progress: ExerciseProgressView()),
+    (list: MedicationView(), progress: MedicationProgressView()),
+  ];
+
+  late final TabController _tabs = TabController(
+    length: _views.length,
+    vsync: this,
+  )..addListener(() => setState(() {}));
+
+  /// One flag per sub-tab, so each remembers which side it was left on.
+  final _showingProgress = List.filled(_views.length, false);
 
   @override
   void dispose() {
@@ -40,12 +62,21 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final selected = ref.watch(selectedDayProvider);
+    final current = _tabs.index;
 
     return Scaffold(
       appBar: AppBar(
         leading: const SettingsButton(),
         title: Text(l10n.tabHealth),
-        actions: const [DisclaimerButton(), SizedBox(width: Gap.xs)],
+        actions: [
+          const DisclaimerButton(),
+          ProgressToggle(
+            showingProgress: _showingProgress[current],
+            onChanged: (value) =>
+                setState(() => _showingProgress[current] = value),
+          ),
+          const SizedBox(width: Gap.xs),
+        ],
       ),
       body: Column(
         children: [
@@ -69,11 +100,9 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
           Expanded(
             child: TabBarView(
               controller: _tabs,
-              children: const [
-                SleepView(),
-                NutritionView(),
-                ExerciseView(),
-                MedicationView(),
+              children: [
+                for (var i = 0; i < _views.length; i++)
+                  _showingProgress[i] ? _views[i].progress : _views[i].list,
               ],
             ),
           ),

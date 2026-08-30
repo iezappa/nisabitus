@@ -353,13 +353,22 @@
   "medsAdherencePerDay": "Adherence per day",
   "medsDaysComplete": "Complete days",
   "journalEntriesWritten": "Entries written",
-  "journalDaysWritten": "Days written",
-  "journalWordsAverage": "Words per entry",
+  "journalCoverage": "Coverage",
+  "journalLongestRun": "Longest run",
   "journalPerDay": "Entries per day",
   "todoProgress": "Progress",
   "todoCompletedPerDay": "Tasks completed per day",
   "todoCompleted": "Completed",
   "todoOpen": "Open",
   "todoOverdue": "Overdue",
-  "sleepHoursPerNight": "Hours per night"
+  "sleepHoursPerNight": "Hours per night",
+  "progressDays": "{count} days",
+  "todoProgressEmptyHint": "Finish a task and it shows up here",
+  "@progressDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

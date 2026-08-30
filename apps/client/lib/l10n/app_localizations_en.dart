@@ -1147,10 +1147,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journalEntriesWritten => 'Entries written';
 
   @override
-  String get journalDaysWritten => 'Days written';
+  String get journalCoverage => 'Coverage';
 
   @override
-  String get journalWordsAverage => 'Words per entry';
+  String get journalLongestRun => 'Longest run';
 
   @override
   String get journalPerDay => 'Entries per day';
@@ -1172,4 +1172,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sleepHoursPerNight => 'Hours per night';
+
+  @override
+  String progressDays(int count) {
+    return '$count days';
+  }
+
+  @override
+  String get todoProgressEmptyHint => 'Finish a task and it shows up here';
 }

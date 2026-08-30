@@ -603,13 +603,22 @@
   "medsAdherencePerDay": "Cumplimiento por día",
   "medsDaysComplete": "Días completos",
   "journalEntriesWritten": "Entradas escritas",
-  "journalDaysWritten": "Días escritos",
-  "journalWordsAverage": "Palabras por entrada",
+  "journalCoverage": "Cobertura",
+  "journalLongestRun": "Racha más larga",
   "journalPerDay": "Entradas por día",
   "todoProgress": "Progreso",
   "todoCompletedPerDay": "Tareas completadas por día",
   "todoCompleted": "Completadas",
   "todoOpen": "Abiertas",
   "todoOverdue": "Vencidas",
-  "sleepHoursPerNight": "Horas por noche"
+  "sleepHoursPerNight": "Horas por noche",
+  "progressDays": "{count} días",
+  "todoProgressEmptyHint": "Completá una tarea y aparece acá",
+  "@progressDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

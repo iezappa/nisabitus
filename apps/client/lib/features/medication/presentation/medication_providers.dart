@@ -1,10 +1,13 @@
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
+import '../../../core/time/progress_range.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../data/drift_medication_repository.dart';
 import '../domain/medication.dart';
 import '../domain/medication_repository.dart';
+import '../domain/medication_stats.dart';
 
 final medicationRepositoryProvider = Provider<MedicationRepository>(
   (ref) => DriftMedicationRepository(ref.watch(databaseProvider)),
@@ -12,6 +15,22 @@ final medicationRepositoryProvider = Provider<MedicationRepository>(
 
 /// Incremented after every write so dependent queries refetch.
 final medicationRevisionProvider = StateProvider<int>((ref) => 0);
+
+/// The window the progress view looks at.
+final medicationProgressRangeProvider = StateProvider<ProgressRange>(
+  (ref) => ProgressRange.defaultRange,
+);
+
+/// The figures behind the progress view, for the chosen window.
+final medicationStatsProvider = FutureProvider<MedicationStats>((ref) {
+  ref.watch(medicationRevisionProvider);
+
+  final range = ref
+      .watch(medicationProgressRangeProvider)
+      .toDateRange(from: ref.watch(todayProvider));
+
+  return ref.watch(medicationRepositoryProvider).statsFor(range);
+});
 
 /// What is due on the day the week strip points at.
 final medicationDayProvider = FutureProvider<MedicationDay>((ref) {

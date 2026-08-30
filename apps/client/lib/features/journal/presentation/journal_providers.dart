@@ -1,3 +1,4 @@
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
@@ -6,6 +7,7 @@ import '../../../core/time/selected_day_provider.dart';
 import '../data/drift_journal_repository.dart';
 import '../domain/journal_content.dart';
 import '../domain/journal_repository.dart';
+import '../domain/journal_stats.dart';
 
 final journalRepositoryProvider = Provider<JournalRepository>(
   (ref) => DriftJournalRepository(ref.watch(databaseProvider)),
@@ -14,10 +16,24 @@ final journalRepositoryProvider = Provider<JournalRepository>(
 /// Incremented after every write so dependent queries refetch.
 final journalRevisionProvider = StateProvider<int>((ref) => 0);
 
-/// The history window. The spec offers the last 7, 30 or 365 days.
-final journalHistoryRangeProvider = StateProvider<ProgressRange>(
+/// The window both the progress figures and the history pager look at.
+///
+/// One window, one control: the chart and the list of past entries answer
+/// the same question, so letting them drift apart only confuses.
+final journalProgressRangeProvider = StateProvider<ProgressRange>(
   (ref) => ProgressRange.defaultRange,
 );
+
+/// The figures behind the progress view, for the chosen window.
+final journalStatsProvider = FutureProvider<JournalStats>((ref) {
+  ref.watch(journalRevisionProvider);
+
+  final range = ref
+      .watch(journalProgressRangeProvider)
+      .toDateRange(from: ref.watch(todayProvider));
+
+  return ref.watch(journalRepositoryProvider).statsFor(range);
+});
 
 /// Zero-based page of the history list.
 final journalHistoryPageProvider = StateProvider<int>((ref) => 0);
@@ -36,7 +52,7 @@ final journalHistoryProvider = FutureProvider<JournalPage>((ref) {
   ref.watch(selectedDayProvider);
 
   final range = ref
-      .watch(journalHistoryRangeProvider)
+      .watch(journalProgressRangeProvider)
       .toDateRange(from: ref.watch(todayProvider));
 
   return ref

@@ -2216,17 +2216,17 @@ abstract class AppLocalizations {
   /// **'Entradas escritas'**
   String get journalEntriesWritten;
 
-  /// No description provided for @journalDaysWritten.
+  /// No description provided for @journalCoverage.
   ///
   /// In es, this message translates to:
-  /// **'Días escritos'**
-  String get journalDaysWritten;
+  /// **'Cobertura'**
+  String get journalCoverage;
 
-  /// No description provided for @journalWordsAverage.
+  /// No description provided for @journalLongestRun.
   ///
   /// In es, this message translates to:
-  /// **'Palabras por entrada'**
-  String get journalWordsAverage;
+  /// **'Racha más larga'**
+  String get journalLongestRun;
 
   /// No description provided for @journalPerDay.
   ///
@@ -2269,6 +2269,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Horas por noche'**
   String get sleepHoursPerNight;
+
+  /// No description provided for @progressDays.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} días'**
+  String progressDays(int count);
+
+  /// No description provided for @todoProgressEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Completá una tarea y aparece acá'**
+  String get todoProgressEmptyHint;
 }
 
 class _AppLocalizationsDelegate

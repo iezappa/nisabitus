@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/async_section.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
+import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/section_header.dart';
-import '../../../core/widgets/settings_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../streaks/presentation/streaks_section.dart';
 import '../domain/habit.dart';
@@ -32,9 +33,6 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
     vsync: this,
   )..addListener(() => setState(() {}));
 
-  /// The list is where the day is resolved; progress is a place to look back.
-  bool _showingProgress = false;
-
   @override
   void dispose() {
     _tabs.dispose();
@@ -47,63 +45,43 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: const SettingsButton(),
-        title: Text(l10n.habitsTitle),
-        actions: [
-          IconButton(
-            icon: Icon(
-              _showingProgress ? Icons.format_list_bulleted : Icons.insights,
-            ),
-            tooltip: _showingProgress ? l10n.habitsList : l10n.habitsProgress,
-            onPressed: () =>
-                setState(() => _showingProgress = !_showingProgress),
+    return ModuleScaffold(
+      title: l10n.habitsTitle,
+      // The streaks band and the frequency tabs steer the list; neither says
+      // anything about the window the progress side is looking at.
+      listOnly: Column(
+        children: [
+          const StreaksSection(),
+          TabBar(
+            controller: _tabs,
+            tabs: [
+              for (final frequency in HabitFrequency.values)
+                Tab(text: l10n.frequencyName(frequency)),
+            ],
           ),
-          const SizedBox(width: Gap.xs),
         ],
       ),
-      // Creating a habit belongs to the list, not to looking back at it.
-      floatingActionButton: _showingProgress
-          ? null
-          : FloatingActionButton(
-              onPressed: () async {
-                final draft = await showHabitForm(
-                  context,
-                  initialFrequency: _currentFrequency,
-                );
-                if (draft != null) {
-                  await ref.read(habitActionsProvider).create(draft);
-                }
-              },
-              tooltip: l10n.habitNew,
-              child: const Icon(Icons.add),
-            ),
-      body: _showingProgress
-          ? const ProgressTab()
-          : Column(
-              children: [
-                const StreaksSection(),
-                // The frequency tabs sit under the streaks band: they steer
-                // the list below them, not the screen as a whole.
-                TabBar(
-                  controller: _tabs,
-                  tabs: [
-                    for (final frequency in HabitFrequency.values)
-                      Tab(text: l10n.frequencyName(frequency)),
-                  ],
-                ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabs,
-                    children: [
-                      for (final frequency in HabitFrequency.values)
-                        _HabitList(frequency: frequency),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+      list: TabBarView(
+        controller: _tabs,
+        children: [
+          for (final frequency in HabitFrequency.values)
+            _HabitList(frequency: frequency),
+        ],
+      ),
+      progress: const ProgressTab(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final draft = await showHabitForm(
+            context,
+            initialFrequency: _currentFrequency,
+          );
+          if (draft != null) {
+            await ref.read(habitActionsProvider).create(draft);
+          }
+        },
+        tooltip: l10n.habitNew,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
@@ -120,15 +98,9 @@ class _HabitList extends ConsumerWidget {
     final actions = ref.read(habitActionsProvider);
     final today = ref.watch(habitDayProvider);
 
-    return habits.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Text(
-          '$error',
-          style: TextStyle(color: Theme.of(context).colorScheme.error),
-        ),
-      ),
-      data: (items) {
+    return AsyncSection(
+      value: habits,
+      builder: (items) {
         if (items.isEmpty) {
           return Center(
             child: EmptyState(

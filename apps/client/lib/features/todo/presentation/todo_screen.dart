@@ -3,14 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
+import '../../../core/widgets/async_section.dart';
 import '../../../core/widgets/empty_state.dart';
+import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/name_prompt_dialog.dart';
 import '../../../core/widgets/section_header.dart';
-import '../../../core/widgets/settings_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
 import 'todo_labels.dart';
+import 'todo_progress_view.dart';
 import 'todo_providers.dart';
 import 'widgets/project_tree_view.dart';
 import 'widgets/task_card.dart';
@@ -33,34 +35,30 @@ class TodoScreen extends ConsumerWidget {
       if (name != null) await ref.read(todoActionsProvider).createProject(name);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: const SettingsButton(),
-        title: Text(l10n.todoTitle),
-        actions: [
-          IconButton(
-            icon: Icon(
+    return ModuleScaffold(
+      title: l10n.todoTitle,
+      actions: [
+        IconButton(
+          icon: Icon(
+            mode == TodoViewMode.kanban
+                ? Icons.view_list_outlined
+                : Icons.view_kanban_outlined,
+          ),
+          tooltip: mode == TodoViewMode.kanban
+              ? l10n.todoViewList
+              : l10n.todoViewKanban,
+          onPressed: () => ref.read(todoViewModeProvider.notifier).state =
               mode == TodoViewMode.kanban
-                  ? Icons.view_list_outlined
-                  : Icons.view_kanban_outlined,
-            ),
-            tooltip: mode == TodoViewMode.kanban
-                ? l10n.todoViewList
-                : l10n.todoViewKanban,
-            onPressed: () =>
-                ref.read(todoViewModeProvider.notifier).state =
-                    mode == TodoViewMode.kanban
-                    ? TodoViewMode.list
-                    : TodoViewMode.kanban,
-          ),
-          IconButton(
-            icon: const Icon(Icons.create_new_folder_outlined),
-            tooltip: l10n.todoNewProject,
-            onPressed: newProject,
-          ),
-          const SizedBox(width: Gap.xs),
-        ],
-      ),
+              ? TodoViewMode.list
+              : TodoViewMode.kanban,
+        ),
+        IconButton(
+          icon: const Icon(Icons.create_new_folder_outlined),
+          tooltip: l10n.todoNewProject,
+          onPressed: newProject,
+        ),
+      ],
+      progress: const TodoProgressView(),
       floatingActionButton: selectedId == null
           ? null
           : FloatingActionButton(
@@ -68,15 +66,9 @@ class TodoScreen extends ConsumerWidget {
               tooltip: l10n.todoNewTask,
               child: const Icon(Icons.add),
             ),
-      body: projects.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Text(
-            '$error',
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-        ),
-        data: (data) {
+      list: AsyncSection(
+        value: projects,
+        builder: (data) {
           if (data.tree.all.isEmpty) {
             return Center(
               child: EmptyState(
@@ -87,10 +79,7 @@ class TodoScreen extends ConsumerWidget {
             );
           }
 
-          final sidebar = ProjectTreeView(
-            tree: data.tree,
-            counts: data.counts,
-          );
+          final sidebar = ProjectTreeView(tree: data.tree, counts: data.counts);
 
           if (!wide) {
             // On a narrow window the tree becomes a sheet: a permanent
@@ -139,9 +128,9 @@ class _ProjectStrip extends ConsumerWidget {
               child: ChoiceChip(
                 label: Text(project.name),
                 selected: selected == project.id,
-                onSelected: (_) => ref
-                    .read(selectedProjectIdProvider.notifier)
-                    .state = project.id,
+                onSelected: (_) =>
+                    ref.read(selectedProjectIdProvider.notifier).state =
+                        project.id,
               ),
             ),
         ],
@@ -333,11 +322,7 @@ class _Column extends ConsumerWidget {
                     color: Colors.transparent,
                     child: SizedBox(
                       width: 260,
-                      child: TaskCard(
-                        task: task,
-                        today: today,
-                        onTap: () {},
-                      ),
+                      child: TaskCard(task: task, today: today, onTap: () {}),
                     ),
                   ),
                   childWhenDragging: Opacity(

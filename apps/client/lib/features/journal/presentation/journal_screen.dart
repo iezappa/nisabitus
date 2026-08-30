@@ -4,15 +4,16 @@ import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
+import '../../../core/widgets/async_section.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
-import '../../../core/widgets/range_selector.dart';
+import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/section_header.dart';
-import '../../../core/widgets/settings_button.dart';
 import '../../../core/widgets/week_date_selector.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/journal_content.dart';
 import '../domain/journal_repository.dart';
+import 'journal_progress_view.dart';
 import 'journal_providers.dart';
 import 'widgets/journal_form.dart';
 
@@ -24,94 +25,79 @@ class JournalScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final selected = ref.watch(selectedDayProvider);
-    final entry = ref.watch(journalForSelectedDayProvider);
-    final actions = ref.read(journalActionsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: const SettingsButton(),
-        title: Text(l10n.journalTitle),
+    return ModuleScaffold(
+      title: l10n.journalTitle,
+      // The strip picks the day being written; it stays put while reviewing
+      // so tapping a past entry still lands somewhere visible.
+      header: WeekDateSelector(
+        selected: selected,
+        today: ref.watch(todayProvider),
+        onSelected: (day) =>
+            ref.read(selectedDayProvider.notifier).state = day,
       ),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: Gap.xxl),
-        children: [
-          WeekDateSelector(
-            selected: selected,
-            today: ref.watch(todayProvider),
-            onSelected: (day) =>
-                ref.read(selectedDayProvider.notifier).state = day,
-          ),
-          SectionHeader(label: l10n.journalEntry),
-          entry.when(
-            loading: () => const Padding(
-              padding: EdgeInsets.all(Gap.xxl),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-            error: (error, _) => Padding(
-              padding: const EdgeInsets.all(Gap.lg),
-              child: Text(
-                '$error',
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            ),
-            data: (value) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: JournalForm(
-                // Keyed by day so moving the strip rebuilds the fields from
-                // scratch instead of carrying the previous day's text over.
-                key: ValueKey(selected),
-                initial: value?.content ?? const JournalContent(),
-                hasEntry: value != null,
-                onSave: actions.save,
-                onDelete: () async {
-                  if (await confirmDelete(context, l10n.journalEntry)) {
-                    await actions.delete();
-                  }
-                },
-              ),
-            ),
-          ),
-          const _History(),
-        ],
-      ),
+      list: const _Entry(),
+      progress: const JournalProgressView(),
     );
   }
 }
 
-class _History extends ConsumerWidget {
-  const _History();
+/// The entry for the day the strip is pointing at.
+class _Entry extends ConsumerWidget {
+  const _Entry();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final range = ref.watch(journalHistoryRangeProvider);
-    final history = ref.watch(journalHistoryProvider);
+    final selected = ref.watch(selectedDayProvider);
+    final actions = ref.read(journalActionsProvider);
+
+    return ListView(
+      padding: const EdgeInsets.only(bottom: Gap.xxl),
+      children: [
+        SectionHeader(label: l10n.journalEntry),
+        AsyncSection(
+          value: ref.watch(journalForSelectedDayProvider),
+          builder: (value) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+            child: JournalForm(
+              // Keyed by day so moving the strip rebuilds the fields from
+              // scratch instead of carrying the previous day's text over.
+              key: ValueKey(selected),
+              initial: value?.content ?? const JournalContent(),
+              hasEntry: value != null,
+              onSave: actions.save,
+              onDelete: () async {
+                if (await confirmDelete(context, l10n.journalEntry)) {
+                  await actions.delete();
+                }
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The past entries of the same window the progress figures use.
+///
+/// Public because the progress view hangs it under its chart: the numbers
+/// and the entries they came from belong on the same side of the toggle.
+class JournalHistory extends ConsumerWidget {
+  const JournalHistory({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionHeader(label: l10n.journalHistory),
-        RangeSelector(
-          value: range,
-          onChanged: (value) {
-            ref.read(journalHistoryRangeProvider.notifier).state = value;
-            // A narrower window can have fewer pages than the one being read.
-            ref.read(journalHistoryPageProvider.notifier).state = 0;
-          },
-        ),
-        history.when(
-          loading: () => const Padding(
-            padding: EdgeInsets.all(Gap.xxl),
-            child: Center(child: CircularProgressIndicator()),
-          ),
-          error: (error, _) => Padding(
-            padding: const EdgeInsets.all(Gap.lg),
-            child: Text(
-              '$error',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-          data: (page) => page.total == 0
+        AsyncSection(
+          value: ref.watch(journalHistoryProvider),
+          builder: (page) => page.total == 0
               ? EmptyState(
                   icon: Icons.menu_book_outlined,
                   title: l10n.journalHistoryEmpty,

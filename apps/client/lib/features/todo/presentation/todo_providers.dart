@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
+import '../../../core/time/progress_range.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../data/drift_todo_repository.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
 import '../domain/todo_repository.dart';
+import '../domain/todo_stats.dart';
 
 /// How the tasks of the selected project are laid out.
 enum TodoViewMode { kanban, list }
@@ -40,6 +42,25 @@ final todoRepositoryProvider = Provider<TodoRepository>(
 
 /// Incremented after every write so dependent queries refetch.
 final todoRevisionProvider = StateProvider<int>((ref) => 0);
+
+/// The window the progress view looks at.
+final todoProgressRangeProvider = StateProvider<ProgressRange>(
+  (ref) => ProgressRange.defaultRange,
+);
+
+/// The figures behind the progress view, for the chosen window.
+final todoStatsProvider = FutureProvider<TodoStats>((ref) {
+  ref.watch(todoRevisionProvider);
+
+  final today = ref.watch(todayProvider);
+
+  return ref
+      .watch(todoRepositoryProvider)
+      .statsFor(
+        ref.watch(todoProgressRangeProvider).toDateRange(from: today),
+        today: today,
+      );
+});
 
 final selectedProjectIdProvider = StateProvider<int?>((ref) => null);
 final includeDescendantsProvider = StateProvider<bool>((ref) => true);

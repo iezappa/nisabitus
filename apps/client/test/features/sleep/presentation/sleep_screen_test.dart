@@ -64,6 +64,12 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  /// Flips the module to its progress side, where the history now lives.
+  Future<void> showProgress(WidgetTester tester) async {
+    await tester.tap(find.byIcon(Icons.insights));
+    await tester.pumpAndSettle();
+  }
+
   group('the day strip', () {
     testWidgets('shows the seven days of the selected week', (tester) async {
       await pumpScreen(tester);
@@ -163,6 +169,7 @@ void main() {
   group('the history', () {
     testWidgets('is empty until a night is registered', (tester) async {
       await pumpScreen(tester);
+      await showProgress(tester);
 
       expect(find.text('Sin datos en este rango'), findsOneWidget);
     });
@@ -170,6 +177,7 @@ void main() {
     testWidgets('summarizes the nights registered', (tester) async {
       await container.read(sleepActionsProvider).save(8);
       await pumpScreen(tester);
+      await showProgress(tester);
 
       expect(find.text('PROMEDIO'), findsOneWidget);
       expect(find.text('8.0 h'), findsOneWidget);
@@ -182,6 +190,7 @@ void main() {
     ) async {
       await container.read(sleepActionsProvider).save(8);
       await pumpScreen(tester);
+      await showProgress(tester);
 
       expect(find.text('Tus noches son parejas.'), findsOneWidget);
 

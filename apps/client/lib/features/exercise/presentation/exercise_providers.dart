@@ -1,10 +1,13 @@
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
+import '../../../core/time/progress_range.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../data/drift_exercise_repository.dart';
 import '../domain/exercise.dart';
 import '../domain/exercise_repository.dart';
+import '../domain/exercise_stats.dart';
 
 final exerciseRepositoryProvider = Provider<ExerciseRepository>(
   (ref) => DriftExerciseRepository(ref.watch(databaseProvider)),
@@ -12,6 +15,22 @@ final exerciseRepositoryProvider = Provider<ExerciseRepository>(
 
 /// Incremented after every write so dependent queries refetch.
 final exerciseRevisionProvider = StateProvider<int>((ref) => 0);
+
+/// The window the progress view looks at.
+final exerciseProgressRangeProvider = StateProvider<ProgressRange>(
+  (ref) => ProgressRange.defaultRange,
+);
+
+/// The figures behind the progress view, for the chosen window.
+final exerciseStatsProvider = FutureProvider<ExerciseStats>((ref) {
+  ref.watch(exerciseRevisionProvider);
+
+  final range = ref
+      .watch(exerciseProgressRangeProvider)
+      .toDateRange(from: ref.watch(todayProvider));
+
+  return ref.watch(exerciseRepositoryProvider).statsFor(range);
+});
 
 final exerciseCatalogueProvider = FutureProvider<List<Exercise>>((ref) {
   ref.watch(exerciseRevisionProvider);

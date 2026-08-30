@@ -1,10 +1,13 @@
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
+import '../../../core/time/progress_range.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../data/drift_nutrition_repository.dart';
 import '../domain/nutrition.dart';
 import '../domain/nutrition_repository.dart';
+import '../domain/nutrition_stats.dart';
 
 final nutritionRepositoryProvider = Provider<NutritionRepository>(
   (ref) => DriftNutritionRepository(ref.watch(databaseProvider)),
@@ -12,6 +15,22 @@ final nutritionRepositoryProvider = Provider<NutritionRepository>(
 
 /// Incremented after every write so dependent queries refetch.
 final nutritionRevisionProvider = StateProvider<int>((ref) => 0);
+
+/// The window the progress view looks at.
+final nutritionProgressRangeProvider = StateProvider<ProgressRange>(
+  (ref) => ProgressRange.defaultRange,
+);
+
+/// The figures behind the progress view, for the chosen window.
+final nutritionStatsProvider = FutureProvider<NutritionStats>((ref) {
+  ref.watch(nutritionRevisionProvider);
+
+  final range = ref
+      .watch(nutritionProgressRangeProvider)
+      .toDateRange(from: ref.watch(todayProvider));
+
+  return ref.watch(nutritionRepositoryProvider).statsFor(range);
+});
 
 /// The day the week strip is pointing at, totalled against the targets.
 final nutritionDayProvider = FutureProvider<DailyNutrition>((ref) {
