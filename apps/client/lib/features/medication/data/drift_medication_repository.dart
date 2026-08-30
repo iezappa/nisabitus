@@ -4,6 +4,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/medication.dart';
 import '../domain/medication_repository.dart';
+import '../domain/medication_stats.dart';
 
 /// Drift-backed implementation of [MedicationRepository].
 class DriftMedicationRepository implements MedicationRepository {
@@ -118,6 +119,34 @@ class DriftMedicationRepository implements MedicationRepository {
     notes: draft.notes,
     active: draft.active,
   );
+
+  @override
+  Future<MedicationStats> statsFor(DateRange range) async {
+    // Only what is active counts, on both sides of the sum: a paused entry
+    // is history, so neither its ticks nor its absences are adherence.
+    final active = await (_db.select(
+      _db.medications,
+    )..where((m) => m.active.equals(true))).get();
+
+    if (active.isEmpty) {
+      return MedicationStats.from(range, activeCount: 0, intakeDays: const []);
+    }
+
+    final activeIds = active.map((m) => m.id).toList();
+    final intakes =
+        await (_db.select(_db.medicationIntakes)..where(
+              (i) =>
+                  i.date.isBetweenValues(range.start, range.end) &
+                  i.medicationId.isIn(activeIds),
+            ))
+            .get();
+
+    return MedicationStats.from(
+      range,
+      activeCount: active.length,
+      intakeDays: intakes.map((row) => row.date).toList(),
+    );
+  }
 
   Medication _toDomain(MedicationRow row) => Medication(
     id: row.id,

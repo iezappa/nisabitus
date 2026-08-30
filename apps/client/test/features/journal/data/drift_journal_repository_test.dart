@@ -139,4 +139,29 @@ void main() {
       expect(page.total, 2);
     });
   });
+
+  group('statsFor', () {
+    test('reads the window as empty before anything is written', () async {
+      expect((await repository.statsFor(march)).isEmpty, isTrue);
+    });
+
+    test('counts the days written inside the window', () async {
+      await repository.save(day(1), const JournalContent(mood: 'Bien'));
+      await repository.save(day(2), const JournalContent(mood: 'Bien'));
+      await repository.save(DateTime(2026, 4, 1), const JournalContent(mood: 'Bien'));
+
+      final stats = await repository.statsFor(march);
+
+      expect(stats.entries, 2);
+      expect(stats.longestRun, 2);
+      expect(stats.perDay, hasLength(31));
+    });
+
+    test('drops an entry that was deleted', () async {
+      await repository.save(day(1), const JournalContent(mood: 'Bien'));
+      await repository.deleteForDay(day(1));
+
+      expect((await repository.statsFor(march)).entries, 0);
+    });
+  });
 }

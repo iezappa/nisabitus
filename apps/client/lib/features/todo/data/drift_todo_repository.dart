@@ -1,9 +1,11 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/time/date_range.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
 import '../domain/todo_repository.dart';
+import '../domain/todo_stats.dart';
 
 /// Drift-backed implementation of [TodoRepository].
 class DriftTodoRepository implements TodoRepository {
@@ -298,6 +300,10 @@ class DriftTodoRepository implements TodoRepository {
     return row == null ? null : _toProject(row);
   }
 
+  @override
+  Future<TodoStats> statsFor(DateRange range, {DateTime? today}) async =>
+      TodoStats.from(range, await allTasks(), today ?? DateTime.now());
+
   Future<Task?> _taskById(int id) async {
     final row = await (_db.select(
       _db.todoTasks,
@@ -335,6 +341,7 @@ class DriftTodoRepository implements TodoRepository {
     priority: TaskPriority.parse(row.priority),
     status: TaskStatus.parse(row.status),
     projectId: row.projectId,
+    completedAt: row.completedAt,
     projectName: projectName,
   );
 }

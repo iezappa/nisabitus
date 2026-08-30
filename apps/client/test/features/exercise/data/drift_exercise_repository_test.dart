@@ -1,6 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/database/app_database.dart';
+import 'package:nisabit/core/time/date_range.dart';
 import 'package:nisabit/features/exercise/data/drift_exercise_repository.dart';
 import 'package:nisabit/features/exercise/domain/exercise.dart';
 import 'package:nisabit/features/exercise/domain/exercise_repository.dart';
@@ -181,6 +182,45 @@ void main() {
       expect(day.totalSets, 2);
       expect(day.totalReps, 18);
       expect(day.totalVolume, 10 * 60 + 8 * 70);
+    });
+  });
+
+  group('statsFor', () {
+    test('reads the window as empty before anything is logged', () async {
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.isEmpty, isTrue);
+    });
+
+    test('counts the sets of the window and leaves the rest out', () async {
+      final squat = await create('Sentadilla');
+      await repository.logSet(monday, exerciseId: squat.id, reps: 10, weight: 50);
+      await repository.logSet(tuesday, exerciseId: squat.id, reps: 8, weight: 60);
+      await repository.logSet(
+        DateTime(2026, 3, 20),
+        exerciseId: squat.id,
+        reps: 5,
+        weight: 100,
+      );
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.sets, 2);
+      expect(stats.reps, 18);
+      expect(stats.volume, 980);
+      expect(stats.daysTrained, 2);
+    });
+
+    test('forgets the sets of an exercise that was deleted', () async {
+      final squat = await create('Sentadilla');
+      await repository.logSet(monday, exerciseId: squat.id, reps: 10, weight: 50);
+
+      await repository.deleteExercise(squat.id);
+
+      expect(
+        (await repository.statsFor(DateRange(monday, tuesday))).isEmpty,
+        isTrue,
+      );
     });
   });
 }

@@ -1,4 +1,6 @@
+import '../../../core/time/date_range.dart';
 import 'medication.dart';
+import 'medication_stats.dart';
 
 /// The user-editable fields of a medication or supplement.
 class MedicationDraft {
@@ -35,4 +37,7 @@ abstract interface class MedicationRepository {
 
   /// Flips whether [id] was taken on [day].
   Future<bool> toggleIntake(int id, DateTime day);
+
+  /// The figures the progress view shows for [range].
+  Future<MedicationStats> statsFor(DateRange range);
 }

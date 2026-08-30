@@ -4,6 +4,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/nutrition.dart';
 import '../domain/nutrition_repository.dart';
+import '../domain/nutrition_stats.dart';
 
 /// Drift-backed implementation of [NutritionRepository].
 class DriftNutritionRepository implements NutritionRepository {
@@ -127,6 +128,17 @@ class DriftNutritionRepository implements NutritionRepository {
   @override
   Future<void> deleteEntry(int id) async {
     await (_db.delete(_db.foodEntries)..where((e) => e.id.equals(id))).go();
+  }
+
+  @override
+  Future<NutritionStats> statsFor(DateRange range) async {
+    final rows = await (_db.select(
+      _db.foodEntries,
+    )..where((e) => e.date.isBetweenValues(range.start, range.end))).get();
+
+    final (entries, target) = (rows.map(_toDomain).toList(), await goal());
+
+    return NutritionStats.from(range, entries, target);
   }
 
   FoodEntry _toDomain(FoodEntryRow row) => FoodEntry(

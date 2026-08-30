@@ -4,6 +4,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/journal_content.dart';
 import '../domain/journal_repository.dart';
+import '../domain/journal_stats.dart';
 
 /// Drift-backed implementation of [JournalRepository].
 class DriftJournalRepository implements JournalRepository {
@@ -76,6 +77,15 @@ class DriftJournalRepository implements JournalRepository {
       page: page,
       pageSize: pageSize,
     );
+  }
+
+  @override
+  Future<JournalStats> statsFor(DateRange range) async {
+    final rows = await (_db.select(
+      _db.moodEntries,
+    )..where((e) => e.date.isBetweenValues(range.start, range.end))).get();
+
+    return JournalStats.from(range, rows.map((row) => row.date).toList());
   }
 
   JournalEntry _toDomain(MoodEntryRow row) => JournalEntry(

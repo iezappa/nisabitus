@@ -1,4 +1,6 @@
+import '../../../core/time/date_range.dart';
 import 'nutrition.dart';
+import 'nutrition_stats.dart';
 
 /// The user-editable fields of a food entry.
 class FoodDraft {
@@ -31,4 +33,7 @@ abstract interface class NutritionRepository {
   Future<FoodEntry> updateEntry(int id, FoodDraft draft);
 
   Future<void> deleteEntry(int id);
+
+  /// The figures the progress view shows for [range].
+  Future<NutritionStats> statsFor(DateRange range);
 }

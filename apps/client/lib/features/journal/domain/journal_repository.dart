@@ -1,5 +1,6 @@
 import '../../../core/time/date_range.dart';
 import 'journal_content.dart';
+import 'journal_stats.dart';
 
 /// One day's journal entry, with its fields already parsed.
 class JournalEntry {
@@ -47,4 +48,7 @@ abstract interface class JournalRepository {
 
   /// Past entries inside [range], newest first, five to a page.
   Future<JournalPage> history(DateRange range, {int page, int pageSize});
+
+  /// The figures the progress view shows for [range].
+  Future<JournalStats> statsFor(DateRange range);
 }

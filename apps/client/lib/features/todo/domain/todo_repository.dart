@@ -1,5 +1,7 @@
+import '../../../core/time/date_range.dart';
 import 'project.dart';
 import 'task.dart';
+import 'todo_stats.dart';
 
 /// The user-editable fields of a task.
 class TaskDraft {
@@ -69,4 +71,10 @@ abstract interface class TodoRepository {
   Future<TaskComment> addComment(int taskId, String content);
 
   Future<void> deleteComment(int id);
+
+  /// The figures the progress view shows for [range].
+  ///
+  /// [today] decides what counts as overdue, so the caller can keep the app's
+  /// idea of today in one place instead of each layer reading the clock.
+  Future<TodoStats> statsFor(DateRange range, {DateTime? today});
 }

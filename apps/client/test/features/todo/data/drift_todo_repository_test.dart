@@ -1,6 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/database/app_database.dart';
+import 'package:nisabit/core/time/date_range.dart';
 import 'package:nisabit/features/todo/data/drift_todo_repository.dart';
 import 'package:nisabit/features/todo/domain/project.dart';
 import 'package:nisabit/features/todo/domain/task.dart';
@@ -227,6 +228,59 @@ void main() {
       );
 
       expect(() => repository.addComment(task.id, '  '), throwsArgumentError);
+    });
+  });
+
+  group('statsFor', () {
+    final march = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 31));
+
+    test('reads as empty before there is any task', () async {
+      expect((await repository.statsFor(march)).isEmpty, isTrue);
+    });
+
+    test('counts what is open and what is overdue today', () async {
+      final project = await repository.createProject('Raíz');
+      await repository.createTask(
+        TaskDraft(
+          title: 'Vencida',
+          projectId: project.id,
+          dueDate: DateTime(2026, 3, 1),
+        ),
+      );
+      await repository.createTask(
+        TaskDraft(
+          title: 'A tiempo',
+          projectId: project.id,
+          dueDate: DateTime(2026, 3, 31),
+        ),
+      );
+
+      final stats = await repository.statsFor(
+        march,
+        today: DateTime(2026, 3, 15),
+      );
+
+      expect(stats.open, 2);
+      expect(stats.overdue, 1);
+      expect(stats.completed, 0);
+    });
+
+    test('counts a finished task on the day it was finished', () async {
+      final project = await repository.createProject('Raíz');
+      final task = await repository.createTask(
+        TaskDraft(title: 'Hecha', projectId: project.id),
+      );
+
+      await repository.setTaskStatus(task.id, TaskStatus.done);
+
+      final stats = await repository.statsFor(
+        DateRange.lastDays(7),
+        today: DateTime.now(),
+      );
+
+      expect(stats.completed, 1);
+      expect(stats.open, 0);
+      expect(stats.perDay.last.value, 1);
     });
   });
 }

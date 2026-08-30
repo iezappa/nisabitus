@@ -61,6 +61,7 @@ class Task {
     this.category,
     DateTime? startDate,
     DateTime? dueDate,
+    this.completedAt,
     this.projectName,
   }) : title = _validateTitle(title),
        startDate = startDate == null ? null : dateOnly(startDate),
@@ -75,6 +76,12 @@ class Task {
   final TaskPriority priority;
   final TaskStatus status;
   final int projectId;
+
+  /// The moment the task reached DONE, or null while it is open.
+  ///
+  /// Kept as an instant rather than a day: the progress chart groups by day,
+  /// but the ordering inside a day is worth keeping.
+  final DateTime? completedAt;
 
   /// Set when the task was pulled in from a subproject, so the card can say
   /// where it came from.

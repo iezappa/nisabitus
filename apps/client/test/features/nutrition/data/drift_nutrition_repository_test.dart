@@ -1,6 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/database/app_database.dart';
+import 'package:nisabit/core/time/date_range.dart';
 import 'package:nisabit/features/nutrition/data/drift_nutrition_repository.dart';
 import 'package:nisabit/features/nutrition/domain/nutrition.dart';
 import 'package:nisabit/features/nutrition/domain/nutrition_repository.dart';
@@ -149,6 +150,36 @@ void main() {
       await repository.addEntry(tuesday, draft(kcal: 900));
 
       expect((await repository.dayFor(monday)).total.calories, 0);
+    });
+  });
+
+  group('statsFor', () {
+    test('reads the window as empty before anything is logged', () async {
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.isEmpty, isTrue);
+    });
+
+    test('adds up the energy of the window and leaves the rest out', () async {
+      await repository.addEntry(monday, draft(kcal: 500));
+      await repository.addEntry(tuesday, draft(kcal: 700));
+      await repository.addEntry(DateTime(2026, 3, 20), draft(kcal: 900));
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.totalCalories, 1200);
+      expect(stats.daysLogged, 2);
+      expect(stats.perDay, hasLength(2));
+    });
+
+    test('carries the saved goal, not the fallback', () async {
+      await repository.saveGoal(
+        NutritionGoal(calories: 2400, protein: 160, carbs: 250, fat: 80),
+      );
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.goalCalories, 2400);
     });
   });
 }

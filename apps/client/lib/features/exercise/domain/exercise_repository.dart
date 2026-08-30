@@ -1,4 +1,6 @@
+import '../../../core/time/date_range.dart';
 import 'exercise.dart';
+import 'exercise_stats.dart';
 
 /// The user-editable fields of an exercise.
 class ExerciseDraft {
@@ -39,4 +41,7 @@ abstract interface class ExerciseRepository {
   Future<ExerciseSet> updateSet(int id, {required int reps, double? weight});
 
   Future<void> deleteSet(int id);
+
+  /// The figures the progress view shows for [range].
+  Future<ExerciseStats> statsFor(DateRange range);
 }

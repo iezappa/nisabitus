@@ -1,6 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabit/core/database/app_database.dart';
+import 'package:nisabit/core/time/date_range.dart';
 import 'package:nisabit/features/medication/data/drift_medication_repository.dart';
 import 'package:nisabit/features/medication/domain/medication.dart';
 import 'package:nisabit/features/medication/domain/medication_repository.dart';
@@ -157,6 +158,66 @@ void main() {
 
       expect((await repository.dayFor(monday)).isEmpty, isTrue);
       expect(await db.select(db.medicationIntakes).get(), isEmpty);
+    });
+  });
+
+  group('statsFor', () {
+    test('is empty while nothing is active', () async {
+      await create(active: false);
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.isEmpty, isTrue);
+    });
+
+    test('measures the ticks against the active entries', () async {
+      final vitamin = await create(name: 'Vitamina D');
+      await create(name: 'Omega 3');
+      await repository.toggleIntake(vitamin.id, monday);
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      // Two entries over two days is four doses expected; one was taken.
+      expect(stats.activeCount, 2);
+      expect(stats.adherencePercent, 25);
+      expect(stats.completeDays, 0);
+    });
+
+    test('counts a day complete once everything active is ticked', () async {
+      final vitamin = await create(name: 'Vitamina D');
+      final omega = await create(name: 'Omega 3');
+      await repository.toggleIntake(vitamin.id, monday);
+      await repository.toggleIntake(omega.id, monday);
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.completeDays, 1);
+    });
+
+    test('leaves a paused entry out of both sides of the sum', () async {
+      final vitamin = await create(name: 'Vitamina D');
+      final paused = await create(name: 'Omega 3');
+      await repository.toggleIntake(vitamin.id, monday);
+      await repository.toggleIntake(paused.id, monday);
+      await repository.update(
+        paused.id,
+        const MedicationDraft(name: 'Omega 3', active: false),
+      );
+
+      final stats = await repository.statsFor(DateRange(monday, monday));
+
+      // One active entry, ticked on the only day of the window.
+      expect(stats.activeCount, 1);
+      expect(stats.adherencePercent, 100);
+    });
+
+    test('ignores ticks outside the window', () async {
+      final vitamin = await create();
+      await repository.toggleIntake(vitamin.id, DateTime(2026, 3, 20));
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.adherencePercent, 0);
     });
   });
 }

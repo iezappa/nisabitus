@@ -4,6 +4,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/exercise.dart';
 import '../domain/exercise_repository.dart';
+import '../domain/exercise_stats.dart';
 
 /// Drift-backed implementation of [ExerciseRepository].
 class DriftExerciseRepository implements ExerciseRepository {
@@ -182,6 +183,15 @@ class DriftExerciseRepository implements ExerciseRepository {
     description: row.description,
     muscleGroup: row.muscleGroup,
   );
+
+  @override
+  Future<ExerciseStats> statsFor(DateRange range) async {
+    final rows = await (_db.select(
+      _db.exerciseSets,
+    )..where((s) => s.date.isBetweenValues(range.start, range.end))).get();
+
+    return ExerciseStats.from(range, rows.map(_toSet).toList());
+  }
 
   ExerciseSet _toSet(ExerciseSetRow row) => ExerciseSet(
     id: row.id,
