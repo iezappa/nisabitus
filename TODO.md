@@ -47,20 +47,39 @@ Still open, carried over:
 
 ---
 
-## 2. Export and import
+## 2. Export and import — done
 
-The spec's Anexo asks for one file holding every entity. The count has grown
-past the original ten:
+One JSON document holding all sixteen tables, stamped with its own format
+version and with the database schema it was taken from. Lives in
+`features/backup/`, reachable from Ajustes.
 
-habits, habit completions, streaks, streak history, pomodoro sessions, sleep
-logs, journal entries, projects, tasks, task comments, nutrition goals, food
-entries, exercises, exercise sets, medications, medication intakes.
+Decisions:
 
-- [ ] One JSON document, versioned, with the schema version inside it.
-- [ ] Import must be all-or-nothing: a partial restore is worse than none.
-- [ ] Decide replace vs merge, and say which in the UI before it runs.
+- **Replace, not merge.** Merging sixteen tables that reference each other by
+  id means renumbering half of them and hoping every reference was found —
+  a lot of surface for silent corruption. The UI says so above the buttons,
+  not only in the confirmation.
+- Rows travel as Drift's own JSON, **ids included**, so a restore is a copy
+  rather than a reconstruction and the foreign keys still point somewhere.
+- All-or-nothing comes from one transaction: clear children first, write
+  parents first, and let anything that will not go back in roll the whole
+  thing back.
+- A backup from an **older** schema is accepted — columns added since come
+  back on their defaults, which is what the migration would have done. A
+  **newer** one is refused: restoring it would drop whatever that version
+  added, which is data loss dressed up as a restore.
+- Projects are ordered by the tree before writing, not by id: a project
+  created first can be moved under one created later, and then the lower id
+  is the child.
 
-This is the last item of the original spec that has no implementation.
+The table list in `DriftBackupRepository` is written by hand, because
+`allTables` has no foreign key order. A test compares the two, so a table
+added to the database and forgotten here fails loudly instead of leaving a
+hole in every backup.
+
+Added `file_picker` for the save and open dialogs. It writes the file
+itself, so nothing in the app touches `dart:io` and the web build runs on
+the same code as the desktop one.
 
 ---
 
