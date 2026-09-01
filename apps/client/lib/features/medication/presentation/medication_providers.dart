@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
@@ -58,12 +57,12 @@ class MedicationActions {
       _ref.read(medicationRepositoryProvider);
 
   Future<void> create(MedicationDraft draft) async {
-    await _repository.create(draft);
+    await _repository.create(draft, today: _ref.read(todayProvider));
     _invalidate();
   }
 
   Future<void> update(int id, MedicationDraft draft) async {
-    await _repository.update(id, draft);
+    await _repository.update(id, draft, today: _ref.read(todayProvider));
     _invalidate();
   }
 

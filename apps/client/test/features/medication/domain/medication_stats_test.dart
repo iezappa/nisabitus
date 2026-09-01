@@ -9,7 +9,7 @@ void main() {
     test('reads as empty when nothing is active', () {
       final stats = MedicationStats.from(
         range,
-        activeCount: 0,
+        activeFrom: const [],
         intakeDays: const [],
       );
 
@@ -22,7 +22,7 @@ void main() {
       // Two entries over four days is eight doses expected; four were taken.
       final stats = MedicationStats.from(
         range,
-        activeCount: 2,
+        activeFrom: const [null, null],
         intakeDays: [
           DateTime(2026, 3, 9),
           DateTime(2026, 3, 9),
@@ -37,7 +37,7 @@ void main() {
     test('counts a day complete only when everything active was taken', () {
       final stats = MedicationStats.from(
         range,
-        activeCount: 2,
+        activeFrom: const [null, null],
         intakeDays: [
           DateTime(2026, 3, 9),
           DateTime(2026, 3, 9),
@@ -51,7 +51,7 @@ void main() {
     test('plots a percentage for every day, including the missed ones', () {
       final stats = MedicationStats.from(
         range,
-        activeCount: 2,
+        activeFrom: const [null, null],
         intakeDays: [DateTime(2026, 3, 10)],
       );
 
@@ -65,7 +65,7 @@ void main() {
       // past 100%, which would read as taking more than was prescribed.
       final stats = MedicationStats.from(
         range,
-        activeCount: 1,
+        activeFrom: const [null],
         intakeDays: [DateTime(2026, 3, 9), DateTime(2026, 3, 9)],
       );
 
@@ -76,11 +76,26 @@ void main() {
     test('ignores intakes outside the window', () {
       final stats = MedicationStats.from(
         range,
-        activeCount: 1,
+        activeFrom: const [null],
         intakeDays: [DateTime(2026, 3, 1), DateTime(2026, 3, 9)],
       );
 
       expect(stats.completeDays, 1);
+    });
+
+    test('never counts a day before the medication was started', () {
+      // Started on the 11th: the 9th and 10th were not days it was missed,
+      // they were days it had not been prescribed yet.
+      final stats = MedicationStats.from(
+        range,
+        activeFrom: [DateTime(2026, 3, 11)],
+        intakeDays: [DateTime(2026, 3, 11), DateTime(2026, 3, 12)],
+      );
+
+      expect(stats.adherencePercent, 100);
+      expect(stats.completeDays, 2);
+      expect(stats.perDay.first.value, 0);
+      expect(stats.perDay[2].value, 100);
     });
   });
 }

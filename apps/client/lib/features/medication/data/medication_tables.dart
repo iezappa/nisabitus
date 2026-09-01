@@ -19,6 +19,13 @@ class Medications extends Table {
 
   /// Paused entries stay in the list but leave the day alone.
   BoolColumn get active => boolean().withDefault(const Constant(true))();
+
+  /// The day the entry started counting, so a window that reaches back
+  /// before a new prescription does not read it as a run of missed days.
+  ///
+  /// Null for rows written before the column existed: their start is
+  /// genuinely unknown, and treating it as today would rewrite history.
+  DateTimeColumn get activeFrom => dateTime().nullable()();
 }
 
 /// A record that something was taken on a given day.
@@ -26,7 +33,11 @@ class Medications extends Table {
 /// One row per medication per day, so ticking is a toggle rather than a
 /// counter the user has to keep straight.
 @DataClassName('MedicationIntakeRow')
-@TableIndex(name: 'intake_by_day', columns: {#date, #medicationId}, unique: true)
+@TableIndex(
+  name: 'intake_by_day',
+  columns: {#date, #medicationId},
+  unique: true,
+)
 class MedicationIntakes extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get medicationId =>

@@ -36,6 +36,7 @@ class Medication {
     this.schedule,
     this.notes,
     this.active = true,
+    this.activeFrom,
   }) : name = _validateName(name);
 
   final int id;
@@ -47,6 +48,14 @@ class Medication {
 
   /// Paused entries stay in the list but leave the day alone.
   final bool active;
+
+  /// The day this entry started counting, or null when it predates the app
+  /// recording that — in which case it counts for as far back as anyone asks.
+  final DateTime? activeFrom;
+
+  /// Whether this entry was part of the regimen on [day].
+  bool startedBy(DateTime day) =>
+      activeFrom == null || !activeFrom!.isAfter(day);
 
   static String _validateName(String value) {
     final trimmed = value.trim();
@@ -68,14 +77,16 @@ typedef MedicationStatus = ({Medication medication, bool taken});
 class MedicationDay {
   const MedicationDay({required this.statuses});
 
-  /// Only active entries reach the day; the rest are history, not a task.
+  /// Only what was active and already started reaches [day]; the rest is
+  /// history or has not begun, and neither is a task for that day.
   factory MedicationDay.from(
     List<Medication> medications,
-    Set<int> takenIds,
-  ) => MedicationDay(
+    Set<int> takenIds, {
+    required DateTime day,
+  }) => MedicationDay(
     statuses: [
       for (final medication in medications)
-        if (medication.active)
+        if (medication.active && medication.startedBy(day))
           (medication: medication, taken: takenIds.contains(medication.id)),
     ],
   );

@@ -29,9 +29,13 @@ abstract interface class MedicationRepository {
   /// What is due on [day], with whether each one is ticked.
   Future<MedicationDay> dayFor(DateTime day);
 
-  Future<Medication> create(MedicationDraft draft);
+  /// Records a new entry, started on [today] — the app's idea of today
+  /// rather than each layer's own reading of the clock.
+  Future<Medication> create(MedicationDraft draft, {DateTime? today});
 
-  Future<Medication> update(int id, MedicationDraft draft);
+  /// Edits an entry. An entry brought back from paused starts again on
+  /// [today]: what it did before the pause is not this regimen.
+  Future<Medication> update(int id, MedicationDraft draft, {DateTime? today});
 
   Future<void> delete(int id);
 

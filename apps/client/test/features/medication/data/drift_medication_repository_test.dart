@@ -19,12 +19,16 @@ void main() {
   });
   tearDown(() => db.close());
 
+  // [startedOn] is the day the entry joined the regimen. It defaults to the
+  // first day these tests look at, so an entry counts across the whole
+  // window unless a test says otherwise.
   Future<Medication> create({
     String name = 'Vitamina D',
     MedicationKind kind = MedicationKind.supplement,
     String? dose,
     String? schedule,
     bool active = true,
+    DateTime? startedOn,
   }) => repository.create(
     MedicationDraft(
       name: name,
@@ -33,6 +37,7 @@ void main() {
       schedule: schedule,
       active: active,
     ),
+    today: startedOn ?? monday,
   );
 
   group('MedicationKind', () {
@@ -70,10 +75,11 @@ void main() {
       await create(name: 'Omega 3');
       await create(name: 'Ibuprofeno', active: false);
 
-      expect(
-        (await repository.all()).map((m) => m.name),
-        ['Omega 3', 'Zinc', 'Ibuprofeno'],
-      );
+      expect((await repository.all()).map((m) => m.name), [
+        'Omega 3',
+        'Zinc',
+        'Ibuprofeno',
+      ]);
     });
 
     test('can be edited and removed', () async {
@@ -102,6 +108,13 @@ void main() {
       final day = await repository.dayFor(monday);
 
       expect(day.statuses.map((s) => s.medication.name), ['Activo']);
+    });
+
+    test('leaves out an entry that had not started yet', () async {
+      await create(name: 'Nuevo', startedOn: tuesday);
+
+      expect((await repository.dayFor(monday)).isEmpty, isTrue);
+      expect((await repository.dayFor(tuesday)).total, 1);
     });
 
     test('starts with nothing ticked', () async {
@@ -208,6 +221,37 @@ void main() {
 
       // One active entry, ticked on the only day of the window.
       expect(stats.activeCount, 1);
+      expect(stats.adherencePercent, 100);
+    });
+
+    test('does not count the days before an entry started', () async {
+      // Prescribed on Tuesday and taken that day: Monday was not a day it
+      // was missed, it was a day it had not been prescribed.
+      final vitamin = await create(name: 'Vitamina D', startedOn: tuesday);
+      await repository.toggleIntake(vitamin.id, tuesday);
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      expect(stats.adherencePercent, 100);
+      expect(stats.completeDays, 1);
+    });
+
+    test('restarts an entry brought back from paused', () async {
+      final vitamin = await create(name: 'Vitamina D');
+      await repository.update(
+        vitamin.id,
+        const MedicationDraft(name: 'Vitamina D', active: false),
+      );
+      await repository.update(
+        vitamin.id,
+        const MedicationDraft(name: 'Vitamina D'),
+        today: tuesday,
+      );
+      await repository.toggleIntake(vitamin.id, tuesday);
+
+      final stats = await repository.statsFor(DateRange(monday, tuesday));
+
+      // Only Tuesday counts: the regimen it is on began there.
       expect(stats.adherencePercent, 100);
     });
 

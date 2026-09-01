@@ -35,12 +35,14 @@ class DriftMedicationRepository implements MedicationRepository {
     return MedicationDay.from(
       medications,
       rows.map((row) => row.medicationId).toSet(),
+      day: dateOnly(day),
     );
   }
 
   @override
-  Future<Medication> create(MedicationDraft draft) async {
+  Future<Medication> create(MedicationDraft draft, {DateTime? today}) async {
     final validated = _fromDraft(draft, id: 0);
+    final start = dateOnly(today ?? DateTime.now());
 
     final id = await _db
         .into(_db.medications)
@@ -52,6 +54,7 @@ class DriftMedicationRepository implements MedicationRepository {
             schedule: Value(validated.schedule),
             notes: Value(validated.notes),
             active: Value(validated.active),
+            activeFrom: Value(start),
           ),
         );
 
@@ -59,8 +62,18 @@ class DriftMedicationRepository implements MedicationRepository {
   }
 
   @override
-  Future<Medication> update(int id, MedicationDraft draft) async {
+  Future<Medication> update(
+    int id,
+    MedicationDraft draft, {
+    DateTime? today,
+  }) async {
     final validated = _fromDraft(draft, id: id);
+    final current = await _byId(id);
+
+    // Coming back from paused starts a new run: the days it sat inactive
+    // were never missed, and counting them would be adherence for a regimen
+    // nobody was on. Editing an entry that never stopped leaves it alone.
+    final resumed = validated.active && current != null && !current.active;
 
     await (_db.update(_db.medications)..where((m) => m.id.equals(id))).write(
       MedicationsCompanion(
@@ -70,6 +83,9 @@ class DriftMedicationRepository implements MedicationRepository {
         schedule: Value(validated.schedule),
         notes: Value(validated.notes),
         active: Value(validated.active),
+        activeFrom: resumed
+            ? Value(dateOnly(today ?? DateTime.now()))
+            : const Value.absent(),
       ),
     );
 
@@ -85,11 +101,9 @@ class DriftMedicationRepository implements MedicationRepository {
   @override
   Future<bool> toggleIntake(int id, DateTime day) async {
     final date = dateOnly(day);
-    final removed =
-        await (_db.delete(_db.medicationIntakes)..where(
-              (i) => i.medicationId.equals(id) & i.date.equals(date),
-            ))
-            .go();
+    final removed = await (_db.delete(
+      _db.medicationIntakes,
+    )..where((i) => i.medicationId.equals(id) & i.date.equals(date))).go();
 
     if (removed > 0) return false;
 
@@ -129,7 +143,11 @@ class DriftMedicationRepository implements MedicationRepository {
     )..where((m) => m.active.equals(true))).get();
 
     if (active.isEmpty) {
-      return MedicationStats.from(range, activeCount: 0, intakeDays: const []);
+      return MedicationStats.from(
+        range,
+        activeFrom: const [],
+        intakeDays: const [],
+      );
     }
 
     final activeIds = active.map((m) => m.id).toList();
@@ -143,7 +161,7 @@ class DriftMedicationRepository implements MedicationRepository {
 
     return MedicationStats.from(
       range,
-      activeCount: active.length,
+      activeFrom: active.map((row) => row.activeFrom).toList(),
       intakeDays: intakes.map((row) => row.date).toList(),
     );
   }
@@ -156,5 +174,6 @@ class DriftMedicationRepository implements MedicationRepository {
     schedule: row.schedule,
     notes: row.notes,
     active: row.active,
+    activeFrom: row.activeFrom,
   );
 }

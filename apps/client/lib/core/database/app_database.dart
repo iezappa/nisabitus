@@ -44,7 +44,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -67,6 +67,12 @@ class AppDatabase extends _$AppDatabase {
       // would put fictional work on the chart.
       if (from < 4) {
         await m.addColumn(todoTasks, todoTasks.completedAt);
+      }
+      // v5 records the day a medication started counting. Existing entries
+      // keep a null start: they were prescribed before the app asked, and
+      // stamping them with today would read as a regimen begun this morning.
+      if (from < 5) {
+        await m.addColumn(medications, medications.activeFrom);
       }
     },
     beforeOpen: (details) async {

@@ -5684,6 +5684,17 @@ class $MedicationsTable extends Medications
     ),
     defaultValue: const Constant(true),
   );
+  static const VerificationMeta _activeFromMeta = const VerificationMeta(
+    'activeFrom',
+  );
+  @override
+  late final GeneratedColumn<DateTime> activeFrom = GeneratedColumn<DateTime>(
+    'active_from',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -5693,6 +5704,7 @@ class $MedicationsTable extends Medications
     schedule,
     notes,
     active,
+    activeFrom,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -5749,6 +5761,12 @@ class $MedicationsTable extends Medications
         active.isAcceptableOrUnknown(data['active']!, _activeMeta),
       );
     }
+    if (data.containsKey('active_from')) {
+      context.handle(
+        _activeFromMeta,
+        activeFrom.isAcceptableOrUnknown(data['active_from']!, _activeFromMeta),
+      );
+    }
     return context;
   }
 
@@ -5786,6 +5804,10 @@ class $MedicationsTable extends Medications
         DriftSqlType.bool,
         data['${effectivePrefix}active'],
       )!,
+      activeFrom: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}active_from'],
+      ),
     );
   }
 
@@ -5811,6 +5833,13 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
 
   /// Paused entries stay in the list but leave the day alone.
   final bool active;
+
+  /// The day the entry started counting, so a window that reaches back
+  /// before a new prescription does not read it as a run of missed days.
+  ///
+  /// Null for rows written before the column existed: their start is
+  /// genuinely unknown, and treating it as today would rewrite history.
+  final DateTime? activeFrom;
   const MedicationRow({
     required this.id,
     required this.name,
@@ -5819,6 +5848,7 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
     this.schedule,
     this.notes,
     required this.active,
+    this.activeFrom,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -5836,6 +5866,9 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
       map['notes'] = Variable<String>(notes);
     }
     map['active'] = Variable<bool>(active);
+    if (!nullToAbsent || activeFrom != null) {
+      map['active_from'] = Variable<DateTime>(activeFrom);
+    }
     return map;
   }
 
@@ -5852,6 +5885,9 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
           ? const Value.absent()
           : Value(notes),
       active: Value(active),
+      activeFrom: activeFrom == null && nullToAbsent
+          ? const Value.absent()
+          : Value(activeFrom),
     );
   }
 
@@ -5868,6 +5904,7 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
       schedule: serializer.fromJson<String?>(json['schedule']),
       notes: serializer.fromJson<String?>(json['notes']),
       active: serializer.fromJson<bool>(json['active']),
+      activeFrom: serializer.fromJson<DateTime?>(json['activeFrom']),
     );
   }
   @override
@@ -5881,6 +5918,7 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
       'schedule': serializer.toJson<String?>(schedule),
       'notes': serializer.toJson<String?>(notes),
       'active': serializer.toJson<bool>(active),
+      'activeFrom': serializer.toJson<DateTime?>(activeFrom),
     };
   }
 
@@ -5892,6 +5930,7 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
     Value<String?> schedule = const Value.absent(),
     Value<String?> notes = const Value.absent(),
     bool? active,
+    Value<DateTime?> activeFrom = const Value.absent(),
   }) => MedicationRow(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -5900,6 +5939,7 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
     schedule: schedule.present ? schedule.value : this.schedule,
     notes: notes.present ? notes.value : this.notes,
     active: active ?? this.active,
+    activeFrom: activeFrom.present ? activeFrom.value : this.activeFrom,
   );
   MedicationRow copyWithCompanion(MedicationsCompanion data) {
     return MedicationRow(
@@ -5910,6 +5950,9 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
       schedule: data.schedule.present ? data.schedule.value : this.schedule,
       notes: data.notes.present ? data.notes.value : this.notes,
       active: data.active.present ? data.active.value : this.active,
+      activeFrom: data.activeFrom.present
+          ? data.activeFrom.value
+          : this.activeFrom,
     );
   }
 
@@ -5922,14 +5965,15 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
           ..write('dose: $dose, ')
           ..write('schedule: $schedule, ')
           ..write('notes: $notes, ')
-          ..write('active: $active')
+          ..write('active: $active, ')
+          ..write('activeFrom: $activeFrom')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, name, kind, dose, schedule, notes, active);
+      Object.hash(id, name, kind, dose, schedule, notes, active, activeFrom);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5940,7 +5984,8 @@ class MedicationRow extends DataClass implements Insertable<MedicationRow> {
           other.dose == this.dose &&
           other.schedule == this.schedule &&
           other.notes == this.notes &&
-          other.active == this.active);
+          other.active == this.active &&
+          other.activeFrom == this.activeFrom);
 }
 
 class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
@@ -5951,6 +5996,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
   final Value<String?> schedule;
   final Value<String?> notes;
   final Value<bool> active;
+  final Value<DateTime?> activeFrom;
   const MedicationsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -5959,6 +6005,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
     this.schedule = const Value.absent(),
     this.notes = const Value.absent(),
     this.active = const Value.absent(),
+    this.activeFrom = const Value.absent(),
   });
   MedicationsCompanion.insert({
     this.id = const Value.absent(),
@@ -5968,6 +6015,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
     this.schedule = const Value.absent(),
     this.notes = const Value.absent(),
     this.active = const Value.absent(),
+    this.activeFrom = const Value.absent(),
   }) : name = Value(name),
        kind = Value(kind);
   static Insertable<MedicationRow> custom({
@@ -5978,6 +6026,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
     Expression<String>? schedule,
     Expression<String>? notes,
     Expression<bool>? active,
+    Expression<DateTime>? activeFrom,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -5987,6 +6036,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
       if (schedule != null) 'schedule': schedule,
       if (notes != null) 'notes': notes,
       if (active != null) 'active': active,
+      if (activeFrom != null) 'active_from': activeFrom,
     });
   }
 
@@ -5998,6 +6048,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
     Value<String?>? schedule,
     Value<String?>? notes,
     Value<bool>? active,
+    Value<DateTime?>? activeFrom,
   }) {
     return MedicationsCompanion(
       id: id ?? this.id,
@@ -6007,6 +6058,7 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
       schedule: schedule ?? this.schedule,
       notes: notes ?? this.notes,
       active: active ?? this.active,
+      activeFrom: activeFrom ?? this.activeFrom,
     );
   }
 
@@ -6034,6 +6086,9 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
     if (active.present) {
       map['active'] = Variable<bool>(active.value);
     }
+    if (activeFrom.present) {
+      map['active_from'] = Variable<DateTime>(activeFrom.value);
+    }
     return map;
   }
 
@@ -6046,7 +6101,8 @@ class MedicationsCompanion extends UpdateCompanion<MedicationRow> {
           ..write('dose: $dose, ')
           ..write('schedule: $schedule, ')
           ..write('notes: $notes, ')
-          ..write('active: $active')
+          ..write('active: $active, ')
+          ..write('activeFrom: $activeFrom')
           ..write(')'))
         .toString();
   }
@@ -10626,6 +10682,7 @@ typedef $$MedicationsTableCreateCompanionBuilder =
       Value<String?> schedule,
       Value<String?> notes,
       Value<bool> active,
+      Value<DateTime?> activeFrom,
     });
 typedef $$MedicationsTableUpdateCompanionBuilder =
     MedicationsCompanion Function({
@@ -10636,6 +10693,7 @@ typedef $$MedicationsTableUpdateCompanionBuilder =
       Value<String?> schedule,
       Value<String?> notes,
       Value<bool> active,
+      Value<DateTime?> activeFrom,
     });
 
 final class $$MedicationsTableReferences
@@ -10708,6 +10766,11 @@ class $$MedicationsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<DateTime> get activeFrom => $composableBuilder(
+    column: $table.activeFrom,
+    builder: (column) => ColumnFilters(column),
+  );
+
   Expression<bool> medicationIntakesRefs(
     Expression<bool> Function($$MedicationIntakesTableFilterComposer f) f,
   ) {
@@ -10777,6 +10840,11 @@ class $$MedicationsTableOrderingComposer
     column: $table.active,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get activeFrom => $composableBuilder(
+    column: $table.activeFrom,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$MedicationsTableAnnotationComposer
@@ -10808,6 +10876,11 @@ class $$MedicationsTableAnnotationComposer
 
   GeneratedColumn<bool> get active =>
       $composableBuilder(column: $table.active, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get activeFrom => $composableBuilder(
+    column: $table.activeFrom,
+    builder: (column) => column,
+  );
 
   Expression<T> medicationIntakesRefs<T extends Object>(
     Expression<T> Function($$MedicationIntakesTableAnnotationComposer a) f,
@@ -10871,6 +10944,7 @@ class $$MedicationsTableTableManager
                 Value<String?> schedule = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<bool> active = const Value.absent(),
+                Value<DateTime?> activeFrom = const Value.absent(),
               }) => MedicationsCompanion(
                 id: id,
                 name: name,
@@ -10879,6 +10953,7 @@ class $$MedicationsTableTableManager
                 schedule: schedule,
                 notes: notes,
                 active: active,
+                activeFrom: activeFrom,
               ),
           createCompanionCallback:
               ({
@@ -10889,6 +10964,7 @@ class $$MedicationsTableTableManager
                 Value<String?> schedule = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<bool> active = const Value.absent(),
+                Value<DateTime?> activeFrom = const Value.absent(),
               }) => MedicationsCompanion.insert(
                 id: id,
                 name: name,
@@ -10897,6 +10973,7 @@ class $$MedicationsTableTableManager
                 schedule: schedule,
                 notes: notes,
                 active: active,
+                activeFrom: activeFrom,
               ),
           withReferenceMapper: (p0) => p0
               .map(
