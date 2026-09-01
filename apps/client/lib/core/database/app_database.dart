@@ -38,7 +38,23 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(driftDatabase(name: 'nisabitus'));
+  AppDatabase() : super(driftDatabase(name: 'nisabitus', web: _web));
+
+  /// Where the browser build finds its database engine.
+  ///
+  /// On the web there is no SQLite to link against: sqlite3 is shipped as
+  /// WebAssembly and driven from a worker, so both files travel in `web/` and
+  /// are named here. Without this the very first query throws — every screen
+  /// in the app reads from the database, so the whole app fails at once,
+  /// which is exactly how it was found.
+  ///
+  /// Both files are pinned to the versions of `drift` and `sqlite3` in
+  /// `pubspec.lock`. Bumping either package means downloading the matching
+  /// pair again from their releases.
+  static final _web = DriftWebOptions(
+    sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+    driftWorker: Uri.parse('drift_worker.js'),
+  );
 
   /// Used by tests to run against a throwaway in-memory database.
   AppDatabase.forTesting(super.executor);

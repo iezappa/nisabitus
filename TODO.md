@@ -15,6 +15,12 @@ What is left is polish, infrastructure and a handful of debts — see
 - [ ] `sqlite3_flutter_libs 0.6.0+eol` and `sqlcipher_flutter_libs
       0.7.0+eol` arrive through `drift_flutter`. They work; they are marked
       end-of-life. Watch for a replacement.
+- [ ] **Nothing tests the web build.** The database had never been given its
+      web backend, so every screen failed at its first query — and the whole
+      suite stayed green, because unit tests run on the VM and the goldens
+      render widgets, not a browser. It was found by opening the app. Until
+      something exercises the browser build, opening it by hand before a
+      release is the only check there is.
 - [ ] The screen captures cover seven screens in Spanish, light theme. Dark
       theme, English, a phone-sized window and the dialogs are not
       photographed yet.
