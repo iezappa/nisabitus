@@ -1,11 +1,11 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/time/date_range.dart';
-import 'package:nisabit/features/pomodoro/data/drift_pomodoro_repository.dart';
-import 'package:nisabit/features/pomodoro/domain/pomodoro_draft.dart';
-import 'package:nisabit/features/pomodoro/domain/pomodoro_repository.dart';
-import 'package:nisabit/features/pomodoro/domain/pomodoro_session.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/time/date_range.dart';
+import 'package:nisabitus/features/pomodoro/data/drift_pomodoro_repository.dart';
+import 'package:nisabitus/features/pomodoro/domain/pomodoro_draft.dart';
+import 'package:nisabitus/features/pomodoro/domain/pomodoro_repository.dart';
+import 'package:nisabitus/features/pomodoro/domain/pomodoro_session.dart';
 
 void main() {
   late AppDatabase db;

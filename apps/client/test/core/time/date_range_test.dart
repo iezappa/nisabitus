@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/time/date_range.dart';
+import 'package:nisabitus/core/time/date_range.dart';
 
 void main() {
   group('DateRange', () {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/pomodoro/domain/pomodoro_session.dart';
-import 'package:nisabit/features/pomodoro/domain/pomodoro_stats.dart';
+import 'package:nisabitus/features/pomodoro/domain/pomodoro_session.dart';
+import 'package:nisabitus/features/pomodoro/domain/pomodoro_stats.dart';
 
 void main() {
   PomodoroSession session({

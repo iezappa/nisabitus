@@ -1,9 +1,9 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/time/date_range.dart';
-import 'package:nisabit/features/sleep/data/drift_sleep_repository.dart';
-import 'package:nisabit/features/sleep/domain/sleep_repository.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/time/date_range.dart';
+import 'package:nisabitus/features/sleep/data/drift_sleep_repository.dart';
+import 'package:nisabitus/features/sleep/domain/sleep_repository.dart';
 
 void main() {
   late AppDatabase db;

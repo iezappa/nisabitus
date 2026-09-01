@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/nutrition/domain/nutrition.dart';
+import 'package:nisabitus/features/nutrition/domain/nutrition.dart';
 
 void main() {
   final goal = NutritionGoal(calories: 2000, protein: 100, carbs: 200, fat: 60);

@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In es, this message translates to:
-  /// **'Nísabit'**
+  /// **'Nisabitus'**
   String get appTitle;
 
   /// No description provided for @appTagline.
@@ -875,7 +875,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportBody.
   ///
   /// In es, this message translates to:
-  /// **'Nísabit es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.'**
+  /// **'Nisabitus es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.'**
   String get supportBody;
 
   /// No description provided for @supportCafecito.
@@ -1019,7 +1019,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWelcome.
   ///
   /// In es, this message translates to:
-  /// **'Bienvenido a Nísabit'**
+  /// **'Bienvenido a Nisabitus'**
   String get onboardingWelcome;
 
   /// No description provided for @onboardingWelcomeBody.
@@ -1625,7 +1625,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWelcomeDetail.
   ///
   /// In es, this message translates to:
-  /// **'Nísabit reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.'**
+  /// **'Nisabitus reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.'**
   String get onboardingWelcomeDetail;
 
   /// No description provided for @tutorialHabitsDetail.
@@ -1991,7 +1991,7 @@ abstract class AppLocalizations {
   /// No description provided for @disclaimerBody.
   ///
   /// In es, this message translates to:
-  /// **'Nísabit no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.'**
+  /// **'Nisabitus no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.'**
   String get disclaimerBody;
 
   /// No description provided for @disclaimerAction.
@@ -2015,7 +2015,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDisclaimerShort.
   ///
   /// In es, this message translates to:
-  /// **'Nísabit registra lo que anotás. No reemplaza a un profesional de la salud.'**
+  /// **'Nisabitus registra lo que anotás. No reemplaza a un profesional de la salud.'**
   String get settingsDisclaimerShort;
 
   /// No description provided for @settingsDisclaimerRead.
@@ -2345,13 +2345,13 @@ abstract class AppLocalizations {
   /// No description provided for @backupNotABackup.
   ///
   /// In es, this message translates to:
-  /// **'Ese archivo no es una copia de Nísabit'**
+  /// **'Ese archivo no es una copia de Nisabitus'**
   String get backupNotABackup;
 
   /// No description provided for @backupNewerVersion.
   ///
   /// In es, this message translates to:
-  /// **'La copia viene de una versión más nueva de Nísabit'**
+  /// **'La copia viene de una versión más nueva de Nisabitus'**
   String get backupNewerVersion;
 
   /// No description provided for @backupCorrupt.

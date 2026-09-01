@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "app.nisabit" "\0"
-            VALUE "FileDescription", "nisabit" "\0"
+            VALUE "CompanyName", "app.nisabitus" "\0"
+            VALUE "FileDescription", "Nisabitus" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "nisabit" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 app.nisabit. All rights reserved." "\0"
-            VALUE "OriginalFilename", "nisabit.exe" "\0"
-            VALUE "ProductName", "nisabit" "\0"
+            VALUE "InternalName", "Nisabitus" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 app.nisabitus. All rights reserved." "\0"
+            VALUE "OriginalFilename", "nisabitus.exe" "\0"
+            VALUE "ProductName", "Nisabitus" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

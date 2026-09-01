@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/habits/domain/habit.dart';
-import 'package:nisabit/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/features/habits/domain/habit.dart';
+import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
 
 void main() {
   Habit habit({

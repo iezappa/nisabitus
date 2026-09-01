@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/database/database_provider.dart';
-import 'package:nisabit/core/preferences/preferences.dart';
-import 'package:nisabit/core/widgets/disclaimer.dart';
-import 'package:nisabit/features/health/presentation/health_screen.dart';
-import 'package:nisabit/features/settings/presentation/settings_screen.dart';
-import 'package:nisabit/l10n/app_localizations.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
+import 'package:nisabitus/core/preferences/preferences.dart';
+import 'package:nisabitus/core/widgets/disclaimer.dart';
+import 'package:nisabitus/features/health/presentation/health_screen.dart';
+import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
+import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -61,7 +61,7 @@ void main() {
       expect(find.byType(DisclaimerCard), findsOneWidget);
       expect(
         find.text(
-          'Nísabit registra lo que anotás. No reemplaza a un profesional '
+          'Nisabitus registra lo que anotás. No reemplaza a un profesional '
           'de la salud.',
         ),
         findsOneWidget,

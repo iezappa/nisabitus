@@ -1,14 +1,14 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/features/backup/data/drift_backup_repository.dart';
-import 'package:nisabit/features/backup/domain/backup_document.dart';
-import 'package:nisabit/features/backup/domain/backup_repository.dart';
-import 'package:nisabit/features/habits/data/drift_habit_repository.dart';
-import 'package:nisabit/features/habits/domain/habit_draft.dart';
-import 'package:nisabit/features/habits/domain/habit_frequency.dart';
-import 'package:nisabit/features/todo/data/drift_todo_repository.dart';
-import 'package:nisabit/features/todo/domain/todo_repository.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/features/backup/data/drift_backup_repository.dart';
+import 'package:nisabitus/features/backup/domain/backup_document.dart';
+import 'package:nisabitus/features/backup/domain/backup_repository.dart';
+import 'package:nisabitus/features/habits/data/drift_habit_repository.dart';
+import 'package:nisabitus/features/habits/domain/habit_draft.dart';
+import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/features/todo/data/drift_todo_repository.dart';
+import 'package:nisabitus/features/todo/domain/todo_repository.dart';
 
 void main() {
   late AppDatabase db;
@@ -28,7 +28,7 @@ void main() {
       const HabitDraft(name: 'Meditar', frequency: HabitFrequency.daily),
     );
 
-    final project = await todo.createProject('Nísabit');
+    final project = await todo.createProject('Nisabitus');
     final task = await todo.createTask(
       TaskDraft(title: 'Exportar', projectId: project.id),
     );

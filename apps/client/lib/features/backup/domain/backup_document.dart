@@ -8,7 +8,7 @@ enum BackupProblem {
   /// Not JSON, not an object, or not this app's file.
   notABackup,
 
-  /// Written by a newer version of Nísabit than the one reading it.
+  /// Written by a newer version of Nisabitus than the one reading it.
   newerVersion,
 
   /// This app's file, this app's version, but the contents do not hold up.
@@ -66,7 +66,7 @@ class BackupDocument {
       );
     }
 
-    if (decoded['app'] != appId) {
+    if (decoded['app'] != appId && decoded['app'] != legacyAppId) {
       throw const BackupFormatException(
         BackupProblem.notABackup,
         'The document does not belong to this app',
@@ -122,7 +122,13 @@ class BackupDocument {
   }
 
   /// Stamped on every file so another app's JSON cannot be mistaken for one.
-  static const appId = 'nisabit';
+  static const appId = 'nisabitus';
+
+  /// The stamp files carried before the app settled on one name.
+  ///
+  /// Only ever read, never written: dropping it would turn every backup
+  /// taken before the rename into a file the app refuses to open.
+  static const legacyAppId = 'nisabit';
 
   /// The document's own layout, which moves independently of the database
   /// schema: a rearranged file is not a migrated store.

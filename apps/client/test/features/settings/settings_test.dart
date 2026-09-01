@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/preferences/preferences.dart';
-import 'package:nisabit/core/router/app_tab.dart';
-import 'package:nisabit/core/widgets/centered_content.dart';
-import 'package:nisabit/features/settings/domain/accent_color.dart';
-import 'package:nisabit/features/settings/domain/theme_preference.dart';
-import 'package:nisabit/features/settings/presentation/settings_providers.dart';
-import 'package:nisabit/features/settings/presentation/settings_screen.dart';
-import 'package:nisabit/features/shared/support_actions.dart';
-import 'package:nisabit/l10n/app_localizations.dart';
+import 'package:nisabitus/core/preferences/preferences.dart';
+import 'package:nisabitus/core/router/app_tab.dart';
+import 'package:nisabitus/core/widgets/centered_content.dart';
+import 'package:nisabitus/features/settings/domain/accent_color.dart';
+import 'package:nisabitus/features/settings/domain/theme_preference.dart';
+import 'package:nisabitus/features/settings/presentation/settings_providers.dart';
+import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
+import 'package:nisabitus/features/shared/support_actions.dart';
+import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

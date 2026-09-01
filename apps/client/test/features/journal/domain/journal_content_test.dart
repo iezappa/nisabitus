@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/journal/domain/journal_content.dart';
+import 'package:nisabitus/features/journal/domain/journal_content.dart';
 
 void main() {
   const full = JournalContent(

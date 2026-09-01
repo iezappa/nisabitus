@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/todo/domain/project.dart';
-import 'package:nisabit/features/todo/domain/task.dart';
+import 'package:nisabitus/features/todo/domain/project.dart';
+import 'package:nisabitus/features/todo/domain/task.dart';
 
 void main() {
   group('TaskPriority.parse', () {
@@ -91,7 +91,7 @@ void main() {
   group('ProjectTree', () {
     // root > child > grandchild, plus a second root.
     final projects = [
-      Project(id: 1, name: 'Nísabit'),
+      Project(id: 1, name: 'Nisabitus'),
       Project(id: 2, name: 'Módulos', parentId: 1),
       Project(id: 3, name: 'Hábitos', parentId: 2),
       Project(id: 4, name: 'Personal'),
@@ -123,7 +123,7 @@ void main() {
 
   group('ProjectTree.canMove', () {
     final projects = [
-      Project(id: 1, name: 'Nísabit'),
+      Project(id: 1, name: 'Nisabitus'),
       Project(id: 2, name: 'Módulos', parentId: 1),
       Project(id: 3, name: 'Hábitos', parentId: 2),
       Project(id: 4, name: 'Personal'),
@@ -165,7 +165,7 @@ void main() {
 
   group('ProjectTree counts', () {
     final tree = ProjectTree([
-      Project(id: 1, name: 'Nísabit'),
+      Project(id: 1, name: 'Nisabitus'),
       Project(id: 2, name: 'Módulos', parentId: 1),
     ]);
 

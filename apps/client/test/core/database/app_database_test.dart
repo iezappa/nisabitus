@@ -2,7 +2,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
+import 'package:nisabitus/core/database/app_database.dart';
 
 void main() {
   late AppDatabase db;
@@ -56,7 +56,7 @@ void main() {
     test('cascade down the project tree to tasks and their comments', () async {
       final rootId = await db
           .into(db.projects)
-          .insert(ProjectsCompanion.insert(name: 'Nísabit'));
+          .insert(ProjectsCompanion.insert(name: 'Nisabitus'));
       final childId = await db
           .into(db.projects)
           .insert(

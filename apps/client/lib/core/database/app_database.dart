@@ -38,7 +38,7 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(driftDatabase(name: 'nisabit'));
+  AppDatabase() : super(driftDatabase(name: 'nisabitus'));
 
   /// Used by tests to run against a throwaway in-memory database.
   AppDatabase.forTesting(super.executor);

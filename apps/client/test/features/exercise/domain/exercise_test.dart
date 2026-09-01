@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/exercise/domain/exercise.dart';
+import 'package:nisabitus/features/exercise/domain/exercise.dart';
 
 void main() {
   final today = DateTime(2026, 3, 11);

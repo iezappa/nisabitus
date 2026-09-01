@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/time/progress_range.dart';
+import 'package:nisabitus/core/time/progress_range.dart';
 
 void main() {
   final today = DateTime(2026, 3, 30);

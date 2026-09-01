@@ -1,10 +1,10 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/time/date_range.dart';
-import 'package:nisabit/features/exercise/data/drift_exercise_repository.dart';
-import 'package:nisabit/features/exercise/domain/exercise.dart';
-import 'package:nisabit/features/exercise/domain/exercise_repository.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/time/date_range.dart';
+import 'package:nisabitus/features/exercise/data/drift_exercise_repository.dart';
+import 'package:nisabitus/features/exercise/domain/exercise.dart';
+import 'package:nisabitus/features/exercise/domain/exercise_repository.dart';
 
 void main() {
   late AppDatabase db;

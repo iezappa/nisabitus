@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/database/database_provider.dart';
-import 'package:nisabit/features/streaks/presentation/streak_providers.dart';
-import 'package:nisabit/features/streaks/presentation/streaks_section.dart';
-import 'package:nisabit/l10n/app_localizations.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
+import 'package:nisabitus/features/streaks/presentation/streak_providers.dart';
+import 'package:nisabitus/features/streaks/presentation/streaks_section.dart';
+import 'package:nisabitus/l10n/app_localizations.dart';
 
 void main() {
   late AppDatabase db;

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/dashboard/domain/task_focus.dart';
-import 'package:nisabit/features/todo/domain/task.dart';
+import 'package:nisabitus/features/dashboard/domain/task_focus.dart';
+import 'package:nisabitus/features/todo/domain/task.dart';
 
 void main() {
   final today = DateTime(2026, 3, 11);

@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/theme/app_theme.dart';
-import 'package:nisabit/features/settings/domain/accent_color.dart';
+import 'package:nisabitus/core/theme/app_theme.dart';
+import 'package:nisabitus/features/settings/domain/accent_color.dart';
 
 /// Relative luminance, per the WCAG definition.
 double _luminance(Color c) {

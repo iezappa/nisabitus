@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/time/date_range.dart';
-import 'package:nisabit/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/core/time/date_range.dart';
+import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
 
 void main() {
   group('HabitFrequency.periodFor', () {

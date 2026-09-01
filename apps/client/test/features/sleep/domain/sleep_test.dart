@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/sleep/domain/sleep_log.dart';
-import 'package:nisabit/features/sleep/domain/sleep_stats.dart';
+import 'package:nisabitus/features/sleep/domain/sleep_log.dart';
+import 'package:nisabitus/features/sleep/domain/sleep_stats.dart';
 
 void main() {
   SleepLog log(double hours, [int day = 1]) =>

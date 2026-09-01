@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/database/database_provider.dart';
-import 'package:nisabit/features/backup/domain/backup_document.dart';
-import 'package:nisabit/features/backup/domain/backup_files.dart';
-import 'package:nisabit/features/backup/presentation/backup_providers.dart';
-import 'package:nisabit/features/habits/data/drift_habit_repository.dart';
-import 'package:nisabit/features/habits/domain/habit_draft.dart';
-import 'package:nisabit/features/habits/domain/habit_frequency.dart';
-import 'package:nisabit/features/habits/presentation/habit_providers.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
+import 'package:nisabitus/features/backup/domain/backup_document.dart';
+import 'package:nisabitus/features/backup/domain/backup_files.dart';
+import 'package:nisabitus/features/backup/presentation/backup_providers.dart';
+import 'package:nisabitus/features/habits/data/drift_habit_repository.dart';
+import 'package:nisabitus/features/habits/domain/habit_draft.dart';
+import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/features/habits/presentation/habit_providers.dart';
 
 /// Stands in for the native dialogs: remembers what was written and hands
 /// back whatever the test says the user picked.

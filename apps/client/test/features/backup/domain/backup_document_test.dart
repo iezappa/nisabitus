@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/backup/domain/backup_document.dart';
+import 'package:nisabitus/features/backup/domain/backup_document.dart';
 
 void main() {
   final exportedAt = DateTime(2026, 3, 11, 21, 30);
@@ -46,6 +46,7 @@ void main() {
       final decoded = jsonDecode(document().encode()) as Map<String, dynamic>;
 
       expect(decoded['app'], BackupDocument.appId);
+      expect(decoded['app'], 'nisabitus');
       expect(decoded['format'], BackupDocument.currentFormat);
       expect(decoded['schemaVersion'], 4);
     });
@@ -105,6 +106,18 @@ void main() {
         () => BackupDocument.parse('[1, 2, 3]', supportedSchemaVersion: 4),
         throwsA(isA<BackupFormatException>()),
       );
+    });
+
+    test('reads a file stamped with the name the app used to carry', () {
+      final legacy = raw()..['app'] = BackupDocument.legacyAppId;
+
+      final restored = BackupDocument.parse(
+        jsonEncode(legacy),
+        supportedSchemaVersion: 4,
+      );
+
+      expect(restored.schemaVersion, 4);
+      expect(restored.tables['habits'], hasLength(1));
     });
 
     test('refuses a file from another app', () {

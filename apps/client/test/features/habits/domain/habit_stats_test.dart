@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/features/habits/domain/habit_stats.dart';
+import 'package:nisabitus/features/habits/domain/habit_stats.dart';
 
 void main() {
   group('HabitStats.successRate', () {

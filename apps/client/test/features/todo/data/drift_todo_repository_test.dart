@@ -1,11 +1,11 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/time/date_range.dart';
-import 'package:nisabit/features/todo/data/drift_todo_repository.dart';
-import 'package:nisabit/features/todo/domain/project.dart';
-import 'package:nisabit/features/todo/domain/task.dart';
-import 'package:nisabit/features/todo/domain/todo_repository.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/time/date_range.dart';
+import 'package:nisabitus/features/todo/data/drift_todo_repository.dart';
+import 'package:nisabitus/features/todo/domain/project.dart';
+import 'package:nisabitus/features/todo/domain/task.dart';
+import 'package:nisabitus/features/todo/domain/todo_repository.dart';
 
 void main() {
   late AppDatabase db;
@@ -23,7 +23,7 @@ void main() {
     });
 
     test('can be nested', () async {
-      final root = await repository.createProject('Nísabit');
+      final root = await repository.createProject('Nisabitus');
       final child = await repository.createProject('Módulos', parentId: root.id);
 
       expect(child.parentId, root.id);

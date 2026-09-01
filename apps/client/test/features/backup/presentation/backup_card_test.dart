@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/database/database_provider.dart';
-import 'package:nisabit/features/backup/domain/backup_files.dart';
-import 'package:nisabit/features/backup/presentation/backup_providers.dart';
-import 'package:nisabit/features/backup/presentation/widgets/backup_card.dart';
-import 'package:nisabit/features/habits/data/drift_habit_repository.dart';
-import 'package:nisabit/features/habits/domain/habit_draft.dart';
-import 'package:nisabit/features/habits/domain/habit_frequency.dart';
-import 'package:nisabit/l10n/app_localizations.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
+import 'package:nisabitus/features/backup/domain/backup_files.dart';
+import 'package:nisabitus/features/backup/presentation/backup_providers.dart';
+import 'package:nisabitus/features/backup/presentation/widgets/backup_card.dart';
+import 'package:nisabitus/features/habits/data/drift_habit_repository.dart';
+import 'package:nisabitus/features/habits/domain/habit_draft.dart';
+import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/l10n/app_localizations.dart';
 
 /// Stands in for the native dialogs.
 class _FakeFiles implements BackupFiles {
@@ -129,7 +129,7 @@ void main() {
     await tester.tap(find.text('Reemplazar'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Ese archivo no es una copia de Nísabit'), findsOne);
+    expect(find.text('Ese archivo no es una copia de Nisabitus'), findsOne);
   });
 
   testWidgets('restores a confirmed file and says how much came in', (

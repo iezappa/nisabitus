@@ -1,9 +1,9 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/features/todo/data/drift_todo_repository.dart';
-import 'package:nisabit/features/todo/domain/task.dart';
-import 'package:nisabit/features/todo/domain/todo_repository.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/features/todo/data/drift_todo_repository.dart';
+import 'package:nisabitus/features/todo/domain/task.dart';
+import 'package:nisabitus/features/todo/domain/todo_repository.dart';
 
 void main() {
   late AppDatabase db;

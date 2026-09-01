@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/database/app_database.dart';
-import 'package:nisabit/core/database/database_provider.dart';
-import 'package:nisabit/core/widgets/stat_tile.dart';
-import 'package:nisabit/features/habits/domain/habit_draft.dart';
-import 'package:nisabit/features/habits/domain/habit_frequency.dart';
-import 'package:nisabit/features/habits/presentation/habit_providers.dart';
-import 'package:nisabit/features/habits/presentation/habits_screen.dart';
-import 'package:nisabit/features/streaks/presentation/streak_providers.dart';
-import 'package:nisabit/l10n/app_localizations.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
+import 'package:nisabitus/core/widgets/stat_tile.dart';
+import 'package:nisabitus/features/habits/domain/habit_draft.dart';
+import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/features/habits/presentation/habit_providers.dart';
+import 'package:nisabitus/features/habits/presentation/habits_screen.dart';
+import 'package:nisabitus/features/streaks/presentation/streak_providers.dart';
+import 'package:nisabitus/l10n/app_localizations.dart';
 
 void main() {
   late AppDatabase db;

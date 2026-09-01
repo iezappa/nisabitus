@@ -10,7 +10,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Nísabit';
+  String get appTitle => 'Nisabitus';
 
   @override
   String get appTagline => 'El esfuerzo que te eleva';
@@ -426,7 +426,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get supportBody =>
-      'Nísabit es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.';
+      'Nisabitus es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.';
 
   @override
   String get supportCafecito => 'Cafecito';
@@ -499,7 +499,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tutorialBack => 'Atrás';
 
   @override
-  String get onboardingWelcome => 'Bienvenido a Nísabit';
+  String get onboardingWelcome => 'Bienvenido a Nisabitus';
 
   @override
   String get onboardingWelcomeBody => 'El esfuerzo que te eleva.';
@@ -823,7 +823,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboardingWelcomeDetail =>
-      'Nísabit reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.';
+      'Nisabitus reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.';
 
   @override
   String get tutorialHabitsDetail =>
@@ -1033,7 +1033,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get disclaimerBody =>
-      'Nísabit no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.';
+      'Nisabitus no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.';
 
   @override
   String get disclaimerAction => 'Entendido';
@@ -1046,7 +1046,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsDisclaimerShort =>
-      'Nísabit registra lo que anotás. No reemplaza a un profesional de la salud.';
+      'Nisabitus registra lo que anotás. No reemplaza a un profesional de la salud.';
 
   @override
   String get settingsDisclaimerRead => 'Leer el aviso completo';
@@ -1240,11 +1240,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get backupNotABackup => 'Ese archivo no es una copia de Nísabit';
+  String get backupNotABackup => 'Ese archivo no es una copia de Nisabitus';
 
   @override
   String get backupNewerVersion =>
-      'La copia viene de una versión más nueva de Nísabit';
+      'La copia viene de una versión más nueva de Nisabitus';
 
   @override
   String get backupCorrupt => 'La copia está dañada y no se puede leer';

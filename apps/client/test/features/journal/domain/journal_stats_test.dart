@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabit/core/time/date_range.dart';
-import 'package:nisabit/features/journal/domain/journal_stats.dart';
+import 'package:nisabitus/core/time/date_range.dart';
+import 'package:nisabitus/features/journal/domain/journal_stats.dart';
 
 void main() {
   final range = DateRange(DateTime(2026, 3, 9), DateTime(2026, 3, 12));
