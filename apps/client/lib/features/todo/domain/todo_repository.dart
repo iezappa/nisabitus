@@ -33,7 +33,11 @@ abstract interface class TodoRepository {
   /// How many tasks sit directly on each project, keyed by project id.
   Future<Map<int, int>> directTaskCounts();
 
-  Future<Project> createProject(String name, {int? parentId, String? description});
+  Future<Project> createProject(
+    String name, {
+    int? parentId,
+    String? description,
+  });
 
   /// Renames, re-describes and optionally reparents a project.
   ///

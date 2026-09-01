@@ -25,8 +25,6 @@ extension HabitLabels on AppLocalizations {
   };
 
   /// The chosen weekdays in calendar order, abbreviated.
-  String weekdayList(Set<Weekday> days) => Weekday.values
-      .where(days.contains)
-      .map(weekdayShort)
-      .join(' ');
+  String weekdayList(Set<Weekday> days) =>
+      Weekday.values.where(days.contains).map(weekdayShort).join(' ');
 }

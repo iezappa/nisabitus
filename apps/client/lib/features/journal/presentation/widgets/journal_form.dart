@@ -101,16 +101,17 @@ class _JournalFormState extends State<JournalForm> {
               hint: l10n.journalMoodHint,
             ),
             const SizedBox(height: Gap.lg),
-            Text(l10n.journalEnergy.toUpperCase(),
-                style: theme.textTheme.labelSmall),
+            Text(
+              l10n.journalEnergy.toUpperCase(),
+              style: theme.textTheme.labelSmall,
+            ),
             const SizedBox(height: Gap.sm),
             _EnergyPicker(
               value: _energy,
               // Tapping the chosen level again clears it: the spec allows the
               // field to stay empty.
-              onChanged: (value) => setState(
-                () => _energy = _energy == value ? null : value,
-              ),
+              onChanged: (value) =>
+                  setState(() => _energy = _energy == value ? null : value),
             ),
             const SizedBox(height: Gap.lg),
             _Field(

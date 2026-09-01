@@ -25,7 +25,10 @@ void main() {
     db.close();
   });
 
-  Future<void> pump(WidgetTester tester, {Size size = const Size(700, 500)}) async {
+  Future<void> pump(
+    WidgetTester tester, {
+    Size size = const Size(700, 500),
+  }) async {
     await tester.binding.setSurfaceSize(size);
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -73,10 +76,12 @@ void main() {
 
       final card = tester.getSize(find.byType(Card).first);
       final band = tester.getSize(
-        find.ancestor(
-          of: find.byType(ListView),
-          matching: find.byType(SizedBox),
-        ).first,
+        find
+            .ancestor(
+              of: find.byType(ListView),
+              matching: find.byType(SizedBox),
+            )
+            .first,
       );
 
       // The card is sized by its content; a band much taller than that is
@@ -190,7 +195,9 @@ void main() {
       await tester.sendEventToBinding(pointer.scroll(const Offset(0, 99999)));
       await tester.pumpAndSettle();
 
-      final scrollable = tester.widget<Scrollable>(find.byType(Scrollable).first);
+      final scrollable = tester.widget<Scrollable>(
+        find.byType(Scrollable).first,
+      );
       final position = scrollable.controller!.position;
       expect(position.pixels, position.maxScrollExtent);
     });

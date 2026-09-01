@@ -24,12 +24,15 @@ void main() {
       expect(period.end, DateTime(2026, 3, 15));
     });
 
-    test('weekly keeps Sunday as the last day of the week that started before it', () {
-      final period = HabitFrequency.weekly.periodFor(DateTime(2026, 3, 15));
+    test(
+      'weekly keeps Sunday as the last day of the week that started before it',
+      () {
+        final period = HabitFrequency.weekly.periodFor(DateTime(2026, 3, 15));
 
-      expect(period.start, DateTime(2026, 3, 9));
-      expect(period.end, DateTime(2026, 3, 15));
-    });
+        expect(period.start, DateTime(2026, 3, 9));
+        expect(period.end, DateTime(2026, 3, 15));
+      },
+    );
 
     test('weekly crosses a month boundary', () {
       // 2026-04-01 is a Wednesday, so its week starts in March.

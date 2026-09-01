@@ -23,7 +23,10 @@ void main() {
       const a = Macros(calories: 100, protein: 10, carbs: 20, fat: 5);
       const b = Macros(calories: 250, protein: 30, carbs: 5, fat: 12);
 
-      expect(a + b, const Macros(calories: 350, protein: 40, carbs: 25, fat: 17));
+      expect(
+        a + b,
+        const Macros(calories: 350, protein: 40, carbs: 25, fat: 17),
+      );
     });
 
     test('start empty', () {
@@ -129,10 +132,13 @@ void main() {
       );
     });
 
-    test('reads a target of zero as no progress rather than dividing by it', () {
-      final none = NutritionGoal(calories: 0, protein: 0, carbs: 0, fat: 0);
+    test(
+      'reads a target of zero as no progress rather than dividing by it',
+      () {
+        final none = NutritionGoal(calories: 0, protein: 0, carbs: 0, fat: 0);
 
-      expect(DailyNutrition.from([entry()], none).caloriesRatio, 0);
-    });
+        expect(DailyNutrition.from([entry()], none).caloriesRatio, 0);
+      },
+    );
   });
 }

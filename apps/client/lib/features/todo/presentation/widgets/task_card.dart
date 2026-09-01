@@ -86,10 +86,7 @@ class TaskCard extends StatelessWidget {
                   // Only present when the task was pulled in from a
                   // subproject, so the board says where it actually lives.
                   if (task.projectName case final name?)
-                    _Pill(
-                      label: name,
-                      colour: theme.colorScheme.outline,
-                    ),
+                    _Pill(label: name, colour: theme.colorScheme.outline),
                 ],
               ),
             ],
@@ -115,9 +112,8 @@ class _Pill extends StatelessWidget {
     ),
     child: Text(
       label,
-      style: Theme.of(
-        context,
-      ).textTheme.labelSmall?.copyWith(color: colour, letterSpacing: 0.4),
+      style: Theme.of(context).textTheme.labelSmall
+          ?.copyWith(color: colour, letterSpacing: 0.4),
     ),
   );
 }

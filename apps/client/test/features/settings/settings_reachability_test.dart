@@ -33,10 +33,7 @@ void main() {
   test('settings is not one of the hideable tabs', () {
     // The whole point: a tab can be hidden, and hiding the screen that
     // unhides tabs would leave the user with no way back in.
-    expect(
-      AppTab.values.map((tab) => tab.name),
-      isNot(contains('settings')),
-    );
+    expect(AppTab.values.map((tab) => tab.name), isNot(contains('settings')));
   });
 
   test('every hideable tab can still be hidden down to the last one', () {

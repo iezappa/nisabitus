@@ -56,7 +56,8 @@ class DriftHabitRepository implements HabitRepository {
     };
 
     return [
-      for (final row in rows) _toDomain(row, completed: fulfilled.contains(row.id)),
+      for (final row in rows)
+        _toDomain(row, completed: fulfilled.contains(row.id)),
     ];
   }
 
@@ -69,7 +70,9 @@ class DriftHabitRepository implements HabitRepository {
 
     final id = await _db
         .into(_db.habits)
-        .insert(_toCompanion(validated, createdAt: today, scheduledDate: today));
+        .insert(
+          _toCompanion(validated, createdAt: today, scheduledDate: today),
+        );
 
     return _hydrate(id, today);
   }
@@ -105,16 +108,15 @@ class DriftHabitRepository implements HabitRepository {
       await _recordCompletion(id, day);
     }
 
-    await _writeStatus(id, removed == 0 ? HabitStatus.done : HabitStatus.pending);
+    await _writeStatus(
+      id,
+      removed == 0 ? HabitStatus.done : HabitStatus.pending,
+    );
     return _hydrate(id, day);
   }
 
   @override
-  Future<Habit> changeStatus(
-    int id,
-    HabitStatus status,
-    DateTime day,
-  ) async {
+  Future<Habit> changeStatus(int id, HabitStatus status, DateTime day) async {
     final row = await _requireRow(id);
     final period = HabitFrequency.parse(row.frequency).periodFor(day);
 
@@ -227,22 +229,25 @@ class DriftHabitRepository implements HabitRepository {
     );
   }
 
-  Habit _fromDraft(HabitDraft draft, {required int id, required DateTime createdAt}) =>
-      Habit(
-        id: id,
-        name: draft.name,
-        description: draft.description,
-        category: draft.category,
-        frequency: draft.frequency,
-        targetCount: draft.targetCount,
-        endDate: draft.endDate,
-        repeatForever: draft.repeatForever,
-        repeatDays: draft.repeatDays,
-        type: draft.type,
-        status: HabitStatus.pending,
-        createdAt: createdAt,
-        scheduledDate: createdAt,
-      );
+  Habit _fromDraft(
+    HabitDraft draft, {
+    required int id,
+    required DateTime createdAt,
+  }) => Habit(
+    id: id,
+    name: draft.name,
+    description: draft.description,
+    category: draft.category,
+    frequency: draft.frequency,
+    targetCount: draft.targetCount,
+    endDate: draft.endDate,
+    repeatForever: draft.repeatForever,
+    repeatDays: draft.repeatDays,
+    type: draft.type,
+    status: HabitStatus.pending,
+    createdAt: createdAt,
+    scheduledDate: createdAt,
+  );
 
   HabitsCompanion _toCompanion(
     Habit habit, {

@@ -142,7 +142,12 @@ void main() {
       final toggled = await repository.toggleCompletion(habit.id, thursday);
 
       expect(toggled.completed, isFalse);
-      expect(await repository.totalCompletions(DateRange.lastDays(30, from: nextMonday)), 0);
+      expect(
+        await repository.totalCompletions(
+          DateRange.lastDays(30, from: nextMonday),
+        ),
+        0,
+      );
     });
   });
 
@@ -167,9 +172,7 @@ void main() {
       await repository.changeStatus(habit.id, HabitStatus.done, wednesday);
 
       expect(
-        await repository.totalCompletions(
-          DateRange(wednesday, wednesday),
-        ),
+        await repository.totalCompletions(DateRange(wednesday, wednesday)),
         1,
       );
     });
@@ -238,10 +241,7 @@ void main() {
         DateRange(wednesday, thursday),
       );
 
-      expect(counts, [
-        (day: wednesday, count: 2),
-        (day: thursday, count: 1),
-      ]);
+      expect(counts, [(day: wednesday, count: 2), (day: thursday, count: 1)]);
     });
 
     test('leaves out days outside the range', () async {

@@ -16,10 +16,8 @@ void main() {
     startedAt: DateTime(2026, 3, 11, 9),
   );
 
-  FocusTimer timerFor(PomodoroSession s) => FocusTimer(
-    session: s,
-    onFocusPhaseEnded: () async => cyclesReported++,
-  );
+  FocusTimer timerFor(PomodoroSession s) =>
+      FocusTimer(session: s, onFocusPhaseEnded: () async => cyclesReported++);
 
   setUp(() => cyclesReported = 0);
 

@@ -8,9 +8,11 @@ class Projects extends Table {
   TextColumn get description => text().withLength(max: 5000).nullable()();
 
   /// The parent project, or null for a root project.
-  IntColumn get parentId => integer()
-      .nullable()
-      .references(Projects, #id, onDelete: KeyAction.cascade)();
+  IntColumn get parentId => integer().nullable().references(
+    Projects,
+    #id,
+    onDelete: KeyAction.cascade,
+  )();
 }
 
 /// A unit of work belonging to a project.

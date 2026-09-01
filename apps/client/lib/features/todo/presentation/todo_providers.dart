@@ -72,20 +72,21 @@ final taskFiltersProvider = StateProvider<TaskFilters>(
 );
 
 /// The project tree plus the task counts the sidebar shows.
-final projectTreeProvider = FutureProvider<({ProjectTree tree, Map<int, TaskCount> counts})>((
-  ref,
-) async {
-  ref.watch(todoRevisionProvider);
+final projectTreeProvider =
+    FutureProvider<({ProjectTree tree, Map<int, TaskCount> counts})>((
+      ref,
+    ) async {
+      ref.watch(todoRevisionProvider);
 
-  final repository = ref.watch(todoRepositoryProvider);
-  final (projects, direct) = await (
-    repository.projects(),
-    repository.directTaskCounts(),
-  ).wait;
+      final repository = ref.watch(todoRepositoryProvider);
+      final (projects, direct) = await (
+        repository.projects(),
+        repository.directTaskCounts(),
+      ).wait;
 
-  final tree = ProjectTree(projects);
-  return (tree: tree, counts: tree.taskCounts(direct));
-});
+      final tree = ProjectTree(projects);
+      return (tree: tree, counts: tree.taskCounts(direct));
+    });
 
 /// The tasks of the selected project, already filtered.
 final tasksProvider = FutureProvider<List<Task>>((ref) async {

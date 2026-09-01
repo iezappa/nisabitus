@@ -39,10 +39,11 @@ abstract final class TaskFocus {
     return a.title.toLowerCase().compareTo(b.title.toLowerCase());
   }
 
-  static int _group(Task task, DateTime today) => switch (task.dueState(today)) {
-    DueState.overdue => 0,
-    DueState.today => 1,
-    DueState.upcoming => 2,
-    DueState.none => 3,
-  };
+  static int _group(Task task, DateTime today) =>
+      switch (task.dueState(today)) {
+        DueState.overdue => 0,
+        DueState.today => 1,
+        DueState.upcoming => 2,
+        DueState.none => 3,
+      };
 }

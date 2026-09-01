@@ -86,8 +86,7 @@ class WorkoutDay {
     List<ExerciseSet> sets,
     Map<int, Exercise> exercises,
   ) {
-    final ordered = [...sets]
-      ..sort((a, b) => a.position.compareTo(b.position));
+    final ordered = [...sets]..sort((a, b) => a.position.compareTo(b.position));
 
     final grouped = <int, List<ExerciseSet>>{};
     for (final set in ordered) {

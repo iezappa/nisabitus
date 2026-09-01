@@ -69,8 +69,7 @@ class MedicationView extends ConsumerWidget {
                     child: Card(
                       child: CheckboxListTile(
                         value: status.taken,
-                        onChanged: (_) =>
-                            actions.toggle(status.medication.id),
+                        onChanged: (_) => actions.toggle(status.medication.id),
                         title: Text(status.medication.name),
                         subtitle: status.medication.summary.isEmpty
                             ? null
@@ -133,8 +132,7 @@ class MedicationView extends ConsumerWidget {
                                 final draft = await showMedicationForm(
                                   context,
                                   existing: medication,
-                                  onDelete: () =>
-                                      actions.delete(medication.id),
+                                  onDelete: () => actions.delete(medication.id),
                                 );
                                 if (draft != null) {
                                   await actions.update(medication.id, draft);

@@ -1,7 +1,11 @@
 /// A node of the project tree.
 class Project {
-  Project({required this.id, required String name, this.parentId, this.description})
-    : name = _validateName(name);
+  Project({
+    required this.id,
+    required String name,
+    this.parentId,
+    this.description,
+  }) : name = _validateName(name);
 
   final int id;
   final String name;
@@ -66,9 +70,10 @@ class ProjectTree {
     final children = childrenOf(id);
     if (children.isEmpty) return 1;
 
-    return 1 + children.map((child) => heightOf(child.id)).reduce(
-      (a, b) => a > b ? a : b,
-    );
+    return 1 +
+        children
+            .map((child) => heightOf(child.id))
+            .reduce((a, b) => a > b ? a : b);
   }
 
   /// Whether [id] may be reparented under [under].
@@ -94,10 +99,8 @@ class ProjectTree {
     for (final project in all)
       project.id: (
         direct: directCounts[project.id] ?? 0,
-        descendants: descendantsOf(project.id).fold(
-          0,
-          (sum, child) => sum + (directCounts[child.id] ?? 0),
-        ),
+        descendants: descendantsOf(project.id)
+            .fold(0, (sum, child) => sum + (directCounts[child.id] ?? 0)),
       ),
   };
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
@@ -70,7 +69,11 @@ class ExerciseActions {
     _invalidate();
   }
 
-  Future<void> logSet(int exerciseId, {required int reps, double? weight}) async {
+  Future<void> logSet(
+    int exerciseId, {
+    required int reps,
+    double? weight,
+  }) async {
     await _repository.logSet(
       _ref.read(selectedDayProvider),
       exerciseId: exerciseId,

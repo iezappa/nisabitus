@@ -36,8 +36,7 @@ class _MedicationFormDialogState extends State<_MedicationFormDialog> {
   );
   late final _notes = TextEditingController(text: widget.existing?.notes ?? '');
 
-  late MedicationKind _kind =
-      widget.existing?.kind ?? MedicationKind.fallback;
+  late MedicationKind _kind = widget.existing?.kind ?? MedicationKind.fallback;
   late bool _active = widget.existing?.active ?? true;
 
   @override

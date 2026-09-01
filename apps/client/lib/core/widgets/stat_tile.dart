@@ -47,7 +47,11 @@ class StatTile extends StatelessWidget {
                   ),
                 ),
                 if (icon != null)
-                  Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
+                  Icon(
+                    icon,
+                    size: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
               ],
             ),
             const SizedBox(height: Gap.sm),

@@ -125,10 +125,7 @@ void main() {
       await next(tester);
 
       expect(find.text('Sostener, no arrancar.'), findsOneWidget);
-      expect(
-        find.textContaining('Las rachas cuentan aparte'),
-        findsOneWidget,
-      );
+      expect(find.textContaining('Las rachas cuentan aparte'), findsOneWidget);
     });
 
     testWidgets('centre their text', (tester) async {

@@ -83,7 +83,9 @@ void main() {
     test('remembers the choice', () async {
       await boot();
 
-      container.read(accentPreferenceProvider.notifier).set(AccentColor.gold.id);
+      container
+          .read(accentPreferenceProvider.notifier)
+          .set(AccentColor.gold.id);
 
       expect(container.read(accentColorProvider), AccentColor.gold);
       expect(prefs.getString('settings.accent'), 'gold');
@@ -295,9 +297,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-          // Pinned: these assertions read the Spanish copy, and the
-          // test binding would otherwise pick the device default.
-          locale: Locale('es'),
+            // Pinned: these assertions read the Spanish copy, and the
+            // test binding would otherwise pick the device default.
+            locale: Locale('es'),
             home: SettingsScreen(),
           ),
         ),
@@ -336,9 +338,9 @@ void main() {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-          // Pinned: these assertions read the Spanish copy, and the
-          // test binding would otherwise pick the device default.
-          locale: Locale('es'),
+            // Pinned: these assertions read the Spanish copy, and the
+            // test binding would otherwise pick the device default.
+            locale: Locale('es'),
             home: SettingsScreen(),
           ),
         ),

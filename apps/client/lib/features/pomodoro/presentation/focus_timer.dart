@@ -22,9 +22,8 @@ class FocusTimerState {
   final bool running;
 
   /// Zero to one, for the ring.
-  double get progress => total.inSeconds == 0
-      ? 0
-      : 1 - (remaining.inSeconds / total.inSeconds);
+  double get progress =>
+      total.inSeconds == 0 ? 0 : 1 - (remaining.inSeconds / total.inSeconds);
 
   FocusTimerState copyWith({
     TimerPhase? phase,

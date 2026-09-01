@@ -52,7 +52,10 @@ void main() {
       await repository.save(monday, 8);
 
       expect((await repository.forDay(monday))?.hours, 8);
-      expect(await repository.inRange(DateRange(monday, wednesday)), hasLength(1));
+      expect(
+        await repository.inRange(DateRange(monday, wednesday)),
+        hasLength(1),
+      );
     });
 
     test('rejects hours outside zero to twenty four', () {

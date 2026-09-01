@@ -4,11 +4,7 @@ import 'exercise_stats.dart';
 
 /// The user-editable fields of an exercise.
 class ExerciseDraft {
-  const ExerciseDraft({
-    required this.name,
-    this.description,
-    this.muscleGroup,
-  });
+  const ExerciseDraft({required this.name, this.description, this.muscleGroup});
 
   final String name;
   final String? description;

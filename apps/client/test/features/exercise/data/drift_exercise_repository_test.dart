@@ -32,10 +32,11 @@ void main() {
       await create('Dominadas');
       await create('Press banca');
 
-      expect(
-        (await repository.exercises()).map((e) => e.name),
-        ['Dominadas', 'Press banca', 'Sentadilla'],
-      );
+      expect((await repository.exercises()).map((e) => e.name), [
+        'Dominadas',
+        'Press banca',
+        'Sentadilla',
+      ]);
     });
 
     test('rejects a blank name', () {
@@ -71,7 +72,12 @@ void main() {
   group('sets', () {
     test('are logged against the day they were done', () async {
       final exercise = await create('Sentadilla');
-      await repository.logSet(monday, exerciseId: exercise.id, reps: 10, weight: 60);
+      await repository.logSet(
+        monday,
+        exerciseId: exercise.id,
+        reps: 10,
+        weight: 60,
+      );
 
       expect((await repository.workoutFor(monday)).totalSets, 1);
       expect((await repository.workoutFor(tuesday)).isEmpty, isTrue);
@@ -107,7 +113,11 @@ void main() {
       final exercise = await create('Dominadas');
       await repository.logSet(monday, exerciseId: exercise.id, reps: 12);
 
-      final set = (await repository.workoutFor(monday)).blocks.single.sets.single;
+      final set = (await repository.workoutFor(monday))
+          .blocks
+          .single
+          .sets
+          .single;
       expect(set.weight, isNull);
       expect(set.volume, 0);
     });
@@ -132,14 +142,22 @@ void main() {
 
       await repository.updateSet(set.id, reps: 8, weight: 70);
 
-      final stored = (await repository.workoutFor(monday)).blocks.single.sets.single;
+      final stored = (await repository.workoutFor(monday))
+          .blocks
+          .single
+          .sets
+          .single;
       expect(stored.reps, 8);
       expect(stored.weight, 70);
     });
 
     test('can be removed one at a time', () async {
       final exercise = await create('Sentadilla');
-      final set = await repository.logSet(monday, exerciseId: exercise.id, reps: 10);
+      final set = await repository.logSet(
+        monday,
+        exerciseId: exercise.id,
+        reps: 10,
+      );
       await repository.logSet(monday, exerciseId: exercise.id, reps: 8);
 
       await repository.deleteSet(set.id);
@@ -161,9 +179,24 @@ void main() {
     test('groups the sets under each exercise', () async {
       final squat = await create('Sentadilla');
       final bench = await create('Press banca');
-      await repository.logSet(monday, exerciseId: squat.id, reps: 10, weight: 60);
-      await repository.logSet(monday, exerciseId: bench.id, reps: 8, weight: 40);
-      await repository.logSet(monday, exerciseId: squat.id, reps: 8, weight: 70);
+      await repository.logSet(
+        monday,
+        exerciseId: squat.id,
+        reps: 10,
+        weight: 60,
+      );
+      await repository.logSet(
+        monday,
+        exerciseId: bench.id,
+        reps: 8,
+        weight: 40,
+      );
+      await repository.logSet(
+        monday,
+        exerciseId: squat.id,
+        reps: 8,
+        weight: 70,
+      );
 
       final day = await repository.workoutFor(monday);
 
@@ -174,8 +207,18 @@ void main() {
 
     test('adds up sets, reps and volume', () async {
       final exercise = await create('Sentadilla');
-      await repository.logSet(monday, exerciseId: exercise.id, reps: 10, weight: 60);
-      await repository.logSet(monday, exerciseId: exercise.id, reps: 8, weight: 70);
+      await repository.logSet(
+        monday,
+        exerciseId: exercise.id,
+        reps: 10,
+        weight: 60,
+      );
+      await repository.logSet(
+        monday,
+        exerciseId: exercise.id,
+        reps: 8,
+        weight: 70,
+      );
 
       final day = await repository.workoutFor(monday);
 
@@ -194,8 +237,18 @@ void main() {
 
     test('counts the sets of the window and leaves the rest out', () async {
       final squat = await create('Sentadilla');
-      await repository.logSet(monday, exerciseId: squat.id, reps: 10, weight: 50);
-      await repository.logSet(tuesday, exerciseId: squat.id, reps: 8, weight: 60);
+      await repository.logSet(
+        monday,
+        exerciseId: squat.id,
+        reps: 10,
+        weight: 50,
+      );
+      await repository.logSet(
+        tuesday,
+        exerciseId: squat.id,
+        reps: 8,
+        weight: 60,
+      );
       await repository.logSet(
         DateTime(2026, 3, 20),
         exerciseId: squat.id,
@@ -213,7 +266,12 @@ void main() {
 
     test('forgets the sets of an exercise that was deleted', () async {
       final squat = await create('Sentadilla');
-      await repository.logSet(monday, exerciseId: squat.id, reps: 10, weight: 50);
+      await repository.logSet(
+        monday,
+        exerciseId: squat.id,
+        reps: 10,
+        weight: 50,
+      );
 
       await repository.deleteExercise(squat.id);
 

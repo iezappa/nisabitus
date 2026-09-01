@@ -161,8 +161,7 @@ class DriftTodoRepository implements TodoRepository {
     )..orderBy([(t) => OrderingTerm.asc(t.id)])).get();
 
     return [
-      for (final row in rows)
-        _toTask(row, projectName: names[row.projectId]),
+      for (final row in rows) _toTask(row, projectName: names[row.projectId]),
     ];
   }
 
@@ -233,9 +232,7 @@ class DriftTodoRepository implements TodoRepository {
         status: Value(status.wireName),
         // Stamped on the way into DONE and cleared on the way out, so
         // reopening a task takes it back off the chart it was counted on.
-        completedAt: Value(
-          status == TaskStatus.done ? DateTime.now() : null,
-        ),
+        completedAt: Value(status == TaskStatus.done ? DateTime.now() : null),
       ),
     );
 
@@ -279,12 +276,7 @@ class DriftTodoRepository implements TodoRepository {
           ),
         );
 
-    return TaskComment(
-      id: id,
-      taskId: taskId,
-      content: text,
-      createdAt: now,
-    );
+    return TaskComment(id: id, taskId: taskId, content: text, createdAt: now);
   }
 
   @override

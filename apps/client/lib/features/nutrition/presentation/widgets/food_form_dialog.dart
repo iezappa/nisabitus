@@ -13,8 +13,7 @@ Future<FoodDraft?> showFoodForm(
   Future<void> Function()? onDelete,
 }) => showDialog<FoodDraft>(
   context: context,
-  builder: (context) =>
-      _FoodFormDialog(existing: existing, onDelete: onDelete),
+  builder: (context) => _FoodFormDialog(existing: existing, onDelete: onDelete),
 );
 
 class _FoodFormDialog extends StatefulWidget {

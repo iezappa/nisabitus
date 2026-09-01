@@ -216,7 +216,10 @@ class _Comments extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l10n.todoComments.toUpperCase(), style: theme.textTheme.labelSmall),
+        Text(
+          l10n.todoComments.toUpperCase(),
+          style: theme.textTheme.labelSmall,
+        ),
         const SizedBox(height: Gap.sm),
         comments.when(
           loading: () => const Padding(
@@ -237,9 +240,8 @@ class _Comments extends ConsumerWidget {
                           style: theme.textTheme.bodyMedium,
                         ),
                         subtitle: Text(
-                          DateFormat('dd/MM/yyyy HH:mm').format(
-                            comment.createdAt,
-                          ),
+                          DateFormat('dd/MM/yyyy HH:mm')
+                              .format(comment.createdAt),
                           style: theme.textTheme.bodySmall,
                         ),
                         trailing: IconButton(

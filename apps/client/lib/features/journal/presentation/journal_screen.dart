@@ -33,8 +33,7 @@ class JournalScreen extends ConsumerWidget {
       header: WeekDateSelector(
         selected: selected,
         today: ref.watch(todayProvider),
-        onSelected: (day) =>
-            ref.read(selectedDayProvider.notifier).state = day,
+        onSelected: (day) => ref.read(selectedDayProvider.notifier).state = day,
       ),
       list: const _Entry(),
       progress: const JournalProgressView(),
@@ -143,9 +142,9 @@ class _HistoryList extends ConsumerWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      onTap: () => ref
-                          .read(selectedDayProvider.notifier)
-                          .state = entry.date,
+                      onTap: () =>
+                          ref.read(selectedDayProvider.notifier).state =
+                              entry.date,
                     ),
                   ),
                 ),

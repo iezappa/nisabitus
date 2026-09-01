@@ -72,11 +72,7 @@ class PomodoroSession {
 
   static void _bound(int value, String field, int min, int max) {
     if (value < min || value > max) {
-      throw ArgumentError.value(
-        value,
-        field,
-        'Must be between $min and $max',
-      );
+      throw ArgumentError.value(value, field, 'Must be between $min and $max');
     }
   }
 
@@ -114,19 +110,17 @@ class PomodoroSession {
   /// Abandons the session, keeping whatever was already served.
   PomodoroSession cancel() => copyWith(status: PomodoroStatus.cancelled);
 
-  PomodoroSession copyWith({
-    int? completedCycles,
-    PomodoroStatus? status,
-  }) => PomodoroSession(
-    id: id,
-    name: name,
-    category: category,
-    purpose: purpose,
-    cycles: cycles,
-    focusDuration: focusDuration,
-    breakDuration: breakDuration,
-    completedCycles: completedCycles ?? this.completedCycles,
-    status: status ?? this.status,
-    startedAt: startedAt,
-  );
+  PomodoroSession copyWith({int? completedCycles, PomodoroStatus? status}) =>
+      PomodoroSession(
+        id: id,
+        name: name,
+        category: category,
+        purpose: purpose,
+        cycles: cycles,
+        focusDuration: focusDuration,
+        breakDuration: breakDuration,
+        completedCycles: completedCycles ?? this.completedCycles,
+        status: status ?? this.status,
+        startedAt: startedAt,
+      );
 }

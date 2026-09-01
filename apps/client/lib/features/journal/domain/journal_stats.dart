@@ -16,10 +16,7 @@ class JournalStats {
 
   /// Reads the figures off the days that carry an entry, in any order.
   factory JournalStats.from(DateRange range, List<DateTime> entryDays) {
-    final written = entryDays
-        .where(range.contains)
-        .map(dateOnly)
-        .toSet();
+    final written = entryDays.where(range.contains).map(dateOnly).toSet();
 
     var longest = 0;
     var current = 0;

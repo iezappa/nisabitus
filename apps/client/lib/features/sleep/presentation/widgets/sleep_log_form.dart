@@ -66,8 +66,10 @@ class _SleepLogFormState extends State<SleepLogForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(l10n.sleepLog.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelSmall),
+              Text(
+                l10n.sleepLog.toUpperCase(),
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
               const SizedBox(height: Gap.md),
               TextFormField(
                 controller: _hours,

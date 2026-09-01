@@ -103,10 +103,7 @@ void main() {
     // two buttons, not a list of rows.
     expect(find.byType(SupportProjectsCard), findsOneWidget);
     expect(
-      find.descendant(
-        of: find.byType(Card),
-        matching: find.byType(ListTile),
-      ),
+      find.descendant(of: find.byType(Card), matching: find.byType(ListTile)),
       findsNothing,
       reason: 'a row inside a card is the grouped layout the standard drops',
     );

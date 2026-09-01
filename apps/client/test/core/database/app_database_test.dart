@@ -60,10 +60,7 @@ void main() {
       final childId = await db
           .into(db.projects)
           .insert(
-            ProjectsCompanion.insert(
-              name: 'Módulo 1',
-              parentId: Value(rootId),
-            ),
+            ProjectsCompanion.insert(name: 'Módulo 1', parentId: Value(rootId)),
           );
       final taskId = await db
           .into(db.todoTasks)

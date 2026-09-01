@@ -71,7 +71,10 @@ void main() {
     });
 
     test('ignores blank entries while decoding', () {
-      expect(Weekday.decode('MONDAY,,FRIDAY'), {Weekday.monday, Weekday.friday});
+      expect(Weekday.decode('MONDAY,,FRIDAY'), {
+        Weekday.monday,
+        Weekday.friday,
+      });
     });
   });
 
@@ -96,7 +99,11 @@ void main() {
     test('is always false when the habit repeats forever', () {
       final h = habit(repeatForever: true, endDate: DateTime(2026, 3, 15));
 
-      expect(h.endDate, isNull, reason: 'repeating forever clears the end date');
+      expect(
+        h.endDate,
+        isNull,
+        reason: 'repeating forever clears the end date',
+      );
       expect(h.isFinishedOn(DateTime(2030, 1, 1)), isFalse);
     });
   });
@@ -160,14 +167,25 @@ void main() {
   });
 
   group('Habit.showsTargetBadge', () {
-    test('is true only when the target is above one and the day is scheduled', () {
-      expect(habit(targetCount: 3).showsTargetBadge(DateTime(2026, 3, 11)), isTrue);
-      expect(habit(targetCount: 1).showsTargetBadge(DateTime(2026, 3, 11)), isFalse);
-      expect(
-        habit(targetCount: 3, repeatDays: {Weekday.monday})
-            .showsTargetBadge(DateTime(2026, 3, 10)),
-        isFalse,
-      );
-    });
+    test(
+      'is true only when the target is above one and the day is scheduled',
+      () {
+        expect(
+          habit(targetCount: 3).showsTargetBadge(DateTime(2026, 3, 11)),
+          isTrue,
+        );
+        expect(
+          habit(targetCount: 1).showsTargetBadge(DateTime(2026, 3, 11)),
+          isFalse,
+        );
+        expect(
+          habit(
+            targetCount: 3,
+            repeatDays: {Weekday.monday},
+          ).showsTargetBadge(DateTime(2026, 3, 10)),
+          isFalse,
+        );
+      },
+    );
   });
 }

@@ -73,10 +73,9 @@ void main() {
       await repository.addEntry(monday, draft(name: 'Lunes'));
       await repository.addEntry(tuesday, draft(name: 'Martes'));
 
-      expect(
-        (await repository.entriesFor(monday)).map((e) => e.name),
-        ['Lunes'],
-      );
+      expect((await repository.entriesFor(monday)).map((e) => e.name), [
+        'Lunes',
+      ]);
     });
 
     test('keep the order they were logged in', () async {
@@ -84,10 +83,11 @@ void main() {
       await repository.addEntry(monday, draft(name: 'Almuerzo'));
       await repository.addEntry(monday, draft(name: 'Cena'));
 
-      expect(
-        (await repository.entriesFor(monday)).map((e) => e.name),
-        ['Desayuno', 'Almuerzo', 'Cena'],
-      );
+      expect((await repository.entriesFor(monday)).map((e) => e.name), [
+        'Desayuno',
+        'Almuerzo',
+        'Cena',
+      ]);
     });
 
     test('reject a blank name', () {
@@ -106,7 +106,10 @@ void main() {
     test('can be edited without moving day', () async {
       final entry = await repository.addEntry(monday, draft());
 
-      await repository.updateEntry(entry.id, draft(name: 'Avena con fruta', kcal: 380));
+      await repository.updateEntry(
+        entry.id,
+        draft(name: 'Avena con fruta', kcal: 380),
+      );
 
       final stored = (await repository.entriesFor(monday)).single;
       expect(stored.name, 'Avena con fruta');

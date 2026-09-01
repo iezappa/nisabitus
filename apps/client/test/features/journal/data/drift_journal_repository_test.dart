@@ -131,9 +131,7 @@ void main() {
     test('leaves out entries outside the window', () async {
       await seed(3);
 
-      final page = await repository.history(
-        DateRange(day(2), day(3)),
-      );
+      final page = await repository.history(DateRange(day(2), day(3)));
 
       expect(page.entries.map((e) => e.date), [day(3), day(2)]);
       expect(page.total, 2);
@@ -148,7 +146,10 @@ void main() {
     test('counts the days written inside the window', () async {
       await repository.save(day(1), const JournalContent(mood: 'Bien'));
       await repository.save(day(2), const JournalContent(mood: 'Bien'));
-      await repository.save(DateTime(2026, 4, 1), const JournalContent(mood: 'Bien'));
+      await repository.save(
+        DateTime(2026, 4, 1),
+        const JournalContent(mood: 'Bien'),
+      );
 
       final stats = await repository.statsFor(march);
 

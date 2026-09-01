@@ -195,14 +195,17 @@ class _Sessions extends ConsumerWidget {
                 subtitle: Text(
                   [
                     if (session.category case final c? when c.isNotEmpty) c,
-                    l10n.pomodoroCycleOf(session.completedCycles, session.cycles),
+                    l10n.pomodoroCycleOf(
+                      session.completedCycles,
+                      session.cycles,
+                    ),
                     l10n.pomodoroMinutes(session.focusDuration),
                   ].join(' · '),
                 ),
                 trailing: _ProgressBadge(progress: session.progress),
-                onTap: () => ref
-                    .read(selectedSessionIdProvider.notifier)
-                    .state = session.id,
+                onTap: () =>
+                    ref.read(selectedSessionIdProvider.notifier).state =
+                        session.id,
                 onLongPress: () async {
                   final actions = ref.read(pomodoroActionsProvider);
                   final draft = await showPomodoroForm(

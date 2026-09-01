@@ -32,8 +32,7 @@ class Macros {
   double ratioTo(int target) =>
       target <= 0 ? 0 : (calories / target).clamp(0.0, 1.0);
 
-  bool get isEmpty =>
-      calories == 0 && protein == 0 && carbs == 0 && fat == 0;
+  bool get isEmpty => calories == 0 && protein == 0 && carbs == 0 && fat == 0;
 
   @override
   bool operator ==(Object other) =>
@@ -47,8 +46,7 @@ class Macros {
   int get hashCode => Object.hash(calories, protein, carbs, fat);
 
   @override
-  String toString() =>
-      'Macros($calories kcal, P$protein C$carbs F$fat)';
+  String toString() => 'Macros($calories kcal, P$protein C$carbs F$fat)';
 }
 
 /// The daily targets the user is aiming at.

@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
@@ -47,8 +46,7 @@ class NutritionActions {
 
   final Ref _ref;
 
-  NutritionRepository get _repository =>
-      _ref.read(nutritionRepositoryProvider);
+  NutritionRepository get _repository => _ref.read(nutritionRepositoryProvider);
 
   Future<void> saveGoal(NutritionGoal goal) async {
     await _repository.saveGoal(goal);

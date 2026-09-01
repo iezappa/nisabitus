@@ -130,9 +130,7 @@ abstract final class AppTheme {
           backgroundColor: tint,
           foregroundColor: isLight ? Colors.white : _paperDark,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           textStyle: base.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -150,9 +148,7 @@ abstract final class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: card,
         side: BorderSide(color: line),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(999),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

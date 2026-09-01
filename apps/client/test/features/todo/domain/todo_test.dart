@@ -51,7 +51,10 @@ void main() {
     });
 
     test('is overdue before today', () {
-      expect(task(due: DateTime(2026, 3, 10)).dueState(today), DueState.overdue);
+      expect(
+        task(due: DateTime(2026, 3, 10)).dueState(today),
+        DueState.overdue,
+      );
     });
 
     test('is due today on the day', () {
@@ -68,8 +71,10 @@ void main() {
     test('is none once the task is done, however late it was', () {
       // A finished task cannot be overdue; nagging about it helps nobody.
       expect(
-        task(due: DateTime(2026, 1, 1), status: TaskStatus.done)
-            .dueState(today),
+        task(
+          due: DateTime(2026, 1, 1),
+          status: TaskStatus.done,
+        ).dueState(today),
         DueState.none,
       );
     });

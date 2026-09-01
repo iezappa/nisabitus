@@ -146,8 +146,7 @@ class Habit {
   }
 
   /// Whether the list should show the "Nx" badge on [day].
-  bool showsTargetBadge(DateTime day) =>
-      targetCount > 1 && isScheduledOn(day);
+  bool showsTargetBadge(DateTime day) => targetCount > 1 && isScheduledOn(day);
 
   Habit copyWith({
     String? name,

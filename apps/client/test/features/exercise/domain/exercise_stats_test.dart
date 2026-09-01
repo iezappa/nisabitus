@@ -7,13 +7,7 @@ void main() {
   final range = DateRange(DateTime(2026, 3, 9), DateTime(2026, 3, 13));
 
   ExerciseSet set(DateTime day, {int reps = 10, double? weight = 50}) =>
-      ExerciseSet(
-        id: 0,
-        exerciseId: 1,
-        date: day,
-        reps: reps,
-        weight: weight,
-      );
+      ExerciseSet(id: 0, exerciseId: 1, date: day, reps: reps, weight: weight);
 
   group('ExerciseStats', () {
     test('reads as empty when nothing was trained', () {

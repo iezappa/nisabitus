@@ -126,7 +126,9 @@ class _GoalCard extends StatelessWidget {
             Text(
               // Going over is stated plainly rather than hidden: the number
               // is the point, and a negative remainder is information.
-              left >= 0 ? l10n.nutritionRemaining(left) : l10n.nutritionOver(-left),
+              left >= 0
+                  ? l10n.nutritionRemaining(left)
+                  : l10n.nutritionOver(-left),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: left >= 0
                     ? theme.colorScheme.onSurfaceVariant
@@ -185,7 +187,10 @@ class _MacroBar extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Text(label.toUpperCase(), style: theme.textTheme.labelSmall),
+              child: Text(
+                label.toUpperCase(),
+                style: theme.textTheme.labelSmall,
+              ),
             ),
             Text(
               '${l10n.nutritionGrams(value)} / ${l10n.nutritionGrams(target)}',

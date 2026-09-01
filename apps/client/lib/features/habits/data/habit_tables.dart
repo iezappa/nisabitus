@@ -38,7 +38,10 @@ class Habits extends Table {
 ///
 /// This history is never deleted when the day rolls over: it is the source of
 /// every progress chart.
-@TableIndex(name: 'habit_completion_lookup', columns: {#habitId, #completionDate})
+@TableIndex(
+  name: 'habit_completion_lookup',
+  columns: {#habitId, #completionDate},
+)
 @DataClassName('HabitCompletionRow')
 class HabitCompletions extends Table {
   IntColumn get id => integer().autoIncrement()();

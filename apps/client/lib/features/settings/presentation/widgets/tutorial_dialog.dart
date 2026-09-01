@@ -11,16 +11,14 @@ import '../settings_providers.dart';
 ///
 /// Run as [onboarding] on first launch it also collects the profile name and
 /// which tabs to show; opened later from settings it is just the tour.
-Future<void> showTutorial(
-  BuildContext context, {
-  bool onboarding = false,
-}) => showDialog<void>(
-  context: context,
-  // The first run has to be completed, not dismissed: the app needs a
-  // visible tab set before it can show anything.
-  barrierDismissible: !onboarding,
-  builder: (context) => _TutorialDialog(onboarding: onboarding),
-);
+Future<void> showTutorial(BuildContext context, {bool onboarding = false}) =>
+    showDialog<void>(
+      context: context,
+      // The first run has to be completed, not dismissed: the app needs a
+      // visible tab set before it can show anything.
+      barrierDismissible: !onboarding,
+      builder: (context) => _TutorialDialog(onboarding: onboarding),
+    );
 
 class _TutorialDialog extends ConsumerStatefulWidget {
   const _TutorialDialog({required this.onboarding});

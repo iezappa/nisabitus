@@ -24,7 +24,10 @@ void main() {
 
     test('can be nested', () async {
       final root = await repository.createProject('Nisabitus');
-      final child = await repository.createProject('Módulos', parentId: root.id);
+      final child = await repository.createProject(
+        'Módulos',
+        parentId: root.id,
+      );
 
       expect(child.parentId, root.id);
       expect(await repository.projects(), hasLength(2));
@@ -54,7 +57,8 @@ void main() {
 
       // Hanging the root off its own child would cut the branch loose.
       expect(
-        () => repository.updateProject(root.id, name: 'Raíz', parentId: child.id),
+        () =>
+            repository.updateProject(root.id, name: 'Raíz', parentId: child.id),
         throwsArgumentError,
       );
     });
@@ -95,8 +99,12 @@ void main() {
     });
 
     test('belong to the project they were filed under', () async {
-      await repository.createTask(TaskDraft(title: 'Directa', projectId: root.id));
-      await repository.createTask(TaskDraft(title: 'Anidada', projectId: child.id));
+      await repository.createTask(
+        TaskDraft(title: 'Directa', projectId: root.id),
+      );
+      await repository.createTask(
+        TaskDraft(title: 'Anidada', projectId: child.id),
+      );
 
       final direct = await repository.tasks(root.id);
 
@@ -104,8 +112,12 @@ void main() {
     });
 
     test('can be pulled in from the subprojects', () async {
-      await repository.createTask(TaskDraft(title: 'Directa', projectId: root.id));
-      await repository.createTask(TaskDraft(title: 'Anidada', projectId: child.id));
+      await repository.createTask(
+        TaskDraft(title: 'Directa', projectId: root.id),
+      );
+      await repository.createTask(
+        TaskDraft(title: 'Anidada', projectId: child.id),
+      );
 
       final all = await repository.tasks(root.id, includeDescendants: true);
 
@@ -113,7 +125,9 @@ void main() {
     });
 
     test('carry the name of the subproject they came from', () async {
-      await repository.createTask(TaskDraft(title: 'Anidada', projectId: child.id));
+      await repository.createTask(
+        TaskDraft(title: 'Anidada', projectId: child.id),
+      );
 
       final all = await repository.tasks(root.id, includeDescendants: true);
 

@@ -9,11 +9,7 @@ import '../todo_providers.dart';
 
 /// The project hierarchy, indented by depth.
 class ProjectTreeView extends ConsumerWidget {
-  const ProjectTreeView({
-    required this.tree,
-    required this.counts,
-    super.key,
-  });
+  const ProjectTreeView({required this.tree, required this.counts, super.key});
 
   final ProjectTree tree;
   final Map<int, TaskCount> counts;
@@ -60,9 +56,13 @@ class _Node extends ConsumerWidget {
           child: ListTile(
             dense: true,
             selected: selected,
-            selectedTileColor: theme.colorScheme.primary.withValues(alpha: 0.08),
+            selectedTileColor: theme.colorScheme.primary.withValues(
+              alpha: 0.08,
+            ),
             leading: Icon(
-              children.isEmpty ? Icons.folder_outlined : Icons.folder_copy_outlined,
+              children.isEmpty
+                  ? Icons.folder_outlined
+                  : Icons.folder_copy_outlined,
               size: 18,
             ),
             title: Text(project.name, overflow: TextOverflow.ellipsis),
@@ -77,7 +77,10 @@ class _Node extends ConsumerWidget {
                 // never explained after the fact.
                 if (tree.canAddChild(project.id))
                   MenuItemButton(
-                    leadingIcon: const Icon(Icons.create_new_folder_outlined, size: 18),
+                    leadingIcon: const Icon(
+                      Icons.create_new_folder_outlined,
+                      size: 18,
+                    ),
                     onPressed: () async {
                       final name = await promptForName(
                         context,

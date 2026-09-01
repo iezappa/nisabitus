@@ -78,7 +78,10 @@ void main() {
 
     test('serves five to a page, newest first', () async {
       for (var i = 1; i <= 7; i++) {
-        await create(name: 'Sesión $i', startedAt: start.add(Duration(days: i)));
+        await create(
+          name: 'Sesión $i',
+          startedAt: start.add(Duration(days: i)),
+        );
       }
 
       final first = await repository.list();

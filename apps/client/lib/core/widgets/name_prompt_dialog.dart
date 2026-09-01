@@ -73,9 +73,8 @@ class _NamePromptDialogState extends State<_NamePromptDialog> {
           autofocus: true,
           maxLength: 255,
           decoration: InputDecoration(labelText: l10n.fieldName),
-          validator: (value) => (value ?? '').trim().isEmpty
-              ? l10n.validationNameRequired
-              : null,
+          validator: (value) =>
+              (value ?? '').trim().isEmpty ? l10n.validationNameRequired : null,
           onFieldSubmitted: (_) => _submit(),
         ),
       ),

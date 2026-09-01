@@ -39,7 +39,8 @@ void main() {
           expect(
             ratio,
             greaterThan(7),
-            reason: '$name: text on the page reads at '
+            reason:
+                '$name: text on the page reads at '
                 '${ratio.toStringAsFixed(1)}:1',
           );
         }
@@ -56,7 +57,8 @@ void main() {
           expect(
             ratio,
             greaterThan(7),
-            reason: '$name: text on a card reads at '
+            reason:
+                '$name: text on a card reads at '
                 '${ratio.toStringAsFixed(1)}:1',
           );
         }
@@ -91,7 +93,8 @@ void main() {
           expect(
             ratio,
             greaterThan(3),
-            reason: '${accent.id}: label on the accent reads at '
+            reason:
+                '${accent.id}: label on the accent reads at '
                 '${ratio.toStringAsFixed(1)}:1',
           );
         }
@@ -108,7 +111,8 @@ void main() {
           expect(
             ratio,
             greaterThan(3),
-            reason: '${accent.id}: accent on a card reads at '
+            reason:
+                '${accent.id}: accent on a card reads at '
                 '${ratio.toStringAsFixed(1)}:1',
           );
         }
@@ -164,7 +168,11 @@ void main() {
           theme.cardTheme.color!,
         );
 
-        expect(ratio, greaterThan(1.1), reason: '${accent.id}: border invisible');
+        expect(
+          ratio,
+          greaterThan(1.1),
+          reason: '${accent.id}: border invisible',
+        );
         expect(ratio, lessThan(3), reason: '${accent.id}: border shouts');
       }
     });

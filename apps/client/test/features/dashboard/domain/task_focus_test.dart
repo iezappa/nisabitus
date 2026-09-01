@@ -66,11 +66,7 @@ void main() {
     });
 
     test('produce the same order twice, whatever the input order', () {
-      final input = [
-        task(title: 'B'),
-        task(title: 'A'),
-        task(title: 'C'),
-      ];
+      final input = [task(title: 'B'), task(title: 'A'), task(title: 'C')];
 
       expect(
         titles(TaskFocus.rank(input, today)),
