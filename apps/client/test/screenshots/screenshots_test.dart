@@ -118,6 +118,12 @@ void main() {
     await shoot(tester, 'habits', const HabitsScreen());
   });
 
+  testWidgets('habits with nothing recorded yet', (tester) async {
+    // No seed: this is the first-run shape of the screen, where every
+    // section stands on its placeholder rather than on its content.
+    await shoot(tester, 'habits_empty', const HabitsScreen());
+  });
+
   testWidgets('health', (tester) async {
     await seed(db, wednesday);
     await shoot(tester, 'health', const HealthScreen());

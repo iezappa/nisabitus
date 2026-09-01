@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 /// Shown where a list would be, when there is nothing yet.
+///
+/// Takes the full width it is offered and centres its content inside. Sized
+/// to its own text instead, it sat hard against the left edge of every
+/// section that lays its children out from the start — which is most of
+/// them — and read as a paragraph that had lost its place rather than as a
+/// placeholder standing in for the list.
 class EmptyState extends StatelessWidget {
   const EmptyState({
     required this.icon,
@@ -17,7 +23,8 @@ class EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
