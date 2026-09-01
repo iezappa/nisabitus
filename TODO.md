@@ -27,7 +27,57 @@ What is left is polish, infrastructure and a handful of debts — see
 
 ---
 
-## 2. Conformance with the shared standard
+## 2. Features asked for
+
+Not debts — work that was decided and is not written yet.
+
+- [ ] **A database of recorded meals.** Today every food entry is typed from
+      scratch. What is eaten repeats, so the entries should accumulate into
+      something reusable: eat the same breakfast twice and the second time
+      should be picking it, not typing it again.
+- [ ] **A meal log** on top of that: what was eaten, when, chosen from the
+      entries above rather than written blind.
+- [ ] **A hydration log.** Nothing records water today.
+- [ ] **A dialog for exercises**, the way habits and medication already have
+      one, instead of whatever the exercise view does now.
+- [ ] **A dialog for medication**, same reason.
+- [ ] **Change the logo in the nav bar.**
+
+---
+
+## 3. Publishing the web build
+
+The build is published to GitHub Pages by `deploy-pages.yml` on every push to
+`main`. One thing about it is not a detail:
+
+- [ ] **Pages cannot send the cross-origin isolation headers**
+      (`Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy`), so the
+      browser withholds `SharedArrayBuffer`, drift falls back from OPFS to
+      IndexedDB, and IndexedDB persists lazily. A reload at the wrong moment
+      leaves a database whose tables exist but which is not marked as
+      created; the next launch tries to create them again and dies on every
+      screen at once. That is exactly how it was found locally.
+
+      Good enough to let someone try the app. Not good enough to keep a
+      journal in. Three ways out, none of them free:
+
+      1. Host where headers can be set (Cloudflare Pages, Netlify: a
+         `_headers` file) and point the domain there.
+      2. Keep Pages and register a service worker that re-injects the headers
+         client-side — the known trick, and it collides with the service
+         worker Flutter already registers.
+      3. Keep Pages as a demo and **say so in the app**: drift reports the
+         implementation it chose, and today `driftDatabase` ignores it. For
+         an app whose whole pillar is "your data lives on your device",
+         silently running on storage that can lose writes is the wrong
+         default. This one is worth doing regardless of 1 and 2.
+
+`tool/serve_web.py` sends the headers locally, and is what a correct host
+looks like.
+
+---
+
+## 4. Conformance with the shared standard
 
 The standard is
 [standardizer_multiplatform](https://github.com/iezappa/standardizer_multiplatform).

@@ -1,0 +1,87 @@
+name: Deploy web (GitHub Pages)
+
+# Publishes the web build to GitHub Pages on every push to main. The app is
+# offline-first and needs no backend, so the whole thing is a static folder.
+#
+# KNOWN LIMITATION — read before trusting this with data. GitHub Pages cannot
+# send `Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy`, so the
+# browser withholds SharedArrayBuffer and drift falls back from OPFS to
+# IndexedDB, which persists lazily. That is fine for trying the app out; it is
+# not a place to keep a journal you care about. `tool/serve_web.py` sends the
+# headers locally and shows what a correct host looks like — see TODO.md,
+# "Publishing the web build".
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish; queue at most one more.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  FLUTTER_VERSION: 3.47.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/client
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      # Nothing ships without passing first.
+      - name: Analyse
+        run: dart analyze lib test
+
+      - name: Test
+        run: flutter test
+
+      # The site lives under /<repo>/, so every asset path has to be resolved
+      # from there rather than from the domain root.
+      - name: Resolve base href
+        id: base
+        run: echo "value=/${GITHUB_REPOSITORY##*/}/" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: flutter build web --release --base-href "${{ steps.base.outputs.value }}"
+
+      # Pages serves static files and knows nothing about client-side routes,
+      # so a deep link would 404. Serving index.html as the 404 page hands the
+      # route back to the app. The .nojekyll keeps Pages from eating the
+      # underscore-prefixed files Flutter emits.
+      - name: SPA fallback and Pages tweaks
+        run: |
+          cp build/web/index.html build/web/404.html
+          touch build/web/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/client/build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
