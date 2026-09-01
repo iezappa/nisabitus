@@ -3,19 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/centered_content.dart';
-import '../../../core/widgets/disclaimer.dart';
-import '../../../core/widgets/section_header.dart';
+import '../../../core/widgets/section_label.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../backup/presentation/widgets/backup_card.dart';
+import '../../release_notes/presentation/widgets/release_notes_tile.dart';
 import '../../shared/support_actions.dart';
 import '../domain/accent_color.dart';
 import '../domain/language_preference.dart';
 import '../domain/theme_preference.dart';
 import 'settings_providers.dart';
-import '../../release_notes/presentation/widgets/release_notes_tile.dart';
 import 'widgets/tutorial_dialog.dart';
 
 /// The Ajustes tab: how the app looks, what it shows, and how to support it.
+///
+/// One flat column of sections, which is the layout every Zyreth app shares
+/// (`STACK-APPS-DINAMICAS.md`, 2.2). Deliberately not a card per section:
+/// boxing each block adds a border and an inset to every one of them, and on
+/// a screen that is mostly one-line rows that reads as clutter rather than as
+/// structure. The label and the page gutter carry the grouping instead.
+///
+/// The order of the sections is fixed by the same document, so someone who
+/// uses two of these apps finds the same thing in the same place. Security is
+/// absent because this app has no PIN; the visible tabs are its own section
+/// and sit before support, where a domain section belongs.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -25,109 +35,161 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
-      body: CenteredContent(
-        child: ListView(
-          padding: const EdgeInsets.only(bottom: Gap.xxl),
-          children: [
-            SectionHeader(label: l10n.settingsAppearance),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(Gap.lg),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.settingsTheme,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: Gap.md),
-                      const _ThemePicker(),
-                      const SizedBox(height: Gap.xl),
-                      Text(
-                        l10n.settingsAccent,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: Gap.md),
-                      const _AccentPicker(),
-                      const SizedBox(height: Gap.xl),
-                      Text(
-                        l10n.settingsLanguage,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: Gap.md),
-                      const _LanguagePicker(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SectionHeader(label: l10n.settingsTabs),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(Gap.lg),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.settingsTabsHint,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: Gap.md),
-                      const TabVisibilityPicker(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SectionHeader(label: l10n.settingsProfile),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(Gap.lg),
-                  child: const _ProfileNameField(),
-                ),
-              ),
-            ),
-            SectionHeader(label: l10n.settingsBackup),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: BackupCard(),
-            ),
-            SectionHeader(label: l10n.settingsDisclaimer),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: DisclaimerCard(),
-            ),
-            SectionHeader(label: l10n.settingsAbout),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: Card(
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.school_outlined),
-                      title: Text(l10n.settingsTutorial),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () => showTutorial(context),
-                    ),
-                    const ReleaseNotesTile(),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: Gap.lg),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: Gap.lg),
-              child: SupportProjectsCard(),
-            ),
-          ],
+      body: SafeArea(
+        child: CenteredContent(
+          child: ListView(
+            // The one gutter on the page. Nothing below adds its own, which
+            // is what keeps every label, row and control on one left edge.
+            padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.lg, Gap.lg, Gap.xxl),
+            children: const [
+              _AppearanceSection(),
+              Gap.vSection,
+              _ProfileSection(),
+              Gap.vSection,
+              _LanguageSection(),
+              Gap.vSection,
+              _TabsSection(),
+              Gap.vSection,
+              _DataSection(),
+              Gap.vSection,
+              _SupportSection(),
+              Gap.vSection,
+              _AboutSection(),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// A section is its label and its controls. Nothing boxes them in.
+class _Section extends StatelessWidget {
+  const _Section({required this.title, required this.children});
+
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [SectionLabel(title), ...children],
+  );
+}
+
+class _AppearanceSection extends StatelessWidget {
+  const _AppearanceSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return _Section(
+      title: l10n.settingsAppearance,
+      children: [
+        const _ThemePicker(),
+        const SizedBox(height: Gap.xl),
+        Text(l10n.settingsAccent, style: theme.textTheme.titleSmall),
+        const SizedBox(height: Gap.md),
+        const _AccentPicker(),
+      ],
+    );
+  }
+}
+
+class _ProfileSection extends StatelessWidget {
+  const _ProfileSection();
+
+  @override
+  Widget build(BuildContext context) => _Section(
+    title: AppLocalizations.of(context).settingsProfile,
+    children: const [_ProfileNameField()],
+  );
+}
+
+class _LanguageSection extends StatelessWidget {
+  const _LanguageSection();
+
+  @override
+  Widget build(BuildContext context) => _Section(
+    title: AppLocalizations.of(context).settingsLanguage,
+    children: const [_LanguagePicker()],
+  );
+}
+
+/// This app's own section: which modules the bottom bar offers.
+class _TabsSection extends StatelessWidget {
+  const _TabsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return _Section(
+      title: l10n.settingsTabs,
+      children: [
+        Text(l10n.settingsTabsHint, style: theme.textTheme.bodySmall),
+        const SizedBox(height: Gap.md),
+        const TabVisibilityPicker(),
+      ],
+    );
+  }
+}
+
+class _DataSection extends StatelessWidget {
+  const _DataSection();
+
+  @override
+  Widget build(BuildContext context) => _Section(
+    title: AppLocalizations.of(context).settingsYourData,
+    children: const [BackupCard()],
+  );
+}
+
+class _SupportSection extends StatelessWidget {
+  const _SupportSection();
+
+  @override
+  Widget build(BuildContext context) => _Section(
+    title: AppLocalizations.of(context).settingsSupport,
+    children: const [SupportProjectsCard()],
+  );
+}
+
+class _AboutSection extends StatelessWidget {
+  const _AboutSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return _Section(
+      title: l10n.settingsAbout,
+      children: [
+        Text(l10n.disclaimerTitle, style: theme.textTheme.titleSmall),
+        const SizedBox(height: Gap.sm),
+        // Printed in full rather than hidden behind a tile that opens a
+        // dialog: a notice you have to tap to read is a notice nobody reads.
+        Text(
+          l10n.disclaimerBody,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            height: 1.45,
+          ),
+        ),
+        const SizedBox(height: Gap.sm),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.school_outlined),
+          title: Text(l10n.settingsTutorial),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => showTutorial(context),
+        ),
+        const ReleaseNotesTile(),
+      ],
     );
   }
 }

@@ -560,9 +560,6 @@
   "disclaimerBody": "Nisabitus no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.",
   "disclaimerAction": "Entendido",
   "disclaimerTooltip": "Sobre estos datos",
-  "settingsDisclaimer": "Aviso importante",
-  "settingsDisclaimerShort": "Nisabitus registra lo que anotás. No reemplaza a un profesional de la salud.",
-  "settingsDisclaimerRead": "Leer el aviso completo",
   "healthMeds": "Medicación",
   "medsTitle": "Medicación y suplementos",
   "medsToday": "Para ese día",
@@ -624,6 +621,8 @@
     }
   },
   "settingsBackup": "Copia de seguridad",
+  "settingsYourData": "Tus datos",
+  "settingsSupport": "Soporte",
   "backupHint": "Todo lo que anotaste, en un archivo tuyo. No se sube a ningún lado: queda donde vos lo guardes.",
   "backupExport": "Exportar",
   "backupImport": "Importar",

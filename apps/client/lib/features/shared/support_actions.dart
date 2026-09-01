@@ -59,8 +59,16 @@ class SupportProjectsCard extends StatelessWidget {
           : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(l10n.supportTitle.toUpperCase(), style: theme.textTheme.labelSmall),
-        const SizedBox(height: Gap.sm),
+        // The heading only belongs to the compact copy. In settings the
+        // section label above already names the block, and printing both
+        // would announce it twice.
+        if (compact) ...[
+          Text(
+            l10n.supportTitle.toUpperCase(),
+            style: theme.textTheme.labelSmall,
+          ),
+          const SizedBox(height: Gap.sm),
+        ],
         Text(
           l10n.supportBody,
           style: theme.textTheme.bodyMedium,

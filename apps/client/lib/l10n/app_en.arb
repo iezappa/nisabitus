@@ -320,9 +320,6 @@
   "disclaimerBody": "Nisabitus is not a medical or nutritional application. It is a log: it keeps what you write down and hands it back to you in order.\n\nIt does not diagnose, interpret symptoms, calculate doses, or recommend treatments, diets or routines. The targets you set are your own, not a professional instruction.\n\nBefore starting, changing or stopping a medication, a supplement, a diet or a training plan, talk to a health professional. If any symptom worries you, seek advice without delay.",
   "disclaimerAction": "Understood",
   "disclaimerTooltip": "About this data",
-  "settingsDisclaimer": "Important notice",
-  "settingsDisclaimerShort": "Nisabitus records what you write down. It does not replace a health professional.",
-  "settingsDisclaimerRead": "Read the full notice",
   "healthMeds": "Medication",
   "medsTitle": "Medication and supplements",
   "medsToday": "For that day",
@@ -374,6 +371,8 @@
     }
   },
   "settingsBackup": "Backup",
+  "settingsYourData": "Your data",
+  "settingsSupport": "Support",
   "backupHint": "Everything you have recorded, in a file of your own. It is not uploaded anywhere: it stays wherever you put it.",
   "backupExport": "Export",
   "backupImport": "Import",

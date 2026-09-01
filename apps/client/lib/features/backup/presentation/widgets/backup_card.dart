@@ -108,43 +108,40 @@ class _BackupCardState extends ConsumerState<BackupCard> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(Gap.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    // No card around it: settings is a flat column, and only the support
+    // block — a paragraph with two buttons — keeps its box.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.backupHint, style: theme.textTheme.bodySmall),
+        const SizedBox(height: Gap.sm),
+        Text(
+          l10n.backupReplaceWarning,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.error,
+          ),
+        ),
+        const SizedBox(height: Gap.lg),
+        Row(
           children: [
-            Text(l10n.backupHint, style: theme.textTheme.bodySmall),
-            const SizedBox(height: Gap.sm),
-            Text(
-              l10n.backupReplaceWarning,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.error,
+            Expanded(
+              child: FilledButton.tonalIcon(
+                onPressed: _busy ? null : _export,
+                icon: const Icon(Icons.upload_file_outlined),
+                label: Text(l10n.backupExport),
               ),
             ),
-            const SizedBox(height: Gap.lg),
-            Row(
-              children: [
-                Expanded(
-                  child: FilledButton.tonalIcon(
-                    onPressed: _busy ? null : _export,
-                    icon: const Icon(Icons.upload_file_outlined),
-                    label: Text(l10n.backupExport),
-                  ),
-                ),
-                const SizedBox(width: Gap.md),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: _busy ? null : _import,
-                    icon: const Icon(Icons.download_outlined),
-                    label: Text(l10n.backupImport),
-                  ),
-                ),
-              ],
+            const SizedBox(width: Gap.md),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _busy ? null : _import,
+                icon: const Icon(Icons.download_outlined),
+                label: Text(l10n.backupImport),
+              ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

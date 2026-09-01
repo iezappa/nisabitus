@@ -210,4 +210,15 @@ abstract final class Gap {
   static const lg = 16.0;
   static const xl = 24.0;
   static const xxl = 32.0;
+
+  /// The air between two sections of a flat settings column.
+  ///
+  /// Its own step rather than [xl] or [xxl]: the scale above is for space
+  /// inside a block, and a section break has to read as wider than any gap
+  /// within a section without opening a hole in the page.
+  static const section = 28.0;
+
+  /// [section] as a widget, so a settings column never carries a loose
+  /// `SizedBox(height: 28)` that the next screen rounds to 24.
+  static const vSection = SizedBox(height: section);
 }

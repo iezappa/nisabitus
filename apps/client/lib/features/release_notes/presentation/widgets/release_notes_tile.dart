@@ -24,6 +24,9 @@ class ReleaseNotesTile extends ConsumerWidget {
     final unread = ref.watch(unseenReleasesProvider(language)).isNotEmpty;
 
     return ListTile(
+      // Flush with the page gutter: settings is a flat column, and a tile
+      // that indents itself breaks the one left edge everything shares.
+      contentPadding: EdgeInsets.zero,
       leading: const Icon(Icons.campaign_outlined),
       title: Text(l10n.settingsReleaseNotes),
       trailing: Row(

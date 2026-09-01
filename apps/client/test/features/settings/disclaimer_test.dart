@@ -53,27 +53,14 @@ void main() {
   }
 
   group('in settings', () {
-    testWidgets('the notice is stated, not hidden behind an icon', (
+    testWidgets('states the notice in full, with nothing to tap', (
       tester,
     ) async {
       await pump(tester, const SettingsScreen());
 
-      expect(find.byType(DisclaimerCard), findsOneWidget);
-      expect(
-        find.text(
-          'Nisabitus registra lo que anotás. No reemplaza a un profesional '
-          'de la salud.',
-        ),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('the full text opens from the card', (tester) async {
-      await pump(tester, const SettingsScreen());
-
-      await tester.tap(find.text('Leer el aviso completo'));
-      await tester.pumpAndSettle();
-
+      // The whole body is on the page. It used to be a summary with a button
+      // that opened the rest, and the standard drops that: a notice you have
+      // to tap to read is a notice nobody reads.
       expect(
         find.textContaining('No diagnostica, no interpreta síntomas'),
         findsOneWidget,
@@ -82,6 +69,13 @@ void main() {
         find.textContaining('hablá con un profesional de la salud'),
         findsOneWidget,
       );
+    });
+
+    testWidgets('reads without opening a dialog', (tester) async {
+      await pump(tester, const SettingsScreen());
+
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.text('Leer el aviso completo'), findsNothing);
     });
   });
 

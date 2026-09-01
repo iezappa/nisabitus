@@ -2018,24 +2018,6 @@ abstract class AppLocalizations {
   /// **'Sobre estos datos'**
   String get disclaimerTooltip;
 
-  /// No description provided for @settingsDisclaimer.
-  ///
-  /// In es, this message translates to:
-  /// **'Aviso importante'**
-  String get settingsDisclaimer;
-
-  /// No description provided for @settingsDisclaimerShort.
-  ///
-  /// In es, this message translates to:
-  /// **'Nisabitus registra lo que anotás. No reemplaza a un profesional de la salud.'**
-  String get settingsDisclaimerShort;
-
-  /// No description provided for @settingsDisclaimerRead.
-  ///
-  /// In es, this message translates to:
-  /// **'Leer el aviso completo'**
-  String get settingsDisclaimerRead;
-
   /// No description provided for @healthMeds.
   ///
   /// In es, this message translates to:
@@ -2299,6 +2281,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Copia de seguridad'**
   String get settingsBackup;
+
+  /// No description provided for @settingsYourData.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos'**
+  String get settingsYourData;
+
+  /// No description provided for @settingsSupport.
+  ///
+  /// In es, this message translates to:
+  /// **'Soporte'**
+  String get settingsSupport;
 
   /// No description provided for @backupHint.
   ///

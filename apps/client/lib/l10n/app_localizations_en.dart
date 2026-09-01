@@ -1045,16 +1045,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disclaimerTooltip => 'About this data';
 
   @override
-  String get settingsDisclaimer => 'Important notice';
-
-  @override
-  String get settingsDisclaimerShort =>
-      'Nisabitus records what you write down. It does not replace a health professional.';
-
-  @override
-  String get settingsDisclaimerRead => 'Read the full notice';
-
-  @override
   String get healthMeds => 'Medication';
 
   @override
@@ -1195,6 +1185,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsBackup => 'Backup';
+
+  @override
+  String get settingsYourData => 'Your data';
+
+  @override
+  String get settingsSupport => 'Support';
 
   @override
   String get backupHint =>
