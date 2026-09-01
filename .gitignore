@@ -1,4 +1,10 @@
 # Internal working documents — never published
+#
+# `Estandarización/` is a working copy of the standard, kept here to be read
+# without leaving the repo. The canonical one is the repository below, and a
+# copy committed here would age inside it and end up contradicting that one
+# with all the authority of sitting in the project.
+# https://github.com/iezappa/standardizer_multiplatform
 Estandarización/
 HABITS_SECTOR_SPEC.md
 About Nísabit.txt
