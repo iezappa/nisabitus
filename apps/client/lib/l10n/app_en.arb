@@ -386,6 +386,18 @@
   "backupNewerVersion": "The backup comes from a newer version of Nisabitus",
   "backupCorrupt": "The backup is damaged and cannot be read",
   "backupFailed": "It could not be completed",
+  "settingsReleaseNotes": "What's new",
+  "releaseNotesWhatsNew": "What's new",
+  "releaseNotesHistory": "Release history",
+  "releaseNotesVersion": "Version {version}",
+  "releaseNotesClose": "Got it",
+  "@releaseNotesVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "@backupExported": {
     "placeholders": {
       "count": {

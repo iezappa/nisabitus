@@ -1,0 +1,28 @@
+{
+  "releases": [
+    {
+      "version": "1.1.0",
+      "date": "2026-09-01",
+      "highlights": [
+        "The app is called Nisabitus everywhere now. Backups taken before the change still open.",
+        "On a wide window the content no longer stretches edge to edge: it stays at a width that is comfortable to read.",
+        "Medication: adherence is measured against what was active on each day, so starting something new no longer counts as days missed.",
+        "Habits have a description.",
+        "The panel now carries shortcuts to the other modules.",
+        "Streaks: record a day you forgot, up to a year back, and rescue the run."
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-08-30",
+      "highlights": [
+        "Habits and streaks: track what you repeat and see how long you have kept it up.",
+        "Health: sleep, food, training and medication, all on the same day.",
+        "Journal, Pomodoro and a to-do board with nested projects.",
+        "Every module has its own progress view, over a day, a week, a month or a year.",
+        "Backups: export everything to a file and load it back whenever you want.",
+        "It all lives on your device. No account, no server, no connection."
+      ]
+    }
+  ]
+}

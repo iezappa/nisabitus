@@ -2371,6 +2371,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se pudo completar la operación'**
   String get backupFailed;
+
+  /// No description provided for @settingsReleaseNotes.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades'**
+  String get settingsReleaseNotes;
+
+  /// No description provided for @releaseNotesWhatsNew.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades'**
+  String get releaseNotesWhatsNew;
+
+  /// No description provided for @releaseNotesHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial de novedades'**
+  String get releaseNotesHistory;
+
+  /// No description provided for @releaseNotesVersion.
+  ///
+  /// In es, this message translates to:
+  /// **'Versión {version}'**
+  String releaseNotesVersion(String version);
+
+  /// No description provided for @releaseNotesClose.
+  ///
+  /// In es, this message translates to:
+  /// **'Entendido'**
+  String get releaseNotesClose;
 }
 
 class _AppLocalizationsDelegate

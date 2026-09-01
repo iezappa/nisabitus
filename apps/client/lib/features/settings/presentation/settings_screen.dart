@@ -12,6 +12,7 @@ import '../domain/accent_color.dart';
 import '../domain/language_preference.dart';
 import '../domain/theme_preference.dart';
 import 'settings_providers.dart';
+import '../../release_notes/presentation/widgets/release_notes_tile.dart';
 import 'widgets/tutorial_dialog.dart';
 
 /// The Ajustes tab: how the app looks, what it shows, and how to support it.
@@ -106,11 +107,16 @@ class SettingsScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
               child: Card(
-                child: ListTile(
-                  leading: const Icon(Icons.school_outlined),
-                  title: Text(l10n.settingsTutorial),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => showTutorial(context),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.school_outlined),
+                      title: Text(l10n.settingsTutorial),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => showTutorial(context),
+                    ),
+                    const ReleaseNotesTile(),
+                  ],
                 ),
               ),
             ),

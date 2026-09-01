@@ -1254,4 +1254,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backupFailed => 'No se pudo completar la operación';
+
+  @override
+  String get settingsReleaseNotes => 'Novedades';
+
+  @override
+  String get releaseNotesWhatsNew => 'Novedades';
+
+  @override
+  String get releaseNotesHistory => 'Historial de novedades';
+
+  @override
+  String releaseNotesVersion(String version) {
+    return 'Versión $version';
+  }
+
+  @override
+  String get releaseNotesClose => 'Entendido';
 }

@@ -3,11 +3,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/app/launch_gate.dart';
 import 'core/preferences/preferences.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/settings_providers.dart';
-import 'features/settings/presentation/widgets/tutorial_dialog.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
@@ -58,36 +58,7 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
       // Null hands the choice back to the device.
       locale: language.locale,
       debugShowCheckedModeBanner: false,
-      builder: (context, child) => _FirstRunGate(child: child ?? const SizedBox()),
+      builder: (context, child) => LaunchGate(child: child ?? const SizedBox()),
     );
   }
-}
-
-/// Opens the first-run wizard once the app has a navigator to show it in.
-class _FirstRunGate extends ConsumerStatefulWidget {
-  const _FirstRunGate({required this.child});
-
-  final Widget child;
-
-  @override
-  ConsumerState<_FirstRunGate> createState() => _FirstRunGateState();
-}
-
-class _FirstRunGateState extends ConsumerState<_FirstRunGate> {
-  bool _asked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_asked || !mounted) return;
-      _asked = true;
-      if (!ref.read(onboardingDoneProvider)) {
-        showTutorial(context, onboarding: true);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => widget.child;
 }

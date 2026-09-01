@@ -1,0 +1,28 @@
+{
+  "releases": [
+    {
+      "version": "1.1.0",
+      "date": "2026-09-01",
+      "highlights": [
+        "La app ahora se llama Nisabitus en todos lados. Tus copias de seguridad viejas se siguen abriendo igual.",
+        "En pantallas anchas el contenido ya no se estira de punta a punta: se queda en un ancho cómodo de leer.",
+        "Medicación: el cumplimiento se mide contra lo que estaba activo cada día, así que empezar algo nuevo ya no cuenta como días perdidos.",
+        "Los hábitos tienen descripción.",
+        "El Panel suma accesos directos a los demás módulos.",
+        "Rachas: podés registrar un día que se te pasó, hasta un año para atrás, y salvar la racha."
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-08-30",
+      "highlights": [
+        "Hábitos y rachas: seguí lo que repetís y mirá cuánto llevás sin cortar.",
+        "Salud: sueño, alimentación, entrenamiento y medicación, todo sobre el mismo día.",
+        "Diario, Pomodoro y To-Do con proyectos anidados.",
+        "Cada módulo tiene su vista de progreso, con ventanas de un día, una semana, un mes o un año.",
+        "Copia de seguridad: exportá todos tus datos a un archivo y volvé a cargarlos cuando quieras.",
+        "Todo vive en tu dispositivo. Sin cuenta, sin servidor y sin conexión."
+      ]
+    }
+  ]
+}

@@ -636,6 +636,18 @@
   "backupNewerVersion": "La copia viene de una versión más nueva de Nisabitus",
   "backupCorrupt": "La copia está dañada y no se puede leer",
   "backupFailed": "No se pudo completar la operación",
+  "settingsReleaseNotes": "Novedades",
+  "releaseNotesWhatsNew": "Novedades",
+  "releaseNotesHistory": "Historial de novedades",
+  "releaseNotesVersion": "Versión {version}",
+  "releaseNotesClose": "Entendido",
+  "@releaseNotesVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "@backupExported": {
     "placeholders": {
       "count": {
