@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A new push to the same branch makes the previous run pointless.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Pinned, not "stable": a CI that silently changes toolchain under you is a
+  # CI that fails for reasons unrelated to the commit under test. The golden
+  # screenshots carry the SDK's own font rendering, so here it matters twice.
+  FLUTTER_VERSION: 3.47.1
+
+defaults:
+  run:
+    working-directory: apps/client
+
+jobs:
+  check:
+    name: Format, analyse, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyse
+        run: dart analyze lib test
+
+      - name: Test
+        run: flutter test
+
+      # The screenshots are goldens: a layout that shifts fails above. Keeping
+      # the diffs makes the failure readable without reproducing it locally.
+      - name: Keep the golden diffs of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: apps/client/test/screenshots/failures/
+          if-no-files-found: ignore
+
+  integration:
+    name: Integration test (Linux desktop)
+    runs-on: ubuntu-latest
+    # These drive the real app, which is slower and worth nothing if the unit
+    # tests are already red.
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      # The Linux desktop shell is a real GTK application, so it needs GTK and
+      # a display even when nobody is watching.
+      - name: Install the Linux desktop toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgtk-3-dev xvfb
+        working-directory: .
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Run the flows end to end
+        run: xvfb-run -a flutter test integration_test -d linux
+
+  build:
+    name: Build Linux and web
+    runs-on: ubuntu-latest
+    # dart2js and the desktop toolchain catch things the analyser does not,
+    # but there is no point compiling a tree whose tests are already red.
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install the Linux desktop toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgtk-3-dev
+        working-directory: .
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Build web
+        run: flutter build web --release
+
+      - name: Build Linux
+        run: flutter build linux --release
