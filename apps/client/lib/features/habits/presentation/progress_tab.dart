@@ -45,10 +45,7 @@ class ProgressTab extends ConsumerWidget {
           ),
         ],
         chartLabel: l10n.habitsCompletionsPerDay,
-        points: [
-          for (final entry in stats.perDay)
-            (day: entry.day, value: entry.count.toDouble()),
-        ],
+        points: stats.isEmpty ? const [] : stats.perDay,
         emptyHint: l10n.chartEmptyHint,
         extra: const StreaksProgressView(),
       ),

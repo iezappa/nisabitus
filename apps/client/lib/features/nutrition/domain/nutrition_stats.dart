@@ -1,4 +1,4 @@
-import '../../../core/time/daily_point.dart';
+import '../../../core/time/daily_series.dart';
 import '../../../core/time/date_range.dart';
 import 'nutrition.dart';
 
@@ -32,10 +32,7 @@ class NutritionStats {
       totalCalories: caloriesPerDay.values.fold(0, (sum, v) => sum + v),
       daysLogged: caloriesPerDay.length,
       goalCalories: goal.calories,
-      perDay: [
-        for (final day in range.days)
-          (day: day, value: (caloriesPerDay[day] ?? 0).toDouble()),
-      ],
+      perDay: dailySeries(range, caloriesPerDay),
     );
   }
 

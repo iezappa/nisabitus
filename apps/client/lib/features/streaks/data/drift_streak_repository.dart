@@ -105,11 +105,9 @@ class DriftStreakRepository implements StreakRepository {
     )..orderBy([(s) => OrderingTerm.asc(s.id)])).get();
     if (streaks.isEmpty) return const [];
 
-    final history =
-        await (_db.select(_db.streakHistoryEntries)..where(
-              (h) => h.reachedAt.isBetweenValues(range.start, range.end),
-            ))
-            .get();
+    final history = await (_db.select(
+      _db.streakHistoryEntries,
+    )..where((h) => h.reachedAt.isBetweenValues(range.start, range.end))).get();
 
     // Several increments can land on the same day; the line should show the
     // value the day ended on, so the highest wins.
@@ -128,12 +126,12 @@ class DriftStreakRepository implements StreakRepository {
       final perDay = highestPerDay[streak.id];
       if (perDay == null || perDay.isEmpty) continue;
 
-      final days = perDay.keys.toList()..sort();
       series.add(
-        StreakSeries(
+        StreakSeries.from(
+          range,
           streakId: streak.id,
           name: streak.name,
-          points: [for (final day in days) (day: day, count: perDay[day]!)],
+          highestPerDay: perDay,
         ),
       );
     }

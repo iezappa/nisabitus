@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nisabitus/core/time/date_range.dart';
 import 'package:nisabitus/features/pomodoro/domain/pomodoro_session.dart';
 import 'package:nisabitus/features/pomodoro/domain/pomodoro_stats.dart';
 
@@ -144,8 +145,11 @@ void main() {
   });
 
   group('PomodoroStats', () {
+    // Wide enough to hold every session these tests start.
+    final march = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 31));
+
     test('is empty without sessions', () {
-      final stats = PomodoroStats.from(const []);
+      final stats = PomodoroStats.from(march, const []);
 
       expect(stats.isEmpty, isTrue);
       expect(stats.focusMinutes, 0);
@@ -153,7 +157,7 @@ void main() {
     });
 
     test('adds up the focus minutes and the cycles', () {
-      final stats = PomodoroStats.from([
+      final stats = PomodoroStats.from(march, [
         session(id: 1, completedCycles: 2, focusDuration: 25),
         session(id: 2, completedCycles: 3, focusDuration: 30),
       ]);
@@ -163,7 +167,7 @@ void main() {
     });
 
     test('leaves out sessions that never served a cycle', () {
-      final stats = PomodoroStats.from([
+      final stats = PomodoroStats.from(march, [
         session(id: 1, category: 'Trabajo', completedCycles: 2),
         session(id: 2, category: 'Trabajo', completedCycles: 0),
       ]);
@@ -172,22 +176,38 @@ void main() {
     });
 
     test('files a session with no category under its own label', () {
-      final stats = PomodoroStats.from([session(completedCycles: 1)]);
+      final stats = PomodoroStats.from(march, [session(completedCycles: 1)]);
 
       expect(stats.byCategory.keys.single, PomodoroStats.uncategorized);
     });
 
     test('groups the minutes by the day the session started', () {
-      final stats = PomodoroStats.from([
+      final stats = PomodoroStats.from(march, [
         session(id: 1, completedCycles: 1, startedAt: DateTime(2026, 3, 11, 9)),
-        session(id: 2, completedCycles: 2, startedAt: DateTime(2026, 3, 11, 18)),
+        session(
+          id: 2,
+          completedCycles: 2,
+          startedAt: DateTime(2026, 3, 11, 18),
+        ),
         session(id: 3, completedCycles: 1, startedAt: DateTime(2026, 3, 12, 9)),
       ]);
 
-      expect(stats.perDay, [
-        (day: DateTime(2026, 3, 11), minutes: 75),
-        (day: DateTime(2026, 3, 12), minutes: 25),
+      expect(stats.perDay.where((point) => point.value > 0), [
+        (day: DateTime(2026, 3, 11), value: 75.0),
+        (day: DateTime(2026, 3, 12), value: 25.0),
       ]);
+    });
+
+    test('carries one point for every day of the window', () {
+      final week = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 7));
+      final stats = PomodoroStats.from(week, [
+        session(id: 1, completedCycles: 1, startedAt: DateTime(2026, 3, 3, 9)),
+      ]);
+
+      expect(stats.perDay.length, 7);
+      expect(stats.perDay[2].value, 25);
+      // A day with no session is a day with no focus, not a gap in the chart.
+      expect(stats.perDay[3].value, 0);
     });
   });
 }

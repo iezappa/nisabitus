@@ -54,9 +54,7 @@ class SleepProgressView extends ConsumerWidget {
           ),
         ],
         chartLabel: l10n.sleepHoursPerNight,
-        points: [
-          for (final log in stats.logs) (day: log.date, value: log.hours),
-        ],
+        points: stats.isEmpty ? const [] : stats.perDay,
         // Pinned so two windows are read against the same scale, and stopped
         // at twelve because a night off the top of that is not a night.
         chartMaxY: 12,

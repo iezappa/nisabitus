@@ -1,10 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nisabitus/core/time/date_range.dart';
 import 'package:nisabitus/features/sleep/domain/sleep_log.dart';
 import 'package:nisabitus/features/sleep/domain/sleep_stats.dart';
 
 void main() {
   SleepLog log(double hours, [int day = 1]) =>
       SleepLog(id: day, hours: hours, date: DateTime(2026, 3, day));
+
+  // Wide enough to hold every night these tests write down.
+  final march = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 31));
 
   group('SleepQuality.forHours', () {
     test('is optimal between seven and nine hours', () {
@@ -55,7 +59,7 @@ void main() {
 
   group('SleepStats', () {
     test('is empty without records', () {
-      final stats = SleepStats.from(const []);
+      final stats = SleepStats.from(march, const []);
 
       expect(stats.isEmpty, isTrue);
       expect(stats.count, 0);
@@ -63,14 +67,14 @@ void main() {
     });
 
     test('averages the hours', () {
-      final stats = SleepStats.from([log(7, 1), log(8, 2), log(9, 3)]);
+      final stats = SleepStats.from(march, [log(7, 1), log(8, 2), log(9, 3)]);
 
       expect(stats.average, 8);
       expect(stats.count, 3);
     });
 
     test('reports the lowest and highest night', () {
-      final stats = SleepStats.from([log(6.5, 1), log(9, 2), log(7, 3)]);
+      final stats = SleepStats.from(march, [log(6.5, 1), log(9, 2), log(7, 3)]);
 
       expect(stats.minHours, 6.5);
       expect(stats.maxHours, 9);
@@ -78,37 +82,77 @@ void main() {
 
     test('reports the share of optimal nights as a whole percentage', () {
       // Three of four nights land in the seven to nine band.
-      final stats = SleepStats.from([log(7, 1), log(8, 2), log(9, 3), log(5, 4)]);
+      final stats = SleepStats.from(march, [
+        log(7, 1),
+        log(8, 2),
+        log(9, 3),
+        log(5, 4),
+      ]);
 
       expect(stats.optimalPercent, 75);
     });
 
     test('takes the most recent night as the latest, whatever the order', () {
-      final stats = SleepStats.from([log(6, 3), log(8, 10), log(7, 1)]);
+      final stats = SleepStats.from(march, [log(6, 3), log(8, 10), log(7, 1)]);
 
       expect(stats.latest?.date, DateTime(2026, 3, 10));
       expect(stats.latest?.hours, 8);
     });
 
     test('reports perfect consistency when every night is the same', () {
-      final stats = SleepStats.from([log(8, 1), log(8, 2), log(8, 3)]);
+      final stats = SleepStats.from(march, [log(8, 1), log(8, 2), log(8, 3)]);
 
       expect(stats.consistency, 0);
     });
 
     test('grows the consistency figure as nights scatter', () {
-      final steady = SleepStats.from([log(7.5, 1), log(8, 2), log(8.5, 3)]);
-      final erratic = SleepStats.from([log(4, 1), log(8, 2), log(12, 3)]);
+      final steady = SleepStats.from(march, [
+        log(7.5, 1),
+        log(8, 2),
+        log(8.5, 3),
+      ]);
+      final erratic = SleepStats.from(march, [
+        log(4, 1),
+        log(8, 2),
+        log(12, 3),
+      ]);
 
       expect(steady.consistency, lessThan(erratic.consistency));
     });
 
     test('averages a single night to itself', () {
-      final stats = SleepStats.from([log(7.5)]);
+      final stats = SleepStats.from(march, [log(7.5)]);
 
       expect(stats.average, 7.5);
       expect(stats.consistency, 0);
       expect(stats.optimalPercent, 100);
+    });
+
+    test('carries one point for every day of the window', () {
+      final week = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 7));
+      final stats = SleepStats.from(week, [log(8, 2), log(7, 5)]);
+
+      expect(stats.perDay.length, 7);
+      expect(stats.perDay.first.day, DateTime(2026, 3, 1));
+      expect(stats.perDay.last.day, DateTime(2026, 3, 7));
+    });
+
+    test('reads a night with no record as zero hours', () {
+      final week = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 7));
+      final stats = SleepStats.from(week, [log(8, 2)]);
+
+      expect(stats.perDay[1].value, 8);
+      expect(stats.perDay[0].value, 0);
+      // Zero on the chart, but never counted as a night slept.
+      expect(stats.count, 1);
+    });
+
+    test('still spans the window when nothing was recorded', () {
+      final week = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 7));
+      final stats = SleepStats.from(week, const []);
+
+      expect(stats.perDay.length, 7);
+      expect(stats.perDay.every((point) => point.value == 0), isTrue);
     });
   });
 }

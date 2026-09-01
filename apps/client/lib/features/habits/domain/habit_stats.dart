@@ -1,12 +1,32 @@
+import '../../../core/time/daily_series.dart';
+import '../../../core/time/date_range.dart';
 import 'habit_repository.dart';
 
 /// What the habits progress view shows for a given window.
 class HabitStats {
-  const HabitStats({
+  const HabitStats._({
     required this.completions,
     required this.habitCount,
     required this.perDay,
   });
+
+  /// Gathers the figures the repository answered with over [range].
+  ///
+  /// [completionsPerDay] is the repository's own grouping, which leaves out
+  /// the days that recorded nothing; the series built here carries all of
+  /// them.
+  factory HabitStats.from(
+    DateRange range, {
+    required int completions,
+    required int habitCount,
+    required List<DailyCompletionCount> completionsPerDay,
+  }) => HabitStats._(
+    completions: completions,
+    habitCount: habitCount,
+    perDay: dailySeries(range, {
+      for (final entry in completionsPerDay) entry.day: entry.count,
+    }),
+  );
 
   /// Completions recorded inside the window.
   final int completions;
@@ -14,8 +34,8 @@ class HabitStats {
   /// How many habits exist, used to estimate the rate.
   final int habitCount;
 
-  /// Completions grouped by day, ascending. Days with none are absent.
-  final List<DailyCompletionCount> perDay;
+  /// Completions per day, one point for every day of the window.
+  final List<DailyPoint> perDay;
 
   /// A rough sense of how well the window went, as a whole percentage.
   ///
@@ -29,5 +49,9 @@ class HabitStats {
     return rate > 100 ? 100 : rate;
   }
 
-  bool get isEmpty => perDay.isEmpty;
+  /// Whether the window recorded anything at all.
+  ///
+  /// Read off the total rather than the series: the series always holds every
+  /// day of the window, so it is never empty.
+  bool get isEmpty => completions == 0;
 }

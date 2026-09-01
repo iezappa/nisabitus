@@ -1,3 +1,4 @@
+import '../../../core/time/daily_series.dart';
 import '../../../core/time/date_range.dart';
 import 'streak.dart';
 
@@ -6,17 +7,34 @@ typedef StreakPoint = ({DateTime day, int count});
 
 /// One streak's evolution over a range, ready to be drawn as a line.
 class StreakSeries {
-  const StreakSeries({
+  const StreakSeries._({
     required this.streakId,
     required this.name,
     required this.points,
   });
 
+  /// Spreads the days that have history across the whole window.
+  ///
+  /// [highestPerDay] holds the value each recorded day ended on. Every other
+  /// day of the window reads as zero, which is the honest value: a streak is
+  /// a run of consecutive days, so a day nobody recorded broke it and the
+  /// count started over.
+  factory StreakSeries.from(
+    DateRange range, {
+    required int streakId,
+    required String name,
+    required Map<DateTime, int> highestPerDay,
+  }) => StreakSeries._(
+    streakId: streakId,
+    name: name,
+    points: dailySeries(range, highestPerDay),
+  );
+
   final int streakId;
   final String name;
 
-  /// Ascending by day, one point per day that has history.
-  final List<StreakPoint> points;
+  /// Ascending by day, one point for every day of the window.
+  final List<DailyPoint> points;
 }
 
 /// The port the streaks module talks to.

@@ -56,7 +56,7 @@ class DriftSleepRepository implements SleepRepository {
 
   @override
   Future<SleepStats> statsFor(DateRange range) async =>
-      SleepStats.from(await inRange(range));
+      SleepStats.from(range, await inRange(range));
 
   SleepLog _toDomain(SleepLogRow row) =>
       SleepLog(id: row.id, hours: row.hours, date: row.date);

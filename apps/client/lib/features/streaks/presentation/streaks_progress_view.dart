@@ -75,8 +75,8 @@ class StreaksProgressView extends ConsumerWidget {
 
 /// One line per streak.
 ///
-/// Days are placed on a shared calendar axis so two streaks recorded on the
-/// same day line up, and gaps are bridged rather than breaking the line.
+/// Every series carries the same window, one point per day, so the lines
+/// already share an axis and a day nobody recorded reads as the zero it is.
 class _StreakChart extends StatelessWidget {
   const _StreakChart({required this.series});
 
@@ -95,24 +95,18 @@ class _StreakChart extends StatelessWidget {
     final theme = Theme.of(context);
     final formatter = DateFormat('dd/MM');
 
-    // The union of every day that has a point, so all lines share an axis.
-    final days = <DateTime>{
-      for (final line in series)
-        for (final point in line.points) point.day,
-    }.toList()..sort();
-    final positionOf = {
-      for (var i = 0; i < days.length; i++) days[i]: i.toDouble(),
-    };
+    // Every series spans the whole window, so any of them gives the axis.
+    final days = series.first.points.map((point) => point.day).toList();
 
     final maxCount = series
         .expand((line) => line.points)
-        .map((point) => point.count)
+        .map((point) => point.value)
         .reduce((a, b) => a > b ? a : b);
 
     return LineChart(
       LineChartData(
         minY: 0,
-        maxY: (maxCount + 1).toDouble(),
+        maxY: maxCount + 1,
         gridData: FlGridData(
           drawVerticalLine: false,
           getDrawingHorizontalLine: (_) =>
@@ -159,8 +153,8 @@ class _StreakChart extends StatelessWidget {
           for (var i = 0; i < series.length; i++)
             LineChartBarData(
               spots: [
-                for (final point in series[i].points)
-                  FlSpot(positionOf[point.day]!, point.count.toDouble()),
+                for (var day = 0; day < series[i].points.length; day++)
+                  FlSpot(day.toDouble(), series[i].points[day].value),
               ],
               isCurved: false,
               color: _palette[i % _palette.length],
@@ -196,8 +190,8 @@ class _Legend extends StatelessWidget {
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                    color: _StreakChart
-                        ._palette[i % _StreakChart._palette.length],
+                    color:
+                        _StreakChart._palette[i % _StreakChart._palette.length],
                     shape: BoxShape.circle,
                   ),
                 ),

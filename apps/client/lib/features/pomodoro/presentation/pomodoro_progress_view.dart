@@ -47,10 +47,7 @@ class PomodoroProgressView extends ConsumerWidget {
             ),
           ],
           chartLabel: l10n.pomodoroMinutesPerDay,
-          points: [
-            for (final entry in stats.perDay)
-              (day: entry.day, value: entry.minutes.toDouble()),
-          ],
+          points: stats.isEmpty ? const [] : stats.perDay,
           emptyHint: l10n.pomodoroEmptyHint,
           extra: stats.isEmpty
               ? null

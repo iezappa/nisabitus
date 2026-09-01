@@ -1,4 +1,4 @@
-import '../../../core/time/daily_point.dart';
+import '../../../core/time/daily_series.dart';
 import '../../../core/time/date_range.dart';
 import 'task.dart';
 
@@ -41,10 +41,7 @@ class TodoStats {
       completed: completed,
       open: open,
       overdue: overdue,
-      perDay: [
-        for (final day in range.days)
-          (day: day, value: (completionsPerDay[day] ?? 0).toDouble()),
-      ],
+      perDay: dailySeries(range, completionsPerDay),
     );
   }
 

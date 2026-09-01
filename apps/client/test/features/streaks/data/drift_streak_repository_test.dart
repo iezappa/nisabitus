@@ -61,10 +61,7 @@ void main() {
 
       final history = await repository.historyFor(streak.id);
 
-      expect(history, [
-        (day: monday, count: 1),
-        (day: tuesday, count: 2),
-      ]);
+      expect(history, [(day: monday, count: 1), (day: tuesday, count: 2)]);
     });
 
     test('persists across a reload', () async {
@@ -132,14 +129,15 @@ void main() {
       await repository.increment(streak.id, on: monday);
       await repository.increment(streak.id, on: tuesday);
 
-      final series = await repository.chartSeries(
-        DateRange(monday, wednesday),
-      );
+      final series = await repository.chartSeries(DateRange(monday, wednesday));
 
       expect(series.single.name, 'Meditar');
       expect(series.single.points, [
-        (day: monday, count: 2),
-        (day: tuesday, count: 3),
+        (day: monday, value: 2.0),
+        (day: tuesday, value: 3.0),
+        // Nothing on Wednesday: a day nobody recorded broke the run, and the
+        // line has to show the drop rather than skip the day.
+        (day: wednesday, value: 0.0),
       ]);
     });
 
@@ -149,9 +147,7 @@ void main() {
       await repository.increment(a.id, on: monday);
       await repository.increment(b.id, on: tuesday);
 
-      final series = await repository.chartSeries(
-        DateRange(monday, wednesday),
-      );
+      final series = await repository.chartSeries(DateRange(monday, wednesday));
 
       expect(series.map((s) => s.name), ['Meditar', 'Leer']);
     });
@@ -163,7 +159,10 @@ void main() {
 
       final series = await repository.chartSeries(DateRange(monday, tuesday));
 
-      expect(series.single.points, [(day: monday, count: 1)]);
+      expect(series.single.points, [
+        (day: monday, value: 1.0),
+        (day: tuesday, value: 0.0),
+      ]);
     });
 
     test('omits a streak with no points in the range', () async {

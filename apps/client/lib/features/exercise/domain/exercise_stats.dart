@@ -1,4 +1,4 @@
-import '../../../core/time/daily_point.dart';
+import '../../../core/time/daily_series.dart';
 import '../../../core/time/date_range.dart';
 import 'exercise.dart';
 
@@ -29,9 +29,7 @@ class ExerciseStats {
       // Counted off the sets, not off the volume map: a day of bodyweight
       // work carries no load but is still a day trained.
       daysTrained: inRange.map((s) => dateOnly(s.date)).toSet().length,
-      perDay: [
-        for (final day in range.days) (day: day, value: volumePerDay[day] ?? 0),
-      ],
+      perDay: dailySeries(range, volumePerDay),
     );
   }
 

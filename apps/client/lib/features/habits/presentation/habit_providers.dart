@@ -51,10 +51,11 @@ final habitStatsProvider = FutureProvider<HabitStats>((ref) async {
     repository.completionsPerDay(range),
   ).wait;
 
-  return HabitStats(
+  return HabitStats.from(
+    range,
     completions: completions,
     habitCount: habitCount,
-    perDay: perDay,
+    completionsPerDay: perDay,
   );
 });
 

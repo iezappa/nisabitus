@@ -17,9 +17,9 @@ class DriftPomodoroRepository implements PomodoroRepository {
   Future<PomodoroPage> list({int page = 0, int pageSize = 5}) async {
     final counter = _db.pomodoroSessions.id.count();
     final total =
-        (await (_db.selectOnly(_db.pomodoroSessions)..addColumns([counter]))
-                .getSingle())
-            .read(counter) ??
+        (await (_db.selectOnly(
+          _db.pomodoroSessions,
+        )..addColumns([counter])).getSingle()).read(counter) ??
         0;
 
     final rows =
@@ -79,17 +79,18 @@ class DriftPomodoroRepository implements PomodoroRepository {
     final existing = await _require(id);
     final validated = _fromDraft(draft, id: id, startedAt: existing.startedAt);
 
-    await (_db.update(_db.pomodoroSessions)..where((s) => s.id.equals(id)))
-        .write(
-          PomodoroSessionsCompanion(
-            name: Value(validated.name),
-            category: Value(validated.category),
-            purpose: Value(validated.purpose),
-            cycles: Value(validated.cycles),
-            focusDuration: Value(validated.focusDuration),
-            breakDuration: Value(validated.breakDuration),
-          ),
-        );
+    await (_db.update(
+      _db.pomodoroSessions,
+    )..where((s) => s.id.equals(id))).write(
+      PomodoroSessionsCompanion(
+        name: Value(validated.name),
+        category: Value(validated.category),
+        purpose: Value(validated.purpose),
+        cycles: Value(validated.cycles),
+        focusDuration: Value(validated.focusDuration),
+        breakDuration: Value(validated.breakDuration),
+      ),
+    );
 
     return (await byId(id))!;
   }
@@ -130,7 +131,7 @@ class DriftPomodoroRepository implements PomodoroRepository {
             ))
             .get();
 
-    return PomodoroStats.from(rows.map(_toDomain).toList());
+    return PomodoroStats.from(range, rows.map(_toDomain).toList());
   }
 
   Future<PomodoroSession> _apply(
@@ -139,13 +140,14 @@ class DriftPomodoroRepository implements PomodoroRepository {
   ) async {
     final updated = change(await _require(id));
 
-    await (_db.update(_db.pomodoroSessions)..where((s) => s.id.equals(id)))
-        .write(
-          PomodoroSessionsCompanion(
-            completedCycles: Value(updated.completedCycles),
-            status: Value(updated.status.wireName),
-          ),
-        );
+    await (_db.update(
+      _db.pomodoroSessions,
+    )..where((s) => s.id.equals(id))).write(
+      PomodoroSessionsCompanion(
+        completedCycles: Value(updated.completedCycles),
+        status: Value(updated.status.wireName),
+      ),
+    );
 
     return updated;
   }
