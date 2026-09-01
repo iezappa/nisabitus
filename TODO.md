@@ -36,6 +36,35 @@ edits, and a test fails if any is missed:
 
 ---
 
+## Changing the database schema
+
+Every migration is tested against a real database upgraded the way an
+installed copy would be, so a schema change is four steps:
+
+1. Change the tables, bump `schemaVersion`, and write the step in
+   `AppDatabase.migration`.
+2. `dart run drift_dev schema dump lib/core/database/app_database.dart
+   drift_schemas/`
+3. `dart run drift_dev schema generate --data-classes --companions
+   drift_schemas/ test/core/database/generated/`
+4. `flutter test test/core/database/migration_test.dart`
+
+The snapshots under `drift_schemas/` are the record of what shipped; the
+ones for v1 to v4 were dumped from worktrees of the commits where each
+version lived, because they predate this test.
+
+Two traps the tests exist to catch, both already found this way:
+
+- `createTable` builds a table from **today's** definition, columns and
+  all. A later `addColumn` on a table an earlier step created fails on a
+  duplicate — hence `from >= 3 && from < 5` for `medications.activeFrom`.
+- `createTable` writes the table and **nothing else**: indices declared
+  with `@TableIndex` have to go up by hand with `m.create(...)`. Missing
+  ones do not merely slow a query down — `intake_by_day` is unique, and
+  without it the same medication could be ticked twice on one day.
+
+---
+
 ## Running the app
 
 ```bash

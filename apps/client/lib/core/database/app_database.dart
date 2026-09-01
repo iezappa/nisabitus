@@ -51,16 +51,25 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (m, from, to) async {
       // v2 added the nutrition and exercise tables. Everything already
       // stored is untouched: this only creates what did not exist.
+      //
+      // The indices go up by hand: `createTable` writes the table and
+      // nothing else, so a database that arrived here through a migration
+      // would run without them. `intake_by_day` is unique, so its absence
+      // would not merely slow a query down — it would let the same thing be
+      // ticked twice on one day.
       if (from < 2) {
         await m.createTable(nutritionGoals);
         await m.createTable(foodEntries);
         await m.createTable(exercises);
         await m.createTable(exerciseSets);
+        await m.create(foodEntryByDay);
+        await m.create(exerciseSetByDay);
       }
       // v3 added medication and supplement tracking.
       if (from < 3) {
         await m.createTable(medications);
         await m.createTable(medicationIntakes);
+        await m.create(intakeByDay);
       }
       // v4 records when a task was finished. Existing tasks keep a null
       // date: their status is known, the moment is not, and inventing one
@@ -71,7 +80,12 @@ class AppDatabase extends _$AppDatabase {
       // v5 records the day a medication started counting. Existing entries
       // keep a null start: they were prescribed before the app asked, and
       // stamping them with today would read as a regimen begun this morning.
-      if (from < 5) {
+      //
+      // Only for a database that already had the table. `createTable` builds
+      // it from today's definition, this column included, so a database
+      // arriving from before v3 got it above and adding it again would fail
+      // on a duplicate column.
+      if (from >= 3 && from < 5) {
         await m.addColumn(medications, medications.activeFrom);
       }
     },
