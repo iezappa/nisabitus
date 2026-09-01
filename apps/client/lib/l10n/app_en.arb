@@ -32,6 +32,7 @@
   "streakRecord": "Record: {count}",
   "streakIncrement": "+1",
   "streakReset": "Reset",
+  "streakMissedDay": "Mark a day I forgot",
   "actionSave": "Save",
   "actionCancel": "Cancel",
   "actionDelete": "Delete",

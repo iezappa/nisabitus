@@ -53,6 +53,7 @@
   },
   "streakIncrement": "+1",
   "streakReset": "Reiniciar",
+  "streakMissedDay": "Marcar un día olvidado",
   "actionSave": "Guardar",
   "actionCancel": "Cancelar",
   "actionDelete": "Borrar",

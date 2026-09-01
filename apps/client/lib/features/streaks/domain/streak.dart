@@ -43,15 +43,38 @@ class Streak {
 
   /// Adds one to the count, raising the record when the count passes it.
   ///
+  /// A streak is a run of consecutive days, so a whole calendar day with
+  /// nothing recorded breaks it: the next increment restarts the count at one
+  /// instead of resuming where it left off. Several increments on the same day
+  /// are still allowed, and so is one the day after the last.
+  ///
+  /// The record survives the break, and is rescued first in case the stored
+  /// count had outrun it.
+  ///
+  /// Recording a day earlier than the last update is a correction, not a new
+  /// day: it adds to the run but leaves [lastUpdated] where it was. Dragging
+  /// the date backwards would turn the days already recorded after it into a
+  /// gap, and break the very run the correction was meant to rescue.
+  ///
   /// The caller is responsible for appending the matching history entry.
   Streak increment(DateTime on) {
-    final next = count + 1;
+    final day = dateOnly(on);
+    final record = count > maxStreak ? count : maxStreak;
+    final next = _brokenBy(day) ? 1 : count + 1;
+
     return _copyWith(
       count: next,
-      maxStreak: next > maxStreak ? next : maxStreak,
-      lastUpdated: on,
+      maxStreak: next > record ? next : record,
+      lastUpdated: day.isAfter(lastUpdated) ? day : lastUpdated,
     );
   }
+
+  /// Whether at least one full day passed between [day] and the last update.
+  ///
+  /// A date earlier than the last update cannot break a run: it is a
+  /// correction of the past, not a gap.
+  bool _brokenBy(DateTime day) =>
+      lastUpdated.isBefore(DateTime(day.year, day.month, day.day - 1));
 
   /// Sends the count back to zero, keeping the record earned so far.
   ///

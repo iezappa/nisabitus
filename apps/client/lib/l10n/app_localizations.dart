@@ -290,6 +290,12 @@ abstract class AppLocalizations {
   /// **'Reiniciar'**
   String get streakReset;
 
+  /// No description provided for @streakMissedDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Marcar un día olvidado'**
+  String get streakMissedDay;
+
   /// No description provided for @actionSave.
   ///
   /// In es, this message translates to:

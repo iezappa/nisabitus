@@ -113,6 +113,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get streakReset => 'Reset';
 
   @override
+  String get streakMissedDay => 'Mark a day I forgot';
+
+  @override
   String get actionSave => 'Save';
 
   @override

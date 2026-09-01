@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/time/selected_day_provider.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/name_prompt_dialog.dart';
 import '../../../core/widgets/section_header.dart';
@@ -59,7 +60,9 @@ class StreaksSection extends ConsumerWidget {
                 )
               : SizedBox(
                   height: 124,
-                  child: _StreakStrip(count: items.length, builder: (context, index) {
+                  child: _StreakStrip(
+                    count: items.length,
+                    builder: (context, index) {
                       final streak = items[index];
                       return SizedBox(
                         width: 200,
@@ -70,8 +73,11 @@ class StreaksSection extends ConsumerWidget {
                             final name = await showStreakEditor(
                               context,
                               streak: streak,
+                              today: ref.read(todayProvider),
                               onReset: () => actions.reset(streak.id),
                               onDelete: () => actions.delete(streak.id),
+                              onRecordDay: (day) =>
+                                  actions.increment(streak.id, on: day),
                             );
                             if (name != null) {
                               await actions.rename(streak.id, name);
@@ -79,7 +85,8 @@ class StreaksSection extends ConsumerWidget {
                           },
                         ),
                       );
-                  }),
+                    },
+                  ),
                 ),
         ),
       ],

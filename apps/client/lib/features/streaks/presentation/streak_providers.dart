@@ -51,8 +51,8 @@ class StreakActions {
     _invalidate();
   }
 
-  Future<void> increment(int id) async {
-    await _repository.increment(id);
+  Future<void> increment(int id, {DateTime? on}) async {
+    await _repository.increment(id, on: on);
     _invalidate();
   }
 

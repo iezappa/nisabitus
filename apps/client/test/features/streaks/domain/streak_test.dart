@@ -4,7 +4,9 @@ import 'package:nisabitus/features/streaks/domain/streak.dart';
 void main() {
   final today = DateTime(2026, 3, 11);
 
-  Streak newStreak() => Streak.create(id: 1, name: 'Meditar');
+  // Pinned to [today]: increment reads the gap since the last update, so a
+  // streak born "now" would answer differently on every run.
+  Streak newStreak() => Streak.create(id: 1, name: 'Meditar', createdAt: today);
 
   group('Streak.create', () {
     test('starts both counters at zero', () {
@@ -52,6 +54,39 @@ void main() {
       final streak = newStreak().increment(DateTime(2026, 3, 11, 22, 40));
 
       expect(streak.lastUpdated, DateTime(2026, 3, 11));
+    });
+
+    test('carries the run over to the day after', () {
+      final streak = newStreak()
+          .increment(today)
+          .increment(DateTime(2026, 3, 12));
+
+      expect(streak.count, 2);
+      expect(streak.lastUpdated, DateTime(2026, 3, 12));
+    });
+
+    test('restarts the count when a whole day went unrecorded', () {
+      // Nothing on the 12th: the run of the 11th is over, and the 13th
+      // begins a new one rather than resuming the old.
+      final streak = newStreak()
+          .increment(today)
+          .increment(today)
+          .increment(DateTime(2026, 3, 13));
+
+      expect(streak.count, 1);
+      expect(streak.maxStreak, 2);
+    });
+
+    test('takes an earlier day as a correction, not as a new day', () {
+      // The user ticks a day they forgot at the time. It adds to the run,
+      // but dragging the stamp backwards would turn the days already
+      // recorded after it into a gap.
+      final streak = newStreak()
+          .increment(DateTime(2026, 3, 12))
+          .increment(today);
+
+      expect(streak.count, 2);
+      expect(streak.lastUpdated, DateTime(2026, 3, 12));
     });
   });
 
