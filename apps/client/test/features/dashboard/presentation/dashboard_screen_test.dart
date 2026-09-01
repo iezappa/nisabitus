@@ -8,6 +8,7 @@ import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/core/time/selected_day_provider.dart';
 import 'package:nisabitus/core/widgets/centered_content.dart';
+import 'package:nisabitus/core/widgets/stat_tile.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nisabitus/core/router/app_tab.dart';
 import 'package:nisabitus/features/dashboard/presentation/dashboard_screen.dart';
@@ -107,6 +108,25 @@ void main() {
 
     return router;
   }
+
+  group('the summary tiles', () {
+    testWidgets('are the same height, whatever each one has to say', (
+      tester,
+    ) async {
+      // One tile carries a caption and the other does not. Sized to their
+      // own content, they end up different heights and centred against each
+      // other, which reads as a mistake rather than as a pair.
+      await pumpScreen(tester);
+
+      final tiles = tester.widgetList<StatTile>(find.byType(StatTile)).toList();
+      expect(tiles, hasLength(2));
+
+      final first = tester.getRect(find.byType(StatTile).first);
+      final second = tester.getRect(find.byType(StatTile).last);
+      expect(second.top, first.top);
+      expect(second.height, first.height);
+    });
+  });
 
   group('quick actions', () {
     testWidgets('offers a shortcut to every other tab', (tester) async {

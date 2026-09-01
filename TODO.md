@@ -15,11 +15,9 @@ What is left is polish, infrastructure and a handful of debts — see
 - [ ] `sqlite3_flutter_libs 0.6.0+eol` and `sqlcipher_flutter_libs
       0.7.0+eol` arrive through `drift_flutter`. They work; they are marked
       end-of-life. Watch for a replacement.
-- [ ] The UI has never been checked visually from this environment. WSLg
-      composites per Wayland surface, so `ffmpeg -f x11grab` on `:0` returns
-      an empty root, and Xvfb with no window manager never maps the window.
-      Installing Chromium would allow driving the web build headless and
-      taking real screenshots.
+- [ ] The screen captures cover seven screens in Spanish, light theme. Dark
+      theme, English, a phone-sized window and the dialogs are not
+      photographed yet.
 
 ---
 
@@ -33,6 +31,32 @@ edits, and a test fails if any is missed:
    `assets/release_notes/en.json` — same version, same date, one highlight per
    line, written for a user rather than for a reviewer.
 3. Run `flutter test test/features/release_notes/data/`.
+
+---
+
+## Looking at the UI
+
+`test/screenshots/` renders the screens to PNG files that can actually be
+opened and looked at:
+
+```bash
+flutter test test/screenshots --update-goldens
+```
+
+Without the flag they are a regression test, so a layout that shifts fails.
+`flutter test -x screenshots` leaves them out.
+
+- Running the app on this machine shows nothing: WSLg composites per Wayland
+  surface, so `ffmpeg -f x11grab` on `:0` returns an empty root and Xvfb with
+  no window manager never maps the window. These captures are how the UI gets
+  looked at instead, and they found two real defects the first time they ran.
+- Text and icons need the SDK's own Roboto and MaterialIcons: the test binding
+  ships Ahem, which draws every glyph as a filled box. A golden that fails
+  right after an SDK upgrade is worth looking at before it is regenerated.
+- Size the window through `tester.view`, never `setSurfaceSize`: the latter
+  resizes the surface but leaves MediaQuery reporting 800x600, so a screen
+  that lays itself out by width — To-Do's sidebar — is photographed in a
+  shape no user will ever see.
 
 ---
 

@@ -76,39 +76,46 @@ class DashboardScreen extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xl, Gap.lg, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () => context.go(AppTab.todo.path),
-                        child: StatTile(
-                          label: l10n.dashboardPendingTasks,
-                          value: '${data.openTasks}',
-                          caption: data.overdueTasks == 0
-                              ? l10n.dashboardNoOverdue
-                              : l10n.dashboardOverdue(data.overdueTasks),
-                          icon: Icons.task_alt_outlined,
-                          emphasize: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: Gap.md),
-                    Expanded(
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () => context.go(AppTab.habits.path),
-                        child: StatTile(
-                          label: l10n.dashboardHabitsToday,
-                          value: l10n.dashboardHabitsRatio(
-                            data.habitsDone,
-                            data.habitsTotal,
+                // The two tiles are a pair, so they are one height: only
+                // one of them carries a caption, and sized to their own
+                // content they end up centred against each other, which
+                // reads as a mistake rather than as a pair.
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () => context.go(AppTab.todo.path),
+                          child: StatTile(
+                            label: l10n.dashboardPendingTasks,
+                            value: '${data.openTasks}',
+                            caption: data.overdueTasks == 0
+                                ? l10n.dashboardNoOverdue
+                                : l10n.dashboardOverdue(data.overdueTasks),
+                            icon: Icons.task_alt_outlined,
+                            emphasize: true,
                           ),
-                          icon: Icons.checklist_outlined,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: Gap.md),
+                      Expanded(
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () => context.go(AppTab.habits.path),
+                          child: StatTile(
+                            label: l10n.dashboardHabitsToday,
+                            value: l10n.dashboardHabitsRatio(
+                              data.habitsDone,
+                              data.habitsTotal,
+                            ),
+                            icon: Icons.checklist_outlined,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const _QuickActions(),

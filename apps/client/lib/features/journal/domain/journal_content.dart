@@ -158,12 +158,26 @@ class JournalContent {
   static String dashboardPreview(String content) {
     final joined = content
         .split('\n')
-        .map((line) => line.startsWith('$_heading ')
-            ? line.substring(_heading.length + 1).trim()
-            : line.trim())
+        .map(
+          (line) => line.startsWith('$_heading ')
+              ? line.substring(_heading.length + 1).trim()
+              : line.trim(),
+        )
         .where((line) => line.isNotEmpty && line != _empty)
         .join(' · ');
 
-    return joined.length <= 120 ? joined : joined.substring(0, 120);
+    if (joined.length <= _previewLength) return joined;
+
+    // Cut back to the last space so a word is never left half written, and
+    // say that it was cut: a preview that simply stops reads as the whole
+    // entry, and the user has no way to tell there is more to read.
+    final cut = joined.substring(0, _previewLength);
+    final lastSpace = cut.lastIndexOf(' ');
+    final kept = lastSpace <= 0 ? cut : cut.substring(0, lastSpace);
+
+    return '${kept.trimRight()}…';
   }
+
+  /// How much of an entry the dashboard shows before it says "there is more".
+  static const _previewLength = 120;
 }

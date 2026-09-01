@@ -13,7 +13,9 @@ void main() {
 
   group('serialize', () {
     test('writes the six sections in order', () {
-      expect(full.serialize(), '''
+      expect(
+        full.serialize(),
+        '''
 ## Estado emocional
 Tranquilo
 
@@ -30,7 +32,9 @@ Terminar el módulo
 Salió mejor de lo que esperaba
 
 ## Intención para mañana
-Empezar temprano'''.trim());
+Empezar temprano'''
+            .trim(),
+      );
     });
 
     test('marks an empty field with a dash rather than leaving it blank', () {
@@ -123,11 +127,16 @@ Empezar temprano'''.trim());
         'El café',
       );
       expect(
-        const JournalContent(mood: 'Tranquilo', focus: 'El módulo')
-            .journalPreview,
+        const JournalContent(
+          mood: 'Tranquilo',
+          focus: 'El módulo',
+        ).journalPreview,
         'El módulo',
       );
-      expect(const JournalContent(mood: 'Tranquilo').journalPreview, 'Tranquilo');
+      expect(
+        const JournalContent(mood: 'Tranquilo').journalPreview,
+        'Tranquilo',
+      );
     });
 
     test('is empty when there is nothing to show', () {
@@ -153,12 +162,39 @@ Empezar temprano'''.trim());
       );
     });
 
-    test('cuts at a hundred and twenty characters', () {
+    test('cuts a long entry down to a preview', () {
       final long = JournalContent.dashboardPreview(
         JournalContent(reflection: 'a' * 300).serialize(),
       );
 
-      expect(long.length, 120);
+      expect(long.length, lessThanOrEqualTo(120));
+    });
+
+    test('says it cut, rather than stopping mid-sentence', () {
+      // Cut with nothing to show for it, the preview reads as the whole
+      // entry: the user has no way to tell there is more to read.
+      final long = JournalContent.dashboardPreview(
+        JournalContent(reflection: 'palabra ' * 40).serialize(),
+      );
+
+      expect(long, endsWith('…'));
+    });
+
+    test('cuts between words, never through one', () {
+      final long = JournalContent.dashboardPreview(
+        JournalContent(reflection: 'palabra ' * 40).serialize(),
+      );
+
+      // Every word of the preview is one the entry actually contains.
+      final words = long.replaceAll('…', '').trim().split(' ');
+      expect(words.last, anyOf('palabra', '·'));
+    });
+
+    test('leaves an entry that fits exactly as it is', () {
+      const entry = JournalContent(mood: 'Tranquilo');
+      final preview = JournalContent.dashboardPreview(entry.serialize());
+
+      expect(preview, isNot(endsWith('…')));
     });
 
     test('is empty for empty content', () {
