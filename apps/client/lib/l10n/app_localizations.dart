@@ -326,6 +326,12 @@ abstract class AppLocalizations {
   /// **'Nombre'**
   String get fieldName;
 
+  /// No description provided for @fieldDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get fieldDescription;
+
   /// No description provided for @fieldCategory.
   ///
   /// In es, this message translates to:

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../core/router/app_tab.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
+import '../../../core/widgets/centered_content.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../core/widgets/settings_button.dart';
@@ -42,74 +43,126 @@ class DashboardScreen extends ConsumerWidget {
           const SizedBox(width: Gap.xs),
         ],
       ),
-      body: summary.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Text('$error', style: TextStyle(color: theme.colorScheme.error)),
-        ),
-        data: (data) => ListView(
-          padding: const EdgeInsets.only(bottom: Gap.xxl),
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xl, Gap.lg, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name.isEmpty
-                        ? l10n.dashboardGreetingAnonymous
-                        : l10n.dashboardGreeting(name),
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: Gap.xs),
-                  Text(l10n.dashboardSubtitle, style: theme.textTheme.bodyMedium),
-                ],
-              ),
+      body: CenteredContent(
+        child: summary.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(
+            child: Text(
+              '$error',
+              style: TextStyle(color: theme.colorScheme.error),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xl, Gap.lg, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () => context.go(AppTab.todo.path),
-                      child: StatTile(
-                        label: l10n.dashboardPendingTasks,
-                        value: '${data.openTasks}',
-                        caption: data.overdueTasks == 0
-                            ? l10n.dashboardNoOverdue
-                            : l10n.dashboardOverdue(data.overdueTasks),
-                        icon: Icons.task_alt_outlined,
-                        emphasize: true,
-                      ),
+          ),
+          data: (data) => ListView(
+            padding: const EdgeInsets.only(bottom: Gap.xxl),
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xl, Gap.lg, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name.isEmpty
+                          ? l10n.dashboardGreetingAnonymous
+                          : l10n.dashboardGreeting(name),
+                      style: theme.textTheme.headlineSmall,
                     ),
-                  ),
-                  const SizedBox(width: Gap.md),
-                  Expanded(
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () => context.go(AppTab.habits.path),
-                      child: StatTile(
-                        label: l10n.dashboardHabitsToday,
-                        value: l10n.dashboardHabitsRatio(
-                          data.habitsDone,
-                          data.habitsTotal,
+                    const SizedBox(height: Gap.xs),
+                    Text(
+                      l10n.dashboardSubtitle,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xl, Gap.lg, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () => context.go(AppTab.todo.path),
+                        child: StatTile(
+                          label: l10n.dashboardPendingTasks,
+                          value: '${data.openTasks}',
+                          caption: data.overdueTasks == 0
+                              ? l10n.dashboardNoOverdue
+                              : l10n.dashboardOverdue(data.overdueTasks),
+                          icon: Icons.task_alt_outlined,
+                          emphasize: true,
                         ),
-                        icon: Icons.checklist_outlined,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: Gap.md),
+                    Expanded(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () => context.go(AppTab.habits.path),
+                        child: StatTile(
+                          label: l10n.dashboardHabitsToday,
+                          value: l10n.dashboardHabitsRatio(
+                            data.habitsDone,
+                            data.habitsTotal,
+                          ),
+                          icon: Icons.checklist_outlined,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SectionHeader(label: l10n.dashboardFocus),
-            _Focus(tasks: data.focus),
-            SectionHeader(label: l10n.dashboardHealth),
-            _Health(summary: data),
-          ],
+              const _QuickActions(),
+              SectionHeader(label: l10n.dashboardFocus),
+              _Focus(tasks: data.focus),
+              SectionHeader(label: l10n.dashboardHealth),
+              _Health(summary: data),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// Shortcuts to the other tabs, so the panel is a way in and not only a
+/// summary.
+///
+/// Built from the tabs the user actually kept: offering a way into a screen
+/// they hid would put it back in front of them through the side door.
+class _QuickActions extends ConsumerWidget {
+  const _QuickActions();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tabs = [
+      for (final tab in ref.watch(visibleTabsProvider))
+        // The panel is where the user already is.
+        if (tab != AppTab.dashboard) tab,
+    ];
+
+    if (tabs.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(label: l10n.dashboardQuickActions),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+          child: Wrap(
+            spacing: Gap.sm,
+            runSpacing: Gap.sm,
+            children: [
+              for (final tab in tabs)
+                ActionChip(
+                  avatar: Icon(tab.icon, size: 18),
+                  label: Text(tab.label(l10n)),
+                  onPressed: () => context.go(tab.path),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

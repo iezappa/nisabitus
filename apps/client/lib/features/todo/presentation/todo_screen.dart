@@ -37,6 +37,9 @@ class TodoScreen extends ConsumerWidget {
 
     return ModuleScaffold(
       title: l10n.todoTitle,
+      // The tree and the board are two panes, not a column of cards: the
+      // reading measure would leave neither of them room.
+      listMaxWidth: double.infinity,
       actions: [
         IconButton(
           icon: Icon(

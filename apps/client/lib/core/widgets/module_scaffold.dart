@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
+import 'centered_content.dart';
 import 'disclaimer.dart';
 import 'settings_button.dart';
 
@@ -20,6 +21,7 @@ class ModuleScaffold extends StatefulWidget {
     this.listOnly,
     this.floatingActionButton,
     this.healthDisclaimer = false,
+    this.listMaxWidth = CenteredContent.readingMeasure,
     super.key,
   });
 
@@ -45,6 +47,14 @@ class ModuleScaffold extends StatefulWidget {
 
   /// Adds the health notice, for screens that record health data.
   final bool healthDisclaimer;
+
+  /// How wide the doing side may grow.
+  ///
+  /// The reading measure by default, like everywhere else. A module whose
+  /// layout is panes rather than a column of cards — To-Do's project tree
+  /// beside its board — passes [double.infinity] and keeps the window.
+  /// Reviewing is always a column of figures, so it is capped regardless.
+  final double listMaxWidth;
 
   @override
   State<ModuleScaffold> createState() => _ModuleScaffoldState();
@@ -72,14 +82,17 @@ class _ModuleScaffoldState extends State<ModuleScaffold> {
       floatingActionButton: _showingProgress
           ? null
           : widget.floatingActionButton,
-      body: Column(
-        children: [
-          ?widget.header,
-          if (!_showingProgress) ?widget.listOnly,
-          Expanded(
-            child: _showingProgress ? widget.progress : widget.list,
-          ),
-        ],
+      body: CenteredContent(
+        maxWidth: _showingProgress
+            ? CenteredContent.readingMeasure
+            : widget.listMaxWidth,
+        child: Column(
+          children: [
+            ?widget.header,
+            if (!_showingProgress) ?widget.listOnly,
+            Expanded(child: _showingProgress ? widget.progress : widget.list),
+          ],
+        ),
       ),
     );
   }
@@ -103,9 +116,7 @@ class ProgressToggle extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return IconButton(
-      icon: Icon(
-        showingProgress ? Icons.format_list_bulleted : Icons.insights,
-      ),
+      icon: Icon(showingProgress ? Icons.format_list_bulleted : Icons.insights),
       tooltip: showingProgress ? l10n.habitsList : l10n.habitsProgress,
       onPressed: () => onChanged(!showingProgress),
     );

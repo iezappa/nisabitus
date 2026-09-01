@@ -131,6 +131,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fieldName => 'Name';
 
   @override
+  String get fieldDescription => 'Description';
+
+  @override
   String get fieldCategory => 'Category';
 
   @override

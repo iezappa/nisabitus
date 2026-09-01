@@ -38,6 +38,7 @@
   "actionDelete": "Delete",
   "actionEdit": "Edit",
   "fieldName": "Name",
+  "fieldDescription": "Description",
   "fieldCategory": "Category",
   "fieldFrequency": "Frequency",
   "fieldTarget": "Target per period",

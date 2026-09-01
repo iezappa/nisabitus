@@ -59,6 +59,7 @@
   "actionDelete": "Borrar",
   "actionEdit": "Editar",
   "fieldName": "Nombre",
+  "fieldDescription": "Descripción",
   "fieldCategory": "Categoría",
   "fieldFrequency": "Frecuencia",
   "fieldTarget": "Objetivo por período",

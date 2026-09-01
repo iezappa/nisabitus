@@ -9,9 +9,13 @@ import 'package:flutter/material.dart';
 class CenteredContent extends StatelessWidget {
   const CenteredContent({
     required this.child,
-    this.maxWidth = 640,
+    this.maxWidth = readingMeasure,
     super.key,
   });
+
+  /// How wide a column of text or cards may grow before it stops being
+  /// comfortable to read.
+  static const readingMeasure = 640.0;
 
   final Widget child;
   final double maxWidth;

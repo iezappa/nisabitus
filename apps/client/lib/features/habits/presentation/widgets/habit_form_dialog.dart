@@ -41,6 +41,7 @@ class _HabitFormDialog extends StatefulWidget {
 class _HabitFormDialogState extends State<_HabitFormDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _name;
+  late final TextEditingController _description;
   late final TextEditingController _category;
   late final TextEditingController _target;
 
@@ -54,6 +55,7 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
     super.initState();
     final existing = widget.existing;
     _name = TextEditingController(text: existing?.name ?? '');
+    _description = TextEditingController(text: existing?.description ?? '');
     _category = TextEditingController(text: existing?.category ?? '');
     _target = TextEditingController(text: '${existing?.targetCount ?? 1}');
     _frequency = existing?.frequency ?? widget.initialFrequency;
@@ -65,6 +67,7 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
   @override
   void dispose() {
     _name.dispose();
+    _description.dispose();
     _category.dispose();
     _target.dispose();
     super.dispose();
@@ -76,6 +79,7 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
     Navigator.of(context).pop(
       HabitDraft(
         name: _name.text,
+        description: _blankToNull(_description.text),
         category: _category.text.trim().isEmpty ? null : _category.text.trim(),
         frequency: _frequency,
         targetCount: int.tryParse(_target.text) ?? 1,
@@ -85,6 +89,12 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
         repeatDays: _frequency.supportsRepeatDays ? _repeatDays : const {},
       ),
     );
+  }
+
+  /// An untouched optional field is absent, not an empty string.
+  static String? _blankToNull(String value) {
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
   }
 
   Future<void> _pickEndDate() async {
@@ -124,6 +134,13 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
                   validator: (value) => (value ?? '').trim().isEmpty
                       ? l10n.validationNameRequired
                       : null,
+                ),
+                TextFormField(
+                  controller: _description,
+                  decoration: InputDecoration(labelText: l10n.fieldDescription),
+                  maxLength: 5000,
+                  maxLines: 2,
+                  minLines: 1,
                 ),
                 TextFormField(
                   controller: _category,
@@ -234,10 +251,10 @@ class _WeekdayPicker extends StatelessWidget {
               ),
             ),
             selected: selected.contains(day),
-            onSelected: (isSelected) => onChanged({
-              ...selected,
-              if (isSelected) day,
-            }..removeWhere((value) => !isSelected && value == day)),
+            onSelected: (isSelected) => onChanged(
+              {...selected, if (isSelected) day}
+                ..removeWhere((value) => !isSelected && value == day),
+            ),
           ),
       ],
     );

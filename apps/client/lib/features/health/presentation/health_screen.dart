@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
+import '../../../core/widgets/centered_content.dart';
 import '../../../core/widgets/disclaimer.dart';
 import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/settings_button.dart';
@@ -78,35 +79,37 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
           const SizedBox(width: Gap.xs),
         ],
       ),
-      body: Column(
-        children: [
-          WeekDateSelector(
-            selected: selected,
-            today: ref.watch(todayProvider),
-            onSelected: (day) =>
-                ref.read(selectedDayProvider.notifier).state = day,
-          ),
-          TabBar(
-            controller: _tabs,
-            isScrollable: true,
-            tabAlignment: TabAlignment.center,
-            tabs: [
-              Tab(text: l10n.healthSleep),
-              Tab(text: l10n.healthNutrition),
-              Tab(text: l10n.healthExercise),
-              Tab(text: l10n.healthMeds),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
+      body: CenteredContent(
+        child: Column(
+          children: [
+            WeekDateSelector(
+              selected: selected,
+              today: ref.watch(todayProvider),
+              onSelected: (day) =>
+                  ref.read(selectedDayProvider.notifier).state = day,
+            ),
+            TabBar(
               controller: _tabs,
-              children: [
-                for (var i = 0; i < _views.length; i++)
-                  _showingProgress[i] ? _views[i].progress : _views[i].list,
+              isScrollable: true,
+              tabAlignment: TabAlignment.center,
+              tabs: [
+                Tab(text: l10n.healthSleep),
+                Tab(text: l10n.healthNutrition),
+                Tab(text: l10n.healthExercise),
+                Tab(text: l10n.healthMeds),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabs,
+                children: [
+                  for (var i = 0; i < _views.length; i++)
+                    _showingProgress[i] ? _views[i].progress : _views[i].list,
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
