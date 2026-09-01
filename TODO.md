@@ -21,6 +21,41 @@ What is left is polish, infrastructure and a handful of debts — see
 
 ---
 
+## 2. Conformance with the shared standard
+
+The standard is
+[standardizer_multiplatform](https://github.com/iezappa/standardizer_multiplatform).
+It is the canonical copy: `Estandarización/` here is a working copy, ignored
+by git, and loses to that repository on any disagreement.
+
+Last checked against it: **2026-09-01**.
+
+- [ ] No CI. §5 puts GitHub Actions as the default, and the 654 tests here run
+      only when somebody remembers to run them — with everything landing
+      straight on `main`. Memini's `ci.yml` (format, analyse, test, build) is
+      the shape to copy.
+- [ ] No `integration_test/`. §7 asks for critical flows end to end on at
+      least one platform; widget tests and goldens do not start the app.
+- [ ] **Sentry is a decision, not a debt.** §5 lists it under observability,
+      and this app is offline-first with no account and no server: shipping
+      crash reports to a third party contradicts the pillar the whole stack
+      was chosen for. Decide it and write the answer down — as a deliberate
+      exception carried back to the canonical repository, not as an oversight.
+
+Walk this when the standard changes, or before a release:
+
+- [ ] **§2.2 Settings layout.** Asserted by
+      `test/features/settings/settings_layout_test.dart`, so a drift fails
+      the suite rather than waiting to be noticed.
+- [ ] **§2.1 Product patterns.** i18n through ARB files, onboarding shown
+      once, local PIN (absent here on purpose), disclaimer visible in
+      settings, JSON import/export.
+
+A change decided here and not carried back to the canonical repository is not
+a standard — it is an exception the next project will never hear about.
+
+---
+
 ## Publishing a release
 
 The changelog is what the app calls its own version, so a release is three
