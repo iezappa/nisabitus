@@ -85,6 +85,31 @@ jobs:
       - name: Run the flows end to end
         run: xvfb-run -a flutter test integration_test -d linux
 
+  web:
+    name: Integration test (Chrome)
+    runs-on: ubuntu-latest
+    # The one job that loads the web build. Everything else in this workflow
+    # runs on the Dart VM or renders widgets, so a browser-only failure — a
+    # database with no web backend, which is exactly what shipped once — walks
+    # straight past all of it.
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      # The runner image ships Chrome and a chromedriver built for it; the
+      # script finds both on PATH.
+      - name: Drive the app in a browser
+        run: tool/test_web.sh
+
   build:
     name: Build Linux and web
     runs-on: ubuntu-latest
