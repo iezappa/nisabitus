@@ -125,6 +125,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get actionDelete => 'Borrar';
 
   @override
+  String get actionExpand => 'Mostrar';
+
+  @override
+  String get actionCollapse => 'Ocultar';
+
+  @override
   String get actionEdit => 'Editar';
 
   @override
@@ -952,9 +958,351 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nutritionPortionHint => '150 g, 1 plato, 2 unidades';
 
   @override
+  String get tabMeditation => 'Meditación';
+
+  @override
+  String get meditationTitle => 'Meditación';
+
+  @override
+  String get meditationToday => 'Lo que sentaste';
+
+  @override
+  String get meditationEmpty => 'Ese día no anotaste nada';
+
+  @override
+  String get meditationEmptyHint => 'Anotá cuánto sentaste y cómo te fue';
+
+  @override
+  String get meditationAdd => 'Anotar sesión';
+
+  @override
+  String get meditationEdit => 'Editar sesión';
+
+  @override
+  String meditationMinutes(Object value) {
+    return '$value min';
+  }
+
+  @override
+  String meditationDayTotal(Object value) {
+    return '$value min ese día';
+  }
+
+  @override
+  String get meditationDuration => 'Duración';
+
+  @override
+  String get meditationNote => 'Cómo te fue';
+
+  @override
+  String get meditationNoteHint => 'Costó arrancar, me dormí, quedé tranquilo…';
+
+  @override
+  String meditationValidationMinutes(Object max) {
+    return 'Ingresá un número entre 1 y $max';
+  }
+
+  @override
+  String get meditationMinutesPerDay => 'Minutos por día';
+
+  @override
+  String get meditationAverageDaily => 'Promedio diario';
+
+  @override
+  String get meditationDaysPractised => 'Días que sentaste';
+
+  @override
+  String get meditationLongestStreak => 'Racha más larga';
+
+  @override
+  String get hydration => 'Hidratación';
+
+  @override
+  String get hydrationTarget => 'Objetivo diario';
+
+  @override
+  String get hydrationEditTarget => 'Editar objetivo';
+
+  @override
+  String hydrationMillilitres(Object value) {
+    return '$value ml';
+  }
+
+  @override
+  String hydrationRemaining(Object value) {
+    return 'Te faltan $value ml';
+  }
+
+  @override
+  String get hydrationReached => 'Llegaste al objetivo';
+
+  @override
+  String get hydrationToday => 'Lo que tomaste';
+
+  @override
+  String get hydrationEmpty => 'Sin registros ese día';
+
+  @override
+  String get hydrationEmptyHint => 'Anotá cada vaso y se suma solo';
+
+  @override
+  String get hydrationAdd => 'Agregar';
+
+  @override
+  String get hydrationCustom => 'Otra cantidad';
+
+  @override
+  String get hydrationAmount => 'Cantidad';
+
+  @override
+  String hydrationValidationAmount(Object max) {
+    return 'Ingresá un número entre 1 y $max';
+  }
+
+  @override
+  String get hydrationPerDay => 'Mililitros por día';
+
+  @override
+  String get hydrationAverageDaily => 'Promedio diario';
+
+  @override
+  String get hydrationDaysOnTarget => 'Días en objetivo';
+
+  @override
+  String get nutritionMeal => 'Comida';
+
+  @override
+  String get nutritionMealBreakfast => 'Desayuno';
+
+  @override
+  String get nutritionMealLunch => 'Almuerzo';
+
+  @override
+  String get nutritionMealSnack => 'Merienda';
+
+  @override
+  String get nutritionMealDinner => 'Cena';
+
+  @override
+  String get nutritionMealNone => 'Sin comida';
+
+  @override
+  String get nutritionUnassigned => 'Sin asignar';
+
+  @override
+  String get nutritionSaved => 'Lo que comés seguido';
+
+  @override
+  String get nutritionSavedHint => 'Se llena solo con lo que vas anotando';
+
+  @override
+  String get nutritionSavedEmpty => 'Todavía no anotaste nada';
+
+  @override
+  String get nutritionPickSaved => 'Elegir de lo que comés seguido';
+
+  @override
+  String get nutritionForget => 'Sacar de la lista';
+
+  @override
+  String get nutritionForgetHint =>
+      'Sale de la lista. Lo que ya comiste queda como está.';
+
+  @override
   String nutritionValidationNumber(int max) {
     return 'Ingresá un número entre 0 y $max';
   }
+
+  @override
+  String get discipline => 'Disciplinas';
+
+  @override
+  String get disciplineHint =>
+      'Natación, correr, bici — lo que se mide en tiempo, no en series';
+
+  @override
+  String get disciplineEmpty => 'Nada practicado ese día';
+
+  @override
+  String get disciplineAdd => 'Anotar disciplina';
+
+  @override
+  String get disciplineEdit => 'Editar disciplina';
+
+  @override
+  String get disciplineName => 'Qué practicaste';
+
+  @override
+  String get disciplineNameHint => 'Natación, Correr, Bici, Yoga…';
+
+  @override
+  String get disciplineDuration => 'Duración';
+
+  @override
+  String get disciplineDistance => 'Distancia';
+
+  @override
+  String disciplineMinutes(int value) {
+    return '$value min';
+  }
+
+  @override
+  String disciplineKm(String value) {
+    return '$value km';
+  }
+
+  @override
+  String get disciplineNotes => 'Notas';
+
+  @override
+  String get disciplineCompleteTitle => '¿Cómo te fue?';
+
+  @override
+  String get disciplineCompleteHint =>
+      'Anotá el tiempo y la distancia reales. Lo que dejes en blanco queda como estaba planeado.';
+
+  @override
+  String disciplineValidationMinutes(int max) {
+    return 'Ingresá un número entre 1 y $max';
+  }
+
+  @override
+  String disciplineValidationDistance(int max) {
+    return 'Ingresá un número entre 0 y $max';
+  }
+
+  @override
+  String get plan => 'Plan';
+
+  @override
+  String get planToday => 'Lo que toca ese día';
+
+  @override
+  String get planEmpty => 'Nada anotado para ese día';
+
+  @override
+  String get planEmptyHint =>
+      'Anotá un ejercicio y, si se repite, decí en qué días';
+
+  @override
+  String get planAdd => 'Anotar ejercicio';
+
+  @override
+  String get planEdit => 'Editar ejercicio';
+
+  @override
+  String planSetsReps(int sets, int reps) {
+    return '${sets}x$reps';
+  }
+
+  @override
+  String planWeight(String weight) {
+    return '$weight kg';
+  }
+
+  @override
+  String planRpe(int value) {
+    return 'RPE $value';
+  }
+
+  @override
+  String get planComments => 'Indicaciones';
+
+  @override
+  String get planCommentsHint => 'Bajar hasta paralelo, sin rebote…';
+
+  @override
+  String get planFeedback => 'Cómo te fue';
+
+  @override
+  String get planFeedbackHint =>
+      'La última salió fea, pesó más de lo esperado…';
+
+  @override
+  String get planDone => 'Hecho';
+
+  @override
+  String get planReopen => 'Volver a pendiente';
+
+  @override
+  String get planComplete => 'Marcar como hecho';
+
+  @override
+  String get planCompleteTitle => '¿Cómo te fue?';
+
+  @override
+  String get planCompleteHint =>
+      'Anotá el peso y el esfuerzo reales. Lo que dejes en blanco queda como estaba planeado.';
+
+  @override
+  String get planRepeat => 'Repetir';
+
+  @override
+  String get planRepeatDays => 'Días';
+
+  @override
+  String get planRepeatUntilLabel => 'Hasta cuándo';
+
+  @override
+  String get planRepeatWeeks => 'Por semanas';
+
+  @override
+  String get planRepeatUntil => 'Hasta una fecha';
+
+  @override
+  String get planRepeatForever => 'Siempre';
+
+  @override
+  String get planRepeatWeeksValue => 'Cantidad de semanas';
+
+  @override
+  String get planRepeatUntilValue => 'Termina el';
+
+  @override
+  String planRepeatSummary(String days) {
+    return 'Se repite $days';
+  }
+
+  @override
+  String get planStopRepeat => 'Dejar de repetir';
+
+  @override
+  String get planStopRepeatTitle => '¿Dejar de repetir?';
+
+  @override
+  String get planStopRepeatBody =>
+      'Se borran los días siguientes que todavía no hiciste. Lo que ya entrenaste queda como está.';
+
+  @override
+  String get planValidationDays => 'Elegí al menos un día';
+
+  @override
+  String planValidationNumber(int max) {
+    return 'Ingresá un número entre 1 y $max';
+  }
+
+  @override
+  String get planValidationRpe => 'El RPE va de 1 a 10';
+
+  @override
+  String get planValidationEndDate =>
+      'La repetición no puede terminar antes de empezar';
+
+  @override
+  String get exerciseVideo => 'Video de referencia';
+
+  @override
+  String get exerciseVideoHint => 'Link a un video que muestre el movimiento';
+
+  @override
+  String get exerciseOpenVideo => 'Ver el video';
+
+  @override
+  String get exerciseSetNote => 'Cómo se sintió';
+
+  @override
+  String get exerciseSetNoteHint =>
+      'La última salió fea, pesó más de lo esperado…';
 
   @override
   String get exerciseCatalogue => 'Ejercicios';
@@ -992,6 +1340,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exerciseEditSet => 'Editar serie';
+
+  @override
+  String get exerciseSets => 'Series';
 
   @override
   String get exerciseReps => 'Repeticiones';

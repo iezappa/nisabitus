@@ -5,7 +5,9 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
+import '../domain/meal.dart';
 import '../domain/nutrition.dart';
+import 'nutrition_labels.dart';
 import 'nutrition_providers.dart';
 import 'widgets/food_form_dialog.dart';
 import 'widgets/goal_form_dialog.dart';
@@ -47,41 +49,113 @@ class NutritionView extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
             child: _GoalCard(day: data),
           ),
-          SectionHeader(label: l10n.nutritionToday),
+          SectionHeader(
+            label: l10n.nutritionToday,
+            trailing: IconButton(
+              icon: const Icon(Icons.add, size: 20),
+              tooltip: l10n.nutritionAdd,
+              onPressed: () async {
+                final draft = await showFoodForm(
+                  context,
+                  // The clock is read here rather than inside the dialog:
+                  // a dialog that reads the clock is a dialog that cannot be
+                  // photographed the same way twice.
+                  initialMeal: Meal.forHour(DateTime.now().hour),
+                );
+                if (draft != null) await actions.add(draft);
+              },
+            ),
+          ),
           if (data.isEmpty)
             EmptyState(
               icon: Icons.restaurant_outlined,
               title: l10n.nutritionEmpty,
               hint: l10n.nutritionEmptyHint,
             )
-          else
-            for (final entry in data.entries)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(Gap.lg, 0, Gap.lg, Gap.sm),
-                child: Card(
-                  child: ListTile(
-                    title: Text(entry.name),
-                    subtitle: Text(
-                      [
-                        ?entry.portion,
-                        l10n.nutritionKcal(entry.macros.calories),
-                        'P ${entry.macros.protein}',
-                        'C ${entry.macros.carbs}',
-                        'G ${entry.macros.fat}',
-                      ].join(' · '),
-                    ),
-                    onTap: () async {
-                      final draft = await showFoodForm(
-                        context,
-                        existing: entry,
-                        onDelete: () => actions.delete(entry.id),
-                      );
-                      if (draft != null) await actions.update(entry.id, draft);
-                    },
-                  ),
-                ),
-              ),
+          else ...[
+            // One heading per meal, in the order the day happens. A meal
+            // nothing was eaten at is absent rather than empty: four headings
+            // over three empty lists describe a form to fill in, not a day
+            // that was lived.
+            for (final group in data.byMeal.entries) ...[
+              _MealHeading(meal: group.key, entries: group.value),
+              for (final entry in group.value)
+                _EntryCard(entry: entry, actions: actions),
+            ],
+            // Everything logged before the app asked which meal it was. It
+            // still counts towards the totals above; it just cannot say when
+            // it was eaten, and pretending otherwise would invent the answer.
+            if (data.unassigned.isNotEmpty) ...[
+              _MealHeading(meal: null, entries: data.unassigned),
+              for (final entry in data.unassigned)
+                _EntryCard(entry: entry, actions: actions),
+            ],
+          ],
         ],
+      ),
+    );
+  }
+}
+
+/// The name of a meal, with what it added up to on the right.
+class _MealHeading extends StatelessWidget {
+  const _MealHeading({required this.meal, required this.entries});
+
+  final Meal? meal;
+  final List<FoodEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final calories = entries.fold(
+      0,
+      (sum, entry) => sum + entry.macros.calories,
+    );
+
+    return SectionHeader(
+      label: l10n.mealHeading(meal),
+      trailing: Text(
+        l10n.nutritionKcal(calories),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+}
+
+/// One thing eaten, and the way back into the form that wrote it.
+class _EntryCard extends StatelessWidget {
+  const _EntryCard({required this.entry, required this.actions});
+
+  final FoodEntry entry;
+  final NutritionActions actions;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Gap.lg, 0, Gap.lg, Gap.sm),
+      child: Card(
+        child: ListTile(
+          title: Text(entry.name),
+          subtitle: Text(
+            [
+              ?entry.portion,
+              l10n.nutritionKcal(entry.macros.calories),
+              'P ${entry.macros.protein}',
+              'C ${entry.macros.carbs}',
+              'G ${entry.macros.fat}',
+            ].join(' · '),
+          ),
+          onTap: () async {
+            final draft = await showFoodForm(
+              context,
+              existing: entry,
+              onDelete: () => actions.delete(entry.id),
+            );
+            if (draft != null) await actions.update(entry.id, draft);
+          },
+        ),
       ),
     );
   }

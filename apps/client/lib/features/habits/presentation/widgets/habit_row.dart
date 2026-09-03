@@ -5,6 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/habit.dart';
 import '../habit_labels.dart';
+import '../../../../core/time/weekday_labels.dart';
 
 /// One habit as a compact row: an icon, what it is, and a circle to resolve
 /// it for today.

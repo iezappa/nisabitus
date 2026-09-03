@@ -7,6 +7,8 @@ import '../../domain/habit.dart';
 import '../../domain/habit_draft.dart';
 import '../../domain/habit_frequency.dart';
 import '../habit_labels.dart';
+import '../../../../core/time/weekday.dart';
+import '../../../../core/widgets/weekday_picker.dart';
 
 /// Collects the fields of a habit. Returns null when dismissed.
 Future<HabitDraft?> showHabitForm(
@@ -177,7 +179,7 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  _WeekdayPicker(
+                  WeekdayPicker(
                     selected: _repeatDays,
                     onChanged: (days) => setState(() => _repeatDays = days),
                   ),
@@ -223,40 +225,3 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
 }
 
 /// The seven days as round toggles. Nothing selected means every day.
-class _WeekdayPicker extends StatelessWidget {
-  const _WeekdayPicker({required this.selected, required this.onChanged});
-
-  final Set<Weekday> selected;
-  final ValueChanged<Set<Weekday>> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
-
-    return Wrap(
-      spacing: 6,
-      children: [
-        for (final day in Weekday.values)
-          ChoiceChip(
-            shape: const CircleBorder(),
-            showCheckmark: false,
-            label: SizedBox(
-              width: 16,
-              child: Center(
-                child: Text(
-                  l10n.weekdayShort(day),
-                  style: theme.textTheme.labelMedium,
-                ),
-              ),
-            ),
-            selected: selected.contains(day),
-            onSelected: (isSelected) => onChanged(
-              {...selected, if (isSelected) day}
-                ..removeWhere((value) => !isSelected && value == day),
-            ),
-          ),
-      ],
-    );
-  }
-}

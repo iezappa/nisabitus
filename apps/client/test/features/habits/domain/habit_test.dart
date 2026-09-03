@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/features/habits/domain/habit.dart';
 import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
+import 'package:nisabitus/core/time/weekday.dart';
 
 void main() {
   Habit habit({

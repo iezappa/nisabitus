@@ -7,6 +7,7 @@ import 'package:nisabitus/features/habits/domain/habit.dart';
 import 'package:nisabitus/features/habits/domain/habit_draft.dart';
 import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
 import 'package:nisabitus/features/habits/domain/habit_repository.dart';
+import 'package:nisabitus/core/time/weekday.dart';
 
 void main() {
   late AppDatabase db;

@@ -1,4 +1,6 @@
 import '../../../core/time/date_range.dart';
+import 'meal.dart';
+import 'nutrition_repository.dart';
 
 /// A set of macronutrient figures, used both as a target and as a total.
 ///
@@ -92,6 +94,7 @@ class FoodEntry {
     required String name,
     required this.macros,
     this.portion,
+    this.meal,
   }) : date = dateOnly(date),
        name = _validateName(name);
 
@@ -103,6 +106,10 @@ class FoodEntry {
   final String? portion;
 
   final Macros macros;
+
+  /// Which meal this belonged to, or null for an entry written before the
+  /// app asked. Null is not "breakfast": it is nobody having said.
+  final Meal? meal;
 
   static String _validateName(String value) {
     final trimmed = value.trim();
@@ -118,7 +125,55 @@ class FoodEntry {
     name: name,
     portion: portion,
     macros: macros,
+    meal: meal,
   );
+
+  /// This entry as something the catalogue can offer again.
+  ///
+  /// The id is zero: what comes back describes a food, it does not claim to
+  /// be a stored one. The repository decides whether it is new.
+  Food toFood() => Food(id: 0, name: name, portion: portion, macros: macros);
+}
+
+/// Something eaten often enough to be worth not typing again.
+///
+/// The catalogue fills itself: every entry saved offers itself as a food, so
+/// nobody maintains a list by hand — a list maintained by hand stays empty.
+///
+/// An entry does not point back at the food it came from, on purpose. What
+/// was eaten is a record of a day, and correcting a food's macros today must
+/// not rewrite what last week says. Picking a food copies its figures; from
+/// then on the two are unrelated.
+class Food {
+  Food({
+    required this.id,
+    required String name,
+    required this.macros,
+    this.portion,
+  }) : name = _validateName(name);
+
+  final int id;
+  final String name;
+
+  /// The portion the macros are quoted for: "80 g", "1 plato".
+  final String? portion;
+
+  final Macros macros;
+
+  static String _validateName(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      throw ArgumentError.value(value, 'name', 'The name is required');
+    }
+    return trimmed;
+  }
+
+  /// The entry this food would fill in, ready for the form to adjust.
+  FoodDraft toDraft({Meal? meal}) =>
+      FoodDraft(name: name, portion: portion, macros: macros, meal: meal);
+
+  Food copyWith({int? id}) =>
+      Food(id: id ?? this.id, name: name, portion: portion, macros: macros);
 }
 
 /// What one day of eating adds up to, against the targets.
@@ -141,6 +196,26 @@ class DailyNutrition {
   final NutritionGoal goal;
 
   bool get isEmpty => entries.isEmpty;
+
+  /// The day split into its meals, in the order the day happens.
+  ///
+  /// A meal nothing was eaten at is absent rather than empty: the screen
+  /// prints a heading per key, and four headings over three empty lists
+  /// describe a form to fill in, not a day that was lived.
+  Map<Meal, List<FoodEntry>> get byMeal {
+    final grouped = <Meal, List<FoodEntry>>{};
+    for (final meal in Meal.values) {
+      final ofMeal = entries.where((e) => e.meal == meal).toList();
+      if (ofMeal.isNotEmpty) grouped[meal] = ofMeal;
+    }
+
+    return grouped;
+  }
+
+  /// What was eaten without saying when. Everything logged before the app
+  /// asked lands here, and it still counts towards [total].
+  List<FoodEntry> get unassigned =>
+      entries.where((e) => e.meal == null).toList();
 
   double get caloriesRatio => _ratio(total.calories, goal.calories);
   double get proteinRatio => _ratio(total.protein, goal.protein);

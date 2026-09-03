@@ -46,10 +46,16 @@ class DriftBackupRepository implements BackupRepository {
     _codec(_db.taskComments, TaskCommentRow.fromJson),
     _codec(_db.nutritionGoals, NutritionGoalRow.fromJson),
     _codec(_db.foodEntries, FoodEntryRow.fromJson),
+    _codec(_db.foods, FoodRow.fromJson),
     _codec(_db.exercises, ExerciseRow.fromJson),
     _codec(_db.exerciseSets, ExerciseSetRow.fromJson),
+    _codec(_db.scheduledExercises, ScheduledExerciseRow.fromJson),
+    _codec(_db.disciplines, DisciplineRow.fromJson),
     _codec(_db.medications, MedicationRow.fromJson),
     _codec(_db.medicationIntakes, MedicationIntakeRow.fromJson),
+    _codec(_db.hydrationGoals, HydrationGoalRow.fromJson),
+    _codec(_db.waterEntries, WaterEntryRow.fromJson),
+    _codec(_db.meditationSessions, MeditationSessionRow.fromJson),
   ];
 
   @override

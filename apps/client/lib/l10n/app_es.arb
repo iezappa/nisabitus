@@ -57,6 +57,8 @@
   "actionSave": "Guardar",
   "actionCancel": "Cancelar",
   "actionDelete": "Borrar",
+  "actionExpand": "Mostrar",
+  "actionCollapse": "Ocultar",
   "actionEdit": "Editar",
   "fieldName": "Nombre",
   "fieldDescription": "Descripción",
@@ -456,7 +458,108 @@
   "nutritionEditEntry": "Editar alimento",
   "nutritionPortion": "Porción",
   "nutritionPortionHint": "150 g, 1 plato, 2 unidades",
+  "tabMeditation": "Meditación",
+  "meditationTitle": "Meditación",
+  "meditationToday": "Lo que sentaste",
+  "meditationEmpty": "Ese día no anotaste nada",
+  "meditationEmptyHint": "Anotá cuánto sentaste y cómo te fue",
+  "meditationAdd": "Anotar sesión",
+  "meditationEdit": "Editar sesión",
+  "meditationMinutes": "{value} min",
+  "meditationDayTotal": "{value} min ese día",
+  "meditationDuration": "Duración",
+  "meditationNote": "Cómo te fue",
+  "meditationNoteHint": "Costó arrancar, me dormí, quedé tranquilo…",
+  "meditationValidationMinutes": "Ingresá un número entre 1 y {max}",
+  "meditationMinutesPerDay": "Minutos por día",
+  "meditationAverageDaily": "Promedio diario",
+  "meditationDaysPractised": "Días que sentaste",
+  "meditationLongestStreak": "Racha más larga",
+  "hydration": "Hidratación",
+  "hydrationTarget": "Objetivo diario",
+  "hydrationEditTarget": "Editar objetivo",
+  "hydrationMillilitres": "{value} ml",
+  "hydrationRemaining": "Te faltan {value} ml",
+  "hydrationReached": "Llegaste al objetivo",
+  "hydrationToday": "Lo que tomaste",
+  "hydrationEmpty": "Sin registros ese día",
+  "hydrationEmptyHint": "Anotá cada vaso y se suma solo",
+  "hydrationAdd": "Agregar",
+  "hydrationCustom": "Otra cantidad",
+  "hydrationAmount": "Cantidad",
+  "hydrationValidationAmount": "Ingresá un número entre 1 y {max}",
+  "hydrationPerDay": "Mililitros por día",
+  "hydrationAverageDaily": "Promedio diario",
+  "hydrationDaysOnTarget": "Días en objetivo",
+  "nutritionMeal": "Comida",
+  "nutritionMealBreakfast": "Desayuno",
+  "nutritionMealLunch": "Almuerzo",
+  "nutritionMealSnack": "Merienda",
+  "nutritionMealDinner": "Cena",
+  "nutritionMealNone": "Sin comida",
+  "nutritionUnassigned": "Sin asignar",
+  "nutritionSaved": "Lo que comés seguido",
+  "nutritionSavedHint": "Se llena solo con lo que vas anotando",
+  "nutritionSavedEmpty": "Todavía no anotaste nada",
+  "nutritionPickSaved": "Elegir de lo que comés seguido",
+  "nutritionForget": "Sacar de la lista",
+  "nutritionForgetHint": "Sale de la lista. Lo que ya comiste queda como está.",
   "nutritionValidationNumber": "Ingresá un número entre 0 y {max}",
+  "discipline": "Disciplinas",
+  "disciplineHint": "Natación, correr, bici — lo que se mide en tiempo, no en series",
+  "disciplineEmpty": "Nada practicado ese día",
+  "disciplineAdd": "Anotar disciplina",
+  "disciplineEdit": "Editar disciplina",
+  "disciplineName": "Qué practicaste",
+  "disciplineNameHint": "Natación, Correr, Bici, Yoga…",
+  "disciplineDuration": "Duración",
+  "disciplineDistance": "Distancia",
+  "disciplineMinutes": "{value} min",
+  "disciplineKm": "{value} km",
+  "disciplineNotes": "Notas",
+  "disciplineCompleteTitle": "¿Cómo te fue?",
+  "disciplineCompleteHint": "Anotá el tiempo y la distancia reales. Lo que dejes en blanco queda como estaba planeado.",
+  "disciplineValidationMinutes": "Ingresá un número entre 1 y {max}",
+  "disciplineValidationDistance": "Ingresá un número entre 0 y {max}",
+  "plan": "Plan",
+  "planToday": "Lo que toca ese día",
+  "planEmpty": "Nada anotado para ese día",
+  "planEmptyHint": "Anotá un ejercicio y, si se repite, decí en qué días",
+  "planAdd": "Anotar ejercicio",
+  "planEdit": "Editar ejercicio",
+  "planSetsReps": "{sets}x{reps}",
+  "planWeight": "{weight} kg",
+  "planRpe": "RPE {value}",
+  "planComments": "Indicaciones",
+  "planCommentsHint": "Bajar hasta paralelo, sin rebote…",
+  "planFeedback": "Cómo te fue",
+  "planFeedbackHint": "La última salió fea, pesó más de lo esperado…",
+  "planDone": "Hecho",
+  "planReopen": "Volver a pendiente",
+  "planComplete": "Marcar como hecho",
+  "planCompleteTitle": "¿Cómo te fue?",
+  "planCompleteHint": "Anotá el peso y el esfuerzo reales. Lo que dejes en blanco queda como estaba planeado.",
+  "planRepeat": "Repetir",
+  "planRepeatDays": "Días",
+  "planRepeatUntilLabel": "Hasta cuándo",
+  "planRepeatWeeks": "Por semanas",
+  "planRepeatUntil": "Hasta una fecha",
+  "planRepeatForever": "Siempre",
+  "planRepeatWeeksValue": "Cantidad de semanas",
+  "planRepeatUntilValue": "Termina el",
+  "planRepeatSummary": "Se repite {days}",
+  "planStopRepeat": "Dejar de repetir",
+  "planStopRepeatTitle": "¿Dejar de repetir?",
+  "planStopRepeatBody": "Se borran los días siguientes que todavía no hiciste. Lo que ya entrenaste queda como está.",
+  "planValidationDays": "Elegí al menos un día",
+  "planValidationNumber": "Ingresá un número entre 1 y {max}",
+  "planValidationRpe": "El RPE va de 1 a 10",
+  "planValidationEndDate": "La repetición no puede terminar antes de empezar",
+  "exerciseVideo": "Video de referencia",
+  "exerciseVideoHint": "Link a un video que muestre el movimiento",
+  "exerciseOpenVideo": "Ver el video",
+  "exerciseSetNote": "Cómo se sintió",
+  "exerciseSetNoteHint": "La última salió fea, pesó más de lo esperado…",
   "exerciseCatalogue": "Ejercicios",
   "exerciseNew": "Nuevo ejercicio",
   "exerciseEdit": "Editar ejercicio",
@@ -469,6 +572,7 @@
   "exerciseNoSetsHint": "Elegí un ejercicio y anotá tu primera serie",
   "exerciseAddSet": "Agregar serie",
   "exerciseEditSet": "Editar serie",
+  "exerciseSets": "Series",
   "exerciseReps": "Repeticiones",
   "exerciseWeight": "Peso (kg)",
   "exerciseBodyweight": "Peso corporal",
@@ -480,6 +584,64 @@
   "exerciseVolumeValue": "{value} kg",
   "exerciseTopWeight": "Máximo: {weight} kg",
   "exercisePickOne": "Elegí un ejercicio",
+  "@planSetsReps": {
+    "placeholders": {
+      "sets": {
+        "type": "int"
+      },
+      "reps": {
+        "type": "int"
+      }
+    }
+  },
+  "@planWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "@planRpe": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "@planRepeatSummary": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "@planValidationNumber": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@disciplineMinutes": {
+    "placeholders": {
+      "value": { "type": "int" }
+    }
+  },
+  "@disciplineKm": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "@disciplineValidationMinutes": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "@disciplineValidationDistance": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
   "@nutritionGrams": {
     "placeholders": {
       "value": {

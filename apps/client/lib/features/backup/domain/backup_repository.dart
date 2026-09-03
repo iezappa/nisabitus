@@ -7,7 +7,7 @@ abstract interface class BackupRepository {
 
   /// Replaces the whole store with what [document] holds.
   ///
-  /// Replace, not merge. Merging sixteen tables that reference each other by
+  /// Replace, not merge. Merging twenty-two tables that reference each other by
   /// id would mean renumbering half of them and hoping every reference was
   /// found — a lot of surface for silent corruption. Replacing is something
   /// the user can reason about, and the UI says so before it runs.

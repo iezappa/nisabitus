@@ -31,6 +31,13 @@ final nutritionStatsProvider = FutureProvider<NutritionStats>((ref) {
   return ref.watch(nutritionRepositoryProvider).statsFor(range);
 });
 
+/// Everything the catalogue has learned, most recently eaten first.
+final nutritionFoodsProvider = FutureProvider<List<Food>>((ref) {
+  ref.watch(nutritionRevisionProvider);
+
+  return ref.watch(nutritionRepositoryProvider).foods();
+});
+
 /// The day the week strip is pointing at, totalled against the targets.
 final nutritionDayProvider = FutureProvider<DailyNutrition>((ref) {
   ref.watch(nutritionRevisionProvider);
@@ -65,6 +72,13 @@ class NutritionActions {
 
   Future<void> delete(int id) async {
     await _repository.deleteEntry(id);
+    _invalidate();
+  }
+
+  /// Drops a food from the catalogue. What was already eaten is untouched:
+  /// the catalogue is a convenience, not the record.
+  Future<void> forgetFood(int id) async {
+    await _repository.forgetFood(id);
     _invalidate();
   }
 

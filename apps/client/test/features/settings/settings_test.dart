@@ -132,14 +132,19 @@ void main() {
     });
 
     test('repairs a stored set that would leave nothing visible', () async {
-      await boot({'settings.visibleTabs': <String>[]});
+      await boot({
+        'settings.hiddenTabs': [for (final t in AppTab.values) t.name],
+      });
 
       expect(container.read(visibleTabsProvider), [AppTab.dashboard]);
     });
 
     test('keeps the tabs in their declared order', () async {
       await boot({
-        'settings.visibleTabs': [AppTab.todo.name, AppTab.habits.name],
+        'settings.hiddenTabs': [
+          for (final tab in AppTab.values)
+            if (tab != AppTab.todo && tab != AppTab.habits) tab.name,
+        ],
       });
 
       expect(container.read(visibleTabsProvider), [AppTab.habits, AppTab.todo]);

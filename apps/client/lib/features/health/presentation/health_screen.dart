@@ -11,6 +11,8 @@ import '../../../core/widgets/week_date_selector.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../exercise/presentation/exercise_progress_view.dart';
 import '../../exercise/presentation/exercise_view.dart';
+import '../../hydration/presentation/hydration_progress_view.dart';
+import '../../hydration/presentation/hydration_view.dart';
 import '../../medication/presentation/medication_progress_view.dart';
 import '../../medication/presentation/medication_view.dart';
 import '../../nutrition/presentation/nutrition_progress_view.dart';
@@ -18,8 +20,8 @@ import '../../nutrition/presentation/nutrition_view.dart';
 import '../../sleep/presentation/sleep_progress_view.dart';
 import '../../sleep/presentation/sleep_view.dart';
 
-/// The Salud tab: sleep, nutrition, training and medication for one chosen
-/// day.
+/// The Salud tab: sleep, eating, water, training and medication for one
+/// chosen day.
 ///
 /// The week strip lives here rather than inside each view, because all four
 /// answer the same question about the same day and moving it once should
@@ -41,6 +43,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
   static const _views = [
     (list: SleepView(), progress: SleepProgressView()),
     (list: NutritionView(), progress: NutritionProgressView()),
+    (list: HydrationView(), progress: HydrationProgressView()),
     (list: ExerciseView(), progress: ExerciseProgressView()),
     (list: MedicationView(), progress: MedicationProgressView()),
   ];
@@ -95,6 +98,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
               tabs: [
                 Tab(text: l10n.healthSleep),
                 Tab(text: l10n.healthNutrition),
+                Tab(text: l10n.hydration),
                 Tab(text: l10n.healthExercise),
                 Tab(text: l10n.healthMeds),
               ],

@@ -6,6 +6,7 @@ import '../domain/habit.dart';
 import '../domain/habit_draft.dart';
 import '../domain/habit_frequency.dart';
 import '../domain/habit_repository.dart';
+import '../../../core/time/weekday.dart';
 
 /// Drift-backed implementation of [HabitRepository].
 ///

@@ -13,6 +13,7 @@
 @Tags(['screenshots'])
 library;
 
+import 'dart:async';
 import 'dart:io';
 
 // drift's `Value` wraps the optional columns the seed data sets.
@@ -27,15 +28,46 @@ import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/core/theme/app_theme.dart';
+import 'package:nisabitus/core/widgets/brand_logo.dart';
 import 'package:nisabitus/core/time/selected_day_provider.dart';
 import 'package:nisabitus/features/dashboard/presentation/dashboard_screen.dart';
 import 'package:nisabitus/features/habits/presentation/habits_screen.dart';
+import 'package:nisabitus/core/time/weekday.dart';
+import 'package:nisabitus/features/discipline/data/drift_discipline_repository.dart';
+import 'package:nisabitus/features/discipline/domain/discipline_repository.dart';
+import 'package:nisabitus/features/discipline/presentation/widgets/discipline_dialog.dart';
+import 'package:nisabitus/features/exercise/data/drift_exercise_repository.dart';
+import 'package:nisabitus/features/exercise/domain/exercise_repository.dart';
+import 'package:nisabitus/features/exercise/presentation/exercise_view.dart';
+import 'package:nisabitus/features/exercise/domain/scheduled_exercise.dart';
+import 'package:nisabitus/features/exercise/presentation/widgets/scheduled_exercise_dialog.dart';
 import 'package:nisabitus/features/health/presentation/health_screen.dart';
+import 'package:nisabitus/features/hydration/data/drift_hydration_repository.dart';
+import 'package:nisabitus/features/hydration/presentation/hydration_view.dart';
 import 'package:nisabitus/features/journal/presentation/journal_screen.dart';
+import 'package:nisabitus/features/meditation/data/drift_meditation_repository.dart';
+import 'package:nisabitus/features/meditation/domain/meditation_repository.dart';
+import 'package:nisabitus/features/meditation/presentation/meditation_screen.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_screen.dart';
 import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
 import 'package:nisabitus/features/todo/presentation/todo_screen.dart';
 import 'package:nisabitus/features/settings/domain/accent_color.dart';
+import 'package:nisabitus/features/settings/presentation/widgets/tutorial_dialog.dart';
+import 'package:nisabitus/features/exercise/presentation/widgets/exercise_form_dialog.dart';
+import 'package:nisabitus/features/habits/presentation/widgets/habit_form_dialog.dart';
+import 'package:nisabitus/features/medication/presentation/widgets/medication_form_dialog.dart';
+import 'package:nisabitus/features/nutrition/data/drift_nutrition_repository.dart';
+import 'package:nisabitus/features/nutrition/domain/meal.dart';
+import 'package:nisabitus/features/nutrition/domain/nutrition.dart';
+import 'package:nisabitus/features/nutrition/domain/nutrition_repository.dart';
+import 'package:nisabitus/features/nutrition/presentation/nutrition_view.dart';
+import 'package:nisabitus/features/nutrition/presentation/widgets/food_form_dialog.dart';
+import 'package:nisabitus/features/nutrition/presentation/widgets/saved_food_picker.dart';
+import 'package:nisabitus/features/release_notes/presentation/release_notes_providers.dart';
+import 'package:nisabitus/features/release_notes/presentation/widgets/release_notes_dialog.dart';
+import 'package:nisabitus/features/streaks/domain/streak.dart';
+import 'package:nisabitus/features/streaks/presentation/widgets/streak_editor_dialog.dart';
+import 'package:nisabitus/features/todo/presentation/widgets/task_dialog.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,6 +87,7 @@ void main() {
       overrides: [
         databaseProvider.overrideWithValue(db),
         sharedPreferencesProvider.overrideWithValue(prefs),
+        assetBundleProvider.overrideWithValue(_ShippedAssets()),
         todayProvider.overrideWithValue(wednesday),
         selectedDayProvider.overrideWith((ref) => wednesday),
       ],
@@ -65,11 +98,14 @@ void main() {
     db.close();
   });
 
-  Future<void> shoot(
+  /// Puts [home] on screen at [surface], in the language and brightness asked
+  /// for, and leaves it there for the caller to photograph.
+  Future<void> mount(
     WidgetTester tester,
-    String name,
-    Widget screen, {
-    Size surface = const Size(1000, 1400),
+    Widget home, {
+    required Size surface,
+    required Locale locale,
+    required Brightness brightness,
   }) async {
     // The view, not `setSurfaceSize`: that one resizes the surface the tree
     // is painted on but leaves MediaQuery reporting the default 800x600, so
@@ -93,14 +129,96 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('es'),
-          theme: AppTheme.light(AccentColor.forest),
+          locale: locale,
+          theme: brightness == Brightness.dark
+              ? AppTheme.dark(AccentColor.forest)
+              : AppTheme.light(AccentColor.forest),
           debugShowCheckedModeBanner: false,
-          home: screen,
+          home: home,
         ),
       ),
     );
     await tester.pumpAndSettle();
+
+    // An asset image decodes asynchronously and a widget test drives fake
+    // async, so without this the frame is photographed before the picture
+    // exists. Done for every shot rather than only the ones that show the
+    // mark: the image cache is shared, so precaching in one test would make
+    // a later golden depend on which test happened to run first.
+    await tester.runAsync(
+      () => precacheImage(
+        const AssetImage('assets/branding/logo.png'),
+        tester.element(find.byType(MaterialApp)),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> shoot(
+    WidgetTester tester,
+    String name,
+    Widget screen, {
+    Size surface = const Size(1000, 1400),
+    Locale locale = spanish,
+    Brightness brightness = Brightness.light,
+  }) async {
+    await mount(
+      tester,
+      screen,
+      surface: surface,
+      locale: locale,
+      brightness: brightness,
+    );
+
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('goldens/$name.png'),
+    );
+  }
+
+  /// Photographs a dialog rather than a screen.
+  ///
+  /// The host underneath is a bare `Scaffold` on purpose: what is being looked
+  /// at is the dialog, and putting a real screen behind it would make every
+  /// one of these goldens fail whenever that screen changed.
+  Future<void> shootDialog(
+    WidgetTester tester,
+    String name,
+    Future<void> Function(BuildContext context) open, {
+    Size surface = const Size(700, 900),
+    Locale locale = spanish,
+    Brightness brightness = Brightness.light,
+    Future<void> Function()? after,
+  }) async {
+    late BuildContext hostContext;
+
+    await mount(
+      tester,
+      Scaffold(
+        body: Builder(
+          builder: (context) {
+            hostContext = context;
+            return const SizedBox.expand();
+          },
+        ),
+      ),
+      surface: surface,
+      locale: locale,
+      brightness: brightness,
+    );
+
+    // Not awaited: the future only completes when the dialog is dismissed,
+    // and dismissing it is the one thing this test must not do.
+    unawaited(open(hostContext));
+    await tester.pumpAndSettle();
+
+    // Anything the picture needs done to the dialog once it is up. It runs
+    // here rather than inside [open], because [open] is deliberately not
+    // awaited and two un-nested guarded calls conflict.
+    if (after != null) {
+      await after();
+      await tester.pumpAndSettle();
+    }
 
     await expectLater(
       find.byType(MaterialApp),
@@ -154,10 +272,270 @@ void main() {
     );
   });
 
+  // The mark on the surface it actually sits on, in both themes. A logo
+  // painted the same colour as the panel behind it is not a subtle logo, it
+  // is an absent one — and nothing else in this suite would notice.
+  for (final brightness in Brightness.values) {
+    testWidgets('the brand mark on ${brightness.name}', (tester) async {
+      await shoot(
+        tester,
+        'brand_logo_${brightness.name}',
+        Builder(
+          builder: (context) => ColoredBox(
+            color: Theme.of(context).navigationRailTheme.backgroundColor!,
+            child: const Center(child: BrandLogo(color: Colors.white)),
+          ),
+        ),
+        surface: const Size(240, 160),
+        brightness: brightness,
+      );
+    });
+  }
+
+  testWidgets('training', (tester) async {
+    await seed(db, wednesday);
+    await shoot(tester, 'training', const Scaffold(body: ExerciseView()));
+  });
+
+  testWidgets('meditation', (tester) async {
+    await seed(db, wednesday);
+    await shoot(tester, 'meditation', const MeditationScreen());
+  });
+
+  testWidgets('hydration', (tester) async {
+    await seed(db, wednesday);
+    await shoot(tester, 'hydration', const Scaffold(body: HydrationView()));
+  });
+
+  testWidgets('nutrition', (tester) async {
+    await seed(db, wednesday);
+    await shoot(tester, 'nutrition', const Scaffold(body: NutritionView()));
+  });
+
   testWidgets('settings', (tester) async {
     await shoot(tester, 'settings', const SettingsScreen());
   });
+
+  // The dark theme is not the light one with the colours flipped: it has its
+  // own surfaces and its own contrast, and nothing had ever looked at it.
+  group('dark', () {
+    testWidgets('dashboard', (tester) async {
+      await seed(db, wednesday);
+      await shoot(
+        tester,
+        'dashboard_dark',
+        const DashboardScreen(),
+        brightness: Brightness.dark,
+      );
+    });
+
+    testWidgets('health', (tester) async {
+      await seed(db, wednesday);
+      await shoot(
+        tester,
+        'health_dark',
+        const HealthScreen(),
+        brightness: Brightness.dark,
+      );
+    });
+
+    testWidgets('settings', (tester) async {
+      await shoot(
+        tester,
+        'settings_dark',
+        const SettingsScreen(),
+        brightness: Brightness.dark,
+      );
+    });
+  });
+
+  // English is half the copy this app ships and none of it had been seen. A
+  // translation that overflows its row only shows up in a picture.
+  group('english', () {
+    testWidgets('dashboard', (tester) async {
+      await seed(db, wednesday);
+      await shoot(
+        tester,
+        'dashboard_en',
+        const DashboardScreen(),
+        locale: english,
+      );
+    });
+
+    testWidgets('settings', (tester) async {
+      await shoot(
+        tester,
+        'settings_en',
+        const SettingsScreen(),
+        locale: english,
+      );
+    });
+  });
+
+  // A phone is the narrowest thing the app has to survive, and every screen
+  // above was photographed on a window no phone has.
+  group('phone', () {
+    testWidgets('dashboard', (tester) async {
+      await seed(db, wednesday);
+      await shoot(
+        tester,
+        'dashboard_phone',
+        const DashboardScreen(),
+        surface: phone,
+      );
+    });
+
+    testWidgets('habits', (tester) async {
+      await seed(db, wednesday);
+      await shoot(tester, 'habits_phone', const HabitsScreen(), surface: phone);
+    });
+
+    testWidgets('todo', (tester) async {
+      await seed(db, wednesday);
+      await shoot(tester, 'todo_phone', const TodoScreen(), surface: phone);
+    });
+
+    testWidgets('settings', (tester) async {
+      await shoot(
+        tester,
+        'settings_phone',
+        const SettingsScreen(),
+        surface: phone,
+      );
+    });
+  });
+
+  // Every dialog the app can open. These are where the forms live, so they
+  // hold more layout per pixel than the screens that launch them.
+  group('dialogs', () {
+    testWidgets('new habit', (tester) async {
+      await shootDialog(tester, 'dialog_habit', showHabitForm);
+    });
+
+    testWidgets('new food entry', (tester) async {
+      // The meal is passed in rather than read off the clock, or this
+      // photograph comes out different depending on the hour it was taken.
+      await shootDialog(
+        tester,
+        'dialog_food',
+        (context) => showFoodForm(context, initialMeal: Meal.breakfast),
+      );
+    });
+
+    testWidgets('picking something eaten before', (tester) async {
+      await seed(db, wednesday);
+      await shootDialog(tester, 'dialog_saved_food', showSavedFoodPicker);
+    });
+
+    testWidgets('new exercise', (tester) async {
+      await shootDialog(tester, 'dialog_exercise', showExerciseForm);
+    });
+
+    testWidgets('an exercise for the day', (tester) async {
+      await seed(db, wednesday);
+      final catalogue = await DriftExerciseRepository(db).exercises();
+      await shootDialog(
+        tester,
+        'dialog_scheduled_exercise',
+        (context) => showScheduledExerciseForm(
+          context,
+          catalogue: catalogue,
+          day: wednesday,
+        ),
+        surface: const Size(760, 1000),
+      );
+    });
+
+    testWidgets('an exercise for the day, repeating', (tester) async {
+      // The half of the form the eye actually complained about: the switch,
+      // the day chips and the duration.
+      await seed(db, wednesday);
+      final catalogue = await DriftExerciseRepository(db).exercises();
+      await shootDialog(
+        tester,
+        'dialog_scheduled_exercise_repeat',
+        (context) => showScheduledExerciseForm(
+          context,
+          catalogue: catalogue,
+          day: wednesday,
+        ),
+        surface: const Size(760, 1100),
+        after: () => tester.tap(find.byType(SwitchListTile)),
+      );
+    });
+
+    testWidgets('a discipline', (tester) async {
+      await shootDialog(
+        tester,
+        'dialog_discipline',
+        (context) => showDisciplineForm(context, day: wednesday),
+        surface: const Size(760, 900),
+      );
+    });
+
+    testWidgets('ticking one off', (tester) async {
+      await seed(db, wednesday);
+      final scheduled = await DriftExerciseRepository(db)
+          .scheduledFor(wednesday);
+      await shootDialog(
+        tester,
+        'dialog_exercise_done',
+        (context) => showCompletionForm(context, scheduled: scheduled.first),
+        surface: const Size(700, 700),
+      );
+    });
+
+    testWidgets('new medication', (tester) async {
+      await shootDialog(tester, 'dialog_medication', showMedicationForm);
+    });
+
+    testWidgets('task', (tester) async {
+      await seed(db, wednesday);
+      final project = await db.select(db.projects).getSingle();
+      await shootDialog(
+        tester,
+        'dialog_task',
+        (context) => showTaskDialog(context, projectId: project.id),
+      );
+    });
+
+    testWidgets('streak editor', (tester) async {
+      final streak = Streak(
+        id: 1,
+        name: 'Sin azúcar',
+        count: 9,
+        maxStreak: 14,
+        lastUpdated: wednesday,
+      );
+      await shootDialog(
+        tester,
+        'dialog_streak',
+        (context) => showStreakEditor(
+          context,
+          streak: streak,
+          today: wednesday,
+          onReset: () async {},
+          onDelete: () async {},
+          onRecordDay: (_) async {},
+        ),
+      );
+    });
+
+    testWidgets('tutorial', (tester) async {
+      await shootDialog(tester, 'dialog_tutorial', showTutorial);
+    });
+
+    testWidgets('release notes', (tester) async {
+      await shootDialog(tester, 'dialog_release_notes', showReleaseNotes);
+    });
+  });
 }
+
+/// A phone, in logical pixels: the narrowest shape the app has to survive.
+const phone = Size(390, 844);
+
+const spanish = Locale('es');
+const english = Locale('en');
 
 /// A fortnight of a life, so the screens show what a used app looks like
 /// rather than the empty state everyone has already seen.
@@ -217,6 +595,105 @@ Future<void> seed(AppDatabase db, DateTime today) async {
             date: dayBefore(i),
           ),
         );
+  }
+
+  final eaten = [
+    ('Avena con banana', '80 g', 320, 9, 58, 6, Meal.breakfast),
+    ('Café con leche', '1 taza', 90, 5, 8, 4, Meal.breakfast),
+    ('Milanesa con puré', '1 plato', 640, 38, 55, 28, Meal.lunch),
+    ('Yogur con nueces', '150 g', 210, 11, 18, 11, Meal.snack),
+    ('Ensalada y huevo', '1 plato', 380, 22, 20, 24, Meal.dinner),
+  ];
+  for (final (name, portion, kcal, protein, carbs, fat, meal) in eaten) {
+    await NutritionActionsSeed(db).add(
+      today,
+      name: name,
+      portion: portion,
+      kcal: kcal,
+      protein: protein,
+      carbs: carbs,
+      fat: fat,
+      meal: meal,
+    );
+  }
+
+  // A week of training, written down the way the app writes it: one row per
+  // exercise per day, repeating.
+  final training = DriftExerciseRepository(db);
+  final squat = await training.createExercise(
+    const ExerciseDraft(
+      name: 'Sentadilla',
+      muscleGroup: 'Piernas',
+      videoUrl: 'https://example.test/sentadilla',
+    ),
+  );
+  final press = await training.createExercise(
+    const ExerciseDraft(name: 'Press de banca', muscleGroup: 'Pecho'),
+  );
+  await training.schedule(
+    dayBefore(9),
+    ScheduledExerciseDraft(
+      exerciseId: squat.id,
+      sets: 4,
+      reps: 6,
+      weightKg: 90,
+      comments: 'Bajar hasta paralelo, sin rebote',
+    ),
+    recurrence: ExerciseRecurrence(
+      days: const {Weekday.monday, Weekday.wednesday, Weekday.friday},
+      type: RecurrenceType.weeks,
+      weeks: 8,
+    ),
+  );
+  await training.schedule(
+    today,
+    ScheduledExerciseDraft(
+      exerciseId: press.id,
+      sets: 3,
+      reps: 8,
+      weightKg: 60,
+    ),
+  );
+  final donePress = (await training.scheduledFor(today)).last;
+  await training.complete(
+    donePress.id,
+    const ExerciseCompletion(rpe: 8, feedback: 'Salió redondo'),
+  );
+  await training.logSet(today, exerciseId: squat.id, reps: 6, weight: 90);
+  await training.logSet(
+    today,
+    exerciseId: squat.id,
+    reps: 6,
+    weight: 90,
+    note: 'La última salió fea',
+  );
+
+  // A swim, which is measured in time and distance rather than in sets.
+  await DriftDisciplineRepository(db).schedule(
+    today,
+    const DisciplineDraft(
+      name: 'Natación',
+      durationMinutes: 45,
+      distanceKm: 2,
+      notes: 'Crol suave, sin apurar',
+    ),
+  );
+
+  // A fortnight of sitting, with the gaps a real practice has.
+  for (var i = 0; i < 12; i++) {
+    if (i % 5 == 4) continue;
+    await DriftMeditationRepository(db).add(
+      dayBefore(i),
+      MeditationDraft(
+        minutes: i.isEven ? 20 : 10,
+        note: i == 0 ? 'Costó arrancar, después salió sola' : null,
+      ),
+    );
+  }
+
+  // A day of water, drunk in glasses the way it actually is.
+  for (final millilitres in const [350, 200, 500, 200]) {
+    await DriftHydrationRepository(db).addEntry(today, millilitres);
   }
 
   await db
@@ -281,6 +758,56 @@ Future<void> seed(AppDatabase db, DateTime today) async {
           ),
         );
   }
+}
+
+/// The assets the app actually ships, read straight off the disk.
+///
+/// `rootBundle` has nothing behind it in a widget test, so the release notes
+/// stay loading forever and their dialog is photographed as a spinner — and
+/// a spinner is an animation, so `pumpAndSettle` times out rather than
+/// failing on the picture. Reading the real files also means these goldens
+/// show the changelog that ships, not a fixture that drifts from it.
+class _ShippedAssets extends CachingAssetBundle {
+  @override
+  Future<ByteData> load(String key) async {
+    final file = File(key);
+    if (!file.existsSync()) throw StateError('Asset not found: $key');
+
+    // Read synchronously: a widget test drives fake async, so a real disk
+    // read never completes inside `pumpAndSettle` and the spinner it leaves
+    // on screen is an animation that never ends.
+    return ByteData.sublistView(file.readAsBytesSync());
+  }
+}
+
+/// Seeds food through the repository rather than through the tables.
+///
+/// The catalogue is filled by saving an entry, so writing rows straight into
+/// `food_entries` would photograph a day of eating with an empty list of
+/// foods behind it — which is not a state the app can actually reach.
+class NutritionActionsSeed {
+  NutritionActionsSeed(this._db);
+
+  final AppDatabase _db;
+
+  Future<void> add(
+    DateTime day, {
+    required String name,
+    required String portion,
+    required int kcal,
+    required int protein,
+    required int carbs,
+    required int fat,
+    required Meal meal,
+  }) => DriftNutritionRepository(_db).addEntry(
+    day,
+    FoodDraft(
+      name: name,
+      portion: portion,
+      macros: Macros(calories: kcal, protein: protein, carbs: carbs, fat: fat),
+      meal: meal,
+    ),
+  );
 }
 
 /// Loads Roboto and the icon font from the Flutter SDK, so the screenshots

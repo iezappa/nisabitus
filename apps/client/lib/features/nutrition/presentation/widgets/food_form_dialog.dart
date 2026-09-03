@@ -3,24 +3,38 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/dialog_title.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/meal.dart';
 import '../../domain/nutrition.dart';
 import '../../domain/nutrition_repository.dart';
+import '../nutrition_labels.dart';
+import 'saved_food_picker.dart';
 
 /// Collects one food entry. Returns null when dismissed.
+///
+/// [initialMeal] is which meal a new entry starts on. It is asked for rather
+/// than worked out here because working it out means reading the clock, and a
+/// dialog that reads the clock cannot be photographed: the same screenshot
+/// comes out different depending on the hour the test happened to run.
 Future<FoodDraft?> showFoodForm(
   BuildContext context, {
   FoodEntry? existing,
   Future<void> Function()? onDelete,
+  Meal? initialMeal,
 }) => showDialog<FoodDraft>(
   context: context,
-  builder: (context) => _FoodFormDialog(existing: existing, onDelete: onDelete),
+  builder: (context) => _FoodFormDialog(
+    existing: existing,
+    onDelete: onDelete,
+    initialMeal: initialMeal,
+  ),
 );
 
 class _FoodFormDialog extends StatefulWidget {
-  const _FoodFormDialog({this.existing, this.onDelete});
+  const _FoodFormDialog({this.existing, this.onDelete, this.initialMeal});
 
   final FoodEntry? existing;
   final Future<void> Function()? onDelete;
+  final Meal? initialMeal;
 
   @override
   State<_FoodFormDialog> createState() => _FoodFormDialogState();
@@ -37,6 +51,12 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
   late final _carbs = _number(widget.existing?.macros.carbs);
   late final _fat = _number(widget.existing?.macros.fat);
 
+  /// An existing entry starts on whatever it was filed under, a new one on
+  /// what the caller suggested. Only a starting point: the common case is
+  /// writing down what you are eating right now, and that case should need no
+  /// answer at all.
+  late Meal? _meal = widget.existing?.meal ?? widget.initialMeal;
+
   TextEditingController _number(int? value) =>
       TextEditingController(text: value == null || value == 0 ? '' : '$value');
 
@@ -49,6 +69,24 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
   }
 
   int _read(TextEditingController c) => int.tryParse(c.text.trim()) ?? 0;
+
+  Future<void> _pickSaved() async {
+    final food = await showSavedFoodPicker(context);
+    if (food == null || !mounted) return;
+
+    setState(() {
+      _name.text = food.name;
+      _portion.text = food.portion ?? '';
+      _calories.text = _text(food.macros.calories);
+      _protein.text = _text(food.macros.protein);
+      _carbs.text = _text(food.macros.carbs);
+      _fat.text = _text(food.macros.fat);
+    });
+  }
+
+  /// Zero reads as blank, the same way the fields started: a food logged
+  /// without its fat known should not come back claiming zero grams of it.
+  String _text(int value) => value == 0 ? '' : '$value';
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
@@ -63,6 +101,7 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
           carbs: _read(_carbs),
           fat: _read(_fat),
         ),
+        meal: _meal,
       ),
     );
   }
@@ -87,6 +126,18 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Only offered on a new entry: editing one is correcting
+                // what was written, and a button that overwrites the whole
+                // form is not a correction.
+                if (widget.existing == null)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      onPressed: _pickSaved,
+                      icon: const Icon(Icons.history),
+                      label: Text(l10n.nutritionPickSaved),
+                    ),
+                  ),
                 TextFormField(
                   controller: _name,
                   autofocus: true,
@@ -142,6 +193,19 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
                     ),
                   ],
                 ),
+                const SizedBox(height: Gap.xl),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    l10n.nutritionMeal,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                const SizedBox(height: Gap.sm),
+                _MealPicker(
+                  selected: _meal,
+                  onChanged: (meal) => setState(() => _meal = meal),
+                ),
               ],
             ),
           ),
@@ -154,6 +218,35 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
         ),
         FilledButton(onPressed: _submit, child: Text(l10n.actionSave)),
       ],
+    );
+  }
+}
+
+/// Which meal the entry belongs to, or none.
+///
+/// `emptySelectionAllowed`, because "I do not know which meal this was" has
+/// to be sayable — every entry written before the app asked is in exactly
+/// that state, and editing one must not force an answer onto it.
+class _MealPicker extends StatelessWidget {
+  const _MealPicker({required this.selected, required this.onChanged});
+
+  final Meal? selected;
+  final ValueChanged<Meal?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return SegmentedButton<Meal>(
+      showSelectedIcon: false,
+      emptySelectionAllowed: true,
+      segments: [
+        for (final meal in Meal.values)
+          ButtonSegment(value: meal, label: Text(l10n.mealName(meal))),
+      ],
+      selected: {?selected},
+      onSelectionChanged: (selection) =>
+          onChanged(selection.isEmpty ? null : selection.first),
     );
   }
 }

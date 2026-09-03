@@ -35,10 +35,13 @@ class _ExerciseFormDialogState extends State<_ExerciseFormDialog> {
   late final _description = TextEditingController(
     text: widget.existing?.description ?? '',
   );
+  late final _video = TextEditingController(
+    text: widget.existing?.videoUrl ?? '',
+  );
 
   @override
   void dispose() {
-    for (final c in [_name, _group, _description]) {
+    for (final c in [_name, _group, _description, _video]) {
       c.dispose();
     }
     super.dispose();
@@ -55,6 +58,7 @@ class _ExerciseFormDialogState extends State<_ExerciseFormDialog> {
         name: _name.text,
         muscleGroup: _text(_group),
         description: _text(_description),
+        videoUrl: _text(_video),
       ),
     );
   }
@@ -101,6 +105,19 @@ class _ExerciseFormDialogState extends State<_ExerciseFormDialog> {
                     labelText: l10n.exerciseDescription,
                   ),
                 ),
+                // On the movement, not on the routine: a squat is performed
+                // the same way whoever prescribed it, so the link is right
+                // once instead of copied into every plan that asks for one.
+                TextFormField(
+                  controller: _video,
+                  maxLength: 2000,
+                  keyboardType: TextInputType.url,
+                  decoration: InputDecoration(
+                    labelText: l10n.exerciseVideo,
+                    hintText: l10n.exerciseVideoHint,
+                    prefixIcon: const Icon(Icons.ondemand_video_outlined),
+                  ),
+                ),
               ],
             ),
           ),
@@ -117,12 +134,16 @@ class _ExerciseFormDialogState extends State<_ExerciseFormDialog> {
   }
 }
 
-/// Collects one set. Returns null when dismissed.
-Future<({int reps, double? weight})?> showSetForm(
+/// Collects one set, and how it felt. Returns null when dismissed.
+///
+/// The note lives here rather than on the routine because a plan cannot feel
+/// anything. It is the half of the record that says the weight moved but the
+/// last rep was ugly, which no target will ever tell you.
+Future<({int reps, double? weight, String? note})?> showSetForm(
   BuildContext context, {
   ExerciseSet? existing,
   Future<void> Function()? onDelete,
-}) => showDialog<({int reps, double? weight})>(
+}) => showDialog<({int reps, double? weight, String? note})>(
   context: context,
   builder: (context) => _SetFormDialog(existing: existing, onDelete: onDelete),
 );
@@ -145,11 +166,13 @@ class _SetFormDialogState extends State<_SetFormDialog> {
   late final _weight = TextEditingController(
     text: widget.existing?.weight == null ? '' : '${widget.existing!.weight}',
   );
+  late final _note = TextEditingController(text: widget.existing?.note ?? '');
 
   @override
   void dispose() {
     _reps.dispose();
     _weight.dispose();
+    _note.dispose();
     super.dispose();
   }
 
@@ -161,6 +184,7 @@ class _SetFormDialogState extends State<_SetFormDialog> {
       reps: int.parse(_reps.text),
       // Blank means bodyweight, which is not the same as zero.
       weight: raw.isEmpty ? null : double.parse(raw),
+      note: _note.text.trim().isEmpty ? null : _note.text.trim(),
     ));
   }
 
@@ -214,6 +238,16 @@ class _SetFormDialogState extends State<_SetFormDialog> {
                       : null;
                 },
                 onFieldSubmitted: (_) => _submit(),
+              ),
+              TextFormField(
+                controller: _note,
+                maxLength: 1000,
+                maxLines: 2,
+                decoration: InputDecoration(
+                  labelText: l10n.exerciseSetNote,
+                  hintText: l10n.exerciseSetNoteHint,
+                  alignLabelWithHint: true,
+                ),
               ),
             ],
           ),

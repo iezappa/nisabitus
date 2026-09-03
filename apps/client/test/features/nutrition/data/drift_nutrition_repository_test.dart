@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/time/date_range.dart';
 import 'package:nisabitus/features/nutrition/data/drift_nutrition_repository.dart';
+import 'package:nisabitus/features/nutrition/domain/meal.dart';
 import 'package:nisabitus/features/nutrition/domain/nutrition.dart';
 import 'package:nisabitus/features/nutrition/domain/nutrition_repository.dart';
 
@@ -26,10 +27,12 @@ void main() {
     int c = 50,
     int f = 5,
     String? portion,
+    Meal? meal,
   }) => FoodDraft(
     name: name,
     portion: portion,
     macros: Macros(calories: kcal, protein: p, carbs: c, fat: f),
+    meal: meal,
   );
 
   group('goals', () {
@@ -183,6 +186,126 @@ void main() {
       final stats = await repository.statsFor(DateRange(monday, tuesday));
 
       expect(stats.goalCalories, 2400);
+    });
+  });
+
+  group('meals', () {
+    test('stores which meal an entry belonged to', () async {
+      await repository.addEntry(monday, draft(meal: Meal.breakfast));
+
+      final stored = (await repository.entriesFor(monday)).single;
+      expect(stored.meal, Meal.breakfast);
+    });
+
+    test('accepts an entry that names no meal', () async {
+      await repository.addEntry(monday, draft());
+
+      expect((await repository.entriesFor(monday)).single.meal, isNull);
+    });
+
+    test('changes the meal an entry is filed under', () async {
+      final entry = await repository.addEntry(
+        monday,
+        draft(meal: Meal.breakfast),
+      );
+
+      await repository.updateEntry(entry.id, draft(meal: Meal.dinner));
+
+      expect((await repository.entriesFor(monday)).single.meal, Meal.dinner);
+    });
+
+    test('takes the meal off an entry that had one', () async {
+      // Not the same as leaving it alone: someone who no longer knows which
+      // meal it was has to be able to say so.
+      final entry = await repository.addEntry(
+        monday,
+        draft(meal: Meal.breakfast),
+      );
+
+      await repository.updateEntry(entry.id, draft());
+
+      expect((await repository.entriesFor(monday)).single.meal, isNull);
+    });
+
+    test('groups the day it reads back', () async {
+      await repository.addEntry(
+        monday,
+        draft(name: 'Avena', meal: Meal.breakfast),
+      );
+      await repository.addEntry(monday, draft(name: 'Pollo', meal: Meal.lunch));
+
+      final day = await repository.dayFor(monday);
+
+      expect(day.byMeal[Meal.breakfast]!.single.name, 'Avena');
+      expect(day.byMeal[Meal.lunch]!.single.name, 'Pollo');
+    });
+  });
+
+  group('the catalogue', () {
+    test('starts empty', () async {
+      expect(await repository.foods(), isEmpty);
+    });
+
+    test('learns a food from the entry that was saved', () async {
+      // Nobody maintains a list of foods by hand. A list maintained by hand
+      // stays empty, and then the picker is worth nothing.
+      await repository.addEntry(monday, draft(name: 'Avena', portion: '80 g'));
+
+      final food = (await repository.foods()).single;
+      expect(food.name, 'Avena');
+      expect(food.portion, '80 g');
+      expect(food.macros.calories, 300);
+    });
+
+    test('files the same food once however it was capitalised', () async {
+      await repository.addEntry(monday, draft(name: 'Avena'));
+      await repository.addEntry(tuesday, draft(name: 'AVENA'));
+
+      expect(await repository.foods(), hasLength(1));
+    });
+
+    test('keeps the newest spelling and figures of a food', () async {
+      await repository.addEntry(monday, draft(name: 'Avena', kcal: 300));
+      await repository.addEntry(tuesday, draft(name: 'avena', kcal: 350));
+
+      final food = (await repository.foods()).single;
+      expect(food.name, 'avena');
+      expect(food.macros.calories, 350);
+    });
+
+    test('offers what was eaten most recently first', () async {
+      await repository.addEntry(monday, draft(name: 'Avena'));
+      await repository.addEntry(tuesday, draft(name: 'Pollo'));
+
+      expect((await repository.foods()).map((f) => f.name), ['Pollo', 'Avena']);
+    });
+
+    test(
+      'leaves what was already eaten alone when a food is forgotten',
+      () async {
+        // The catalogue is a convenience. Deleting from it must not rewrite
+        // the record of a day that was actually lived.
+        await repository.addEntry(monday, draft(name: 'Avena'));
+        final food = (await repository.foods()).single;
+
+        await repository.forgetFood(food.id);
+
+        expect(await repository.foods(), isEmpty);
+        expect((await repository.entriesFor(monday)).single.name, 'Avena');
+      },
+    );
+
+    test('does not rewrite what was eaten when a food is corrected', () async {
+      // The whole reason an entry holds no reference to its food: last week
+      // says what was eaten last week, whatever the catalogue says today.
+      await repository.addEntry(monday, draft(name: 'Avena', kcal: 300));
+      final food = (await repository.foods()).single;
+
+      await repository.rememberFood(
+        Food(id: food.id, name: 'Avena', macros: const Macros(calories: 999)),
+      );
+
+      expect((await repository.entriesFor(monday)).single.macros.calories, 300);
     });
   });
 }

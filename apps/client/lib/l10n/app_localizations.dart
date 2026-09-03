@@ -314,6 +314,18 @@ abstract class AppLocalizations {
   /// **'Borrar'**
   String get actionDelete;
 
+  /// No description provided for @actionExpand.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar'**
+  String get actionExpand;
+
+  /// No description provided for @actionCollapse.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar'**
+  String get actionCollapse;
+
   /// No description provided for @actionEdit.
   ///
   /// In es, this message translates to:
@@ -1850,11 +1862,617 @@ abstract class AppLocalizations {
   /// **'150 g, 1 plato, 2 unidades'**
   String get nutritionPortionHint;
 
+  /// No description provided for @tabMeditation.
+  ///
+  /// In es, this message translates to:
+  /// **'Meditación'**
+  String get tabMeditation;
+
+  /// No description provided for @meditationTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Meditación'**
+  String get meditationTitle;
+
+  /// No description provided for @meditationToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que sentaste'**
+  String get meditationToday;
+
+  /// No description provided for @meditationEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese día no anotaste nada'**
+  String get meditationEmpty;
+
+  /// No description provided for @meditationEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá cuánto sentaste y cómo te fue'**
+  String get meditationEmptyHint;
+
+  /// No description provided for @meditationAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotar sesión'**
+  String get meditationAdd;
+
+  /// No description provided for @meditationEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar sesión'**
+  String get meditationEdit;
+
+  /// No description provided for @meditationMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} min'**
+  String meditationMinutes(Object value);
+
+  /// No description provided for @meditationDayTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} min ese día'**
+  String meditationDayTotal(Object value);
+
+  /// No description provided for @meditationDuration.
+  ///
+  /// In es, this message translates to:
+  /// **'Duración'**
+  String get meditationDuration;
+
+  /// No description provided for @meditationNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo te fue'**
+  String get meditationNote;
+
+  /// No description provided for @meditationNoteHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Costó arrancar, me dormí, quedé tranquilo…'**
+  String get meditationNoteHint;
+
+  /// No description provided for @meditationValidationMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 1 y {max}'**
+  String meditationValidationMinutes(Object max);
+
+  /// No description provided for @meditationMinutesPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Minutos por día'**
+  String get meditationMinutesPerDay;
+
+  /// No description provided for @meditationAverageDaily.
+  ///
+  /// In es, this message translates to:
+  /// **'Promedio diario'**
+  String get meditationAverageDaily;
+
+  /// No description provided for @meditationDaysPractised.
+  ///
+  /// In es, this message translates to:
+  /// **'Días que sentaste'**
+  String get meditationDaysPractised;
+
+  /// No description provided for @meditationLongestStreak.
+  ///
+  /// In es, this message translates to:
+  /// **'Racha más larga'**
+  String get meditationLongestStreak;
+
+  /// No description provided for @hydration.
+  ///
+  /// In es, this message translates to:
+  /// **'Hidratación'**
+  String get hydration;
+
+  /// No description provided for @hydrationTarget.
+  ///
+  /// In es, this message translates to:
+  /// **'Objetivo diario'**
+  String get hydrationTarget;
+
+  /// No description provided for @hydrationEditTarget.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar objetivo'**
+  String get hydrationEditTarget;
+
+  /// No description provided for @hydrationMillilitres.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} ml'**
+  String hydrationMillilitres(Object value);
+
+  /// No description provided for @hydrationRemaining.
+  ///
+  /// In es, this message translates to:
+  /// **'Te faltan {value} ml'**
+  String hydrationRemaining(Object value);
+
+  /// No description provided for @hydrationReached.
+  ///
+  /// In es, this message translates to:
+  /// **'Llegaste al objetivo'**
+  String get hydrationReached;
+
+  /// No description provided for @hydrationToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que tomaste'**
+  String get hydrationToday;
+
+  /// No description provided for @hydrationEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin registros ese día'**
+  String get hydrationEmpty;
+
+  /// No description provided for @hydrationEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá cada vaso y se suma solo'**
+  String get hydrationEmptyHint;
+
+  /// No description provided for @hydrationAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar'**
+  String get hydrationAdd;
+
+  /// No description provided for @hydrationCustom.
+  ///
+  /// In es, this message translates to:
+  /// **'Otra cantidad'**
+  String get hydrationCustom;
+
+  /// No description provided for @hydrationAmount.
+  ///
+  /// In es, this message translates to:
+  /// **'Cantidad'**
+  String get hydrationAmount;
+
+  /// No description provided for @hydrationValidationAmount.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 1 y {max}'**
+  String hydrationValidationAmount(Object max);
+
+  /// No description provided for @hydrationPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Mililitros por día'**
+  String get hydrationPerDay;
+
+  /// No description provided for @hydrationAverageDaily.
+  ///
+  /// In es, this message translates to:
+  /// **'Promedio diario'**
+  String get hydrationAverageDaily;
+
+  /// No description provided for @hydrationDaysOnTarget.
+  ///
+  /// In es, this message translates to:
+  /// **'Días en objetivo'**
+  String get hydrationDaysOnTarget;
+
+  /// No description provided for @nutritionMeal.
+  ///
+  /// In es, this message translates to:
+  /// **'Comida'**
+  String get nutritionMeal;
+
+  /// No description provided for @nutritionMealBreakfast.
+  ///
+  /// In es, this message translates to:
+  /// **'Desayuno'**
+  String get nutritionMealBreakfast;
+
+  /// No description provided for @nutritionMealLunch.
+  ///
+  /// In es, this message translates to:
+  /// **'Almuerzo'**
+  String get nutritionMealLunch;
+
+  /// No description provided for @nutritionMealSnack.
+  ///
+  /// In es, this message translates to:
+  /// **'Merienda'**
+  String get nutritionMealSnack;
+
+  /// No description provided for @nutritionMealDinner.
+  ///
+  /// In es, this message translates to:
+  /// **'Cena'**
+  String get nutritionMealDinner;
+
+  /// No description provided for @nutritionMealNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin comida'**
+  String get nutritionMealNone;
+
+  /// No description provided for @nutritionUnassigned.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin asignar'**
+  String get nutritionUnassigned;
+
+  /// No description provided for @nutritionSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que comés seguido'**
+  String get nutritionSaved;
+
+  /// No description provided for @nutritionSavedHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Se llena solo con lo que vas anotando'**
+  String get nutritionSavedHint;
+
+  /// No description provided for @nutritionSavedEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no anotaste nada'**
+  String get nutritionSavedEmpty;
+
+  /// No description provided for @nutritionPickSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir de lo que comés seguido'**
+  String get nutritionPickSaved;
+
+  /// No description provided for @nutritionForget.
+  ///
+  /// In es, this message translates to:
+  /// **'Sacar de la lista'**
+  String get nutritionForget;
+
+  /// No description provided for @nutritionForgetHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Sale de la lista. Lo que ya comiste queda como está.'**
+  String get nutritionForgetHint;
+
   /// No description provided for @nutritionValidationNumber.
   ///
   /// In es, this message translates to:
   /// **'Ingresá un número entre 0 y {max}'**
   String nutritionValidationNumber(int max);
+
+  /// No description provided for @discipline.
+  ///
+  /// In es, this message translates to:
+  /// **'Disciplinas'**
+  String get discipline;
+
+  /// No description provided for @disciplineHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Natación, correr, bici — lo que se mide en tiempo, no en series'**
+  String get disciplineHint;
+
+  /// No description provided for @disciplineEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada practicado ese día'**
+  String get disciplineEmpty;
+
+  /// No description provided for @disciplineAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotar disciplina'**
+  String get disciplineAdd;
+
+  /// No description provided for @disciplineEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar disciplina'**
+  String get disciplineEdit;
+
+  /// No description provided for @disciplineName.
+  ///
+  /// In es, this message translates to:
+  /// **'Qué practicaste'**
+  String get disciplineName;
+
+  /// No description provided for @disciplineNameHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Natación, Correr, Bici, Yoga…'**
+  String get disciplineNameHint;
+
+  /// No description provided for @disciplineDuration.
+  ///
+  /// In es, this message translates to:
+  /// **'Duración'**
+  String get disciplineDuration;
+
+  /// No description provided for @disciplineDistance.
+  ///
+  /// In es, this message translates to:
+  /// **'Distancia'**
+  String get disciplineDistance;
+
+  /// No description provided for @disciplineMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} min'**
+  String disciplineMinutes(int value);
+
+  /// No description provided for @disciplineKm.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} km'**
+  String disciplineKm(String value);
+
+  /// No description provided for @disciplineNotes.
+  ///
+  /// In es, this message translates to:
+  /// **'Notas'**
+  String get disciplineNotes;
+
+  /// No description provided for @disciplineCompleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo te fue?'**
+  String get disciplineCompleteTitle;
+
+  /// No description provided for @disciplineCompleteHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá el tiempo y la distancia reales. Lo que dejes en blanco queda como estaba planeado.'**
+  String get disciplineCompleteHint;
+
+  /// No description provided for @disciplineValidationMinutes.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 1 y {max}'**
+  String disciplineValidationMinutes(int max);
+
+  /// No description provided for @disciplineValidationDistance.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 0 y {max}'**
+  String disciplineValidationDistance(int max);
+
+  /// No description provided for @plan.
+  ///
+  /// In es, this message translates to:
+  /// **'Plan'**
+  String get plan;
+
+  /// No description provided for @planToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que toca ese día'**
+  String get planToday;
+
+  /// No description provided for @planEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Nada anotado para ese día'**
+  String get planEmpty;
+
+  /// No description provided for @planEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá un ejercicio y, si se repite, decí en qué días'**
+  String get planEmptyHint;
+
+  /// No description provided for @planAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotar ejercicio'**
+  String get planAdd;
+
+  /// No description provided for @planEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar ejercicio'**
+  String get planEdit;
+
+  /// No description provided for @planSetsReps.
+  ///
+  /// In es, this message translates to:
+  /// **'{sets}x{reps}'**
+  String planSetsReps(int sets, int reps);
+
+  /// No description provided for @planWeight.
+  ///
+  /// In es, this message translates to:
+  /// **'{weight} kg'**
+  String planWeight(String weight);
+
+  /// No description provided for @planRpe.
+  ///
+  /// In es, this message translates to:
+  /// **'RPE {value}'**
+  String planRpe(int value);
+
+  /// No description provided for @planComments.
+  ///
+  /// In es, this message translates to:
+  /// **'Indicaciones'**
+  String get planComments;
+
+  /// No description provided for @planCommentsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Bajar hasta paralelo, sin rebote…'**
+  String get planCommentsHint;
+
+  /// No description provided for @planFeedback.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo te fue'**
+  String get planFeedback;
+
+  /// No description provided for @planFeedbackHint.
+  ///
+  /// In es, this message translates to:
+  /// **'La última salió fea, pesó más de lo esperado…'**
+  String get planFeedbackHint;
+
+  /// No description provided for @planDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Hecho'**
+  String get planDone;
+
+  /// No description provided for @planReopen.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a pendiente'**
+  String get planReopen;
+
+  /// No description provided for @planComplete.
+  ///
+  /// In es, this message translates to:
+  /// **'Marcar como hecho'**
+  String get planComplete;
+
+  /// No description provided for @planCompleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo te fue?'**
+  String get planCompleteTitle;
+
+  /// No description provided for @planCompleteHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá el peso y el esfuerzo reales. Lo que dejes en blanco queda como estaba planeado.'**
+  String get planCompleteHint;
+
+  /// No description provided for @planRepeat.
+  ///
+  /// In es, this message translates to:
+  /// **'Repetir'**
+  String get planRepeat;
+
+  /// No description provided for @planRepeatDays.
+  ///
+  /// In es, this message translates to:
+  /// **'Días'**
+  String get planRepeatDays;
+
+  /// No description provided for @planRepeatUntilLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Hasta cuándo'**
+  String get planRepeatUntilLabel;
+
+  /// No description provided for @planRepeatWeeks.
+  ///
+  /// In es, this message translates to:
+  /// **'Por semanas'**
+  String get planRepeatWeeks;
+
+  /// No description provided for @planRepeatUntil.
+  ///
+  /// In es, this message translates to:
+  /// **'Hasta una fecha'**
+  String get planRepeatUntil;
+
+  /// No description provided for @planRepeatForever.
+  ///
+  /// In es, this message translates to:
+  /// **'Siempre'**
+  String get planRepeatForever;
+
+  /// No description provided for @planRepeatWeeksValue.
+  ///
+  /// In es, this message translates to:
+  /// **'Cantidad de semanas'**
+  String get planRepeatWeeksValue;
+
+  /// No description provided for @planRepeatUntilValue.
+  ///
+  /// In es, this message translates to:
+  /// **'Termina el'**
+  String get planRepeatUntilValue;
+
+  /// No description provided for @planRepeatSummary.
+  ///
+  /// In es, this message translates to:
+  /// **'Se repite {days}'**
+  String planRepeatSummary(String days);
+
+  /// No description provided for @planStopRepeat.
+  ///
+  /// In es, this message translates to:
+  /// **'Dejar de repetir'**
+  String get planStopRepeat;
+
+  /// No description provided for @planStopRepeatTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Dejar de repetir?'**
+  String get planStopRepeatTitle;
+
+  /// No description provided for @planStopRepeatBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se borran los días siguientes que todavía no hiciste. Lo que ya entrenaste queda como está.'**
+  String get planStopRepeatBody;
+
+  /// No description provided for @planValidationDays.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí al menos un día'**
+  String get planValidationDays;
+
+  /// No description provided for @planValidationNumber.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un número entre 1 y {max}'**
+  String planValidationNumber(int max);
+
+  /// No description provided for @planValidationRpe.
+  ///
+  /// In es, this message translates to:
+  /// **'El RPE va de 1 a 10'**
+  String get planValidationRpe;
+
+  /// No description provided for @planValidationEndDate.
+  ///
+  /// In es, this message translates to:
+  /// **'La repetición no puede terminar antes de empezar'**
+  String get planValidationEndDate;
+
+  /// No description provided for @exerciseVideo.
+  ///
+  /// In es, this message translates to:
+  /// **'Video de referencia'**
+  String get exerciseVideo;
+
+  /// No description provided for @exerciseVideoHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Link a un video que muestre el movimiento'**
+  String get exerciseVideoHint;
+
+  /// No description provided for @exerciseOpenVideo.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver el video'**
+  String get exerciseOpenVideo;
+
+  /// No description provided for @exerciseSetNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo se sintió'**
+  String get exerciseSetNote;
+
+  /// No description provided for @exerciseSetNoteHint.
+  ///
+  /// In es, this message translates to:
+  /// **'La última salió fea, pesó más de lo esperado…'**
+  String get exerciseSetNoteHint;
 
   /// No description provided for @exerciseCatalogue.
   ///
@@ -1927,6 +2545,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Editar serie'**
   String get exerciseEditSet;
+
+  /// No description provided for @exerciseSets.
+  ///
+  /// In es, this message translates to:
+  /// **'Series'**
+  String get exerciseSets;
 
   /// No description provided for @exerciseReps.
   ///

@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/habits/presentation/habits_screen.dart';
 import '../../features/journal/presentation/journal_screen.dart';
+import '../../features/meditation/presentation/meditation_screen.dart';
 import '../../features/pomodoro/presentation/pomodoro_screen.dart';
 import '../../features/settings/presentation/settings_providers.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/health/presentation/health_screen.dart';
 import '../../features/todo/presentation/todo_screen.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/brand_logo.dart';
 import '../widgets/settings_button.dart';
 import 'app_tab.dart';
 
@@ -32,6 +34,7 @@ GoRouter buildRouter() => GoRouter(
               AppTab.health => const HealthScreen(),
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
+              AppTab.meditation => const MeditationScreen(),
               AppTab.todo => const TodoScreen(),
             },
           ),
@@ -100,7 +103,7 @@ class AppShell extends ConsumerWidget {
             labelType: NavigationRailLabelType.all,
             leading: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Image.asset('assets/branding/logo.png', height: 28),
+              child: const BrandLogo(color: Colors.white),
             ),
             destinations: [
               for (final tab in visible)

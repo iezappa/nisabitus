@@ -7,6 +7,7 @@ import '../data/drift_exercise_repository.dart';
 import '../domain/exercise.dart';
 import '../domain/exercise_repository.dart';
 import '../domain/exercise_stats.dart';
+import '../domain/scheduled_exercise.dart';
 
 final exerciseRepositoryProvider = Provider<ExerciseRepository>(
   (ref) => DriftExerciseRepository(ref.watch(databaseProvider)),
@@ -46,6 +47,17 @@ final workoutDayProvider = FutureProvider<WorkoutDay>((ref) {
       .workoutFor(ref.watch(selectedDayProvider));
 });
 
+/// What is written down for the day the week strip points at.
+final scheduledExercisesProvider = FutureProvider<List<ScheduledExercise>>((
+  ref,
+) {
+  ref.watch(exerciseRevisionProvider);
+
+  return ref
+      .watch(exerciseRepositoryProvider)
+      .scheduledFor(ref.watch(selectedDayProvider));
+});
+
 /// Write operations, kept out of the widgets.
 class ExerciseActions {
   ExerciseActions(this._ref);
@@ -54,9 +66,14 @@ class ExerciseActions {
 
   ExerciseRepository get _repository => _ref.read(exerciseRepositoryProvider);
 
-  Future<void> createExercise(ExerciseDraft draft) async {
-    await _repository.createExercise(draft);
+  /// Returns what it created, so a caller that needs to select it — the
+  /// scheduling form, adding a movement it did not have — does not have to
+  /// re-read the catalogue and guess which row is the new one.
+  Future<Exercise> createExercise(ExerciseDraft draft) async {
+    final exercise = await _repository.createExercise(draft);
     _invalidate();
+
+    return exercise;
   }
 
   Future<void> updateExercise(int id, ExerciseDraft draft) async {
@@ -73,23 +90,72 @@ class ExerciseActions {
     int exerciseId, {
     required int reps,
     double? weight,
+    String? note,
   }) async {
     await _repository.logSet(
       _ref.read(selectedDayProvider),
       exerciseId: exerciseId,
       reps: reps,
       weight: weight,
+      note: note,
     );
     _invalidate();
   }
 
-  Future<void> updateSet(int id, {required int reps, double? weight}) async {
-    await _repository.updateSet(id, reps: reps, weight: weight);
+  Future<void> updateSet(
+    int id, {
+    required int reps,
+    double? weight,
+    String? note,
+  }) async {
+    await _repository.updateSet(id, reps: reps, weight: weight, note: note);
     _invalidate();
   }
 
   Future<void> deleteSet(int id) async {
     await _repository.deleteSet(id);
+    _invalidate();
+  }
+
+  Future<void> setNote(int setId, String? note) async {
+    await _repository.updateSetNote(setId, note);
+    _invalidate();
+  }
+
+  Future<void> schedule(
+    ScheduledExerciseDraft draft, {
+    ExerciseRecurrence? recurrence,
+  }) async {
+    await _repository.schedule(
+      _ref.read(selectedDayProvider),
+      draft,
+      recurrence: recurrence,
+    );
+    _invalidate();
+  }
+
+  Future<void> updateScheduled(int id, ScheduledExerciseDraft draft) async {
+    await _repository.updateScheduled(id, draft);
+    _invalidate();
+  }
+
+  Future<void> complete(int id, ExerciseCompletion completion) async {
+    await _repository.complete(id, completion);
+    _invalidate();
+  }
+
+  Future<void> reopen(int id) async {
+    await _repository.reopen(id);
+    _invalidate();
+  }
+
+  Future<void> deleteScheduled(int id) async {
+    await _repository.deleteScheduled(id);
+    _invalidate();
+  }
+
+  Future<void> stopRecurrence(int id) async {
+    await _repository.stopRecurrence(id);
     _invalidate();
   }
 

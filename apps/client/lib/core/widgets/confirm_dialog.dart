@@ -2,6 +2,39 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 
+/// Asks before an action that cannot be undone. Returns true only on
+/// confirmation.
+///
+/// [confirmDelete] is the common case worded for a delete; this one is for
+/// everything else that throws work away — stopping a repetition, say, where
+/// "Borrar" would describe the wrong thing.
+Future<bool> confirmAction(
+  BuildContext context, {
+  required String title,
+  required String body,
+  required String confirmLabel,
+}) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Text(body),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(AppLocalizations.of(context).actionCancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(confirmLabel),
+        ),
+      ],
+    ),
+  );
+
+  return confirmed ?? false;
+}
+
 /// Asks before a destructive action. Returns true only on confirmation.
 Future<bool> confirmDelete(BuildContext context, String name) async {
   final l10n = AppLocalizations.of(context);

@@ -36,10 +36,17 @@ void main() {
   });
 
   Future<void> pumpScreen(WidgetTester tester) async {
-    // Wide enough for the four scrollable tabs to all be on screen: a tab
+    // Wide enough for all five scrollable tabs to be on screen: a tab
     // scrolled out of view cannot be tapped.
-    await tester.binding.setSurfaceSize(const Size(900, 1400));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
+    //
+    // Through `tester.view`, not `setSurfaceSize`: that one resizes the
+    // surface the tree is painted on but leaves MediaQuery reporting the
+    // default 800x600, so the tabs lay themselves out for a window narrower
+    // than the one they are painted into and scroll off it anyway.
+    tester.view.physicalSize = const Size(1200, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -72,6 +79,11 @@ void main() {
   }
 
   Future<void> openTab(WidgetTester tester, String label) async {
+    // Brought into view first. The tab strip scrolls because the page is
+    // capped at a reading width, so widening the window does not put the
+    // last tabs on screen — and a tab scrolled out of view cannot be tapped.
+    await tester.ensureVisible(find.text(label));
+    await tester.pumpAndSettle();
     await tester.tap(find.text(label));
     await tester.pumpAndSettle();
   }

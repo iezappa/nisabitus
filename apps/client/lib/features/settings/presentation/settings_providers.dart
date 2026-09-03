@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/preferences/preferences.dart';
 import '../../../core/router/app_tab.dart';
@@ -65,23 +66,57 @@ final onboardingDoneProvider = StateNotifierProvider<BoolPreference, bool>(
   ),
 );
 
-/// Which first-level tabs are shown.
+/// Which first-level tabs the user has hidden.
 ///
-/// The spec lets every tab be hidden except that at least one must remain,
-/// so the stored set is repaired on read rather than trusted.
-final visibleTabsPreferenceProvider =
-    StateNotifierProvider<StringSetPreference, Set<String>>(
-      (ref) => StringSetPreference(
-        ref.watch(sharedPreferencesProvider),
-        'settings.visibleTabs',
-        fallback: {for (final tab in AppTab.values) tab.name},
-      ),
-    );
+/// The hidden ones are stored, not the visible ones, and that is the whole
+/// point: hiding is a decision the user made, showing is the absence of one.
+/// A set of visible tabs cannot tell "I hid this" apart from "this did not
+/// exist when I last chose", so every module added afterwards would arrive
+/// switched off for everyone who had ever opened the screen — invisible, and
+/// blamed on the user's own settings.
+final hiddenTabsPreferenceProvider =
+    StateNotifierProvider<StringSetPreference, Set<String>>((ref) {
+      final prefs = ref.watch(sharedPreferencesProvider);
+
+      return StringSetPreference(
+        prefs,
+        _hiddenTabsKey,
+        fallback: _hiddenFromLegacy(prefs),
+      );
+    });
+
+const _hiddenTabsKey = 'settings.hiddenTabs';
+const _legacyVisibleTabsKey = 'settings.visibleTabs';
+
+/// The tabs that existed when the stored set was still a set of visible ones.
+///
+/// Frozen on purpose. The old value cannot say anything about a tab that did
+/// not exist when it was written, so reading it against today's [AppTab]
+/// would hide every module added since — which is the exact bug this whole
+/// arrangement exists to avoid.
+const _tabsAtMigration = {
+  'dashboard',
+  'habits',
+  'journal',
+  'health',
+  'pomodoro',
+  'todo',
+};
+
+/// Turns an old visible-tab set into the hidden one it implied.
+///
+/// Nothing stored means nothing hidden: a fresh install shows everything.
+Set<String> _hiddenFromLegacy(SharedPreferences prefs) {
+  final legacy = prefs.getStringList(_legacyVisibleTabsKey);
+  if (legacy == null) return const {};
+
+  return _tabsAtMigration.difference(legacy.toSet());
+}
 
 final visibleTabsProvider = Provider<List<AppTab>>((ref) {
-  final stored = ref.watch(visibleTabsPreferenceProvider);
+  final hidden = ref.watch(hiddenTabsPreferenceProvider);
   final visible = AppTab.values
-      .where((tab) => stored.contains(tab.name))
+      .where((tab) => !hidden.contains(tab.name))
       .toList();
 
   // Never leave the user without a destination.
@@ -95,14 +130,14 @@ class TabVisibilityActions {
   final Ref _ref;
 
   void setVisible(AppTab tab, {required bool visible}) {
-    final current = {..._ref.read(visibleTabsPreferenceProvider)};
+    final current = {..._ref.read(hiddenTabsPreferenceProvider)};
     if (visible) {
-      current.add(tab.name);
+      current.remove(tab.name);
     } else {
       if (_ref.read(visibleTabsProvider).length <= 1) return;
-      current.remove(tab.name);
+      current.add(tab.name);
     }
-    _ref.read(visibleTabsPreferenceProvider.notifier).set(current);
+    _ref.read(hiddenTabsPreferenceProvider.notifier).set(current);
   }
 }
 

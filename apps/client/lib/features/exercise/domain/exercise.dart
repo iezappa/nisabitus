@@ -7,6 +7,7 @@ class Exercise {
     required String name,
     this.description,
     this.muscleGroup,
+    this.videoUrl,
   }) : name = _validateName(name);
 
   final int id;
@@ -15,6 +16,13 @@ class Exercise {
 
   /// Free text, so the user's own vocabulary works.
   final String? muscleGroup;
+
+  /// A video showing how the movement is done.
+  ///
+  /// On the movement rather than on a routine or a day: a squat is performed
+  /// the same way whoever prescribed it, so the link is right once instead of
+  /// copied into every plan that ever asks for one.
+  final String? videoUrl;
 
   static String _validateName(String value) {
     final trimmed = value.trim();
@@ -34,7 +42,9 @@ class ExerciseSet {
     required this.reps,
     this.weight,
     this.position = 0,
-  }) : date = dateOnly(date) {
+    String? note,
+  }) : date = dateOnly(date),
+       note = _cleanNote(note) {
     if (reps < 1 || reps > 1000) {
       throw ArgumentError.value(reps, 'reps', 'Must be between 1 and 1000');
     }
@@ -53,8 +63,20 @@ class ExerciseSet {
 
   final int position;
 
+  /// How it felt, in the user's own words.
+  ///
+  /// On the set, because a plan cannot feel anything. This is the half of the
+  /// record that says the weight moved but the last rep was ugly — which no
+  /// target will ever tell you. Blank reads as nothing written.
+  final String? note;
+
   /// Reps times weight. Bodyweight sets contribute no load, only reps.
   double get volume => (weight ?? 0) * reps;
+
+  static String? _cleanNote(String? value) {
+    final trimmed = value?.trim() ?? '';
+    return trimmed.isEmpty ? null : trimmed;
+  }
 }
 
 /// One exercise as it was worked on a given day.
