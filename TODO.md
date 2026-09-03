@@ -12,18 +12,37 @@ What is left is polish, infrastructure and a handful of debts — see
 
 ## 1. Smaller debts
 
-- [ ] `sqlite3_flutter_libs 0.6.0+eol` and `sqlcipher_flutter_libs
-      0.7.0+eol` arrive through `drift_flutter`. They work; they are marked
-      end-of-life. Watch for a replacement.
-- [ ] **Nothing tests the web build.** The database had never been given its
-      web backend, so every screen failed at its first query — and the whole
-      suite stayed green, because unit tests run on the VM and the goldens
-      render widgets, not a browser. It was found by opening the app. Until
-      something exercises the browser build, opening it by hand before a
-      release is the only check there is.
-- [ ] The screen captures cover seven screens in Spanish, light theme. Dark
-      theme, English, a phone-sized window and the dialogs are not
-      photographed yet.
+All three closed on 2026-09-02. Kept here, struck through, because what each
+one turned out to be is worth more than the line that described it.
+
+- [x] ~~`sqlite3_flutter_libs 0.6.0+eol` and `sqlcipher_flutter_libs
+      0.7.0+eol`~~ — **nothing to wait for on this side.** `+eol` is the last
+      version those packages will ever have, and their own description says
+      what replaces them: *"Not used anymore, update to version 3.x of
+      package:sqlite3 instead"*. `sqlite3 3.5.2` is already in the lock file,
+      so the code is on the replacement; what is left is `drift_flutter`
+      dropping the two shims from its own pubspec. Re-check when
+      `drift_flutter` moves past 0.3.1 — there is no action before that.
+- [x] ~~Nothing tests the web build.~~ `tool/test_web.sh` drives the app end
+      to end in a real browser, and the `web` job in `ci.yml` runs it on every
+      push. Two things it does not cover, both known:
+      - `flutter drive` cannot set response headers, so the page is served
+        without cross-origin isolation and drift takes the IndexedDB path.
+        That is the storage GitHub Pages gives, so it is the path worth
+        guarding — but **OPFS stays untested**.
+      - On the web drift answers from a worker over a message channel, so the
+        screen goes quiet before the row exists. `pumpAndSettle` returning is
+        not the write landing: assertions after a save go through
+        `pumpUntilFound`, or they pass on Linux and flake in a browser.
+- [x] ~~The screen captures cover seven screens in Spanish, light theme.~~
+      Twenty-six now: dark theme, English, a phone-sized window (390x844) and
+      all eight dialogs. Note for whoever adds another dialog — `rootBundle`
+      has nothing behind it in a widget test, so a screen that loads an asset
+      is photographed as a spinner, and a spinner is an animation:
+      `pumpAndSettle` times out rather than failing on the picture. The
+      screenshot test reads the shipped assets off the disk, synchronously,
+      because a widget test drives fake async and a real disk read never
+      completes inside a pump either.
 
 ---
 
@@ -31,17 +50,143 @@ What is left is polish, infrastructure and a handful of debts — see
 
 Not debts — work that was decided and is not written yet.
 
-- [ ] **A database of recorded meals.** Today every food entry is typed from
-      scratch. What is eaten repeats, so the entries should accumulate into
-      something reusable: eat the same breakfast twice and the second time
-      should be picking it, not typing it again.
-- [ ] **A meal log** on top of that: what was eaten, when, chosen from the
-      entries above rather than written blind.
-- [ ] **A hydration log.** Nothing records water today.
-- [ ] **A dialog for exercises**, the way habits and medication already have
-      one, instead of whatever the exercise view does now.
-- [ ] **A dialog for medication**, same reason.
-- [ ] **Change the logo in the nav bar.**
+- [x] ~~A database of recorded meals.~~ `Foods` (schema v6) fills itself from
+      what is saved, and the food form offers it back. An entry holds **no
+      reference** to the food it came from, on purpose: correcting a food
+      today must not rewrite what last week says was eaten.
+- [x] ~~A meal log.~~ `FoodEntries.meal` (v6), nullable — every entry written
+      before the app asked keeps a null meal and shows under "Sin asignar",
+      because stamping them would put food on the record at an hour nobody
+      ate it. The day reads as one heading per meal, each with its own total.
+- [x] ~~A hydration log.~~ `features/hydration/` (v7), a fifth tab under
+      Salud. A row per drink rather than one editable daily total: water is
+      drunk in glasses, and a single number typed at midnight is a guess.
+- [x] ~~A dialog for exercises~~ — it already existed. `showExerciseForm`,
+      called from `exercise_view.dart`, plus `showSetForm` for the sets. The
+      item was written before they landed and nobody struck it out.
+- [x] ~~A dialog for medication~~ — same: `showMedicationForm`, called from
+      `medication_view.dart`.
+- [x] ~~Meditation.~~ Asked for alongside these. `features/meditation/` (v8)
+      is a first-level tab of its own. It records a sitting, it does not run
+      one: a timer would make the app something to look at while meditating,
+      and would leave anyone who sat without it unable to write it down.
+- [x] ~~Change the logo in the nav bar.~~ Painted white through `BrandLogo`
+      (`color` + `BlendMode.srcIn`) rather than shipped as a second image, so
+      the artwork keeps one source of truth. **It is invisible in the light
+      theme** and that is not a bug in the code: the navigation rail's
+      background is `_card`, pure white, and `brand_logo_light.png` in the
+      goldens is a photograph of the mark disappearing into it. Either the
+      rail gets a surface to sit on or the mark takes its ink from the theme.
+      Left as asked, on the record here.
+
+### Training, the way Serenio does it
+
+Rewritten on 2026-09-03, after the first attempt was tried and rejected.
+
+**What was built first (v9), and why it went.** A `Routines` table with a start
+and a length in weeks, `RoutineExercises` prescribing days and targets, and the
+day read by comparing the two. It works. It is the wrong shape for this: you
+have to create a plan before you can write anything down, the day is read-only
+against it, and nothing can be ticked off.
+
+**What replaced it (v10)** is the shape Serenio uses, which is also the shape
+habits in this same app already use: **one row per exercise per day, and that
+row is both the plan and the record.**
+
+| Field | What it holds |
+|---|---|
+| `sets`, `reps`, `weightKg`, `comments` | What to do |
+| `completed`, `rpe`, `feedback` | What happened |
+| `recurrenceGroupId`, `repeatDays`, `repeatForever` | What it is part of |
+
+A repetition is **materialised**: creating one writes a row for every day it
+lands on, up to a number of weeks, a date, or a ten-year horizon for "siempre".
+Nothing is computed at read time, and that is the point — a day that owns its
+row can be corrected, ticked and commented on without any of it reaching the
+days around it. It answers the objection the v9 design existed to answer, and
+answers it for free.
+
+Stopping a repetition removes the **later days that are still pending** and
+leaves the ones already trained. Stopping a repetition is not undoing the
+training that happened under it.
+
+The reference video stays on `Exercises` — that is the one thing kept from v9.
+A squat is performed the same way whoever prescribed it, so the link is right
+once instead of copied onto every day it comes round.
+
+**Disciplines (v11)** came from the same place, and are the second half of
+Serenio's fitness page. A swim is not four sets of ten at eighty kilos: it is
+forty-five minutes and two kilometres. Its own table, because one table for
+both shapes is one table with half its columns null on every row — and no
+catalogue behind it, because "Natación" does not need a definition somewhere
+else before it can be written down.
+
+The recurrence is shared rather than copied: `ExerciseRecurrence` describes
+repeating a swim and repeating a squat, because it is the same question and
+two answers to it would drift.
+
+Two smaller things landed with it:
+
+- The exercise catalogue folds away, shut by default, showing how many it
+  holds. It is a reference list, not a day's work.
+- The scheduling form can write down a movement the catalogue does not have
+  yet and carry on with it. Finding that out mid-form used to mean cancelling
+  and starting somewhere else.
+
+Open on this:
+
+- [ ] Two ways to record gym work still sit on the same screen: the day's
+      scheduled rows, and the older per-set log underneath (`ExerciseSets`,
+      with its own sets, reps, weight and note). Serenio has no per-set rows
+      at all. Either the set log becomes the detail of a scheduled row, or one
+      of them goes — but it is real data with real tests, so it is a decision,
+      not a cleanup.
+- [ ] Disciplines have no progress view. Exercises, hydration, meditation and
+      the rest all review themselves over a window; minutes and kilometres per
+      day would say more than most of them.
+
+Four things found while doing the above, all fixed:
+
+- **The day chips were a second design for a question already answered.** The
+  habit form has a weekday picker — round `ChoiceChip`, no tick — and the
+  scheduling form grew its own square ticked one instead of reusing it. It is
+  now `WeekdayPicker` in `core/widgets/`, the third thing this pass moved out
+  of `features/habits/` after the enum and its labels. All three were calendar
+  concepts wearing a feature's name.
+- **A `Row` centres its children.** The weight field carries a helper line and
+  the RPE field does not, so the two were different heights and RPE floated —
+  with the helper reading as a label for the wrong field. `CrossAxisAlignment
+  .start` fixes it, and the same trap hit the `Divider` tried between the two
+  halves of that form: a divider with no width in a start-aligned column
+  collapses to nothing. It was removed rather than propped up — no other
+  dialog in this app draws one.Three things found while doing the above, all fixed:
+
+- **`gen-l10n` orders placeholders alphabetically** when the ARB does not
+  declare them, so `"Semana {week} de {total}"` rendered as "Semana 8 de 2" and
+  `"{sets}x{reps}"` as "6x4" — a different session entirely. Declaring
+  `@key.placeholders` pins the order. Found by looking at a screenshot; nothing
+  else would have caught it, because both strings are perfectly well-formed.
+- **The Linux integration test writes to the real database.** After six runs
+  the habits list had grown past the window, and a `ListView` does not build
+  what is off screen, so the habit it had just saved could not be found — the
+  test failed while the app was working. It scrolls to it now.
+
+- **Nutrition had no way to add anything.** `NutritionActions.add` existed
+  and nothing called it, so the only food entries that could ever appear were
+  the ones a test seeded. `nutrition_view_test.dart` now asserts the way in
+  exists, which is the test that would have caught it.
+- **The tutorial's logo was never in its own screenshot.** An asset image
+  decodes asynchronously and a widget test drives fake async, so the frame was
+  photographed before the picture existed. `mount()` now precaches it for
+  every shot — for every shot, and not only the ones that show the mark,
+  because the image cache is shared and precaching in one test would make a
+  later golden depend on which test happened to run first.
+- **A new tab used to arrive hidden for everyone.** Tab visibility stored the
+  set of *visible* tabs, and such a set cannot tell "I hid this" apart from
+  "this did not exist when I last chose" — so every module added afterwards
+  shipped switched off, blamed on the user's own settings. The stored set is
+  now the *hidden* one, migrated once from the old key against a frozen list
+  of the tabs that existed when it was written.
 
 ---
 
@@ -84,28 +229,53 @@ The standard is
 It is the canonical copy: `Estandarización/` here is a working copy, ignored
 by git, and loses to that repository on any disagreement.
 
-Last checked against it: **2026-09-01**.
+Last checked against it: **2026-09-02**.
 
-- [ ] No CI. §5 puts GitHub Actions as the default, and the 654 tests here run
-      only when somebody remembers to run them — with everything landing
-      straight on `main`. Memini's `ci.yml` (format, analyse, test, build) is
-      the shape to copy.
-- [ ] No `integration_test/`. §7 asks for critical flows end to end on at
-      least one platform; widget tests and goldens do not start the app.
 - [ ] **Sentry is a decision, not a debt.** §5 lists it under observability,
       and this app is offline-first with no account and no server: shipping
       crash reports to a third party contradicts the pillar the whole stack
       was chosen for. Decide it and write the answer down — as a deliberate
       exception carried back to the canonical repository, not as an oversight.
 
+CI and `integration_test/` used to be listed here. Both landed in `47ae205`:
+`.github/workflows/ci.yml` runs format, analyse, test, integration and build on
+every push, and `integration_test/habit_flow_test.dart` starts the app for real.
+
 Walk this when the standard changes, or before a release:
 
-- [ ] **§2.2 Settings layout.** Asserted by
-      `test/features/settings/settings_layout_test.dart`, so a drift fails
-      the suite rather than waiting to be noticed.
 - [ ] **§2.1 Product patterns.** i18n through ARB files, onboarding shown
       once, local PIN (absent here on purpose), disclaimer visible in
       settings, JSON import/export.
+
+### §2.2 Settings layout — conformance indicator
+
+The standard's own indicator, kept here so a drift is visible without opening
+the other repository. Walk it when §2.2 changes or before a release; the date
+is half the indicator, because "conformant" with no date only says somebody
+looked once.
+
+**§2.2 Settings** — Conformant: yes · Last walked: 2026-09-02 ·
+Asserted by: `test/features/settings/settings_layout_test.dart`
+
+- [x] Body inside the shared page widget, with a capped measure
+      (`CenteredContent`, 640)
+- [x] One flat column — no section wrapped in a `Card`
+- [x] Every section opened by `SectionLabel`, uppercase
+- [x] Sections in the fixed order, with the app's own before SUPPORT
+- [x] Separated by `Gap.vSection` — no loose `SizedBox(height: 28)`
+- [x] Every `ListTile` with `contentPadding: EdgeInsets.zero`
+- [x] Short fixed sets in `SegmentedButton`, not `DropdownButton`
+- [x] Support block: the only `Card`, and with no title of its own inside
+- [x] Disclaimer printed in full, outside any `ListTile`
+- [x] Layout test present and green
+
+Declared deviations, carried back to the canonical repository:
+
+- **SECURITY is omitted** — the app has no PIN, on purpose. §2.1 lists it as
+  optional, and an app with no account and no server has nothing to lock.
+- **`BackupCard` keeps its name and is not a card.** The name is left over
+  from before the migration; renaming it is a rename across the backup slice
+  and its tests, not a layout fix.
 
 A change decided here and not carried back to the canonical repository is not
 a standard — it is an exception the next project will never hear about.
@@ -166,7 +336,8 @@ installed copy would be, so a schema change is four steps:
 
 The snapshots under `drift_schemas/` are the record of what shipped; the
 ones for v1 to v4 were dumped from worktrees of the commits where each
-version lived, because they predate this test.
+version lived, because they predate this test. v6 added the food catalogue
+and the meal column, v7 the water log, v8 the meditation log.
 
 Two traps the tests exist to catch, both already found this way:
 
@@ -190,6 +361,17 @@ tmux new-session -d -s nisabit -x 200 -y 50 -c apps/client \
 Hot restart with `tmux send-keys -t nisabit "R"`. It has to live inside tmux:
 the harness kills the process group when a command returns, so `&`, `nohup`
 and `setsid` all die with it.
+
+In a browser, which is the only way to see the web build:
+
+```bash
+flutter build web --release
+python3 tool/serve_web.py 8080   # then open http://localhost:8080
+```
+
+`serve_web.py` and not `python3 -m http.server`: without the two cross-origin
+isolation headers the browser withholds `SharedArrayBuffer` and drift drops to
+IndexedDB, which is the storage that loses writes.
 
 ---
 
