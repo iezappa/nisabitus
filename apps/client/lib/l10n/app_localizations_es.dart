@@ -1090,23 +1090,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nutritionUnassigned => 'Sin asignar';
 
   @override
-  String get nutritionSaved => 'Lo que comés seguido';
+  String get nutritionFoodDatabase => 'Base de alimentos';
 
   @override
-  String get nutritionSavedHint => 'Se llena solo con lo que vas anotando';
+  String get nutritionFoodDatabaseHint =>
+      'Elegí un alimento y decí cuánto pesó';
 
   @override
-  String get nutritionSavedEmpty => 'Todavía no anotaste nada';
+  String get nutritionFoodSearch => 'Buscar un alimento';
 
   @override
-  String get nutritionPickSaved => 'Elegir de lo que comés seguido';
+  String get nutritionFoodNone => 'No hay nada que coincida';
 
   @override
-  String get nutritionForget => 'Sacar de la lista';
+  String get nutritionFoodNew => 'Alimento nuevo';
 
   @override
-  String get nutritionForgetHint =>
-      'Sale de la lista. Lo que ya comiste queda como está.';
+  String get nutritionFoodEdit => 'Editar alimento';
+
+  @override
+  String get nutritionFoodMine => 'Tuyo';
+
+  @override
+  String get nutritionFoodDeleteBody =>
+      'Solo sale de la base de alimentos. Lo que ya comiste queda tal cual lo anotaste.';
+
+  @override
+  String nutritionPer100g(int value) {
+    return '$value kcal cada 100 g';
+  }
+
+  @override
+  String get nutritionPer100gLabel => 'Cada 100 g';
+
+  @override
+  String get nutritionWeight => 'Peso';
+
+  @override
+  String get nutritionWeightHint => 'Los valores se ajustan a lo que pesaste';
+
+  @override
+  String nutritionValidationGrams(int max) {
+    return 'Ingresá un peso entre 0 y $max g';
+  }
 
   @override
   String nutritionValidationNumber(int max) {
@@ -1175,7 +1201,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get plan => 'Plan';
 
   @override
-  String get planToday => 'Lo que toca ese día';
+  String get planToday => 'Rutina de gimnasio';
 
   @override
   String get planEmpty => 'Nada anotado para ese día';
@@ -1298,48 +1324,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exerciseOpenVideo => 'Ver el video';
 
   @override
-  String get exerciseSetNote => 'Cómo se sintió';
-
-  @override
-  String get exerciseSetNoteHint =>
-      'La última salió fea, pesó más de lo esperado…';
-
-  @override
-  String get exerciseCatalogue => 'Ejercicios';
-
-  @override
   String get exerciseNew => 'Nuevo ejercicio';
 
   @override
   String get exerciseEdit => 'Editar ejercicio';
 
   @override
-  String get exerciseNoneYet => 'Todavía no hay ejercicios';
-
-  @override
-  String get exerciseNoneYetHint => 'Creá uno y empezá a registrar tus series';
+  String get exerciseDeleteBody =>
+      'Borrar un ejercicio también borra todos los días en que lo anotaste, incluidos los pasados. No se puede deshacer.';
 
   @override
   String get exerciseMuscleGroup => 'Grupo muscular';
 
   @override
   String get exerciseDescription => 'Descripción';
-
-  @override
-  String get exerciseWorkout => 'Entrenamiento';
-
-  @override
-  String get exerciseNoSets => 'Sin series ese día';
-
-  @override
-  String get exerciseNoSetsHint =>
-      'Elegí un ejercicio y anotá tu primera serie';
-
-  @override
-  String get exerciseAddSet => 'Agregar serie';
-
-  @override
-  String get exerciseEditSet => 'Editar serie';
 
   @override
   String get exerciseSets => 'Series';
@@ -1354,16 +1352,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exerciseBodyweight => 'Peso corporal';
 
   @override
-  String exerciseSetLine(int reps) {
-    return '$reps reps';
-  }
-
-  @override
-  String exerciseSetLineWeighted(int reps, String weight) {
-    return '$reps reps × $weight kg';
-  }
-
-  @override
   String get exerciseTotalSets => 'Series';
 
   @override
@@ -1375,11 +1363,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String exerciseVolumeValue(String value) {
     return '$value kg';
-  }
-
-  @override
-  String exerciseTopWeight(String weight) {
-    return 'Máximo: $weight kg';
   }
 
   @override
@@ -1591,6 +1574,10 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get backupSomeIgnored =>
+      'Parte del archivo viene de una versión anterior y no se pudo restaurar.';
 
   @override
   String get backupNotABackup => 'Ese archivo no es una copia de Nisabitus';

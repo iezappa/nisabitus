@@ -71,6 +71,9 @@ class _ExerciseFormDialogState extends State<_ExerciseFormDialog> {
       title: DialogTitle(
         text: widget.existing == null ? l10n.exerciseNew : l10n.exerciseEdit,
         deleteLabel: widget.existing?.name,
+        // The bin here does not only remove a name from a list: the
+        // scheduled rows cascade with it. The confirmation says that.
+        deleteBody: l10n.exerciseDeleteBody,
         onDelete: widget.onDelete,
       ),
       content: SizedBox(
@@ -120,136 +123,6 @@ class _ExerciseFormDialogState extends State<_ExerciseFormDialog> {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.actionCancel),
-        ),
-        FilledButton(onPressed: _submit, child: Text(l10n.actionSave)),
-      ],
-    );
-  }
-}
-
-/// Collects one set, and how it felt. Returns null when dismissed.
-///
-/// The note lives here rather than on the routine because a plan cannot feel
-/// anything. It is the half of the record that says the weight moved but the
-/// last rep was ugly, which no target will ever tell you.
-Future<({int reps, double? weight, String? note})?> showSetForm(
-  BuildContext context, {
-  ExerciseSet? existing,
-  Future<void> Function()? onDelete,
-}) => showDialog<({int reps, double? weight, String? note})>(
-  context: context,
-  builder: (context) => _SetFormDialog(existing: existing, onDelete: onDelete),
-);
-
-class _SetFormDialog extends StatefulWidget {
-  const _SetFormDialog({this.existing, this.onDelete});
-
-  final ExerciseSet? existing;
-  final Future<void> Function()? onDelete;
-
-  @override
-  State<_SetFormDialog> createState() => _SetFormDialogState();
-}
-
-class _SetFormDialogState extends State<_SetFormDialog> {
-  final _formKey = GlobalKey<FormState>();
-  late final _reps = TextEditingController(
-    text: '${widget.existing?.reps ?? 10}',
-  );
-  late final _weight = TextEditingController(
-    text: widget.existing?.weight == null ? '' : '${widget.existing!.weight}',
-  );
-  late final _note = TextEditingController(text: widget.existing?.note ?? '');
-
-  @override
-  void dispose() {
-    _reps.dispose();
-    _weight.dispose();
-    _note.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    if (!_formKey.currentState!.validate()) return;
-
-    final raw = _weight.text.trim().replaceAll(',', '.');
-    Navigator.of(context).pop((
-      reps: int.parse(_reps.text),
-      // Blank means bodyweight, which is not the same as zero.
-      weight: raw.isEmpty ? null : double.parse(raw),
-      note: _note.text.trim().isEmpty ? null : _note.text.trim(),
-    ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    return AlertDialog(
-      title: DialogTitle(
-        text: widget.existing == null
-            ? l10n.exerciseAddSet
-            : l10n.exerciseEditSet,
-        onDelete: widget.onDelete,
-        deleteLabel: l10n.exerciseEditSet,
-      ),
-      content: SizedBox(
-        width: 320,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _reps,
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: l10n.exerciseReps),
-                validator: (value) {
-                  final parsed = int.tryParse((value ?? '').trim());
-                  return parsed == null || parsed < 1 || parsed > 1000
-                      ? l10n.nutritionValidationNumber(1000)
-                      : null;
-                },
-              ),
-              TextFormField(
-                controller: _weight,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                decoration: InputDecoration(
-                  labelText: l10n.exerciseWeight,
-                  helperText: l10n.exerciseBodyweight,
-                ),
-                validator: (value) {
-                  final text = (value ?? '').trim().replaceAll(',', '.');
-                  if (text.isEmpty) return null;
-
-                  final parsed = double.tryParse(text);
-                  return parsed == null || parsed < 0 || parsed > 1000
-                      ? l10n.nutritionValidationNumber(1000)
-                      : null;
-                },
-                onFieldSubmitted: (_) => _submit(),
-              ),
-              TextFormField(
-                controller: _note,
-                maxLength: 1000,
-                maxLines: 2,
-                decoration: InputDecoration(
-                  labelText: l10n.exerciseSetNote,
-                  hintText: l10n.exerciseSetNoteHint,
-                  alignLabelWithHint: true,
-                ),
-              ),
-            ],
           ),
         ),
       ),

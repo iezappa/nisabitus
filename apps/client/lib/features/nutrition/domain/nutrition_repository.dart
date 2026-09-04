@@ -43,22 +43,24 @@ abstract interface class NutritionRepository {
   /// The figures the progress view shows for [range].
   Future<NutritionStats> statsFor(DateRange range);
 
-  /// Everything the catalogue has learned, most recently eaten first.
+  /// Every food in the database, by name.
   ///
-  /// Ordered by use rather than alphabetically: a list of foods is read to
-  /// find the one you eat every morning, not to browse it.
+  /// Ordered alphabetically rather than by use: it is a reference table of
+  /// eighty-odd foods now, read by looking one up, and an order that shuffles
+  /// with what was eaten this morning makes looking one up harder.
   Future<List<Food>> foods();
 
-  /// Files [food] in the catalogue, or updates the one already there.
+  /// Writes [food] down, or corrects the one already there.
   ///
-  /// Matching is by name, case-insensitively: eating "avena" the day after
-  /// "Avena" is eating the same thing twice, not discovering a second food.
-  ///
-  /// [eatenOn] is what [foods] orders by, so the picker is ordered by when
-  /// each food was last actually eaten rather than by when the row happened
-  /// to be written. Logging a forgotten lunch from last week does not push
-  /// that food to the top: the later of the two dates wins.
-  Future<Food> rememberFood(Food food, {DateTime? eatenOn});
+  /// An id of zero is a food the database does not have yet. Matching is
+  /// otherwise by id, with the case-folded name kept unique underneath:
+  /// "avena" and "Avena" are one food, not two.
+  Future<Food> saveFood(Food food);
 
-  Future<void> forgetFood(int id);
+  /// Removes a food from the database.
+  ///
+  /// It cascades onto nothing. Every entry copied its figures when it was
+  /// logged, so what was eaten survives a food being deleted, which is what
+  /// the confirmation tells the user.
+  Future<void> deleteFood(int id);
 }

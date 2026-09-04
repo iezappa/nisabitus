@@ -1,6 +1,6 @@
 import '../../../core/time/daily_series.dart';
 import '../../../core/time/date_range.dart';
-import 'exercise.dart';
+import 'scheduled_exercise.dart';
 
 /// What the training history says over a window.
 class ExerciseStats {
@@ -12,26 +12,41 @@ class ExerciseStats {
     required this.perDay,
   });
 
-  /// Reads the figures off the sets of [range], in any order.
-  factory ExerciseStats.from(DateRange range, List<ExerciseSet> sets) {
-    final inRange = sets.where((s) => range.contains(s.date)).toList();
+  /// Reads the figures off the scheduled rows of [range], in any order.
+  ///
+  /// Only the rows that were ticked off count. A day is written down before
+  /// it is lived, so counting everything scheduled would put work on the
+  /// record that nobody did — a routine planned on Sunday would read as a
+  /// week already trained.
+  factory ExerciseStats.from(
+    DateRange range,
+    List<ScheduledExercise> scheduled,
+  ) {
+    final done = scheduled
+        .where((e) => e.completed && range.contains(e.scheduledDate))
+        .toList();
 
     final volumePerDay = <DateTime, double>{};
-    for (final set in inRange) {
-      final day = dateOnly(set.date);
-      volumePerDay[day] = (volumePerDay[day] ?? 0) + set.volume;
+    for (final row in done) {
+      final day = dateOnly(row.scheduledDate);
+      volumePerDay[day] = (volumePerDay[day] ?? 0) + _volumeOf(row);
     }
 
     return ExerciseStats._(
-      sets: inRange.length,
-      reps: inRange.fold(0, (sum, s) => sum + s.reps),
-      volume: inRange.fold(0, (sum, s) => sum + s.volume),
-      // Counted off the sets, not off the volume map: a day of bodyweight
+      sets: done.fold(0, (sum, e) => sum + e.sets),
+      reps: done.fold(0, (sum, e) => sum + e.sets * e.reps),
+      volume: done.fold(0, (sum, e) => sum + _volumeOf(e)),
+      // Counted off the rows, not off the volume map: a day of bodyweight
       // work carries no load but is still a day trained.
-      daysTrained: inRange.map((s) => dateOnly(s.date)).toSet().length,
+      daysTrained: done.map((e) => dateOnly(e.scheduledDate)).toSet().length,
       perDay: dailySeries(range, volumePerDay),
     );
   }
+
+  /// Sets times reps times weight. Bodyweight work carries no external load,
+  /// so it contributes nothing here — which is not the same as not counting.
+  static double _volumeOf(ScheduledExercise row) =>
+      row.sets * row.reps * (row.weightKg ?? 0);
 
   final int sets;
   final int reps;

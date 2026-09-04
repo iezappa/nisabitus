@@ -71,108 +71,8 @@ class DriftExerciseRepository implements ExerciseRepository {
 
   @override
   Future<void> deleteExercise(int id) async {
-    // The cascade in the schema takes every set logged against it.
+    // The cascade in the schema takes every day it was scheduled on.
     await (_db.delete(_db.exercises)..where((e) => e.id.equals(id))).go();
-  }
-
-  @override
-  Future<WorkoutDay> workoutFor(DateTime day) async {
-    final catalogue = {
-      for (final exercise in await exercises()) exercise.id: exercise,
-    };
-    final rows =
-        await (_db.select(_db.exerciseSets)
-              ..where((s) => s.date.equals(dateOnly(day)))
-              ..orderBy([(s) => OrderingTerm.asc(s.position)]))
-            .get();
-
-    return WorkoutDay.from(rows.map(_toSet).toList(), catalogue);
-  }
-
-  @override
-  Future<ExerciseSet> logSet(
-    DateTime day, {
-    required int exerciseId,
-    required int reps,
-    double? weight,
-    String? note,
-  }) async {
-    final date = dateOnly(day);
-    // Position is per day, so a set always lands after whatever came before
-    // it that day rather than interleaving with another date.
-    final next = await _nextPosition(date);
-
-    final validated = ExerciseSet(
-      id: 0,
-      exerciseId: exerciseId,
-      date: date,
-      reps: reps,
-      weight: weight,
-      position: next,
-      note: note,
-    );
-
-    final id = await _db
-        .into(_db.exerciseSets)
-        .insert(
-          ExerciseSetsCompanion.insert(
-            exerciseId: exerciseId,
-            date: date,
-            position: Value(next),
-            reps: validated.reps,
-            weight: Value(validated.weight),
-            note: Value(validated.note),
-          ),
-        );
-
-    return (await _setById(id))!;
-  }
-
-  @override
-  Future<ExerciseSet> updateSet(
-    int id, {
-    required int reps,
-    double? weight,
-    String? note,
-  }) async {
-    final existing = await _setById(id);
-    if (existing == null) throw StateError('Exercise set $id was not found');
-
-    final validated = ExerciseSet(
-      id: id,
-      exerciseId: existing.exerciseId,
-      date: existing.date,
-      reps: reps,
-      weight: weight,
-      position: existing.position,
-      note: note,
-    );
-
-    await (_db.update(_db.exerciseSets)..where((s) => s.id.equals(id))).write(
-      ExerciseSetsCompanion(
-        reps: Value(validated.reps),
-        weight: Value(validated.weight),
-        // An absent-or-null value rather than a skipped field: taking back
-        // something written in the moment has to be possible.
-        note: Value(validated.note),
-      ),
-    );
-
-    return validated;
-  }
-
-  @override
-  Future<void> deleteSet(int id) async {
-    await (_db.delete(_db.exerciseSets)..where((s) => s.id.equals(id))).go();
-  }
-
-  Future<int> _nextPosition(DateTime date) async {
-    final highest = _db.exerciseSets.position.max();
-    final query = _db.selectOnly(_db.exerciseSets)
-      ..addColumns([highest])
-      ..where(_db.exerciseSets.date.equals(date));
-
-    return ((await query.getSingle()).read(highest) ?? -1) + 1;
   }
 
   Future<Exercise?> _exerciseById(int id) async {
@@ -181,14 +81,6 @@ class DriftExerciseRepository implements ExerciseRepository {
     )..where((e) => e.id.equals(id))).getSingleOrNull();
 
     return row == null ? null : _toExercise(row);
-  }
-
-  Future<ExerciseSet?> _setById(int id) async {
-    final row = await (_db.select(
-      _db.exerciseSets,
-    )..where((s) => s.id.equals(id))).getSingleOrNull();
-
-    return row == null ? null : _toSet(row);
   }
 
   Exercise _toExercise(ExerciseRow row) => Exercise(
@@ -201,53 +93,13 @@ class DriftExerciseRepository implements ExerciseRepository {
 
   @override
   Future<ExerciseStats> statsFor(DateRange range) async {
-    final rows = await (_db.select(
-      _db.exerciseSets,
-    )..where((s) => s.date.isBetweenValues(range.start, range.end))).get();
+    final rows =
+        await (_db.select(_db.scheduledExercises)..where(
+              (e) => e.scheduledDate.isBetweenValues(range.start, range.end),
+            ))
+            .get();
 
-    return ExerciseStats.from(range, rows.map(_toSet).toList());
-  }
-
-  ExerciseSet _toSet(ExerciseSetRow row) => ExerciseSet(
-    id: row.id,
-    exerciseId: row.exerciseId,
-    date: row.date,
-    reps: row.reps,
-    weight: row.weight,
-    position: row.position,
-    note: row.note,
-  );
-
-  @override
-  Future<ExerciseSet> updateSetNote(int id, String? note) async {
-    final existing = await (_db.select(
-      _db.exerciseSets,
-    )..where((s) => s.id.equals(id))).getSingleOrNull();
-    if (existing == null) throw StateError('Exercise set $id was not found');
-
-    // An absent-or-null value rather than a skipped field: taking back
-    // something you wrote in the moment has to be possible.
-    await (_db.update(_db.exerciseSets)..where((s) => s.id.equals(id))).write(
-      ExerciseSetsCompanion(
-        note: Value(
-          ExerciseSet(
-            id: id,
-            exerciseId: existing.exerciseId,
-            date: existing.date,
-            reps: existing.reps,
-            weight: existing.weight,
-            position: existing.position,
-            note: note,
-          ).note,
-        ),
-      ),
-    );
-
-    return _toSet(
-      (await (_db.select(
-        _db.exerciseSets,
-      )..where((s) => s.id.equals(id))).getSingle()),
-    );
+    return ExerciseStats.from(range, rows.map(_toScheduled).toList());
   }
 
   // ------------------------------------------------------ scheduled work

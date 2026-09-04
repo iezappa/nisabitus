@@ -1,6 +1,6 @@
 import '../../../core/time/date_range.dart';
+import 'food_portion.dart';
 import 'meal.dart';
-import 'nutrition_repository.dart';
 
 /// A set of macronutrient figures, used both as a target and as a total.
 ///
@@ -127,38 +127,42 @@ class FoodEntry {
     macros: macros,
     meal: meal,
   );
-
-  /// This entry as something the catalogue can offer again.
-  ///
-  /// The id is zero: what comes back describes a food, it does not claim to
-  /// be a stored one. The repository decides whether it is new.
-  Food toFood() => Food(id: 0, name: name, portion: portion, macros: macros);
 }
 
-/// Something eaten often enough to be worth not typing again.
+/// An entry in the food database: what something is made of, per 100 g.
 ///
-/// The catalogue fills itself: every entry saved offers itself as a food, so
-/// nobody maintains a list by hand — a list maintained by hand stays empty.
+/// One reference weight for every food, so a figure can be scaled to whatever
+/// was actually on the plate. Quoting macros against a free-text portion
+/// instead — "1 plato" — makes them unscalable and, worse, unreadable: two
+/// foods measured against two different plates cannot be compared, added, or
+/// corrected. See [macrosFor] for the arithmetic that reference weight buys.
 ///
 /// An entry does not point back at the food it came from, on purpose. What
-/// was eaten is a record of a day, and correcting a food's macros today must
+/// was eaten is a record of a day, and correcting a food's figures today must
 /// not rewrite what last week says. Picking a food copies its figures; from
 /// then on the two are unrelated.
 class Food {
   Food({
     required this.id,
     required String name,
-    required this.macros,
-    this.portion,
+    required this.per100g,
+    this.isBuiltIn = false,
   }) : name = _validateName(name);
 
   final int id;
   final String name;
 
-  /// The portion the macros are quoted for: "80 g", "1 plato".
-  final String? portion;
+  /// What 100 g of it is made of. The unit is in the name because getting it
+  /// wrong is silent: nothing about a bare `Macros` says which weight it is
+  /// quoted for.
+  final Macros per100g;
 
-  final Macros macros;
+  /// Whether the app shipped this food or the user wrote it down.
+  ///
+  /// Not decoration: it is what lets a later reseed add foods without
+  /// touching what the user typed, and it tells the picker which rows are the
+  /// catalogue and which are theirs.
+  final bool isBuiltIn;
 
   static String _validateName(String value) {
     final trimmed = value.trim();
@@ -168,12 +172,15 @@ class Food {
     return trimmed;
   }
 
-  /// The entry this food would fill in, ready for the form to adjust.
-  FoodDraft toDraft({Meal? meal}) =>
-      FoodDraft(name: name, portion: portion, macros: macros, meal: meal);
+  /// What [grams] of this food adds up to.
+  Macros macrosFor(double grams) => scaleMacros(per100g, grams);
 
-  Food copyWith({int? id}) =>
-      Food(id: id ?? this.id, name: name, portion: portion, macros: macros);
+  Food copyWith({int? id, String? name, Macros? per100g}) => Food(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    per100g: per100g ?? this.per100g,
+    isBuiltIn: isBuiltIn,
+  );
 }
 
 /// What one day of eating adds up to, against the targets.

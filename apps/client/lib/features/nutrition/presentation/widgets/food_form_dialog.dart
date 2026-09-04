@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/dialog_title.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/food_portion.dart';
 import '../../domain/meal.dart';
 import '../../domain/nutrition.dart';
 import '../../domain/nutrition_repository.dart';
 import '../nutrition_labels.dart';
-import 'saved_food_picker.dart';
+import 'food_database_dialog.dart';
 
 /// Collects one food entry. Returns null when dismissed.
 ///
@@ -50,6 +51,14 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
   late final _protein = _number(widget.existing?.macros.protein);
   late final _carbs = _number(widget.existing?.macros.carbs);
   late final _fat = _number(widget.existing?.macros.fat);
+  final _grams = TextEditingController();
+
+  /// The food this entry was taken from, while the form is still open.
+  ///
+  /// Only the figures are copied out of it — nothing about the saved entry
+  /// points back here. It is held on to so the weight field has something to
+  /// scale, and it is dropped the moment the dialog closes.
+  Food? _food;
 
   /// An existing entry starts on whatever it was filed under, a new one on
   /// what the caller suggested. Only a starting point: the common case is
@@ -62,7 +71,15 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
 
   @override
   void dispose() {
-    for (final c in [_name, _portion, _calories, _protein, _carbs, _fat]) {
+    for (final c in [
+      _name,
+      _portion,
+      _calories,
+      _protein,
+      _carbs,
+      _fat,
+      _grams,
+    ]) {
       c.dispose();
     }
     super.dispose();
@@ -70,17 +87,53 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
 
   int _read(TextEditingController c) => int.tryParse(c.text.trim()) ?? 0;
 
-  Future<void> _pickSaved() async {
-    final food = await showSavedFoodPicker(context);
+  /// Picks a food out of the database and starts it at 100 g.
+  ///
+  /// A hundred is the weight the food is quoted for, so the figures that
+  /// appear are the ones the database actually holds. Starting at a blank
+  /// weight would show four empty fields and leave the user to guess what
+  /// the food was worth.
+  Future<void> _pickFromDatabase() async {
+    final food = await showFoodDatabase(context);
     if (food == null || !mounted) return;
 
     setState(() {
+      _food = food;
       _name.text = food.name;
-      _portion.text = food.portion ?? '';
-      _calories.text = _text(food.macros.calories);
-      _protein.text = _text(food.macros.protein);
-      _carbs.text = _text(food.macros.carbs);
-      _fat.text = _text(food.macros.fat);
+      _grams.text = '100';
+    });
+    _scale();
+  }
+
+  /// Recomputes the macro fields from the weight, as it is typed.
+  ///
+  /// It writes into the visible fields rather than into a hidden total: the
+  /// user has to be able to SEE what they are about to save, and a form that
+  /// scales invisibly is a form that is trusted until the day it is wrong.
+  /// The fields stay editable afterwards, so a figure can still be overridden
+  /// by hand.
+  void _scale() {
+    final food = _food;
+    if (food == null) return;
+
+    final grams = parseGrams(_grams.text);
+    // A blank or impossible weight leaves the figures where they are. Wiping
+    // them to zero while someone is mid-keystroke reads as the form losing
+    // what it was just told.
+    if (grams == null) return;
+
+    final macros = food.macrosFor(grams);
+    setState(() {
+      _calories.text = _text(macros.calories);
+      _protein.text = _text(macros.protein);
+      _carbs.text = _text(macros.carbs);
+      _fat.text = _text(macros.fat);
+      // The portion is free text and stays free text — this only fills it in
+      // with what was actually weighed, and it can be typed over. A food
+      // nobody weighs is logged the way it always was: no database food, no
+      // weight, and "1 plato" written by hand.
+      _portion.text = AppLocalizations.of(context)
+          .nutritionGrams(grams.round());
     });
   }
 
@@ -133,9 +186,9 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton.icon(
-                      onPressed: _pickSaved,
-                      icon: const Icon(Icons.history),
-                      label: Text(l10n.nutritionPickSaved),
+                      onPressed: _pickFromDatabase,
+                      icon: const Icon(Icons.restaurant_menu),
+                      label: Text(l10n.nutritionFoodDatabase),
                     ),
                   ),
                 TextFormField(
@@ -155,6 +208,25 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
                     hintText: l10n.nutritionPortionHint,
                   ),
                 ),
+                // Only once a food has been picked. Without one there is
+                // nothing to scale, and a weight field over four hand-typed
+                // figures would imply an arithmetic that is not happening.
+                if (_food != null)
+                  TextFormField(
+                    controller: _grams,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: l10n.nutritionWeight,
+                      suffixText: 'g',
+                      helperText: l10n.nutritionWeightHint,
+                    ),
+                    onChanged: (_) => _scale(),
+                    validator: (value) => parseGrams(value ?? '') == null
+                        ? l10n.nutritionValidationGrams(maxPortionGrams.toInt())
+                        : null,
+                  ),
                 const SizedBox(height: Gap.sm),
                 _MacroField(
                   controller: _calories,

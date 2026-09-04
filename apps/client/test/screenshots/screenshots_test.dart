@@ -62,7 +62,7 @@ import 'package:nisabitus/features/nutrition/domain/nutrition.dart';
 import 'package:nisabitus/features/nutrition/domain/nutrition_repository.dart';
 import 'package:nisabitus/features/nutrition/presentation/nutrition_view.dart';
 import 'package:nisabitus/features/nutrition/presentation/widgets/food_form_dialog.dart';
-import 'package:nisabitus/features/nutrition/presentation/widgets/saved_food_picker.dart';
+import 'package:nisabitus/features/nutrition/presentation/widgets/food_database_dialog.dart';
 import 'package:nisabitus/features/release_notes/presentation/release_notes_providers.dart';
 import 'package:nisabitus/features/release_notes/presentation/widgets/release_notes_dialog.dart';
 import 'package:nisabitus/features/streaks/domain/streak.dart';
@@ -422,9 +422,20 @@ void main() {
       );
     });
 
-    testWidgets('picking something eaten before', (tester) async {
+    testWidgets('the food database', (tester) async {
+      // The seed is Dart source rather than a bundled asset on purpose:
+      // `rootBundle` has nothing behind it in a widget test, so a dialog that
+      // loaded its catalogue from an asset would photograph as a spinner.
       await seed(db, wednesday);
-      await shootDialog(tester, 'dialog_saved_food', showSavedFoodPicker);
+      await shootDialog(tester, 'dialog_food_database', showFoodDatabase);
+    });
+
+    testWidgets('writing down a food of your own', (tester) async {
+      await shootDialog(
+        tester,
+        'dialog_food_definition',
+        showFoodDefinitionForm,
+      );
     });
 
     testWidgets('new exercise', (tester) async {
@@ -441,6 +452,11 @@ void main() {
           context,
           catalogue: catalogue,
           day: wednesday,
+          // Both ways into the catalogue, because the form is the only place
+          // left that lists movements: one writes a new one down, the other
+          // corrects the one that is picked.
+          onCreateExercise: () async => null,
+          onEditExercise: (exercise) async => null,
         ),
         surface: const Size(760, 1000),
       );
@@ -658,14 +674,6 @@ Future<void> seed(AppDatabase db, DateTime today) async {
   await training.complete(
     donePress.id,
     const ExerciseCompletion(rpe: 8, feedback: 'Salió redondo'),
-  );
-  await training.logSet(today, exerciseId: squat.id, reps: 6, weight: 90);
-  await training.logSet(
-    today,
-    exerciseId: squat.id,
-    reps: 6,
-    weight: 90,
-    note: 'La última salió fea',
   );
 
   // A swim, which is measured in time and distance rather than in sets.

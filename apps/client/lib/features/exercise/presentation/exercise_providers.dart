@@ -38,15 +38,6 @@ final exerciseCatalogueProvider = FutureProvider<List<Exercise>>((ref) {
   return ref.watch(exerciseRepositoryProvider).exercises();
 });
 
-/// The training logged on the day the week strip points at.
-final workoutDayProvider = FutureProvider<WorkoutDay>((ref) {
-  ref.watch(exerciseRevisionProvider);
-
-  return ref
-      .watch(exerciseRepositoryProvider)
-      .workoutFor(ref.watch(selectedDayProvider));
-});
-
 /// What is written down for the day the week strip points at.
 final scheduledExercisesProvider = FutureProvider<List<ScheduledExercise>>((
   ref,
@@ -83,42 +74,6 @@ class ExerciseActions {
 
   Future<void> deleteExercise(int id) async {
     await _repository.deleteExercise(id);
-    _invalidate();
-  }
-
-  Future<void> logSet(
-    int exerciseId, {
-    required int reps,
-    double? weight,
-    String? note,
-  }) async {
-    await _repository.logSet(
-      _ref.read(selectedDayProvider),
-      exerciseId: exerciseId,
-      reps: reps,
-      weight: weight,
-      note: note,
-    );
-    _invalidate();
-  }
-
-  Future<void> updateSet(
-    int id, {
-    required int reps,
-    double? weight,
-    String? note,
-  }) async {
-    await _repository.updateSet(id, reps: reps, weight: weight, note: note);
-    _invalidate();
-  }
-
-  Future<void> deleteSet(int id) async {
-    await _repository.deleteSet(id);
-    _invalidate();
-  }
-
-  Future<void> setNote(int setId, String? note) async {
-    await _repository.updateSetNote(setId, note);
     _invalidate();
   }
 

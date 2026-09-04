@@ -181,6 +181,34 @@ void main() {
       expect((await db.select(db.todoTasks).getSingle()).completedAt, isNull);
     });
 
+    test('ignores a table the store no longer has', () async {
+      // A backup taken before v12 carries the per-set log, and that table is
+      // gone. Refusing the file, or throwing on the way in, would turn every
+      // backup written before the drop into one the app cannot open — the
+      // rows it cannot place are dropped on the floor, which is what the
+      // migration did to them anyway.
+      await seed();
+      final document = await repository.export();
+      final older = BackupDocument(
+        schemaVersion: 11,
+        exportedAt: document.exportedAt,
+        tables: {
+          ...document.tables,
+          'exercise_sets': [
+            {'id': 1, 'exercise_id': 1, 'date': 0, 'position': 0, 'reps': 8},
+          ],
+        },
+      );
+
+      final report = await repository.restore(older);
+
+      expect(await db.select(db.habits).get(), hasLength(1));
+      // The document says one row more than the store can hold. Reporting
+      // the document's count would tell the user the set log came back.
+      expect(report.rows, document.rowCount);
+      expect(report.ignoredTables, {'exercise_sets'});
+    });
+
     test('ignores a table the document does not mention', () async {
       await seed();
       final document = await repository.export();

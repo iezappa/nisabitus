@@ -7,7 +7,6 @@ import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/time/selected_day_provider.dart';
 import 'package:nisabitus/features/nutrition/domain/meal.dart';
-import 'package:nisabitus/features/nutrition/domain/nutrition.dart';
 import 'package:nisabitus/features/nutrition/domain/nutrition_repository.dart';
 import 'package:nisabitus/features/nutrition/presentation/nutrition_providers.dart';
 import 'package:nisabitus/features/nutrition/presentation/nutrition_view.dart';
@@ -118,37 +117,112 @@ void main() {
     expect(find.text('Algo'), findsOneWidget);
   });
 
-  testWidgets('offers back a food that was eaten before', (tester) async {
-    // The catalogue fills itself from what was saved, so eating the same
-    // breakfast twice is picking it the second time.
-    await repository().addEntry(
-      day,
-      const FoodDraft(
-        name: 'Avena',
-        portion: '80 g',
-        macros: Macros(calories: 300),
-      ),
-    );
+  testWidgets('scales a food from the database by what it weighed', (
+    tester,
+  ) async {
+    // The whole point of the reshape: the database quotes 100 g, the user
+    // says what was on the plate, and the entry is the two multiplied out
+    // where they can see it happen.
     await pumpView(tester);
 
     await tester.tap(find.byTooltip('Agregar alimento'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Elegir de lo que comés seguido'));
+    await tester.tap(find.text('Base de alimentos'));
     await tester.pumpAndSettle();
 
-    // Scoped to the picker: the entry it was learned from is still on the
-    // screen behind the dialog, so a bare text finder matches twice.
-    final picker = find.widgetWithText(AlertDialog, 'Lo que comés seguido');
-    final offered = find.descendant(of: picker, matching: find.text('Avena'));
-    expect(offered, findsOneWidget);
+    // Scoped to the dialog on top: the entry form is still behind it, and an
+    // unscoped field finder types into that one instead.
+    final database = find.byType(AlertDialog).last;
 
-    await tester.tap(offered);
+    // Eighty foods do not fit on a screen, so the search is how one is found.
+    await tester.enterText(
+      find.descendant(of: database, matching: find.byType(TextField)),
+      'avena',
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.descendant(of: database, matching: find.text('Avena')),
+    );
+    await tester.pumpAndSettle();
+
+    // It lands at the weight the figure is quoted for, so what appears is
+    // what the database actually holds.
+    expect(find.widgetWithText(TextFormField, 'Avena'), findsOneWidget);
+    expect(find.widgetWithText(TextFormField, '380'), findsOneWidget);
+
+    final weight = find.ancestor(
+      of: find.text('Peso'),
+      matching: find.byType(TextFormField),
+    );
+    await tester.enterText(weight, '50');
+    await tester.pumpAndSettle();
+
+    // 380 kcal per 100 g, halved. Visible in the field before anything is
+    // saved: scaling the user cannot see is scaling the user cannot check.
+    expect(find.widgetWithText(TextFormField, '190'), findsOneWidget);
+    expect(find.widgetWithText(TextFormField, '50 g'), findsOneWidget);
+  });
+
+  testWidgets('writes down a food the database did not have', (tester) async {
+    // Finding out mid-entry that your breakfast is not listed must not mean
+    // cancelling and starting over somewhere else.
+    await pumpView(tester);
+
+    await tester.tap(find.byTooltip('Agregar alimento'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Base de alimentos'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Alimento nuevo'));
+    await tester.pumpAndSettle();
+
+    // Scoped to the form on top: the entry form behind it has a name field
+    // and a calories field of its own.
+    final form = find.byType(AlertDialog).last;
+    await tester.enterText(
+      find.descendant(
+        of: form,
+        matching: find.widgetWithText(TextFormField, 'Nombre'),
+      ),
+      'Licuado de banana',
+    );
+    await tester.enterText(
+      find.descendant(
+        of: form,
+        matching: find.ancestor(
+          of: find.text('Calorías'),
+          matching: find.byType(TextFormField),
+        ),
+      ),
+      '90',
+    );
+    await tester.tap(find.descendant(of: form, matching: find.text('Guardar')));
+    await tester.pumpAndSettle();
+
+    final stored = await repository().foods();
+    final mine = stored.firstWhere((f) => f.name == 'Licuado de banana');
+    expect(mine.per100g.calories, 90);
+    expect(mine.isBuiltIn, isFalse, reason: 'the user wrote it, not the app');
+
+    // And it is offered back straight away, without closing anything. Found
+    // by searching, because the list is alphabetical and eighty foods long —
+    // which is the reason the search is there at all.
+    final database = find.byType(AlertDialog).last;
+    await tester.enterText(
+      find.descendant(of: database, matching: find.byType(TextField)),
+      'licuado',
+    );
     await tester.pumpAndSettle();
 
     expect(
-      find.widgetWithText(TextFormField, 'Avena'),
+      find.descendant(of: database, matching: find.text('Licuado de banana')),
       findsOneWidget,
-      reason: 'picking a food fills the form with it',
+    );
+    // Marked as the user's own, so a later reseed knows to leave it alone.
+    expect(
+      find.descendant(of: database, matching: find.text('Tuyo')),
+      findsOneWidget,
     );
   });
 }

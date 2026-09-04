@@ -40,12 +40,17 @@ class FoodEntries extends Table {
   TextColumn get meal => text().withLength(max: 16).nullable()();
 }
 
-/// A food worth not typing again.
+/// The food database: what things are made of, per 100 g.
 ///
-/// Filled by using the app rather than by maintaining it: saving an entry
-/// files what it describes here. Deliberately not linked to [FoodEntries] —
-/// an entry copies these figures once and never looks back, so correcting a
-/// food today cannot rewrite what last week says was eaten.
+/// A reference table, seeded with what is actually eaten in Argentina and
+/// added to by hand. Every figure is quoted against the same weight, which is
+/// the whole point: 100 g is a fixed reference, so any portion can be worked
+/// out from it, and two foods can be compared. The previous shape quoted
+/// macros against a free-text portion ("1 plato") and could do neither.
+///
+/// Deliberately not linked to [FoodEntries] — an entry copies these figures
+/// once and never looks back, so correcting a food today cannot rewrite what
+/// last week says was eaten.
 @DataClassName('FoodRow')
 @TableIndex(name: 'food_by_name', columns: {#lowerName}, unique: true)
 class Foods extends Table {
@@ -59,13 +64,31 @@ class Foods extends Table {
   /// copy that is not an edge case.
   TextColumn get lowerName => text().withLength(min: 1, max: 255)();
 
-  TextColumn get portion => text().withLength(max: 255).nullable()();
+  /// What 100 g of it is made of. The unit is in every column name because a
+  /// figure that is silently quoted for the wrong weight is off by a factor
+  /// nobody notices — `calories` alone never said which portion it meant.
+  IntColumn get caloriesPer100g => integer().withDefault(const Constant(0))();
+  IntColumn get proteinPer100g => integer().withDefault(const Constant(0))();
+  IntColumn get carbsPer100g => integer().withDefault(const Constant(0))();
+  IntColumn get fatPer100g => integer().withDefault(const Constant(0))();
 
-  IntColumn get calories => integer().withDefault(const Constant(0))();
-  IntColumn get protein => integer().withDefault(const Constant(0))();
-  IntColumn get carbs => integer().withDefault(const Constant(0))();
-  IntColumn get fat => integer().withDefault(const Constant(0))();
+  /// Whether the app shipped this food or the user wrote it down.
+  ///
+  /// It is what lets a later reseed add foods without touching what the user
+  /// typed, and it is what tells the picker whose row it is showing.
+  BoolColumn get isBuiltIn => boolean().withDefault(const Constant(false))();
 
-  /// When it was last eaten, which is the order the picker shows.
-  DateTimeColumn get lastUsedAt => dateTime()();
+  // `portion` and `lastUsedAt` are both gone as of v13.
+  //
+  // `portion` was the weight these macros were quoted for, and there is only
+  // one now: 100 g, named in every column. Keeping a free-text portion here
+  // would let a row claim its figures were for something else, which is the
+  // exact ambiguity the reshape removes. The entry still has one, because
+  // what was on the plate is a fact about the meal, not about the food.
+  //
+  // `lastUsedAt` ordered the old list by what had been eaten lately, which
+  // worked while the catalogue was a short list the user had built by eating.
+  // It is a reference table of eighty-odd foods now, and it is read by
+  // searching for a name — so it is ordered by name, and "recently used"
+  // would only bury the seed under whatever was logged this morning.
 }

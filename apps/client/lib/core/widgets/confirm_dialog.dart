@@ -36,14 +36,22 @@ Future<bool> confirmAction(
 }
 
 /// Asks before a destructive action. Returns true only on confirmation.
-Future<bool> confirmDelete(BuildContext context, String name) async {
+///
+/// [body] replaces the generic "cannot be undone" line where the deletion
+/// takes more with it than the thing being named — a movement, say, which
+/// carries every day it was ever scheduled on.
+Future<bool> confirmDelete(
+  BuildContext context,
+  String name, {
+  String? body,
+}) async {
   final l10n = AppLocalizations.of(context);
 
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(l10n.deleteConfirmTitle(name)),
-      content: Text(l10n.deleteConfirmBody),
+      content: Text(body ?? l10n.deleteConfirmBody),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),

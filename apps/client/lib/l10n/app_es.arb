@@ -498,12 +498,19 @@
   "nutritionMealDinner": "Cena",
   "nutritionMealNone": "Sin comida",
   "nutritionUnassigned": "Sin asignar",
-  "nutritionSaved": "Lo que comés seguido",
-  "nutritionSavedHint": "Se llena solo con lo que vas anotando",
-  "nutritionSavedEmpty": "Todavía no anotaste nada",
-  "nutritionPickSaved": "Elegir de lo que comés seguido",
-  "nutritionForget": "Sacar de la lista",
-  "nutritionForgetHint": "Sale de la lista. Lo que ya comiste queda como está.",
+  "nutritionFoodDatabase": "Base de alimentos",
+  "nutritionFoodDatabaseHint": "Elegí un alimento y decí cuánto pesó",
+  "nutritionFoodSearch": "Buscar un alimento",
+  "nutritionFoodNone": "No hay nada que coincida",
+  "nutritionFoodNew": "Alimento nuevo",
+  "nutritionFoodEdit": "Editar alimento",
+  "nutritionFoodMine": "Tuyo",
+  "nutritionFoodDeleteBody": "Solo sale de la base de alimentos. Lo que ya comiste queda tal cual lo anotaste.",
+  "nutritionPer100g": "{value} kcal cada 100 g",
+  "nutritionPer100gLabel": "Cada 100 g",
+  "nutritionWeight": "Peso",
+  "nutritionWeightHint": "Los valores se ajustan a lo que pesaste",
+  "nutritionValidationGrams": "Ingresá un peso entre 0 y {max} g",
   "nutritionValidationNumber": "Ingresá un número entre 0 y {max}",
   "discipline": "Disciplinas",
   "disciplineHint": "Natación, correr, bici — lo que se mide en tiempo, no en series",
@@ -522,7 +529,7 @@
   "disciplineValidationMinutes": "Ingresá un número entre 1 y {max}",
   "disciplineValidationDistance": "Ingresá un número entre 0 y {max}",
   "plan": "Plan",
-  "planToday": "Lo que toca ese día",
+  "planToday": "Rutina de gimnasio",
   "planEmpty": "Nada anotado para ese día",
   "planEmptyHint": "Anotá un ejercicio y, si se repite, decí en qué días",
   "planAdd": "Anotar ejercicio",
@@ -558,31 +565,19 @@
   "exerciseVideo": "Video de referencia",
   "exerciseVideoHint": "Link a un video que muestre el movimiento",
   "exerciseOpenVideo": "Ver el video",
-  "exerciseSetNote": "Cómo se sintió",
-  "exerciseSetNoteHint": "La última salió fea, pesó más de lo esperado…",
-  "exerciseCatalogue": "Ejercicios",
   "exerciseNew": "Nuevo ejercicio",
   "exerciseEdit": "Editar ejercicio",
-  "exerciseNoneYet": "Todavía no hay ejercicios",
-  "exerciseNoneYetHint": "Creá uno y empezá a registrar tus series",
+  "exerciseDeleteBody": "Borrar un ejercicio también borra todos los días en que lo anotaste, incluidos los pasados. No se puede deshacer.",
   "exerciseMuscleGroup": "Grupo muscular",
   "exerciseDescription": "Descripción",
-  "exerciseWorkout": "Entrenamiento",
-  "exerciseNoSets": "Sin series ese día",
-  "exerciseNoSetsHint": "Elegí un ejercicio y anotá tu primera serie",
-  "exerciseAddSet": "Agregar serie",
-  "exerciseEditSet": "Editar serie",
   "exerciseSets": "Series",
   "exerciseReps": "Repeticiones",
   "exerciseWeight": "Peso (kg)",
   "exerciseBodyweight": "Peso corporal",
-  "exerciseSetLine": "{reps} reps",
-  "exerciseSetLineWeighted": "{reps} reps × {weight} kg",
   "exerciseTotalSets": "Series",
   "exerciseTotalReps": "Repeticiones",
   "exerciseVolume": "Volumen",
   "exerciseVolumeValue": "{value} kg",
-  "exerciseTopWeight": "Máximo: {weight} kg",
   "exercisePickOne": "Elegí un ejercicio",
   "@planSetsReps": {
     "placeholders": {
@@ -687,33 +682,23 @@
       }
     }
   },
-  "@exerciseSetLine": {
+  "@nutritionPer100g": {
     "placeholders": {
-      "reps": {
+      "value": {
         "type": "int"
       }
     }
   },
-  "@exerciseSetLineWeighted": {
+  "@nutritionValidationGrams": {
     "placeholders": {
-      "reps": {
+      "max": {
         "type": "int"
-      },
-      "weight": {
-        "type": "String"
       }
     }
   },
   "@exerciseVolumeValue": {
     "placeholders": {
       "value": {
-        "type": "String"
-      }
-    }
-  },
-  "@exerciseTopWeight": {
-    "placeholders": {
-      "weight": {
         "type": "String"
       }
     }
@@ -794,6 +779,7 @@
   "backupConfirmAction": "Reemplazar",
   "backupExported": "{count, plural, =1{Copia guardada: 1 registro} other{Copia guardada: {count} registros}}",
   "backupImported": "{count, plural, =1{Datos restaurados: 1 registro} other{Datos restaurados: {count} registros}}",
+  "backupSomeIgnored": "Parte del archivo viene de una versión anterior y no se pudo restaurar.",
   "backupNotABackup": "Ese archivo no es una copia de Nisabitus",
   "backupNewerVersion": "La copia viene de una versión más nueva de Nisabitus",
   "backupCorrupt": "La copia está dañada y no se puede leer",

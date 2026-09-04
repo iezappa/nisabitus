@@ -14,6 +14,7 @@ class DialogTitle extends StatelessWidget {
     required this.text,
     this.onDelete,
     this.deleteLabel,
+    this.deleteBody,
     super.key,
   });
 
@@ -22,6 +23,10 @@ class DialogTitle extends StatelessWidget {
 
   /// Named in the confirmation, so the user sees what they are about to lose.
   final String? deleteLabel;
+
+  /// What the confirmation says beyond the name, for a deletion that takes
+  /// more with it than the thing being named. Defaults to the generic line.
+  final String? deleteBody;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,11 @@ class DialogTitle extends StatelessWidget {
             tooltip: l10n.actionDelete,
             color: Theme.of(context).colorScheme.error,
             onPressed: () async {
-              if (await confirmDelete(context, deleteLabel ?? text)) {
+              if (await confirmDelete(
+                context,
+                deleteLabel ?? text,
+                body: deleteBody,
+              )) {
                 await delete();
                 if (context.mounted) Navigator.of(context).pop();
               }

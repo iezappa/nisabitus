@@ -241,68 +241,124 @@ void main() {
     });
   });
 
-  group('the catalogue', () {
-    test('starts empty', () async {
-      expect(await repository.foods(), isEmpty);
+  group('the food database', () {
+    test('ships with the foods the app seeds', () async {
+      // A database that starts empty is a database nobody uses: the point of
+      // the reshape is that picking a food is possible on the first day.
+      final foods = await repository.foods();
+
+      expect(foods, isNotEmpty);
+      expect(foods.map((f) => f.name), contains('Milanesa de carne'));
+      expect(foods.every((f) => f.isBuiltIn), isTrue);
     });
 
-    test('learns a food from the entry that was saved', () async {
-      // Nobody maintains a list of foods by hand. A list maintained by hand
-      // stays empty, and then the picker is worth nothing.
-      await repository.addEntry(monday, draft(name: 'Avena', portion: '80 g'));
+    test('quotes what it ships per one hundred grams', () async {
+      final avena = (await repository.foods()).firstWhere(
+        (f) => f.name == 'Avena',
+      );
 
-      final food = (await repository.foods()).single;
-      expect(food.name, 'Avena');
-      expect(food.portion, '80 g');
-      expect(food.macros.calories, 300);
+      expect(avena.per100g.calories, 380);
+      expect(avena.macrosFor(50).calories, 190);
+    });
+
+    test('lists foods by name, so a long list can be read', () async {
+      final names = (await repository.foods()).map((f) => f.name).toList();
+
+      expect(names, orderedEquals(List.of(names)..sort()));
+    });
+
+    test('does not file a food from an entry that was saved', () async {
+      // The old catalogue filled itself from what was logged. It cannot any
+      // more: an entry's macros are for whatever was on the plate, and there
+      // is no way back from those to a per-100 g figure.
+      final before = (await repository.foods()).length;
+
+      await repository.addEntry(monday, draft(name: 'Algo que nadie pesó'));
+
+      expect(await repository.foods(), hasLength(before));
+    });
+
+    test('writes down a food of the user own', () async {
+      final saved = await repository.saveFood(
+        Food(
+          id: 0,
+          name: 'Licuado de banana',
+          per100g: const Macros(calories: 90, protein: 2, carbs: 18, fat: 1),
+        ),
+      );
+
+      expect(saved.id, isNonZero);
+      expect(saved.isBuiltIn, isFalse);
+
+      final stored = (await repository.foods()).firstWhere(
+        (f) => f.name == 'Licuado de banana',
+      );
+      expect(stored.per100g.calories, 90);
+      expect(stored.isBuiltIn, isFalse);
     });
 
     test('files the same food once however it was capitalised', () async {
-      await repository.addEntry(monday, draft(name: 'Avena'));
-      await repository.addEntry(tuesday, draft(name: 'AVENA'));
+      await repository.saveFood(
+        Food(id: 0, name: 'Ñoquis caseros', per100g: Macros.empty),
+      );
+      await repository.saveFood(
+        Food(id: 0, name: 'ñoquis caseros', per100g: Macros.empty),
+      );
 
-      expect(await repository.foods(), hasLength(1));
+      final matches = (await repository.foods()).where(
+        (f) => f.name.toLowerCase() == 'ñoquis caseros',
+      );
+      expect(matches, hasLength(1));
     });
 
-    test('keeps the newest spelling and figures of a food', () async {
-      await repository.addEntry(monday, draft(name: 'Avena', kcal: 300));
-      await repository.addEntry(tuesday, draft(name: 'avena', kcal: 350));
+    test('corrects a food it already had', () async {
+      final saved = await repository.saveFood(
+        Food(id: 0, name: 'Licuado', per100g: const Macros(calories: 90)),
+      );
 
-      final food = (await repository.foods()).single;
-      expect(food.name, 'avena');
-      expect(food.macros.calories, 350);
+      await repository.saveFood(
+        saved.copyWith(
+          name: 'Licuado de banana',
+          per100g: const Macros(calories: 95),
+        ),
+      );
+
+      final stored = (await repository.foods()).firstWhere(
+        (f) => f.id == saved.id,
+      );
+      expect(stored.name, 'Licuado de banana');
+      expect(stored.per100g.calories, 95);
     });
 
-    test('offers what was eaten most recently first', () async {
-      await repository.addEntry(monday, draft(name: 'Avena'));
-      await repository.addEntry(tuesday, draft(name: 'Pollo'));
+    test('deletes a food without rewriting what was eaten', () async {
+      // The database is a reference. Deleting from it must not rewrite the
+      // record of a day that was actually lived.
+      final saved = await repository.saveFood(
+        Food(id: 0, name: 'Licuado', per100g: const Macros(calories: 90)),
+      );
+      await repository.addEntry(monday, draft(name: 'Licuado', kcal: 135));
 
-      expect((await repository.foods()).map((f) => f.name), ['Pollo', 'Avena']);
+      await repository.deleteFood(saved.id);
+
+      expect(
+        (await repository.foods()).where((f) => f.id == saved.id),
+        isEmpty,
+      );
+      final entry = (await repository.entriesFor(monday)).single;
+      expect(entry.name, 'Licuado');
+      expect(entry.macros.calories, 135);
     });
-
-    test(
-      'leaves what was already eaten alone when a food is forgotten',
-      () async {
-        // The catalogue is a convenience. Deleting from it must not rewrite
-        // the record of a day that was actually lived.
-        await repository.addEntry(monday, draft(name: 'Avena'));
-        final food = (await repository.foods()).single;
-
-        await repository.forgetFood(food.id);
-
-        expect(await repository.foods(), isEmpty);
-        expect((await repository.entriesFor(monday)).single.name, 'Avena');
-      },
-    );
 
     test('does not rewrite what was eaten when a food is corrected', () async {
       // The whole reason an entry holds no reference to its food: last week
-      // says what was eaten last week, whatever the catalogue says today.
-      await repository.addEntry(monday, draft(name: 'Avena', kcal: 300));
-      final food = (await repository.foods()).single;
+      // says what was eaten last week, whatever the database says today.
+      final saved = await repository.saveFood(
+        Food(id: 0, name: 'Avena casera', per100g: const Macros(calories: 380)),
+      );
+      await repository.addEntry(monday, draft(name: 'Avena casera', kcal: 300));
 
-      await repository.rememberFood(
-        Food(id: food.id, name: 'Avena', macros: const Macros(calories: 999)),
+      await repository.saveFood(
+        saved.copyWith(per100g: const Macros(calories: 999)),
       );
 
       expect((await repository.entriesFor(monday)).single.macros.calories, 300);

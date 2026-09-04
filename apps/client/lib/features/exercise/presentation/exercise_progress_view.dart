@@ -49,7 +49,7 @@ class ExerciseProgressView extends ConsumerWidget {
         ],
         chartLabel: l10n.exerciseVolumePerDay,
         points: stats.isEmpty ? const [] : stats.perDay,
-        emptyHint: l10n.exerciseNoSetsHint,
+        emptyHint: l10n.planEmptyHint,
       ),
     );
   }

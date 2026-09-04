@@ -2102,41 +2102,83 @@ abstract class AppLocalizations {
   /// **'Sin asignar'**
   String get nutritionUnassigned;
 
-  /// No description provided for @nutritionSaved.
+  /// No description provided for @nutritionFoodDatabase.
   ///
   /// In es, this message translates to:
-  /// **'Lo que comés seguido'**
-  String get nutritionSaved;
+  /// **'Base de alimentos'**
+  String get nutritionFoodDatabase;
 
-  /// No description provided for @nutritionSavedHint.
+  /// No description provided for @nutritionFoodDatabaseHint.
   ///
   /// In es, this message translates to:
-  /// **'Se llena solo con lo que vas anotando'**
-  String get nutritionSavedHint;
+  /// **'Elegí un alimento y decí cuánto pesó'**
+  String get nutritionFoodDatabaseHint;
 
-  /// No description provided for @nutritionSavedEmpty.
+  /// No description provided for @nutritionFoodSearch.
   ///
   /// In es, this message translates to:
-  /// **'Todavía no anotaste nada'**
-  String get nutritionSavedEmpty;
+  /// **'Buscar un alimento'**
+  String get nutritionFoodSearch;
 
-  /// No description provided for @nutritionPickSaved.
+  /// No description provided for @nutritionFoodNone.
   ///
   /// In es, this message translates to:
-  /// **'Elegir de lo que comés seguido'**
-  String get nutritionPickSaved;
+  /// **'No hay nada que coincida'**
+  String get nutritionFoodNone;
 
-  /// No description provided for @nutritionForget.
+  /// No description provided for @nutritionFoodNew.
   ///
   /// In es, this message translates to:
-  /// **'Sacar de la lista'**
-  String get nutritionForget;
+  /// **'Alimento nuevo'**
+  String get nutritionFoodNew;
 
-  /// No description provided for @nutritionForgetHint.
+  /// No description provided for @nutritionFoodEdit.
   ///
   /// In es, this message translates to:
-  /// **'Sale de la lista. Lo que ya comiste queda como está.'**
-  String get nutritionForgetHint;
+  /// **'Editar alimento'**
+  String get nutritionFoodEdit;
+
+  /// No description provided for @nutritionFoodMine.
+  ///
+  /// In es, this message translates to:
+  /// **'Tuyo'**
+  String get nutritionFoodMine;
+
+  /// No description provided for @nutritionFoodDeleteBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo sale de la base de alimentos. Lo que ya comiste queda tal cual lo anotaste.'**
+  String get nutritionFoodDeleteBody;
+
+  /// No description provided for @nutritionPer100g.
+  ///
+  /// In es, this message translates to:
+  /// **'{value} kcal cada 100 g'**
+  String nutritionPer100g(int value);
+
+  /// No description provided for @nutritionPer100gLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada 100 g'**
+  String get nutritionPer100gLabel;
+
+  /// No description provided for @nutritionWeight.
+  ///
+  /// In es, this message translates to:
+  /// **'Peso'**
+  String get nutritionWeight;
+
+  /// No description provided for @nutritionWeightHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Los valores se ajustan a lo que pesaste'**
+  String get nutritionWeightHint;
+
+  /// No description provided for @nutritionValidationGrams.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un peso entre 0 y {max} g'**
+  String nutritionValidationGrams(int max);
 
   /// No description provided for @nutritionValidationNumber.
   ///
@@ -2249,7 +2291,7 @@ abstract class AppLocalizations {
   /// No description provided for @planToday.
   ///
   /// In es, this message translates to:
-  /// **'Lo que toca ese día'**
+  /// **'Rutina de gimnasio'**
   String get planToday;
 
   /// No description provided for @planEmpty.
@@ -2462,24 +2504,6 @@ abstract class AppLocalizations {
   /// **'Ver el video'**
   String get exerciseOpenVideo;
 
-  /// No description provided for @exerciseSetNote.
-  ///
-  /// In es, this message translates to:
-  /// **'Cómo se sintió'**
-  String get exerciseSetNote;
-
-  /// No description provided for @exerciseSetNoteHint.
-  ///
-  /// In es, this message translates to:
-  /// **'La última salió fea, pesó más de lo esperado…'**
-  String get exerciseSetNoteHint;
-
-  /// No description provided for @exerciseCatalogue.
-  ///
-  /// In es, this message translates to:
-  /// **'Ejercicios'**
-  String get exerciseCatalogue;
-
   /// No description provided for @exerciseNew.
   ///
   /// In es, this message translates to:
@@ -2492,17 +2516,11 @@ abstract class AppLocalizations {
   /// **'Editar ejercicio'**
   String get exerciseEdit;
 
-  /// No description provided for @exerciseNoneYet.
+  /// No description provided for @exerciseDeleteBody.
   ///
   /// In es, this message translates to:
-  /// **'Todavía no hay ejercicios'**
-  String get exerciseNoneYet;
-
-  /// No description provided for @exerciseNoneYetHint.
-  ///
-  /// In es, this message translates to:
-  /// **'Creá uno y empezá a registrar tus series'**
-  String get exerciseNoneYetHint;
+  /// **'Borrar un ejercicio también borra todos los días en que lo anotaste, incluidos los pasados. No se puede deshacer.'**
+  String get exerciseDeleteBody;
 
   /// No description provided for @exerciseMuscleGroup.
   ///
@@ -2515,36 +2533,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Descripción'**
   String get exerciseDescription;
-
-  /// No description provided for @exerciseWorkout.
-  ///
-  /// In es, this message translates to:
-  /// **'Entrenamiento'**
-  String get exerciseWorkout;
-
-  /// No description provided for @exerciseNoSets.
-  ///
-  /// In es, this message translates to:
-  /// **'Sin series ese día'**
-  String get exerciseNoSets;
-
-  /// No description provided for @exerciseNoSetsHint.
-  ///
-  /// In es, this message translates to:
-  /// **'Elegí un ejercicio y anotá tu primera serie'**
-  String get exerciseNoSetsHint;
-
-  /// No description provided for @exerciseAddSet.
-  ///
-  /// In es, this message translates to:
-  /// **'Agregar serie'**
-  String get exerciseAddSet;
-
-  /// No description provided for @exerciseEditSet.
-  ///
-  /// In es, this message translates to:
-  /// **'Editar serie'**
-  String get exerciseEditSet;
 
   /// No description provided for @exerciseSets.
   ///
@@ -2570,18 +2558,6 @@ abstract class AppLocalizations {
   /// **'Peso corporal'**
   String get exerciseBodyweight;
 
-  /// No description provided for @exerciseSetLine.
-  ///
-  /// In es, this message translates to:
-  /// **'{reps} reps'**
-  String exerciseSetLine(int reps);
-
-  /// No description provided for @exerciseSetLineWeighted.
-  ///
-  /// In es, this message translates to:
-  /// **'{reps} reps × {weight} kg'**
-  String exerciseSetLineWeighted(int reps, String weight);
-
   /// No description provided for @exerciseTotalSets.
   ///
   /// In es, this message translates to:
@@ -2605,12 +2581,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{value} kg'**
   String exerciseVolumeValue(String value);
-
-  /// No description provided for @exerciseTopWeight.
-  ///
-  /// In es, this message translates to:
-  /// **'Máximo: {weight} kg'**
-  String exerciseTopWeight(String weight);
 
   /// No description provided for @exercisePickOne.
   ///
@@ -2971,6 +2941,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count, plural, =1{Datos restaurados: 1 registro} other{Datos restaurados: {count} registros}}'**
   String backupImported(int count);
+
+  /// No description provided for @backupSomeIgnored.
+  ///
+  /// In es, this message translates to:
+  /// **'Parte del archivo viene de una versión anterior y no se pudo restaurar.'**
+  String get backupSomeIgnored;
 
   /// No description provided for @backupNotABackup.
   ///

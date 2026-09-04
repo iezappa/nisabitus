@@ -7,7 +7,6 @@ import '../../../core/time/weekday_labels.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
-import '../../../core/widgets/stat_tile.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../discipline/presentation/discipline_section.dart';
 import '../domain/exercise.dart';
@@ -15,129 +14,6 @@ import '../domain/scheduled_exercise.dart';
 import 'exercise_providers.dart';
 import 'widgets/exercise_form_dialog.dart';
 import 'widgets/scheduled_exercise_dialog.dart';
-
-/// The movements this app knows about, folded away by default.
-///
-/// It is a reference list, not a day's work: useful when writing something
-/// down, noise the rest of the time. It stays shut and says how many it holds,
-/// so a closed section still tells you something.
-class _CatalogueSection extends ConsumerStatefulWidget {
-  const _CatalogueSection();
-
-  @override
-  ConsumerState<_CatalogueSection> createState() => _CatalogueSectionState();
-}
-
-class _CatalogueSectionState extends ConsumerState<_CatalogueSection> {
-  bool _open = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final actions = ref.read(exerciseActionsProvider);
-    final catalogue = ref.watch(exerciseCatalogueProvider);
-    final count = catalogue.valueOrNull?.length ?? 0;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SectionHeader(
-          label: l10n.exerciseCatalogue,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('$count', style: theme.textTheme.bodySmall),
-              IconButton(
-                icon: Icon(_open ? Icons.expand_less : Icons.expand_more),
-                tooltip: _open ? l10n.actionCollapse : l10n.actionExpand,
-                onPressed: () => setState(() => _open = !_open),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add, size: 20),
-                tooltip: l10n.exerciseNew,
-                onPressed: () async {
-                  final draft = await showExerciseForm(context);
-                  if (draft == null) return;
-
-                  await actions.createExercise(draft);
-                  // Opened on the way in: something was just added, and a
-                  // list that stays shut after you add to it looks broken.
-                  setState(() => _open = true);
-                },
-              ),
-            ],
-          ),
-        ),
-        if (_open)
-          catalogue.when(
-            loading: () => const SizedBox.shrink(),
-            error: (_, _) => const SizedBox.shrink(),
-            data: (items) => items.isEmpty
-                ? EmptyState(
-                    icon: Icons.list_alt_outlined,
-                    title: l10n.exerciseNoneYet,
-                    hint: l10n.exerciseNoneYetHint,
-                  )
-                : Column(
-                    children: [
-                      for (final exercise in items)
-                        _CatalogueRow(exercise: exercise),
-                    ],
-                  ),
-          ),
-      ],
-    );
-  }
-}
-
-/// One movement in the catalogue, and the ways into it.
-class _CatalogueRow extends ConsumerWidget {
-  const _CatalogueRow({required this.exercise});
-
-  final Exercise exercise;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final actions = ref.read(exerciseActionsProvider);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(Gap.lg, 0, Gap.lg, Gap.sm),
-      child: Card(
-        child: ListTile(
-          title: Text(exercise.name),
-          subtitle: exercise.muscleGroup == null
-              ? null
-              : Text(exercise.muscleGroup!),
-          trailing: IconButton(
-            icon: const Icon(Icons.add_circle_outline),
-            tooltip: l10n.exerciseAddSet,
-            onPressed: () async {
-              final set = await showSetForm(context);
-              if (set == null) return;
-
-              await actions.logSet(
-                exercise.id,
-                reps: set.reps,
-                weight: set.weight,
-                note: set.note,
-              );
-            },
-          ),
-          onTap: () async {
-            final draft = await showExerciseForm(
-              context,
-              existing: exercise,
-              onDelete: () => actions.deleteExercise(exercise.id),
-            );
-            if (draft != null) await actions.updateExercise(exercise.id, draft);
-          },
-        ),
-      ),
-    );
-  }
-}
 
 /// What is written down for the day, ready to be ticked off.
 ///
@@ -189,8 +65,11 @@ class _PlanSection extends ConsumerWidget {
 
   /// Opens the one form this section has.
   ///
-  /// An empty catalogue is not a dead end: the form can write down a movement
-  /// it does not have yet and carry on with it.
+  /// An empty catalogue is not a dead end, and neither is a wrong one: the
+  /// form can write down a movement it does not have yet, correct the name,
+  /// muscle group or video of the one that is selected, and delete one that
+  /// should never have been written down. Those are the three things the
+  /// catalogue section used to be for.
   Future<void> _openForm(
     BuildContext context,
     WidgetRef ref, {
@@ -213,6 +92,37 @@ class _PlanSection extends ConsumerWidget {
         final draft = await showExerciseForm(context);
 
         return draft == null ? null : actions.createExercise(draft);
+      },
+      onEditExercise: (exercise) async {
+        // The form pops with no draft both when it is dismissed and when the
+        // movement is deleted from it, so deletion is remembered here rather
+        // than inferred from the absence of a draft.
+        var deleted = false;
+        final draft = await showExerciseForm(
+          context,
+          existing: exercise,
+          onDelete: () async {
+            deleted = true;
+            await actions.deleteExercise(exercise.id);
+          },
+        );
+        if (deleted) return const ExerciseRemoved();
+        if (draft == null) return null;
+
+        await actions.updateExercise(exercise.id, draft);
+
+        // Rebuilt here rather than re-read: the form validated the draft on
+        // the way out, and the dialog needs the corrected name now, not
+        // after a round trip.
+        return ExerciseCorrected(
+          Exercise(
+            id: exercise.id,
+            name: draft.name,
+            description: draft.description,
+            muscleGroup: draft.muscleGroup,
+            videoUrl: draft.videoUrl,
+          ),
+        );
       },
     );
     if (result == null) return;
@@ -330,162 +240,19 @@ class _ScheduledRow extends ConsumerWidget {
   }
 }
 
-/// The training half of the health section: the day's work, with the
-/// The training half of the health section: the day's work, with the
-/// catalogue underneath.
+/// The training half of the health section: the gym routine for the day,
+/// and the disciplines practised for a time rather than counted in sets.
+///
+/// There is no catalogue section here any more. It was a reference list, not
+/// a day's work, and the one place it was needed — picking a movement — is
+/// inside the routine's own form, which can also write a new one down,
+/// correct one that is wrong, and delete one that should not be there.
 class ExerciseView extends ConsumerWidget {
   const ExerciseView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final workout = ref.watch(workoutDayProvider);
-
-    return ListView(
-      padding: const EdgeInsets.only(bottom: 96),
-      children: [
-        const _PlanSection(),
-        SectionHeader(label: l10n.exerciseWorkout),
-        workout.when(
-          loading: () => const Padding(
-            padding: EdgeInsets.all(Gap.xxl),
-            child: Center(child: CircularProgressIndicator()),
-          ),
-          error: (error, _) => Padding(
-            padding: const EdgeInsets.all(Gap.lg),
-            child: Text(
-              '$error',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-          data: (day) => day.isEmpty
-              ? EmptyState(
-                  icon: Icons.fitness_center_outlined,
-                  title: l10n.exerciseNoSets,
-                  hint: l10n.exerciseNoSetsHint,
-                )
-              : _Workout(day: day),
-        ),
-        const DisciplineSection(),
-        const _CatalogueSection(),
-      ],
-    );
-  }
-}
-
-class _Workout extends ConsumerWidget {
-  const _Workout({required this.day});
-
-  final WorkoutDay day;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
-    final actions = ref.read(exerciseActionsProvider);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-          child: Row(
-            children: [
-              Expanded(
-                child: StatTile(
-                  label: l10n.exerciseTotalSets,
-                  value: '${day.totalSets}',
-                  icon: Icons.repeat,
-                  emphasize: true,
-                ),
-              ),
-              const SizedBox(width: Gap.md),
-              Expanded(
-                child: StatTile(
-                  label: l10n.exerciseTotalReps,
-                  value: '${day.totalReps}',
-                  icon: Icons.numbers,
-                ),
-              ),
-              const SizedBox(width: Gap.md),
-              Expanded(
-                child: StatTile(
-                  label: l10n.exerciseVolume,
-                  value: l10n.exerciseVolumeValue(
-                    day.totalVolume.toStringAsFixed(0),
-                  ),
-                  icon: Icons.fitness_center,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: Gap.md),
-        for (final block in day.blocks)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(Gap.lg, 0, Gap.lg, Gap.sm),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(Gap.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            block.exercise.name,
-                            style: theme.textTheme.titleSmall,
-                          ),
-                        ),
-                        if (block.topWeight case final top?)
-                          Text(
-                            l10n.exerciseTopWeight(top.toStringAsFixed(0)),
-                            style: theme.textTheme.bodySmall,
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: Gap.sm),
-                    Wrap(
-                      spacing: Gap.sm,
-                      runSpacing: Gap.sm,
-                      children: [
-                        for (final set in block.sets)
-                          ActionChip(
-                            label: Text(
-                              set.weight == null
-                                  ? l10n.exerciseSetLine(set.reps)
-                                  : l10n.exerciseSetLineWeighted(
-                                      set.reps,
-                                      set.weight!.toStringAsFixed(
-                                        set.weight! % 1 == 0 ? 0 : 1,
-                                      ),
-                                    ),
-                            ),
-                            onPressed: () async {
-                              final edited = await showSetForm(
-                                context,
-                                existing: set,
-                                onDelete: () => actions.deleteSet(set.id),
-                              );
-                              if (edited != null) {
-                                await actions.updateSet(
-                                  set.id,
-                                  reps: edited.reps,
-                                  weight: edited.weight,
-                                  note: edited.note,
-                                );
-                              }
-                            },
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => ListView(
+    padding: const EdgeInsets.only(bottom: 96),
+    children: const [_PlanSection(), DisciplineSection()],
+  );
 }

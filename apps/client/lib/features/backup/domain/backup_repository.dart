@@ -1,4 +1,5 @@
 import 'backup_document.dart';
+import 'restore_report.dart';
 
 /// The port the backup module talks to.
 abstract interface class BackupRepository {
@@ -13,5 +14,8 @@ abstract interface class BackupRepository {
   /// the user can reason about, and the UI says so before it runs.
   ///
   /// All or nothing: it either finishes or leaves the store as it was.
-  Future<void> restore(BackupDocument document);
+  ///
+  /// Reports what it placed rather than what the document held, so a file
+  /// carrying tables this version dropped is not counted as restored.
+  Future<RestoreReport> restore(BackupDocument document);
 }

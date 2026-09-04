@@ -8,6 +8,7 @@ import '../../features/hydration/data/hydration_tables.dart';
 import '../../features/journal/data/journal_tables.dart';
 import '../../features/medication/data/medication_tables.dart';
 import '../../features/meditation/data/meditation_tables.dart';
+import '../../features/nutrition/data/argentine_food_seed.dart';
 import '../../features/nutrition/data/nutrition_tables.dart';
 import '../../features/pomodoro/data/pomodoro_tables.dart';
 import '../../features/sleep/data/sleep_tables.dart';
@@ -36,7 +37,6 @@ part 'app_database.g.dart';
     FoodEntries,
     Foods,
     Exercises,
-    ExerciseSets,
     ScheduledExercises,
     Disciplines,
     Medications,
@@ -69,10 +69,38 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 13;
+
+  /// Fills the food database with what the app ships.
+  ///
+  /// `insertOrIgnore` against the unique lower-case name, so this can be run
+  /// again on a store that already has foods in it without touching a single
+  /// one. A user who wrote down their own "Milanesa" keeps theirs: the seed
+  /// row is dropped, not merged over it.
+  Future<void> _seedBuiltInFoods() => batch(
+    (b) => b.insertAll(foods, [
+      for (final food in argentineFoodSeed)
+        FoodsCompanion.insert(
+          name: food.name,
+          lowerName: food.name.toLowerCase(),
+          caloriesPer100g: Value(food.calories),
+          proteinPer100g: Value(food.protein),
+          carbsPer100g: Value(food.carbs),
+          fatPer100g: Value(food.fat),
+          isBuiltIn: const Value(true),
+        ),
+    ], mode: InsertMode.insertOrIgnore),
+  );
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) async {
+      await m.createAll();
+      // A fresh install gets the catalogue too. Without this the food
+      // database only exists for people who upgraded into it, which is the
+      // sort of difference nobody finds until a new install looks broken.
+      await _seedBuiltInFoods();
+    },
     onUpgrade: (m, from, to) async {
       // v2 added the nutrition and exercise tables. Everything already
       // stored is untouched: this only creates what did not exist.
@@ -86,9 +114,7 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(nutritionGoals);
         await m.createTable(foodEntries);
         await m.createTable(exercises);
-        await m.createTable(exerciseSets);
         await m.create(foodEntryByDay);
-        await m.create(exerciseSetByDay);
       }
       // v3 added medication and supplement tracking.
       if (from < 3) {
@@ -127,18 +153,20 @@ class AppDatabase extends _$AppDatabase {
       if (from >= 2 && from < 6) {
         await m.addColumn(foodEntries, foodEntries.meal);
       }
-      // v9 adds training routines: what to do, kept apart from what was
-      // done. Two new columns go onto tables that already existed — a
-      // reference video for the movement, and how a set felt — and both are
-      // null for everything already stored, which is honest: nobody was
-      // asked, so nobody answered.
+      // v9 added a reference video to the movement, which is null for
+      // everything already stored — honest, because nobody was asked, so
+      // nobody answered.
       //
-      // Same split as v5 and v6: `createTable` builds `exercises` and
-      // `exercise_sets` from today's definition, these columns included, so
-      // only a database that already had those tables needs them added.
+      // Same split as v5 and v6: `createTable` builds `exercises` from
+      // today's definition, this column included, so only a database that
+      // already had the table needs it added.
+      //
+      // v9 also added a note to `exercise_sets`. That table is gone as of
+      // v12, so the column it wanted is not added here any more: adding a
+      // column to a table this same migration is about to drop is work
+      // nobody would ever read.
       if (from >= 2 && from < 9) {
         await m.addColumn(exercises, exercises.videoUrl);
-        await m.addColumn(exerciseSets, exerciseSets.note);
       }
       // v11 adds what is practised for a time rather than counted in sets:
       // swimming, running, cycling. Its own table, because a swim has a
@@ -183,12 +211,63 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(waterEntries);
         await m.create(waterByDay);
       }
+      // v12 drops the per-set log.
+      //
+      // There were two ways to record the same gym work: a row per scheduled
+      // exercise per day, and a flat list of sets underneath it. Two records
+      // of one thing is one record too many — they drift apart, and neither
+      // is the answer to "what did I train". The scheduled row survives
+      // because it is the one the screen ticks off, and the progress figures
+      // are now read off the rows that were ticked, so they count work that
+      // actually happened rather than work that was written down.
+      //
+      // The sets stored under the old log go with the table. That is data
+      // loss, and it is deliberate.
+      //
+      // A database arriving from v1 never gets the table at all: the v2
+      // branch above stopped creating it, so there is nothing here to drop
+      // and `deleteTable` on a table that was never made is a no-op anyway.
+      if (from < 12) {
+        await m.deleteTable('exercise_sets');
+      }
       if (from < 6) {
         await m.createTable(foods);
         // By hand, as always: `createTable` writes the table and nothing
         // else. `food_by_name` is unique, and without it the catalogue would
         // file a second "avena" every time the casing changed.
         await m.create(foodByName);
+      }
+      // v13 turns the food catalogue into a food database.
+      //
+      // The old table quoted a food's macros against a free-text portion —
+      // "1 plato", "150 g", or nothing at all. That is unusable as a
+      // database: figures measured against an unknown weight cannot be
+      // scaled to what was actually eaten, compared with each other, or
+      // checked against a reference. Every food is quoted per 100 g now, and
+      // an entry is that figure scaled by what went on the scale.
+      //
+      // Which is why the existing rows go rather than convert. Their macros
+      // are for a weight nobody recorded, so reading them as per-100 g
+      // figures would multiply a user's numbers by an arbitrary factor and
+      // say nothing about having done it — a wrong figure that looks right
+      // is worse than a missing one. There is no honest conversion, so there
+      // is no conversion.
+      //
+      // The cost is small and it is bounded: these rows were a convenience
+      // cache the app filled by itself, and what is lost is the typing that
+      // filled them. `food_entries` is not touched. The record of what was
+      // eaten survives this migration exactly as it was written, which is
+      // the only part of the nutrition store that was ever irreplaceable.
+      if (from >= 6 && from < 13) {
+        await m.deleteTable('foods');
+        await m.createTable(foods);
+        // Dropping the table took its index with it, so it goes back up by
+        // hand — and it has to, or the seed below would file a second
+        // "Ñoquis" the first time the casing changed.
+        await m.create(foodByName);
+      }
+      if (from < 13) {
+        await _seedBuiltInFoods();
       }
     },
     beforeOpen: (details) async {

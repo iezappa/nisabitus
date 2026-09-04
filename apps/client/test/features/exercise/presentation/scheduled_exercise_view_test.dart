@@ -154,6 +154,86 @@ void main() {
     expect(stored.feedback, 'Pesó');
   });
 
+  testWidgets('corrects a movement from the form that schedules it', (
+    tester,
+  ) async {
+    // The catalogue section is gone, and with it the only place a movement's
+    // name could be fixed. The form that picks one is where that lives now:
+    // losing the ability to correct a typo would be a real loss, dressed up
+    // as a simplification.
+    await seedExercise('Sentadila');
+    await pumpView(tester);
+
+    await tester.tap(find.byTooltip('Anotar ejercicio'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.byTooltip('Editar ejercicio'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Nombre'),
+      'Sentadilla',
+    );
+    await tester.tap(find.widgetWithText(FilledButton, 'Guardar').last);
+    await tester.pumpAndSettle();
+
+    expect((await repository().exercises()).single.name, 'Sentadilla');
+    // And the form is still open on it, reading right: without the picker
+    // being told, the typo would stay on screen until the dialog is closed
+    // and reopened, which is where the correction was needed in the first
+    // place.
+    expect(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.text('Sentadilla'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Sentadila'), findsNothing);
+  });
+
+  testWidgets('removes a movement from the form that schedules it', (
+    tester,
+  ) async {
+    // Deleting a movement is only reachable from here now. A repository that
+    // can delete is not a feature: the user has to be able to get to it.
+    await seedExercise();
+    await pumpView(tester);
+
+    await tester.tap(find.byTooltip('Anotar ejercicio'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.byTooltip('Editar ejercicio'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Borrar'));
+    await tester.pumpAndSettle();
+
+    // Deleting the movement takes every day it was ever scheduled on with
+    // it. The confirmation has to say so before it happens, not after.
+    expect(
+      find.textContaining('todos los días en que lo anotaste'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Borrar').last);
+    await tester.pumpAndSettle();
+
+    expect(await repository().exercises(), isEmpty);
+    // The picker cannot keep offering something that is gone.
+    expect(find.text('Sentadilla'), findsNothing);
+  });
+
   testWidgets('offers to stop a repetition only on something that repeats', (
     tester,
   ) async {

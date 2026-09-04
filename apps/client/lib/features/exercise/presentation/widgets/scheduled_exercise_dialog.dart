@@ -16,6 +16,28 @@ typedef ScheduledExerciseResult = ({
   ExerciseRecurrence? recurrence,
 });
 
+/// What became of a movement after the catalogue form was opened on it.
+///
+/// Correcting and deleting come back from the same form, and the picker has
+/// to react differently to each: a corrected movement replaces the entry it
+/// was, a deleted one has to leave the list, because nothing can be
+/// scheduled against a row that is no longer there.
+sealed class ExerciseEdit {
+  const ExerciseEdit();
+}
+
+/// The movement was corrected, and this is how it reads now.
+final class ExerciseCorrected extends ExerciseEdit {
+  const ExerciseCorrected(this.exercise);
+
+  final Exercise exercise;
+}
+
+/// The movement is gone from the catalogue.
+final class ExerciseRemoved extends ExerciseEdit {
+  const ExerciseRemoved();
+}
+
 /// Collects one exercise for one day, and optionally the days it repeats on.
 ///
 /// One form, because it is one thing. The repetition is only asked about when
@@ -28,6 +50,7 @@ Future<ScheduledExerciseResult?> showScheduledExerciseForm(
   ScheduledExercise? existing,
   Future<void> Function()? onDelete,
   Future<Exercise?> Function()? onCreateExercise,
+  Future<ExerciseEdit?> Function(Exercise exercise)? onEditExercise,
 }) => showDialog<ScheduledExerciseResult>(
   context: context,
   builder: (context) => _ScheduledExerciseDialog(
@@ -36,6 +59,7 @@ Future<ScheduledExerciseResult?> showScheduledExerciseForm(
     existing: existing,
     onDelete: onDelete,
     onCreateExercise: onCreateExercise,
+    onEditExercise: onEditExercise,
   ),
 );
 
@@ -46,6 +70,7 @@ class _ScheduledExerciseDialog extends StatefulWidget {
     this.existing,
     this.onDelete,
     this.onCreateExercise,
+    this.onEditExercise,
   });
 
   final List<Exercise> catalogue;
@@ -57,6 +82,16 @@ class _ScheduledExerciseDialog extends StatefulWidget {
   /// back. Without it, discovering mid-form that the exercise is missing
   /// means cancelling, going somewhere else, and starting over.
   final Future<Exercise?> Function()? onCreateExercise;
+
+  /// Opens the catalogue form on the selected movement, and says what
+  /// happened to it: corrected, deleted, or neither.
+  ///
+  /// The movement is described once and pointed at from every day it is
+  /// scheduled on, so a typo in it is wrong everywhere until someone can fix
+  /// it, and a movement written down by mistake stays in the picker forever
+  /// unless it can be removed. This is where both of those live: the form
+  /// that picks a movement is the only screen that still lists them.
+  final Future<ExerciseEdit?> Function(Exercise exercise)? onEditExercise;
 
   @override
   State<_ScheduledExerciseDialog> createState() =>
@@ -137,6 +172,32 @@ class _ScheduledExerciseDialogState extends State<_ScheduledExerciseDialog> {
     });
   }
 
+  /// Corrects the selected movement and keeps the form on it, or drops it
+  /// from the picker when it was deleted.
+  Future<void> _editExercise() async {
+    final selected = _selected;
+    if (selected == null) return;
+
+    final edit = await widget.onEditExercise!(selected);
+    if (edit == null || !mounted) return;
+
+    setState(() {
+      switch (edit) {
+        case ExerciseCorrected(:final exercise):
+          _catalogue[_catalogue.indexOf(selected)] = exercise;
+        case ExerciseRemoved():
+          _catalogue.remove(selected);
+          // Whatever is left, or nothing: submitting with no movement is
+          // already refused, so an empty picker is a state the form knows.
+          _exerciseId = _catalogue.firstOrNull?.id;
+      }
+    });
+  }
+
+  /// The movement the dropdown is on, or null when the catalogue is empty.
+  Exercise? get _selected =>
+      _catalogue.where((e) => e.id == _exerciseId).firstOrNull;
+
   Future<void> _pickUntil() async {
     final picked = await showDatePicker(
       context: context,
@@ -200,36 +261,53 @@ class _ScheduledExerciseDialogState extends State<_ScheduledExerciseDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DropdownButtonFormField<int>(
-                  initialValue: _exerciseId,
-                  decoration: InputDecoration(
-                    labelText: l10n.exerciseCatalogue,
-                  ),
-                  items: [
-                    for (final exercise in _catalogue)
-                      DropdownMenuItem(
-                        value: exercise.id,
-                        child: Text(exercise.name),
-                      ),
-                    // The way out of a catalogue that does not have what you
-                    // are about to write down. Without it, finding that out
-                    // mid-form means cancelling and starting over elsewhere.
-                    if (widget.onCreateExercise != null)
-                      DropdownMenuItem(
-                        value: _createId,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.add, size: 18),
-                            const SizedBox(width: Gap.sm),
-                            Text(l10n.exerciseNew),
-                          ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<int>(
+                        initialValue: _exerciseId,
+                        decoration: InputDecoration(
+                          labelText: l10n.exercisePickOne,
                         ),
+                        items: [
+                          for (final exercise in _catalogue)
+                            DropdownMenuItem(
+                              value: exercise.id,
+                              child: Text(exercise.name),
+                            ),
+                          // The way out of a catalogue that does not have
+                          // what you are about to write down. Without it,
+                          // finding that out mid-form means cancelling and
+                          // starting over elsewhere.
+                          if (widget.onCreateExercise != null)
+                            DropdownMenuItem(
+                              value: _createId,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.add, size: 18),
+                                  const SizedBox(width: Gap.sm),
+                                  Text(l10n.exerciseNew),
+                                ],
+                              ),
+                            ),
+                        ],
+                        onChanged: (value) => value == _createId
+                            ? _createExercise()
+                            : setState(() => _exerciseId = value),
+                      ),
+                    ),
+                    // Correcting the movement itself, next to the field that
+                    // picks it. Nothing else in the app lists movements any
+                    // more, so without this a typed name stays wrong on every
+                    // day it was ever scheduled on.
+                    if (widget.onEditExercise != null)
+                      IconButton(
+                        icon: const Icon(Icons.edit_outlined, size: 20),
+                        tooltip: l10n.exerciseEdit,
+                        onPressed: _selected == null ? null : _editExercise,
                       ),
                   ],
-                  onChanged: (value) => value == _createId
-                      ? _createExercise()
-                      : setState(() => _exerciseId = value),
                 ),
                 const SizedBox(height: Gap.md),
                 Row(

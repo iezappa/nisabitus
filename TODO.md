@@ -50,10 +50,61 @@ one turned out to be is worth more than the line that described it.
 
 Not debts — work that was decided and is not written yet.
 
-- [x] ~~A database of recorded meals.~~ `Foods` (schema v6) fills itself from
-      what is saved, and the food form offers it back. An entry holds **no
-      reference** to the food it came from, on purpose: correcting a food
+- [x] ~~A database of recorded meals.~~ `Foods` (schema v6) filled itself
+      from what was saved, and the food form offered it back. **Replaced in
+      v13** — see below. An entry holds **no reference** to the food it came
+      from, on purpose, and that has survived both shapes: correcting a food
       today must not rewrite what last week says was eaten.
+- [x] ~~A real food database, scaled by weight.~~ v13 reshapes `Foods` into a
+      reference table quoted **per 100 g** (`caloriesPer100g` and friends —
+      the unit is in every column name because a figure silently quoted for
+      the wrong weight is wrong by a factor nobody notices). Picking a food
+      and typing what it weighed computes the entry as `per100 * grams / 100`,
+      in `domain/food_portion.dart` rather than inline in a widget, and the
+      result is written into the visible macro fields: scaling the user cannot
+      see is scaling the user cannot check. Rounded, not truncated — the
+      entry's columns are integers and truncating loses a fraction on nearly
+      every entry, always downwards, so a day would add up to less than it was.
+      It ships seeded with ~80 foods actually eaten here (`data/
+      argentine_food_seed.dart`, Dart source rather than a bundled asset so
+      the picker does not photograph as a spinner). **Those figures are not
+      sourced yet** — see the open item below. `isBuiltIn` separates what the app shipped from what the
+      user wrote, so the seed can be re-run — `insertOrIgnore` on the unique
+      folded name — without ever merging over someone's own row.
+
+      **The old `Foods` rows are dropped by the migration, deliberately.**
+      They quoted macros against a free-text portion — "1 plato" — so their
+      figures are for a weight nobody recorded. Reading those as per-100 g
+      values would multiply a user's numbers by an arbitrary factor and say
+      nothing about having done it, and a wrong figure that looks right is
+      worse than a missing one. There is no honest conversion, so there is no
+      conversion. The cost is bounded: those rows were a convenience cache the
+      app filled by itself, and what is lost is the typing that filled them.
+      `FoodEntries` is **not touched** — the record of what was actually eaten
+      survives intact, and a migration test asserts exactly that.
+
+      What went with the reshape, and why: `Foods.portion`, because there is
+      only one weight now and a second one could only contradict it; and
+      `lastUsedAt`, because a reference table of eighty foods is read by
+      searching for a name, not by browsing what was eaten this morning — so
+      the list is alphabetical and has a search box, and "recently used" would
+      only bury the seed. The consequence worth knowing: the catalogue no
+      longer fills itself from saved entries, because it cannot. It is seeded
+      and added to on purpose instead.
+
+      Open on this:
+
+- [ ] **The seed figures are not sourced.** They were written from commonly
+      published composition values, not transcribed from any table that was
+      opened, and the file said "ARGENFOODS with USDA as the fallback" before
+      anybody had read either. That citation is gone; the header now says what
+      the numbers actually are. Walking the list against ARGENFOODS
+      (Universidad Nacional de Luján) and USDA FoodData Central is a pass of
+      its own. Start at the loose end — milanesa, empanada, locro, pastel de
+      papa, choripán are estimates by construction — and leave the staples for
+      last, because an apple, an egg and a litre of oil are measured objects
+      and already agree with every table. A wrong figure that looks right is
+      the same failure the dropped `Foods` rows were about, one layer up.
 - [x] ~~A meal log.~~ `FoodEntries.meal` (v6), nullable — every entry written
       before the app asked keeps a null meal and shows under "Sin asignar",
       because stamping them would put food on the record at an hour nobody
@@ -128,19 +179,43 @@ two answers to it would drift.
 Two smaller things landed with it:
 
 - The exercise catalogue folds away, shut by default, showing how many it
-  holds. It is a reference list, not a day's work.
+  holds. It is a reference list, not a day's work — which is the reasoning
+  v12 followed all the way, and took the section off the screen entirely.
 - The scheduling form can write down a movement the catalogue does not have
   yet and carry on with it. Finding that out mid-form used to mean cancelling
   and starting somewhere else.
 
 Open on this:
 
-- [ ] Two ways to record gym work still sit on the same screen: the day's
-      scheduled rows, and the older per-set log underneath (`ExerciseSets`,
-      with its own sets, reps, weight and note). Serenio has no per-set rows
-      at all. Either the set log becomes the detail of a scheduled row, or one
-      of them goes — but it is real data with real tests, so it is a decision,
-      not a cleanup.
+- [x] ~~Two ways to record gym work still sit on the same screen.~~ **One of
+      them went.** `ExerciseSets` is dropped in a schema v12 migration — a
+      real `DROP TABLE`, so the sets stored under it are gone. That is data
+      loss and it was chosen: two records of the same session drift apart, and
+      when they do neither of them is the answer to "what did I train". The
+      scheduled row survives because it is the one the screen ticks off.
+
+      `Exercises` stays. It is the catalogue the routine points at, and
+      without it `ScheduledExercises.exerciseId` references nothing. What went
+      is its **section on the screen** — a reference list, not a day's work,
+      and the three things it was ever used for now live in the form that
+      schedules a movement: writing down one the catalogue does not have,
+      correcting one whose name, muscle group or video is wrong, and deleting
+      one that should never have been written down. Removing the section
+      without those paths would have quietly taken away the only way to fix a
+      typo that shows on every day the movement was scheduled on, and the
+      only way to get rid of a movement at all. Deleting one still cascades
+      into every day it was ever scheduled on, past days included, so the
+      confirmation says that rather than the generic "cannot be undone".
+
+      The progress view was rebuilt on the surviving rows, and reads
+      differently for it: sets, reps, volume and days trained are now counted
+      **only off rows that were ticked off**. A routine written down on Sunday
+      used to be work the figures would have claimed happened; now a day
+      nobody trained is not a day trained. Bodyweight work still contributes
+      no volume and still counts as a day.
+
+      The screen is two sections now — the gym routine, renamed from "Due that
+      day", and disciplines.
 - [ ] Disciplines have no progress view. Exercises, hydration, meditation and
       the rest all review themselves over a window; minutes and kilometres per
       day would say more than most of them.
@@ -337,7 +412,9 @@ installed copy would be, so a schema change is four steps:
 The snapshots under `drift_schemas/` are the record of what shipped; the
 ones for v1 to v4 were dumped from worktrees of the commits where each
 version lived, because they predate this test. v6 added the food catalogue
-and the meal column, v7 the water log, v8 the meditation log.
+and the meal column, v7 the water log, v8 the meditation log, v13 the reshape
+of that catalogue into a per-100 g food database — the one migration so far
+that throws rows away on purpose rather than as a side effect.
 
 Two traps the tests exist to catch, both already found this way:
 

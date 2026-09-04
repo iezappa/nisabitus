@@ -1088,23 +1088,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutritionUnassigned => 'Unassigned';
 
   @override
-  String get nutritionSaved => 'What you eat often';
+  String get nutritionFoodDatabase => 'Food database';
 
   @override
-  String get nutritionSavedHint => 'It fills itself with whatever you log';
+  String get nutritionFoodDatabaseHint => 'Pick a food and say what it weighed';
 
   @override
-  String get nutritionSavedEmpty => 'Nothing logged yet';
+  String get nutritionFoodSearch => 'Search a food';
 
   @override
-  String get nutritionPickSaved => 'Pick something you eat often';
+  String get nutritionFoodNone => 'Nothing matches that';
 
   @override
-  String get nutritionForget => 'Remove from the list';
+  String get nutritionFoodNew => 'New food';
 
   @override
-  String get nutritionForgetHint =>
-      'It leaves the list. What you already ate stays as it is.';
+  String get nutritionFoodEdit => 'Edit food';
+
+  @override
+  String get nutritionFoodMine => 'Yours';
+
+  @override
+  String get nutritionFoodDeleteBody =>
+      'It only leaves the food database. What you already ate stays exactly as it was logged.';
+
+  @override
+  String nutritionPer100g(int value) {
+    return '$value kcal per 100 g';
+  }
+
+  @override
+  String get nutritionPer100gLabel => 'Per 100 g';
+
+  @override
+  String get nutritionWeight => 'Weight';
+
+  @override
+  String get nutritionWeightHint => 'The figures scale to what you weighed';
+
+  @override
+  String nutritionValidationGrams(int max) {
+    return 'Enter a weight between 0 and $max g';
+  }
 
   @override
   String nutritionValidationNumber(int max) {
@@ -1173,7 +1198,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get plan => 'Plan';
 
   @override
-  String get planToday => 'Due that day';
+  String get planToday => 'Gym Routine';
 
   @override
   String get planEmpty => 'Nothing logged for that day';
@@ -1296,47 +1321,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exerciseOpenVideo => 'Watch the video';
 
   @override
-  String get exerciseSetNote => 'How it felt';
-
-  @override
-  String get exerciseSetNoteHint =>
-      'Last rep was ugly, felt heavier than expected…';
-
-  @override
-  String get exerciseCatalogue => 'Exercises';
-
-  @override
   String get exerciseNew => 'New exercise';
 
   @override
   String get exerciseEdit => 'Edit exercise';
 
   @override
-  String get exerciseNoneYet => 'No exercises yet';
-
-  @override
-  String get exerciseNoneYetHint => 'Create one and start logging your sets';
+  String get exerciseDeleteBody =>
+      'Deleting an exercise also deletes every day it was written down on, past ones included. This cannot be undone.';
 
   @override
   String get exerciseMuscleGroup => 'Muscle group';
 
   @override
   String get exerciseDescription => 'Description';
-
-  @override
-  String get exerciseWorkout => 'Workout';
-
-  @override
-  String get exerciseNoSets => 'No sets that day';
-
-  @override
-  String get exerciseNoSetsHint => 'Pick an exercise and log your first set';
-
-  @override
-  String get exerciseAddSet => 'Add set';
-
-  @override
-  String get exerciseEditSet => 'Edit set';
 
   @override
   String get exerciseSets => 'Sets';
@@ -1351,16 +1349,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exerciseBodyweight => 'Bodyweight';
 
   @override
-  String exerciseSetLine(int reps) {
-    return '$reps reps';
-  }
-
-  @override
-  String exerciseSetLineWeighted(int reps, String weight) {
-    return '$reps reps × $weight kg';
-  }
-
-  @override
   String get exerciseTotalSets => 'Sets';
 
   @override
@@ -1372,11 +1360,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String exerciseVolumeValue(String value) {
     return '$value kg';
-  }
-
-  @override
-  String exerciseTopWeight(String weight) {
-    return 'Top: $weight kg';
   }
 
   @override
@@ -1588,6 +1571,10 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get backupSomeIgnored =>
+      'Part of the file comes from an older version and could not be restored.';
 
   @override
   String get backupNotABackup => 'That file is not a Nisabitus backup';

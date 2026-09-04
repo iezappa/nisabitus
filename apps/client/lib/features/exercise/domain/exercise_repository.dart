@@ -64,31 +64,8 @@ abstract interface class ExerciseRepository {
 
   Future<Exercise> updateExercise(int id, ExerciseDraft draft);
 
-  /// Removes the exercise and every set ever logged against it.
+  /// Removes the exercise and every day it was ever scheduled on.
   Future<void> deleteExercise(int id);
-
-  /// The training done on [day], grouped by exercise.
-  Future<WorkoutDay> workoutFor(DateTime day);
-
-  /// Appends a set to the end of the day.
-  Future<ExerciseSet> logSet(
-    DateTime day, {
-    required int exerciseId,
-    required int reps,
-    double? weight,
-    String? note,
-  });
-
-  Future<ExerciseSet> updateSet(
-    int id, {
-    required int reps,
-    double? weight,
-    String? note,
-  });
-
-  Future<void> deleteSet(int id);
-
-  Future<ExerciseSet> updateSetNote(int id, String? note);
 
   /// The figures the progress view shows for [range].
   Future<ExerciseStats> statsFor(DateRange range);

@@ -15,6 +15,7 @@ import '../data/picker_backup_files.dart';
 import '../domain/backup_document.dart';
 import '../domain/backup_files.dart';
 import '../domain/backup_repository.dart';
+import '../domain/restore_report.dart';
 
 /// How an export or an import ended.
 sealed class BackupOutcome {
@@ -27,9 +28,17 @@ final class BackupCancelled extends BackupOutcome {
 }
 
 final class BackupSucceeded extends BackupOutcome {
-  const BackupSucceeded(this.rows);
+  const BackupSucceeded(this.rows, {this.ignoredTables = const {}});
 
+  /// Rows written on the way in, or written to the file on the way out.
   final int rows;
+
+  /// Tables an imported file carried that this version has no home for.
+  ///
+  /// Empty on export, and on any import of a file this version wrote. When
+  /// it is not, the count above is smaller than the file — and the user is
+  /// told that rather than left to notice.
+  final Set<String> ignoredTables;
 }
 
 /// The file was read and turned down, with a reason worth showing.
@@ -91,15 +100,19 @@ class BackupActions {
       return BackupRejected(error.reason);
     }
 
+    final RestoreReport report;
     try {
-      await _ref.read(backupRepositoryProvider).restore(document);
+      report = await _ref.read(backupRepositoryProvider).restore(document);
     } on Object catch (error) {
       return BackupFailed(error);
     }
 
     _refreshEveryModule();
 
-    return BackupSucceeded(document.rowCount);
+    // The report, not the document: the file can describe rows this version
+    // has nowhere to put, and claiming those came back would make restore —
+    // the only recovery path there is — lie about what it recovered.
+    return BackupSucceeded(report.rows, ignoredTables: report.ignoredTables);
   }
 
   /// Every module caches behind a revision counter, so a restore that does

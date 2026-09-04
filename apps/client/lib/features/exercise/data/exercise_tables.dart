@@ -19,35 +19,6 @@ class Exercises extends Table {
   TextColumn get videoUrl => text().withLength(max: 2000).nullable()();
 }
 
-/// One set performed on one day.
-///
-/// Sets are stored flat rather than nested under a workout: the unit the
-/// user actually records is "this many reps at this weight", and a day's
-/// work is whatever sets carry that date.
-@DataClassName('ExerciseSetRow')
-@TableIndex(name: 'exercise_set_by_day', columns: {#date, #exerciseId})
-class ExerciseSets extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get exerciseId =>
-      integer().references(Exercises, #id, onDelete: KeyAction.cascade)();
-  DateTimeColumn get date => dateTime()();
-
-  /// Order within the day, so sets read in the order they were done.
-  IntColumn get position => integer().withDefault(const Constant(0))();
-
-  IntColumn get reps => integer()();
-
-  /// Null for bodyweight work.
-  RealColumn get weight => real().nullable()();
-
-  /// How it felt, in the user's own words.
-  ///
-  /// On the set and not on the routine, because a plan cannot feel anything.
-  /// This is the half of the record that says the weight moved but the last
-  /// rep was ugly, which no target will ever tell you.
-  TextColumn get note => text().withLength(max: 1000).nullable()();
-}
-
 /// One exercise on one day: what to do, and what happened.
 ///
 /// The same row is both, which is the whole point. A repetition is written

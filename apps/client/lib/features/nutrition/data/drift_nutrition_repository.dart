@@ -96,10 +96,11 @@ class DriftNutritionRepository implements NutritionRepository {
           ),
         );
 
-    // Saving is what fills the catalogue. Only on the way in, not on an
-    // edit: correcting a typo would otherwise leave the typo behind as a
-    // food of its own, and the picker would slowly fill with mistakes.
-    await rememberFood(validated.toFood(), eatenOn: date);
+    // Nothing is filed in the food database here any more. An entry's macros
+    // are for whatever was on the plate, and there is no honest way back from
+    // those to the per-100 g figure a food is quoted in — the weight they
+    // were measured against is not recorded. The database is seeded and added
+    // to on purpose instead.
 
     return validated.copyWith(id: id);
   }
@@ -158,10 +159,10 @@ class DriftNutritionRepository implements NutritionRepository {
   Future<List<Food>> foods() async {
     final rows =
         await (_db.select(_db.foods)..orderBy([
-              (f) => OrderingTerm.desc(f.lastUsedAt),
-              // Two foods eaten on the same day still need an order, and
-              // without one the list reshuffles between reads.
-              (f) => OrderingTerm.desc(f.id),
+              // By the folded name, so "Ñoquis" sorts where a reader looks for
+              // it rather than after "Zapallo" the way raw code points would
+              // put it.
+              (f) => OrderingTerm.asc(f.lowerName),
             ]))
             .get();
 
@@ -169,66 +170,62 @@ class DriftNutritionRepository implements NutritionRepository {
   }
 
   @override
-  Future<Food> rememberFood(Food food, {DateTime? eatenOn}) async {
+  Future<Food> saveFood(Food food) async {
     // Building the entity first lets the domain reject a blank name before
     // anything is written.
     final validated = Food(
       id: food.id,
       name: food.name,
-      portion: food.portion,
-      macros: food.macros,
+      per100g: food.per100g,
+      isBuiltIn: food.isBuiltIn,
     );
     final lowerName = validated.name.toLowerCase();
-    final eaten = dateOnly(eatenOn ?? DateTime.now());
 
-    // Read first, so filling in a meal from last week does not push that
-    // food to the top of a list whose whole job is "what you eat lately".
-    // The later of the two dates wins, and it is worked out here rather than
-    // in the upsert because the conflict clause cannot see the old row.
-    final existing = await (_db.select(
-      _db.foods,
-    )..where((f) => f.lowerName.equals(lowerName))).getSingleOrNull();
+    final values = FoodsCompanion(
+      name: Value(validated.name),
+      lowerName: Value(lowerName),
+      caloriesPer100g: Value(validated.per100g.calories),
+      proteinPer100g: Value(validated.per100g.protein),
+      carbsPer100g: Value(validated.per100g.carbs),
+      fatPer100g: Value(validated.per100g.fat),
+    );
 
-    final lastUsedAt = existing == null || eaten.isAfter(existing.lastUsedAt)
-        ? eaten
-        : existing.lastUsedAt;
+    if (validated.id != 0) {
+      // A correction. `isBuiltIn` is left out on purpose: it records where the
+      // row came from, and editing a shipped food does not make it the user's
+      // invention any more than correcting a typo rewrites its history.
+      await (_db.update(
+        _db.foods,
+      )..where((f) => f.id.equals(validated.id))).write(values);
 
-    // Upsert on the unique lower-case name, so eating the same thing again
-    // updates the food rather than filing a second one. The newest spelling
-    // and figures win: what was typed last is what the user means today.
+      return validated;
+    }
+
+    // Upsert on the unique lower-case name, so writing down "avena" when
+    // "Avena" is already there corrects that food rather than filing a second
+    // one the picker would show twice.
     final id = await _db
         .into(_db.foods)
         .insert(
           FoodsCompanion.insert(
             name: validated.name,
             lowerName: lowerName,
-            portion: Value(validated.portion),
-            calories: Value(validated.macros.calories),
-            protein: Value(validated.macros.protein),
-            carbs: Value(validated.macros.carbs),
-            fat: Value(validated.macros.fat),
-            lastUsedAt: lastUsedAt,
+            caloriesPer100g: Value(validated.per100g.calories),
+            proteinPer100g: Value(validated.per100g.protein),
+            carbsPer100g: Value(validated.per100g.carbs),
+            fatPer100g: Value(validated.per100g.fat),
+            isBuiltIn: Value(validated.isBuiltIn),
           ),
-          onConflict: DoUpdate(
-            (_) => FoodsCompanion(
-              name: Value(validated.name),
-              portion: Value(validated.portion),
-              calories: Value(validated.macros.calories),
-              protein: Value(validated.macros.protein),
-              carbs: Value(validated.macros.carbs),
-              fat: Value(validated.macros.fat),
-              lastUsedAt: Value(lastUsedAt),
-            ),
-            target: [_db.foods.lowerName],
-          ),
+          onConflict: DoUpdate((_) => values, target: [_db.foods.lowerName]),
         );
 
     return validated.copyWith(id: id);
   }
 
   @override
-  Future<void> forgetFood(int id) async {
-    // Only the catalogue row. What was eaten stays exactly as it was logged.
+  Future<void> deleteFood(int id) async {
+    // Only the database row. What was eaten stays exactly as it was logged:
+    // the entry copied its figures and never pointed back here.
     await (_db.delete(_db.foods)..where((f) => f.id.equals(id))).go();
   }
 
@@ -249,12 +246,12 @@ class DriftNutritionRepository implements NutritionRepository {
   Food _foodToDomain(FoodRow row) => Food(
     id: row.id,
     name: row.name,
-    portion: row.portion,
-    macros: Macros(
-      calories: row.calories,
-      protein: row.protein,
-      carbs: row.carbs,
-      fat: row.fat,
+    per100g: Macros(
+      calories: row.caloriesPer100g,
+      protein: row.proteinPer100g,
+      carbs: row.carbsPer100g,
+      fat: row.fatPer100g,
     ),
+    isBuiltIn: row.isBuiltIn,
   );
 }

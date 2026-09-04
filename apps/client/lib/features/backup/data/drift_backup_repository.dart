@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../../core/database/app_database.dart';
 import '../domain/backup_document.dart';
 import '../domain/backup_repository.dart';
+import '../domain/restore_report.dart';
 
 /// One table, in the two directions a backup needs it.
 typedef _TableCodec = ({
@@ -48,7 +49,6 @@ class DriftBackupRepository implements BackupRepository {
     _codec(_db.foodEntries, FoodEntryRow.fromJson),
     _codec(_db.foods, FoodRow.fromJson),
     _codec(_db.exercises, ExerciseRow.fromJson),
-    _codec(_db.exerciseSets, ExerciseSetRow.fromJson),
     _codec(_db.scheduledExercises, ScheduledExerciseRow.fromJson),
     _codec(_db.disciplines, DisciplineRow.fromJson),
     _codec(_db.medications, MedicationRow.fromJson),
@@ -73,19 +73,39 @@ class DriftBackupRepository implements BackupRepository {
   }
 
   @override
-  Future<void> restore(BackupDocument document) => _db.transaction(() async {
-    // Children first on the way out, parents first on the way in: foreign
-    // keys are enforced as each statement runs, not at the end.
-    for (final table in _tables.reversed) {
-      await table.clear();
-    }
-    for (final table in _tables) {
-      // A table the document does not mention stays empty. The document
-      // describes a whole store, so silence about a table means it held
-      // nothing, not that it should be left alone.
-      await table.fill(document.tables[table.name] ?? const []);
-    }
-  });
+  Future<RestoreReport> restore(BackupDocument document) => _db.transaction(
+    () async {
+      // Children first on the way out, parents first on the way in:
+      // foreign keys are enforced as each statement runs, not at the end.
+      for (final table in _tables.reversed) {
+        await table.clear();
+      }
+
+      var rows = 0;
+      for (final table in _tables) {
+        // A table the document does not mention stays empty. The document
+        // describes a whole store, so silence about a table means it held
+        // nothing, not that it should be left alone.
+        final placed = document.tables[table.name] ?? const [];
+        await table.fill(placed);
+        rows += placed.length;
+      }
+
+      // Counted here rather than in the document, which has no idea which
+      // tables this version still has. A file older than a dropped table
+      // carries rows nothing can hold, and saying so is the honest half of
+      // accepting the file at all.
+      final known = {for (final table in _tables) table.name};
+
+      return RestoreReport(
+        rows: rows,
+        ignoredTables: {
+          for (final entry in document.tables.entries)
+            if (entry.value.isNotEmpty && !known.contains(entry.key)) entry.key,
+        },
+      );
+    },
+  );
 
   _TableCodec _codec<T extends Table, D extends DataClass>(
     TableInfo<T, D> table,

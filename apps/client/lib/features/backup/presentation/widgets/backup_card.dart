@@ -86,7 +86,12 @@ class _BackupCardState extends ConsumerState<BackupCard> {
 
     final l10n = AppLocalizations.of(context);
     final message = switch (outcome) {
-      BackupSucceeded(:final rows) => succeeded(l10n, rows),
+      BackupSucceeded(:final rows, :final ignoredTables) => [
+        succeeded(l10n, rows),
+        // Said out loud rather than left as a smaller number: a file from
+        // before a table was dropped is a real thing to open now.
+        if (ignoredTables.isNotEmpty) l10n.backupSomeIgnored,
+      ].join(' '),
       BackupRejected(:final problem) => switch (problem) {
         BackupProblem.notABackup => l10n.backupNotABackup,
         BackupProblem.newerVersion => l10n.backupNewerVersion,

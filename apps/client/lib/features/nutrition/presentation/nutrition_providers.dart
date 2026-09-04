@@ -31,7 +31,7 @@ final nutritionStatsProvider = FutureProvider<NutritionStats>((ref) {
   return ref.watch(nutritionRepositoryProvider).statsFor(range);
 });
 
-/// Everything the catalogue has learned, most recently eaten first.
+/// Every food in the database, by name.
 final nutritionFoodsProvider = FutureProvider<List<Food>>((ref) {
   ref.watch(nutritionRevisionProvider);
 
@@ -75,10 +75,16 @@ class NutritionActions {
     _invalidate();
   }
 
-  /// Drops a food from the catalogue. What was already eaten is untouched:
-  /// the catalogue is a convenience, not the record.
-  Future<void> forgetFood(int id) async {
-    await _repository.forgetFood(id);
+  /// Writes down a food, or corrects the one already there.
+  Future<void> saveFood(Food food) async {
+    await _repository.saveFood(food);
+    _invalidate();
+  }
+
+  /// Drops a food from the database. What was already eaten is untouched:
+  /// the database is a reference, not the record.
+  Future<void> deleteFood(int id) async {
+    await _repository.deleteFood(id);
     _invalidate();
   }
 

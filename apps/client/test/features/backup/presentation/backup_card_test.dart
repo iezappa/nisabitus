@@ -37,7 +37,7 @@ void main() {
   late _FakeFiles files;
   late ProviderContainer container;
 
-  setUp(() {
+  setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
     files = _FakeFiles();
     container = ProviderContainer(
@@ -46,6 +46,10 @@ void main() {
         backupFilesProvider.overrideWithValue(files),
       ],
     );
+    // The food database ships seeded, so a brand new store already holds
+    // eighty-odd rows. Cleared here because these tests count what the backup
+    // carried, and that arithmetic is about what the test wrote down.
+    await db.delete(db.foods).go();
   });
   tearDown(() {
     container.dispose();

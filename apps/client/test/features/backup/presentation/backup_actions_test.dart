@@ -43,7 +43,7 @@ void main() {
   late _FakeFiles files;
   late ProviderContainer container;
 
-  setUp(() {
+  setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
     files = _FakeFiles();
     container = ProviderContainer(
@@ -52,6 +52,10 @@ void main() {
         backupFilesProvider.overrideWithValue(files),
       ],
     );
+    // The food database ships seeded, so a brand new store already holds
+    // eighty-odd rows. Cleared here because these tests count what the backup
+    // carried, and that arithmetic is about what the test wrote down.
+    await db.delete(db.foods).go();
   });
   tearDown(() {
     container.dispose();
@@ -125,6 +129,24 @@ void main() {
       files.toOpen = null;
 
       expect(await actions().import(), isA<BackupCancelled>());
+    });
+
+    test('counts what came in, not what the file claimed', () async {
+      // A backup taken before v12 carries the per-set log, and that table is
+      // gone. The rows cannot be placed, so they cannot be counted, and the
+      // message says part of the file was left behind.
+      await seedHabit();
+      final exported = jsonDecode(await exportedText()) as Map<String, dynamic>;
+      (exported['tables'] as Map<String, dynamic>)['exercise_sets'] = [
+        {'id': 1, 'exercise_id': 1, 'date': 0, 'position': 0, 'reps': 8},
+      ];
+      exported['schemaVersion'] = 11;
+      files.toOpen = jsonEncode(exported);
+
+      final outcome = await actions().import() as BackupSucceeded;
+
+      expect(outcome.rows, 1);
+      expect(outcome.ignoredTables, {'exercise_sets'});
     });
 
     test('refuses a file that is not a backup', () async {
