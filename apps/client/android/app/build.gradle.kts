@@ -8,8 +8,8 @@ plugins {
 }
 
 // Release signing. `android/key.properties` is never committed: locally it is
-// written by hand, in CI by the release workflow from repository secrets.
-// See docs/RELEASING.md.
+// written by hand or by the password manager CLI; it never reaches CI.
+// See docs/SIGNING.md.
 val keystorePropertiesFile = rootProject.file("key.properties")
 val keystoreProperties = Properties()
 val hasReleaseKeystore = keystorePropertiesFile.exists()
@@ -77,7 +77,7 @@ gradle.taskGraph.whenReady {
         throw GradleException(
             "Release signing is not configured: android/key.properties is missing. " +
                 "Release builds are never signed with the debug key. " +
-                "See docs/RELEASING.md.",
+                "See docs/SIGNING.md.",
         )
     }
 }

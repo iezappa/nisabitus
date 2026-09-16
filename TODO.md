@@ -312,10 +312,13 @@ looks like.
       the standard's next-day rule — deliberate), and "Delete all my data"
       (typed confirmation; keeps language, theme and accent).
 - [x] ~~P0-3 release keystore signing~~ in `build.gradle.kts`; see
-      `docs/RELEASING.md`. APKs are signed locally and uploaded with
-      `apps/client/tool/release_apk.sh` (no keystore in CI). **Open:**
-      generate the keystore locally, record its SHA-256 fingerprint in
-      `docs/RELEASING.md`, install the Android SDK. The release workflow for
+      `docs/SIGNING.md`. APKs are signed locally and uploaded with
+      `apps/client/tool/release_apk.sh` (no keystore in CI), aligned with the
+      standard's `templates/local-first/tool/release_apk.sh` (fb593db): same
+      checks, `APK_CERT_SHA256` override, fingerprint read from
+      `docs/SIGNING.md`, `nisabitus-vX.Y.Z-android.apk` + `.sha256`. **Open:**
+      generate the keystore locally, back it up and test the restore, record
+      its SHA-256 fingerprint in `docs/SIGNING.md`, install the Android SDK. The release workflow for
       the other artifacts is still pending (P1). The failing no-keystore build was not verified (no SDK on
       the machine it was written on).
 - [ ] **P0-4** migrate integer ids to UUIDs.
@@ -343,6 +346,13 @@ CI and `integration_test/` used to be listed here. Both landed in `47ae205`:
 every push, and `integration_test/habit_flow_test.dart` starts the app for real.
 
 Walk this when the standard changes, or before a release:
+
+- [ ] **§8.1 APK signing** (FIRMA-ANDROID.md §9 row "Nisabitus", checked
+      against Estandarizador fb593db, 2026-09-16). Keystore created: pending.
+      Backup verified: pending. Fingerprint recorded in `docs/SIGNING.md`:
+      pending. `build.gradle.kts` fails without `key.properties`: done
+      (`0983a02`). CI without APK signing: done (no signing job; release
+      workflow still pending). `tool/release_apk.sh`: aligned with the template.
 
 - [ ] **§2.1 Product patterns.** i18n through ARB files, onboarding shown
       once, local PIN (absent here on purpose), disclaimer visible in
