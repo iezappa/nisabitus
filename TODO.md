@@ -282,20 +282,44 @@ The build is published to GitHub Pages by `deploy-pages.yml` on every push to
       journal in. Three ways out, none of them free:
 
       1. Host where headers can be set (Cloudflare Pages, Netlify: a
-         `_headers` file) and point the domain there.
+         `_headers` file) and point the domain there. **Still open.**
       2. Keep Pages and register a service worker that re-injects the headers
-         client-side — the known trick, and it collides with the service
-         worker Flutter already registers.
-      3. Keep Pages as a demo and **say so in the app**: drift reports the
-         implementation it chose, and today `driftDatabase` ignores it. For
-         an app whose whole pillar is "your data lives on your device",
-         silently running on storage that can lose writes is the wrong
-         default. This one is worth doing regardless of 1 and 2.
+         client-side — collides with Flutter's own service worker. **Still
+         open.**
+      3. ~~Say so in the app.~~ **Done.** drift's chosen implementation maps
+         to `StorageDurability`; IndexedDB and memory show a dismissible
+         banner that offers to export. `navigator.storage.persist()` is
+         requested at startup.
+
+- [x] ~~The half-created database kills every screen.~~ Reproduced in
+      `database_health_test.dart`: tables are `IF NOT EXISTS`, the
+      hand-written indices were not, so a second `onCreate` threw `index ...
+      already exists` and drift kept the migration error. Indices are now
+      created `IF NOT EXISTS`. Any other store that will not open lands on a
+      recovery screen (import a backup / reset), never an automatic reset.
 
 `tool/serve_web.py` sends the headers locally, and is what a correct host
 looks like.
 
 ---
+
+## 3b. Data safety (P0 / P1)
+
+- [x] ~~P0-1 storage engine awareness and half-created DB recovery.~~
+- [x] ~~P0-2 mandatory backup notice~~: onboarding acceptance (plus a one-time
+      dialog for users onboarded before it), notice in Settings → Your data,
+      `backup.lastExportAt` reminder (30 days; "not now" snoozes 7 days, not
+      the standard's next-day rule — deliberate), and "Delete all my data"
+      (typed confirmation; keeps language, theme and accent).
+- [x] ~~P0-3 release keystore signing~~ in `build.gradle.kts`; see
+      `docs/RELEASING.md`. **Open:** generate the keystore, load the four
+      secrets, add the Android release workflow, record the SHA-256
+      fingerprint. The failing no-keystore build was not verified (no SDK on
+      the machine it was written on).
+- [ ] **P0-4** migrate integer ids to UUIDs.
+- [ ] **P1** CSV export; licenses page and privacy/terms links in About;
+      service worker of our own for the web build (8.2); an iOS "Add to
+      Home Screen" onboarding slide; OPFS still untested in CI.
 
 ## 4. Conformance with the shared standard
 
