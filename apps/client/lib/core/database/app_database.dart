@@ -14,6 +14,7 @@ import '../../features/pomodoro/data/pomodoro_tables.dart';
 import '../../features/sleep/data/sleep_tables.dart';
 import '../../features/streaks/data/streak_tables.dart';
 import '../../features/todo/data/todo_tables.dart';
+import 'storage_durability.dart';
 
 part 'app_database.g.dart';
 
@@ -47,7 +48,23 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(driftDatabase(name: 'nisabitus', web: _web));
+  AppDatabase({void Function(StorageDurability)? onStorageChosen})
+    : super(
+        driftDatabase(
+          name: storeName,
+          web: DriftWebOptions(
+            sqlite3Wasm: sqlite3WasmUri,
+            driftWorker: driftWorkerUri,
+            onResult: (result) => onStorageChosen?.call(
+              durabilityOf(result.chosenImplementation),
+            ),
+          ),
+        ),
+      );
+
+  /// The name the store is opened under: `nisabitus.sqlite` on native
+  /// platforms, the browser database of the same name on the web.
+  static const storeName = 'nisabitus';
 
   /// Where the browser build finds its database engine.
   ///
@@ -60,16 +77,18 @@ class AppDatabase extends _$AppDatabase {
   /// Both files are pinned to the versions of `drift` and `sqlite3` in
   /// `pubspec.lock`. Bumping either package means downloading the matching
   /// pair again from their releases.
-  static final _web = DriftWebOptions(
-    sqlite3Wasm: Uri.parse('sqlite3.wasm'),
-    driftWorker: Uri.parse('drift_worker.js'),
-  );
+  static final sqlite3WasmUri = Uri.parse('sqlite3.wasm');
+  static final driftWorkerUri = Uri.parse('drift_worker.js');
 
   /// Used by tests to run against a throwaway in-memory database.
   AppDatabase.forTesting(super.executor);
 
+  /// The schema this build writes, readable without opening a store — which
+  /// is exactly when recovery needs it.
+  static const currentSchemaVersion = 13;
+
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => currentSchemaVersion;
 
   /// Fills the food database with what the app ships.
   ///
@@ -92,10 +111,35 @@ class AppDatabase extends _$AppDatabase {
     ], mode: InsertMode.insertOrIgnore),
   );
 
+  /// `createAll`, safe to run over a store that is already partly there.
+  ///
+  /// Tables go up as `CREATE TABLE IF NOT EXISTS` already; the indices are
+  /// written by hand in the table files as plain `CREATE INDEX`, and those
+  /// throw on a second run. On the web that second run is real: IndexedDB
+  /// persists lazily, so a reload can keep every table and index of a first
+  /// launch and lose the `user_version` that marked it done. The next launch
+  /// creates the store again, the first index throws, drift remembers the
+  /// failed migration, and every screen fails with it.
+  Future<void> _createAllIdempotently(Migrator m) async {
+    for (final entity in allSchemaEntities) {
+      if (entity is Index) {
+        await customStatement(
+          entity.createStatementsByDialect[SqlDialect.sqlite]!
+              .replaceFirstMapped(
+                RegExp(r'^CREATE (UNIQUE )?INDEX (?!IF NOT EXISTS)'),
+                (match) => 'CREATE ${match[1] ?? ''}INDEX IF NOT EXISTS ',
+              ),
+        );
+      } else {
+        await m.create(entity);
+      }
+    }
+  }
+
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
-      await m.createAll();
+      await _createAllIdempotently(m);
       // A fresh install gets the catalogue too. Without this the food
       // database only exists for people who upgraded into it, which is the
       // sort of difference nobody finds until a new install looks broken.

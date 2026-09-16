@@ -45,6 +45,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   file_picker: ^12.1.2
+  # Where drift_flutter keeps the SQLite file, so recovery can delete it.
+  path_provider: ^2.1.6
+  # `navigator.storage.persist()` on the web build.
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

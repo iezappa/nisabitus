@@ -1608,4 +1608,49 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get releaseNotesClose => 'Entendido';
+
+  @override
+  String get storageDegradedWarning =>
+      'Este navegador guarda tus datos en un almacenamiento que puede perderse al recargar o al borrar los datos del navegador. Exportá una copia ahora.';
+
+  @override
+  String get storageVolatileWarning =>
+      'Este navegador no puede guardar tus datos: todo lo que anotes se pierde al cerrar esta pestaña. Exportá una copia antes de irte.';
+
+  @override
+  String get storageExportNow => 'Exportar ahora';
+
+  @override
+  String get storageWarningDismiss => 'Ocultar';
+
+  @override
+  String get recoveryTitle => 'No se pudo abrir la base de datos local';
+
+  @override
+  String get recoveryBody =>
+      'Los datos guardados en este dispositivo no se pudieron leer, así que la app no puede arrancar normalmente. Podés restaurar una copia de seguridad o empezar de cero con una base vacía.';
+
+  @override
+  String get recoveryImport => 'Importar una copia';
+
+  @override
+  String get recoveryReset => 'Restablecer la base de datos local';
+
+  @override
+  String get recoveryImportConfirmTitle => '¿Importar una copia?';
+
+  @override
+  String get recoveryImportConfirmBody =>
+      'La base ilegible de este dispositivo se borra para siempre y queda lo que traiga el archivo de copia. No se puede deshacer.';
+
+  @override
+  String get recoveryResetConfirmTitle =>
+      '¿Restablecer la base de datos local?';
+
+  @override
+  String get recoveryResetConfirmBody =>
+      'Todo lo guardado en este dispositivo se borra para siempre y la app arranca vacía. No se puede deshacer.';
+
+  @override
+  String get recoveryResetConfirmAction => 'Restablecer';
 }

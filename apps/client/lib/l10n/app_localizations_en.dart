@@ -1605,4 +1605,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get releaseNotesClose => 'Got it';
+
+  @override
+  String get storageDegradedWarning =>
+      'This browser keeps your data in storage that may be lost on a reload or when browser data is cleared. Export a backup now.';
+
+  @override
+  String get storageVolatileWarning =>
+      'This browser cannot store your data: everything you record will be lost when you close this tab. Export a backup before you leave.';
+
+  @override
+  String get storageExportNow => 'Export now';
+
+  @override
+  String get storageWarningDismiss => 'Dismiss';
+
+  @override
+  String get recoveryTitle => 'The local database could not be opened';
+
+  @override
+  String get recoveryBody =>
+      'The data stored on this device could not be read, so the app cannot start normally. You can restore a backup file, or start over with an empty database.';
+
+  @override
+  String get recoveryImport => 'Import a backup';
+
+  @override
+  String get recoveryReset => 'Reset local database';
+
+  @override
+  String get recoveryImportConfirmTitle => 'Import a backup?';
+
+  @override
+  String get recoveryImportConfirmBody =>
+      'The unreadable database on this device will be permanently deleted and replaced by what the backup file holds. It cannot be undone.';
+
+  @override
+  String get recoveryResetConfirmTitle => 'Reset the local database?';
+
+  @override
+  String get recoveryResetConfirmBody =>
+      'Everything stored on this device will be permanently deleted and the app will start empty. It cannot be undone.';
+
+  @override
+  String get recoveryResetConfirmAction => 'Reset';
 }

@@ -3001,6 +3001,84 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Entendido'**
   String get releaseNotesClose;
+
+  /// No description provided for @storageDegradedWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Este navegador guarda tus datos en un almacenamiento que puede perderse al recargar o al borrar los datos del navegador. Exportá una copia ahora.'**
+  String get storageDegradedWarning;
+
+  /// No description provided for @storageVolatileWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Este navegador no puede guardar tus datos: todo lo que anotes se pierde al cerrar esta pestaña. Exportá una copia antes de irte.'**
+  String get storageVolatileWarning;
+
+  /// No description provided for @storageExportNow.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar ahora'**
+  String get storageExportNow;
+
+  /// No description provided for @storageWarningDismiss.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar'**
+  String get storageWarningDismiss;
+
+  /// No description provided for @recoveryTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo abrir la base de datos local'**
+  String get recoveryTitle;
+
+  /// No description provided for @recoveryBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos guardados en este dispositivo no se pudieron leer, así que la app no puede arrancar normalmente. Podés restaurar una copia de seguridad o empezar de cero con una base vacía.'**
+  String get recoveryBody;
+
+  /// No description provided for @recoveryImport.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar una copia'**
+  String get recoveryImport;
+
+  /// No description provided for @recoveryReset.
+  ///
+  /// In es, this message translates to:
+  /// **'Restablecer la base de datos local'**
+  String get recoveryReset;
+
+  /// No description provided for @recoveryImportConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Importar una copia?'**
+  String get recoveryImportConfirmTitle;
+
+  /// No description provided for @recoveryImportConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'La base ilegible de este dispositivo se borra para siempre y queda lo que traiga el archivo de copia. No se puede deshacer.'**
+  String get recoveryImportConfirmBody;
+
+  /// No description provided for @recoveryResetConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Restablecer la base de datos local?'**
+  String get recoveryResetConfirmTitle;
+
+  /// No description provided for @recoveryResetConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo lo guardado en este dispositivo se borra para siempre y la app arranca vacía. No se puede deshacer.'**
+  String get recoveryResetConfirmBody;
+
+  /// No description provided for @recoveryResetConfirmAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Restablecer'**
+  String get recoveryResetConfirmAction;
 }
 
 class _AppLocalizationsDelegate

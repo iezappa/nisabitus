@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/backup/presentation/widgets/storage_warning_banner.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/habits/presentation/habits_screen.dart';
 import '../../features/journal/presentation/journal_screen.dart';
@@ -78,7 +79,7 @@ class AppShell extends ConsumerWidget {
 
     if (MediaQuery.sizeOf(context).width < 720) {
       return Scaffold(
-        body: child,
+        body: _WithNotices(child: child),
         bottomNavigationBar: NavigationBar(
           selectedIndex: selected,
           onDestinationSelected: go,
@@ -115,9 +116,28 @@ class AppShell extends ConsumerWidget {
             ],
           ),
           const VerticalDivider(width: 1),
-          Expanded(child: child),
+          Expanded(child: _WithNotices(child: child)),
         ],
       ),
     );
   }
+}
+
+/// The tab, with any data-safety notice docked under it.
+///
+/// At the bottom rather than the top: the tabs bring their own app bars and
+/// status-bar insets, and a banner pushed above them would sit between the
+/// clock and the title. Down here it covers nothing and blocks nothing.
+class _WithNotices extends StatelessWidget {
+  const _WithNotices({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      Expanded(child: child),
+      const StorageWarningBanner(),
+    ],
+  );
 }

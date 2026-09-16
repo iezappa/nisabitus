@@ -1,12 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/app/app_restart.dart';
 import 'core/app/launch_gate.dart';
+import 'core/database/persistent_storage.dart';
 import 'core/preferences/preferences.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/backup/presentation/database_gate.dart';
 import 'features/settings/presentation/settings_providers.dart';
 import 'l10n/app_localizations.dart';
 
@@ -16,8 +21,12 @@ Future<void> main() async {
   // preferences synchronously instead of threading a future through the UI.
   final preferences = await SharedPreferences.getInstance();
 
+  // Not awaited: the browser may take its time, or prompt, and a launch must
+  // not wait on either. A no-op outside the web.
+  unawaited(requestPersistentStorage());
+
   runApp(
-    ProviderScope(
+    AppRestartScope(
       overrides: [sharedPreferencesProvider.overrideWithValue(preferences)],
       child: const NisabitApp(),
     ),
@@ -58,7 +67,10 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
       // Null hands the choice back to the device.
       locale: language.locale,
       debugShowCheckedModeBanner: false,
-      builder: (context, child) => LaunchGate(child: child ?? const SizedBox()),
+      // The database gate goes first: there is no point greeting someone
+      // into an app whose store would not open.
+      builder: (context, child) =>
+          DatabaseGate(child: LaunchGate(child: child ?? const SizedBox())),
     );
   }
 }

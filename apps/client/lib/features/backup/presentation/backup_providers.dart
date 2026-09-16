@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app/app_restart.dart';
+import '../../../core/database/app_database.dart';
 import '../../../core/database/database_provider.dart';
+import '../../../core/database/local_store.dart';
 import '../../exercise/presentation/exercise_providers.dart';
 import '../../habits/presentation/habit_providers.dart';
 import '../../journal/presentation/journal_providers.dart';
@@ -144,3 +147,69 @@ class BackupActions {
 }
 
 final backupActionsProvider = Provider<BackupActions>(BackupActions.new);
+
+/// The way out of a store that cannot be opened.
+///
+/// Neither option tries to repair the store in place: a database that fails
+/// to open has already shown it cannot be trusted, and a repair that guesses
+/// wrong looks exactly like one that worked. Both start from empty, both are
+/// asked for explicitly, and both end by starting the app again.
+class DatabaseRecoveryActions {
+  DatabaseRecoveryActions(this._ref);
+
+  final Ref _ref;
+
+  /// Deletes the store and starts the app over, empty.
+  Future<void> reset() async {
+    await _eraseStore();
+    _ref.read(restartAppProvider)();
+  }
+
+  /// Puts a backup file where the broken store was.
+  ///
+  /// The file is read and checked before anything is deleted, so picking the
+  /// wrong one — or backing out — leaves the device exactly as it was.
+  Future<BackupOutcome> importBackup() async {
+    final source = await _ref.read(backupFilesProvider).open();
+    if (source == null) return const BackupCancelled();
+
+    final BackupDocument document;
+    try {
+      document = BackupDocument.parse(
+        source,
+        supportedSchemaVersion: AppDatabase.currentSchemaVersion,
+      );
+    } on BackupFormatException catch (error) {
+      return BackupRejected(error.reason);
+    }
+
+    try {
+      await _eraseStore();
+      // A connection that failed to open stays failed, so the restore needs
+      // a new one on the new, empty store.
+      _ref.invalidate(databaseProvider);
+      final report = await _ref
+          .read(backupRepositoryProvider)
+          .restore(document);
+      _ref.read(restartAppProvider)();
+
+      return BackupSucceeded(report.rows, ignoredTables: report.ignoredTables);
+    } on Object catch (error) {
+      return BackupFailed(error);
+    }
+  }
+
+  Future<void> _eraseStore() async {
+    try {
+      await _ref.read(databaseProvider).close();
+    } on Object {
+      // Closing a connection that never opened can fail too. The storage is
+      // about to be deleted either way.
+    }
+    await _ref.read(eraseLocalStoreProvider)();
+  }
+}
+
+final databaseRecoveryActionsProvider = Provider<DatabaseRecoveryActions>(
+  DatabaseRecoveryActions.new,
+);

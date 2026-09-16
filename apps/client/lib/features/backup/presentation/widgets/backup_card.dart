@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/backup_document.dart';
+import '../backup_feedback.dart';
 import '../backup_providers.dart';
 
 /// Export and import, in the one place the user goes looking for them.
@@ -82,30 +82,8 @@ class _BackupCardState extends ConsumerState<BackupCard> {
     BackupOutcome outcome,
     String Function(AppLocalizations l10n, int rows) succeeded,
   ) {
-    if (!mounted || outcome is BackupCancelled) return;
-
-    final l10n = AppLocalizations.of(context);
-    final message = switch (outcome) {
-      BackupSucceeded(:final rows, :final ignoredTables) => [
-        succeeded(l10n, rows),
-        // Said out loud rather than left as a smaller number: a file from
-        // before a table was dropped is a real thing to open now.
-        if (ignoredTables.isNotEmpty) l10n.backupSomeIgnored,
-      ].join(' '),
-      BackupRejected(:final problem) => switch (problem) {
-        BackupProblem.notABackup => l10n.backupNotABackup,
-        BackupProblem.newerVersion => l10n.backupNewerVersion,
-        BackupProblem.corrupt => l10n.backupCorrupt,
-      },
-      BackupFailed() => l10n.backupFailed,
-      BackupCancelled() => '',
-    };
-
-    // The previous message is about a run that already finished; leaving it
-    // queued would show the user stale news before the news they asked for.
-    ScaffoldMessenger.of(context)
-      ..clearSnackBars()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    if (!mounted) return;
+    showBackupOutcome(context, outcome, succeeded: succeeded);
   }
 
   @override

@@ -511,5 +511,18 @@
         "type": "int"
       }
     }
-  }
+  },
+  "storageDegradedWarning": "This browser keeps your data in storage that may be lost on a reload or when browser data is cleared. Export a backup now.",
+  "storageVolatileWarning": "This browser cannot store your data: everything you record will be lost when you close this tab. Export a backup before you leave.",
+  "storageExportNow": "Export now",
+  "storageWarningDismiss": "Dismiss",
+  "recoveryTitle": "The local database could not be opened",
+  "recoveryBody": "The data stored on this device could not be read, so the app cannot start normally. You can restore a backup file, or start over with an empty database.",
+  "recoveryImport": "Import a backup",
+  "recoveryReset": "Reset local database",
+  "recoveryImportConfirmTitle": "Import a backup?",
+  "recoveryImportConfirmBody": "The unreadable database on this device will be permanently deleted and replaced by what the backup file holds. It cannot be undone.",
+  "recoveryResetConfirmTitle": "Reset the local database?",
+  "recoveryResetConfirmBody": "Everything stored on this device will be permanently deleted and the app will start empty. It cannot be undone.",
+  "recoveryResetConfirmAction": "Reset"
 }
