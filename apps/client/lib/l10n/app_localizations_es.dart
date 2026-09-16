@@ -1530,10 +1530,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsSupport => 'Soporte';
 
   @override
-  String get backupHint =>
-      'Todo lo que anotaste, en un archivo tuyo. No se sube a ningún lado: queda donde vos lo guardes.';
-
-  @override
   String get backupExport => 'Exportar';
 
   @override
@@ -1653,4 +1649,60 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get recoveryResetConfirmAction => 'Restablecer';
+
+  @override
+  String get backupNoticeTitle => 'Tus datos viven solo en este dispositivo';
+
+  @override
+  String get backupNoticeLead => 'Ningún servidor guarda una copia.';
+
+  @override
+  String get backupNoticeOnboarding =>
+      'No guardamos tus datos en nuestros servidores. Si desinstalás la app, perdés o reseteás el dispositivo o borrás los datos del navegador, se pierden. Exportá seguido desde Ajustes → Tus datos → Exportar y guardá el archivo en un lugar seguro.';
+
+  @override
+  String get backupNoticeAccept => 'Entendido, voy a hacer copias';
+
+  @override
+  String get backupNoticeSettings =>
+      'Tus datos no se guardan en nuestros servidores. Exportá seguido y guardá el archivo fuera de este dispositivo.';
+
+  @override
+  String get backupReminderNever =>
+      'Todavía no hiciste una copia de tus datos.';
+
+  @override
+  String backupReminderOverdue(int days) {
+    return 'Tu última copia fue hace $days días.';
+  }
+
+  @override
+  String get backupReminderAction => 'Exportar';
+
+  @override
+  String get backupReminderDismiss => 'Ahora no';
+
+  @override
+  String get eraseAllData => 'Borrar todos mis datos';
+
+  @override
+  String get eraseAllTitle => '¿Borrar todos tus datos?';
+
+  @override
+  String get eraseAllBody =>
+      'Se borra todo lo registrado en este dispositivo, junto con tu perfil y tus ajustes; solo se conservan el idioma y la apariencia. Después la app vuelve a empezar desde la bienvenida. No se puede deshacer y no existe ninguna copia en otro lado: exportá antes si podrías querer algo de vuelta.';
+
+  @override
+  String get eraseAllConfirmWord => 'BORRAR';
+
+  @override
+  String eraseAllTypeToConfirm(String word) {
+    return 'Escribí $word para confirmar';
+  }
+
+  @override
+  String get eraseAllExportFirst => 'Exportar antes';
+
+  @override
+  String get eraseAllAction => 'Borrar todo';
 }

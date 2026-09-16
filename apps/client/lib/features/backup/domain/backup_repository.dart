@@ -18,4 +18,15 @@ abstract interface class BackupRepository {
   /// Reports what it placed rather than what the document held, so a file
   /// carrying tables this version dropped is not counted as restored.
   Future<RestoreReport> restore(BackupDocument document);
+
+  /// Whether the user has written anything down at all.
+  ///
+  /// The food database the app ships does not count: it is on every install,
+  /// and losing it loses nothing the user made.
+  Future<bool> holdsUserData();
+
+  /// Deletes every record, leaving the store as a fresh install has it.
+  ///
+  /// All or nothing, like [restore].
+  Future<void> eraseEverything();
 }

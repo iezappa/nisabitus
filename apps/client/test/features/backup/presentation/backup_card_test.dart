@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/features/backup/domain/backup_files.dart';
@@ -12,6 +13,7 @@ import 'package:nisabitus/features/habits/data/drift_habit_repository.dart';
 import 'package:nisabitus/features/habits/domain/habit_draft.dart';
 import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Stands in for the native dialogs.
 class _FakeFiles implements BackupFiles {
@@ -38,12 +40,16 @@ void main() {
   late ProviderContainer container;
 
   setUp(() async {
+    SharedPreferences.setMockInitialValues({});
     db = AppDatabase.forTesting(NativeDatabase.memory());
     files = _FakeFiles();
     container = ProviderContainer(
       overrides: [
         databaseProvider.overrideWithValue(db),
         backupFilesProvider.overrideWithValue(files),
+        sharedPreferencesProvider.overrideWithValue(
+          await SharedPreferences.getInstance(),
+        ),
       ],
     );
     // The food database ships seeded, so a brand new store already holds
@@ -80,6 +86,19 @@ void main() {
   Future<void> seedHabit() => DriftHabitRepository(
     db,
   ).create(const HabitDraft(name: 'Meditar', frequency: HabitFrequency.daily));
+
+  testWidgets('says, above the buttons, that no server keeps a copy', (
+    tester,
+  ) async {
+    await pump(tester);
+
+    final notice = find.textContaining('no se guardan en nuestros servidores');
+    expect(notice, findsOne);
+    expect(
+      tester.getTopLeft(notice).dy,
+      lessThan(tester.getTopLeft(find.text('Exportar')).dy),
+    );
+  });
 
   testWidgets('says what importing does before it is pressed', (tester) async {
     await pump(tester);

@@ -96,7 +96,10 @@ class AppDatabase extends _$AppDatabase {
   /// again on a store that already has foods in it without touching a single
   /// one. A user who wrote down their own "Milanesa" keeps theirs: the seed
   /// row is dropped, not merged over it.
-  Future<void> _seedBuiltInFoods() => batch(
+  ///
+  /// Also run after the user erases everything, so the store they are left
+  /// with is the one a fresh install has.
+  Future<void> seedBuiltInFoods() => batch(
     (b) => b.insertAll(foods, [
       for (final food in argentineFoodSeed)
         FoodsCompanion.insert(
@@ -143,7 +146,7 @@ class AppDatabase extends _$AppDatabase {
       // A fresh install gets the catalogue too. Without this the food
       // database only exists for people who upgraded into it, which is the
       // sort of difference nobody finds until a new install looks broken.
-      await _seedBuiltInFoods();
+      await seedBuiltInFoods();
     },
     onUpgrade: (m, from, to) async {
       // v2 added the nutrition and exercise tables. Everything already
@@ -311,7 +314,7 @@ class AppDatabase extends _$AppDatabase {
         await m.create(foodByName);
       }
       if (from < 13) {
-        await _seedBuiltInFoods();
+        await seedBuiltInFoods();
       }
     },
     beforeOpen: (details) async {

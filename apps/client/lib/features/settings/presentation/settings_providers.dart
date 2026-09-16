@@ -66,6 +66,20 @@ final onboardingDoneProvider = StateNotifierProvider<BoolPreference, bool>(
   ),
 );
 
+/// Whether the user accepted that their data lives only on this device.
+///
+/// Separate from [onboardingDoneProvider] on purpose. Everyone onboarded
+/// before the notice existed has that flag set and this one missing, which
+/// is exactly what makes the launch show them the notice once.
+final backupNoticeAcceptedProvider =
+    StateNotifierProvider<BoolPreference, bool>(
+      (ref) => BoolPreference(
+        ref.watch(sharedPreferencesProvider),
+        'settings.backupNoticeAccepted',
+        fallback: false,
+      ),
+    );
+
 /// Which first-level tabs the user has hidden.
 ///
 /// The hidden ones are stored, not the visible ones, and that is the whole

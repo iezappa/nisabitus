@@ -107,6 +107,30 @@ class DriftBackupRepository implements BackupRepository {
     },
   );
 
+  @override
+  Future<bool> holdsUserData() async {
+    for (final table in _tables) {
+      final shipped = table.name == _db.foods.actualTableName
+          ? ' WHERE is_built_in = 0'
+          : '';
+      final row = await _db
+          .customSelect(
+            'SELECT EXISTS(SELECT 1 FROM "${table.name}"$shipped) AS present',
+          )
+          .getSingle();
+      if (row.read<int>('present') == 1) return true;
+    }
+    return false;
+  }
+
+  @override
+  Future<void> eraseEverything() => _db.transaction(() async {
+    for (final table in _tables.reversed) {
+      await table.clear();
+    }
+    await _db.seedBuiltInFoods();
+  });
+
   _TableCodec _codec<T extends Table, D extends DataClass>(
     TableInfo<T, D> table,
     Insertable<D> Function(Map<String, dynamic> json) parse, {

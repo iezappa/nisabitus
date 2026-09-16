@@ -6,10 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/database/storage_durability.dart';
+import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/features/backup/domain/backup_files.dart';
 import 'package:nisabitus/features/backup/presentation/backup_providers.dart';
 import 'package:nisabitus/features/backup/presentation/widgets/storage_warning_banner.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class _FakeFiles implements BackupFiles {
   String? savedContents;
@@ -38,8 +40,12 @@ void main() {
     WidgetTester tester,
     StorageDurability durability,
   ) async {
+    SharedPreferences.setMockInitialValues({});
     final container = ProviderContainer(
       overrides: [
+        sharedPreferencesProvider.overrideWithValue(
+          await SharedPreferences.getInstance(),
+        ),
         databaseProvider.overrideWithValue(db),
         backupFilesProvider.overrideWithValue(files),
         storageDurabilityProvider.overrideWith((ref) => durability),

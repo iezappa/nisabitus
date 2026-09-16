@@ -226,4 +226,59 @@ void main() {
       expect(await db.select(db.habits).get(), isEmpty);
     });
   });
+
+  group('holdsUserData', () {
+    test('is false for a fresh install, seeded foods and all', () async {
+      expect(await repository.holdsUserData(), isFalse);
+    });
+
+    test('is true once anything has been written', () async {
+      await seed();
+
+      expect(await repository.holdsUserData(), isTrue);
+    });
+
+    test(
+      'counts a food the user wrote, not the ones the app shipped',
+      () async {
+        await db
+            .into(db.foods)
+            .insert(
+              FoodsCompanion.insert(name: 'Mi guiso', lowerName: 'mi guiso'),
+            );
+
+        expect(await repository.holdsUserData(), isTrue);
+      },
+    );
+  });
+
+  group('eraseEverything', () {
+    test('empties every table the user wrote to', () async {
+      await seed();
+
+      await repository.eraseEverything();
+
+      final document = await repository.export();
+      for (final entry in document.tables.entries) {
+        if (entry.key == 'foods') continue;
+        expect(entry.value, isEmpty, reason: '${entry.key} kept rows');
+      }
+      expect(await repository.holdsUserData(), isFalse);
+    });
+
+    test('leaves the store as a fresh install has it', () async {
+      final shipped = await db.select(db.foods).get();
+      await db
+          .into(db.foods)
+          .insert(
+            FoodsCompanion.insert(name: 'Mi guiso', lowerName: 'mi guiso'),
+          );
+
+      await repository.eraseEverything();
+
+      final foods = await db.select(db.foods).get();
+      expect(foods, hasLength(shipped.length));
+      expect(foods.every((food) => food.isBuiltIn), isTrue);
+    });
+  });
 }

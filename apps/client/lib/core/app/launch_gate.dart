@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/backup/presentation/widgets/backup_notice_dialog.dart';
 import '../../features/release_notes/domain/release_notes.dart';
 import '../../features/release_notes/presentation/release_notes_providers.dart';
 import '../../features/release_notes/presentation/widgets/release_notes_dialog.dart';
@@ -58,6 +59,13 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
       }
       await showTutorial(context, onboarding: true);
       return;
+    }
+
+    // Someone onboarded before the backup notice existed has never been told
+    // their data lives only here. Once, before anything else is announced.
+    if (!ref.read(backupNoticeAcceptedProvider)) {
+      await showBackupNoticeDialog(context);
+      if (!mounted) return;
     }
 
     if (ref.read(unseenReleasesProvider(language)).isEmpty) return;

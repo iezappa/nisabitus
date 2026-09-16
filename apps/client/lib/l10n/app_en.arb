@@ -472,7 +472,6 @@
   "settingsBackup": "Backup",
   "settingsYourData": "Your data",
   "settingsSupport": "Support",
-  "backupHint": "Everything you have recorded, in a file of your own. It is not uploaded anywhere: it stays wherever you put it.",
   "backupExport": "Export",
   "backupImport": "Import",
   "backupReplaceWarning": "Importing replaces everything you have now.",
@@ -524,5 +523,35 @@
   "recoveryImportConfirmBody": "The unreadable database on this device will be permanently deleted and replaced by what the backup file holds. It cannot be undone.",
   "recoveryResetConfirmTitle": "Reset the local database?",
   "recoveryResetConfirmBody": "Everything stored on this device will be permanently deleted and the app will start empty. It cannot be undone.",
-  "recoveryResetConfirmAction": "Reset"
+  "recoveryResetConfirmAction": "Reset",
+  "backupNoticeTitle": "Your data lives only on this device",
+  "backupNoticeLead": "No server keeps a copy.",
+  "backupNoticeOnboarding": "We don't store your data on our servers. If you uninstall the app, lose or reset your device, or clear your browser data, it will be lost. Export regularly from Settings → Your data → Export and keep the file somewhere safe.",
+  "backupNoticeAccept": "Got it, I'll back up",
+  "backupNoticeSettings": "Your data isn't stored on our servers. Export regularly and keep the file off this device.",
+  "backupReminderNever": "You haven't backed up your data yet.",
+  "backupReminderOverdue": "Your last backup was {days} days ago.",
+  "@backupReminderOverdue": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "backupReminderAction": "Export",
+  "backupReminderDismiss": "Not now",
+  "eraseAllData": "Delete all my data",
+  "eraseAllTitle": "Delete all your data?",
+  "eraseAllBody": "Every record on this device is deleted, along with your profile and settings; only the language and the appearance are kept. The app then starts over from the welcome screens. It cannot be undone, and no copy exists anywhere else: export first if you might want any of it back.",
+  "eraseAllConfirmWord": "DELETE",
+  "eraseAllTypeToConfirm": "Type {word} to confirm",
+  "@eraseAllTypeToConfirm": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "eraseAllExportFirst": "Export first",
+  "eraseAllAction": "Delete everything"
 }

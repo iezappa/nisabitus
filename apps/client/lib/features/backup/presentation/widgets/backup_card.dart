@@ -96,7 +96,26 @@ class _BackupCardState extends ConsumerState<BackupCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.backupHint, style: theme.textTheme.bodySmall),
+        // The standard's backup notice, always on screen and above the
+        // buttons: someone should learn that no server has a copy before
+        // they need one, not after.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.cloud_off_outlined,
+              size: 18,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: Gap.sm),
+            Expanded(
+              child: Text(
+                l10n.backupNoticeSettings,
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: Gap.sm),
         Text(
           l10n.backupReplaceWarning,

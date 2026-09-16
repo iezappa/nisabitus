@@ -6,6 +6,7 @@ import '../../../core/widgets/centered_content.dart';
 import '../../../core/widgets/section_label.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../backup/presentation/widgets/backup_card.dart';
+import '../../backup/presentation/widgets/erase_all_data_tile.dart';
 import '../../release_notes/presentation/widgets/release_notes_tile.dart';
 import '../../shared/support_actions.dart';
 import '../domain/accent_color.dart';
@@ -144,7 +145,13 @@ class _DataSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) => _Section(
     title: AppLocalizations.of(context).settingsYourData,
-    children: const [BackupCard()],
+    // Deleting everything goes last, as the standard fixes it: after the
+    // export that should come before it.
+    children: const [
+      BackupCard(),
+      SizedBox(height: Gap.md),
+      EraseAllDataTile(),
+    ],
   );
 }
 

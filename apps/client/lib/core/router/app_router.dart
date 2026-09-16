@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/backup/presentation/widgets/backup_reminder_banner.dart';
 import '../../features/backup/presentation/widgets/storage_warning_banner.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/habits/presentation/habits_screen.dart';
@@ -138,6 +139,7 @@ class _WithNotices extends StatelessWidget {
     children: [
       Expanded(child: child),
       const StorageWarningBanner(),
+      const BackupReminderBanner(),
     ],
   );
 }

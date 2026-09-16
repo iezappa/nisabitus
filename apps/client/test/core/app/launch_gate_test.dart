@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/app/launch_gate.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/features/release_notes/presentation/release_notes_providers.dart';
+import 'package:nisabitus/features/settings/presentation/settings_providers.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,11 +32,13 @@ void main() {
 
   Future<void> boot({
     bool onboarded = true,
+    bool noticeAccepted = true,
     String? lastSeen,
     String source = '',
   }) async {
     SharedPreferences.setMockInitialValues({
       'settings.onboardingDone': onboarded,
+      'settings.backupNoticeAccepted': noticeAccepted,
       'releaseNotes.lastSeenVersion': ?lastSeen,
     });
     final prefs = await SharedPreferences.getInstance();
@@ -88,7 +91,7 @@ void main() {
       await boot(onboarded: false);
       await launch(tester);
 
-      expect(find.text('1 de 6'), findsOneWidget);
+      expect(find.text('1 de 7'), findsOneWidget);
     });
 
     testWidgets('does not also announce releases the user never used', (
@@ -123,7 +126,7 @@ void main() {
       await boot(lastSeen: '1.0.0');
       await launch(tester);
 
-      expect(find.text('1 de 6'), findsNothing);
+      expect(find.text('1 de 7'), findsNothing);
     });
   });
 
@@ -133,7 +136,7 @@ void main() {
       await launch(tester);
 
       expect(find.text('Lo más nuevo'), findsNothing);
-      expect(find.text('1 de 6'), findsNothing);
+      expect(find.text('1 de 7'), findsNothing);
     });
   });
 
@@ -147,6 +150,65 @@ void main() {
       expect(find.text('la app'), findsOneWidget);
       expect(find.text('Lo más nuevo'), findsNothing);
     });
+  });
+
+  group('someone onboarded before the backup notice existed', () {
+    testWidgets('is shown it once', (tester) async {
+      await boot(noticeAccepted: false, lastSeen: '1.2.0');
+      await launch(tester);
+
+      expect(
+        find.text('Tus datos viven solo en este dispositivo'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('cannot wave it away without accepting it', (tester) async {
+      await boot(noticeAccepted: false, lastSeen: '1.2.0');
+      await launch(tester);
+
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Tus datos viven solo en este dispositivo'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('does not see it again once accepted', (tester) async {
+      await boot(noticeAccepted: false, lastSeen: '1.2.0');
+      await launch(tester);
+
+      await tester.tap(find.text('Entendido, voy a hacer copias'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Tus datos viven solo en este dispositivo'),
+        findsNothing,
+      );
+      expect(container.read(backupNoticeAcceptedProvider), isTrue);
+    });
+
+    testWidgets('still hears about releases afterwards', (tester) async {
+      await boot(noticeAccepted: false, lastSeen: '1.0.0');
+      await launch(tester);
+
+      await tester.tap(find.text('Entendido, voy a hacer copias'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Lo más nuevo'), findsOneWidget);
+    });
+  });
+
+  testWidgets('a first run gets the notice inside onboarding, not twice', (
+    tester,
+  ) async {
+    await boot(onboarded: false, noticeAccepted: false);
+    await launch(tester);
+
+    expect(find.text('1 de 7'), findsOneWidget);
+    expect(find.text('Entendido, voy a hacer copias'), findsNothing);
   });
 }
 

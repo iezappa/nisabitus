@@ -33,6 +33,7 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
   final _controller = PageController();
   final _name = TextEditingController();
   int _page = 0;
+  bool _noticeAccepted = false;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
   void _finish() {
     if (widget.onboarding) {
       ref.read(profileNameProvider.notifier).set(_name.text.trim());
+      ref.read(backupNoticeAcceptedProvider.notifier).set(true);
       ref.read(onboardingDoneProvider.notifier).set(true);
     }
     Navigator.of(context).pop();
@@ -111,6 +113,22 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
           detail: l10n.onboardingTabsDetail,
           extra: const TabVisibilityPicker(),
         ),
+        // Last, so it is the thing standing between the user and the app:
+        // finishing is accepting it.
+        _Slide(
+          art: const _Glyph(icon: Icons.phone_android_outlined),
+          title: l10n.backupNoticeTitle,
+          lead: l10n.backupNoticeLead,
+          detail: l10n.backupNoticeOnboarding,
+          extra: CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            value: _noticeAccepted,
+            onChanged: (value) =>
+                setState(() => _noticeAccepted = value ?? false),
+            title: Text(l10n.backupNoticeAccept),
+          ),
+        ),
       ],
     ];
 
@@ -147,7 +165,11 @@ class _TutorialDialogState extends ConsumerState<_TutorialDialog> {
         else
           const SizedBox.shrink(),
         FilledButton(
-          onPressed: isLast ? _finish : () => _move(1),
+          onPressed: !isLast
+              ? () => _move(1)
+              : widget.onboarding && !_noticeAccepted
+              ? null
+              : _finish,
           child: Text(isLast ? l10n.tutorialDone : l10n.tutorialNext),
         ),
       ],

@@ -2888,12 +2888,6 @@ abstract class AppLocalizations {
   /// **'Soporte'**
   String get settingsSupport;
 
-  /// No description provided for @backupHint.
-  ///
-  /// In es, this message translates to:
-  /// **'Todo lo que anotaste, en un archivo tuyo. No se sube a ningún lado: queda donde vos lo guardes.'**
-  String get backupHint;
-
   /// No description provided for @backupExport.
   ///
   /// In es, this message translates to:
@@ -3079,6 +3073,102 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Restablecer'**
   String get recoveryResetConfirmAction;
+
+  /// No description provided for @backupNoticeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos viven solo en este dispositivo'**
+  String get backupNoticeTitle;
+
+  /// No description provided for @backupNoticeLead.
+  ///
+  /// In es, this message translates to:
+  /// **'Ningún servidor guarda una copia.'**
+  String get backupNoticeLead;
+
+  /// No description provided for @backupNoticeOnboarding.
+  ///
+  /// In es, this message translates to:
+  /// **'No guardamos tus datos en nuestros servidores. Si desinstalás la app, perdés o reseteás el dispositivo o borrás los datos del navegador, se pierden. Exportá seguido desde Ajustes → Tus datos → Exportar y guardá el archivo en un lugar seguro.'**
+  String get backupNoticeOnboarding;
+
+  /// No description provided for @backupNoticeAccept.
+  ///
+  /// In es, this message translates to:
+  /// **'Entendido, voy a hacer copias'**
+  String get backupNoticeAccept;
+
+  /// No description provided for @backupNoticeSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos no se guardan en nuestros servidores. Exportá seguido y guardá el archivo fuera de este dispositivo.'**
+  String get backupNoticeSettings;
+
+  /// No description provided for @backupReminderNever.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hiciste una copia de tus datos.'**
+  String get backupReminderNever;
+
+  /// No description provided for @backupReminderOverdue.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu última copia fue hace {days} días.'**
+  String backupReminderOverdue(int days);
+
+  /// No description provided for @backupReminderAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar'**
+  String get backupReminderAction;
+
+  /// No description provided for @backupReminderDismiss.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get backupReminderDismiss;
+
+  /// No description provided for @eraseAllData.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar todos mis datos'**
+  String get eraseAllData;
+
+  /// No description provided for @eraseAllTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Borrar todos tus datos?'**
+  String get eraseAllTitle;
+
+  /// No description provided for @eraseAllBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se borra todo lo registrado en este dispositivo, junto con tu perfil y tus ajustes; solo se conservan el idioma y la apariencia. Después la app vuelve a empezar desde la bienvenida. No se puede deshacer y no existe ninguna copia en otro lado: exportá antes si podrías querer algo de vuelta.'**
+  String get eraseAllBody;
+
+  /// No description provided for @eraseAllConfirmWord.
+  ///
+  /// In es, this message translates to:
+  /// **'BORRAR'**
+  String get eraseAllConfirmWord;
+
+  /// No description provided for @eraseAllTypeToConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribí {word} para confirmar'**
+  String eraseAllTypeToConfirm(String word);
+
+  /// No description provided for @eraseAllExportFirst.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar antes'**
+  String get eraseAllExportFirst;
+
+  /// No description provided for @eraseAllAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar todo'**
+  String get eraseAllAction;
 }
 
 class _AppLocalizationsDelegate

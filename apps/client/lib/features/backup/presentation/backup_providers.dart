@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/app/app_restart.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/database/database_provider.dart';
 import '../../../core/database/local_store.dart';
+import '../../../core/preferences/preferences.dart';
+import '../../../core/time/clock.dart';
 import '../../exercise/presentation/exercise_providers.dart';
 import '../../habits/presentation/habit_providers.dart';
 import '../../journal/presentation/journal_providers.dart';
@@ -17,6 +20,7 @@ import '../data/drift_backup_repository.dart';
 import '../data/picker_backup_files.dart';
 import '../domain/backup_document.dart';
 import '../domain/backup_files.dart';
+import '../domain/backup_reminder.dart';
 import '../domain/backup_repository.dart';
 import '../domain/restore_report.dart';
 
@@ -81,9 +85,14 @@ class BackupActions {
           .read(backupFilesProvider)
           .save(_fileNameFor(document.exportedAt), document.encode());
 
-      return saved
-          ? BackupSucceeded(document.rowCount)
-          : const BackupCancelled();
+      if (!saved) return const BackupCancelled();
+
+      await _ref
+          .read(backupHistoryProvider)
+          .recordExport(_ref.read(clockProvider)());
+      _ref.invalidate(backupReminderProvider);
+
+      return BackupSucceeded(document.rowCount);
     } on Object catch (error) {
       return BackupFailed(error);
     }
@@ -212,4 +221,83 @@ class DatabaseRecoveryActions {
 
 final databaseRecoveryActionsProvider = Provider<DatabaseRecoveryActions>(
   DatabaseRecoveryActions.new,
+);
+
+/// When the user last exported, and last put the reminder off.
+///
+/// Stored as ISO-8601 text in preferences rather than in the database: the
+/// database is what the backup carries, and a restore must not bring back
+/// the date of an export that happened on another device.
+class BackupHistory {
+  BackupHistory(this._prefs);
+
+  final SharedPreferences _prefs;
+
+  static const lastExportKey = 'backup.lastExportAt';
+  static const reminderDismissedKey = 'backup.reminderDismissedAt';
+
+  DateTime? get lastExportAt => _read(lastExportKey);
+
+  DateTime? get reminderDismissedAt => _read(reminderDismissedKey);
+
+  Future<void> recordExport(DateTime at) =>
+      _prefs.setString(lastExportKey, at.toIso8601String());
+
+  Future<void> snoozeReminder(DateTime at) =>
+      _prefs.setString(reminderDismissedKey, at.toIso8601String());
+
+  DateTime? _read(String key) {
+    final stored = _prefs.getString(key);
+    return stored == null ? null : DateTime.tryParse(stored);
+  }
+}
+
+final backupHistoryProvider = Provider<BackupHistory>(
+  (ref) => BackupHistory(ref.watch(sharedPreferencesProvider)),
+);
+
+/// Whether to nudge the user to export, decided once per launch.
+final backupReminderProvider = FutureProvider<BackupReminder>((ref) async {
+  final history = ref.watch(backupHistoryProvider);
+
+  return backupReminderFor(
+    now: ref.watch(clockProvider)(),
+    lastExportAt: history.lastExportAt,
+    dismissedAt: history.reminderDismissedAt,
+    holdsData: await ref.watch(backupRepositoryProvider).holdsUserData(),
+  );
+});
+
+/// "Delete all my data": the store, the preferences, and back to the start.
+class EraseAllDataActions {
+  EraseAllDataActions(this._ref);
+
+  final Ref _ref;
+
+  /// Preferences that survive erasing everything.
+  ///
+  /// How the app looks and which language it speaks. None of it says
+  /// anything about the person, and losing it would greet them — right after
+  /// they deleted everything — in a language they may not read.
+  static const kept = {
+    'settings.language',
+    'settings.theme',
+    'settings.accent',
+  };
+
+  Future<void> eraseEverything() async {
+    await _ref.read(backupRepositoryProvider).eraseEverything();
+
+    final prefs = _ref.read(sharedPreferencesProvider);
+    for (final key in prefs.getKeys().difference(kept)) {
+      await prefs.remove(key);
+    }
+
+    // Onboarding is gone with the rest, so the restart lands on it.
+    _ref.read(restartAppProvider)();
+  }
+}
+
+final eraseAllDataActionsProvider = Provider<EraseAllDataActions>(
+  EraseAllDataActions.new,
 );

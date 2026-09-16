@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nisabitus/core/preferences/preferences.dart';
+import 'package:nisabitus/core/time/clock.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/features/backup/domain/backup_document.dart';
@@ -12,6 +14,7 @@ import 'package:nisabitus/features/habits/data/drift_habit_repository.dart';
 import 'package:nisabitus/features/habits/domain/habit_draft.dart';
 import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
 import 'package:nisabitus/features/habits/presentation/habit_providers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Stands in for the native dialogs: remembers what was written and hands
 /// back whatever the test says the user picked.
@@ -42,14 +45,20 @@ void main() {
   late AppDatabase db;
   late _FakeFiles files;
   late ProviderContainer container;
+  final now = DateTime(2026, 9, 16, 10, 30);
 
   setUp(() async {
+    SharedPreferences.setMockInitialValues({});
     db = AppDatabase.forTesting(NativeDatabase.memory());
     files = _FakeFiles();
     container = ProviderContainer(
       overrides: [
         databaseProvider.overrideWithValue(db),
         backupFilesProvider.overrideWithValue(files),
+        sharedPreferencesProvider.overrideWithValue(
+          await SharedPreferences.getInstance(),
+        ),
+        clockProvider.overrideWithValue(() => now),
       ],
     );
     // The food database ships seeded, so a brand new store already holds
@@ -104,6 +113,20 @@ void main() {
       files.accepted = false;
 
       expect(await actions().export(), isA<BackupCancelled>());
+    });
+
+    test('remembers when the last export succeeded', () async {
+      await actions().export();
+
+      expect(container.read(backupHistoryProvider).lastExportAt, now);
+    });
+
+    test('does not count an export the user backed out of', () async {
+      files.accepted = false;
+
+      await actions().export();
+
+      expect(container.read(backupHistoryProvider).lastExportAt, isNull);
     });
   });
 

@@ -80,12 +80,12 @@ void main() {
       expect(find.text('1 de 4'), findsOneWidget);
     });
 
-    testWidgets('counts the two extra slides during onboarding', (
+    testWidgets('counts the three extra slides during onboarding', (
       tester,
     ) async {
       await open(tester, onboarding: true);
 
-      expect(find.text('1 de 6'), findsOneWidget);
+      expect(find.text('1 de 7'), findsOneWidget);
     });
   });
 
@@ -161,11 +161,76 @@ void main() {
 
       await tester.enterText(find.byType(TextField), 'Zeke');
       await next(tester);
+      await next(tester);
+      // Below the paragraph, so it has to be scrolled to, as a user would.
+      await tester.ensureVisible(find.byType(Checkbox));
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
       await tester.tap(find.text('Empezar'));
       await tester.pumpAndSettle();
 
       expect(container.read(profileNameProvider), 'Zeke');
       expect(container.read(onboardingDoneProvider), isTrue);
+    });
+  });
+
+  group('the backup notice', () {
+    Future<void> reachIt(WidgetTester tester) async {
+      await open(tester, onboarding: true);
+      for (var i = 0; i < 6; i++) {
+        await next(tester);
+      }
+    }
+
+    FilledButton start(WidgetTester tester) => tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Empezar'),
+    );
+
+    testWidgets('closes onboarding, saying the data lives only here', (
+      tester,
+    ) async {
+      await reachIt(tester);
+
+      expect(find.text('7 de 7'), findsOneWidget);
+      expect(
+        find.text('Tus datos viven solo en este dispositivo'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('must be accepted before onboarding can finish', (
+      tester,
+    ) async {
+      await reachIt(tester);
+
+      expect(start(tester).onPressed, isNull);
+
+      // Below the paragraph, so it has to be scrolled to, as a user would.
+      await tester.ensureVisible(find.byType(Checkbox));
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+      expect(start(tester).onPressed, isNotNull);
+    });
+
+    testWidgets('is remembered as accepted once onboarding finishes', (
+      tester,
+    ) async {
+      await reachIt(tester);
+
+      // Below the paragraph, so it has to be scrolled to, as a user would.
+      await tester.ensureVisible(find.byType(Checkbox));
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
+
+      expect(container.read(backupNoticeAcceptedProvider), isTrue);
+    });
+
+    testWidgets('is not part of the tour opened from settings', (tester) async {
+      await open(tester);
+
+      expect(find.text('1 de 4'), findsOneWidget);
     });
   });
 }

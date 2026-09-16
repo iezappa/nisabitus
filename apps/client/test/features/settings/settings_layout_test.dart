@@ -123,6 +123,23 @@ void main() {
     }
   });
 
+  testWidgets('opens Your data with the backup notice and closes it with '
+      'deleting everything', (tester) async {
+    await pumpSettings(tester);
+
+    double top(Finder finder) => tester.getTopLeft(finder).dy;
+
+    final notice = find.textContaining('no se guardan en nuestros servidores');
+    final erase = find.text('Borrar todos mis datos');
+    expect(notice, findsOneWidget);
+    expect(erase, findsOneWidget);
+
+    expect(top(find.text('TUS DATOS')), lessThan(top(notice)));
+    expect(top(notice), lessThan(top(find.text('Exportar'))));
+    expect(top(find.text('Importar')), lessThan(top(erase)));
+    expect(top(erase), lessThan(top(find.text('SOPORTE'))));
+  });
+
   testWidgets('shows the disclaimer itself, not a tile that hides it', (
     tester,
   ) async {

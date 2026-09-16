@@ -22,11 +22,14 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    // Onboarding done, so the launch gate does not open the tutorial over the
-    // app; Spanish pinned, so the copy these steps look for is deterministic
+    // Onboarding done and the backup notice accepted, so the launch gate
+    // opens nothing over the app; Spanish pinned, so the copy these steps look for is deterministic
     // whatever locale the machine running this happens to have.
     SharedPreferences.setMockInitialValues({
       'settings.onboardingDone': true,
+      'settings.backupNoticeAccepted': true,
+      // Just backed up, so the reminder banner stays out of the flow.
+      'backup.lastExportAt': DateTime.now().toIso8601String(),
       'settings.language': 'es',
       'releaseNotes.lastSeenVersion': '99.0.0',
     });
