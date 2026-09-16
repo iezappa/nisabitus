@@ -11,65 +11,87 @@ means the same thing for every user at once.
 --release`) **fails** when `apps/client/android/key.properties` is missing.
 Debug builds, `flutter run`, and the Linux and web CI jobs are unaffected.
 
+The keystore is **never** stored in GitHub Secrets or any CI system. APKs are
+built and signed on the maintainer's machine and attached to the GitHub
+release with `apps/client/tool/release_apk.sh`. The general procedure is the
+shared standard in
+[`FIRMA-ANDROID.md`](https://github.com/iezappa/standardizer_multiplatform/blob/main/FIRMA-ANDROID.md);
+this file records what is specific to Nisabitus.
+
 ## 1. Generate the keystore (once, ever)
 
+Keep it on the Linux filesystem (not under `/mnt/*` on WSL, where permissions
+are not enforced):
+
 ```bash
-keytool -genkey -v -keystore upload-keystore.jks -storetype JKS \
-        -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+mkdir -p ~/.android-keystores/nisabitus && chmod 700 ~/.android-keystores/nisabitus
+keytool -genkey -v -keystore ~/.android-keystores/nisabitus/upload-keystore.jks \
+        -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+chmod 600 ~/.android-keystores/nisabitus/upload-keystore.jks
 ```
 
 Never commit it. `.gitignore` excludes `key.properties`, `*.jks` and
 `*.keystore`.
 
-## 2. Back it up offline
+## 2. Back it up
 
-Store the `.jks` file, both passwords and the alias in a password manager
-(as an attachment) **and** in a second, offline location. There is no
-recovery if it is lost.
+Store the `.jks` file, both passwords and the alias in a password manager (as
+an attachment) **and** in a second, offline copy (e.g. an encrypted USB drive).
+There is no recovery if it is lost.
 
-## 3. Record the certificate fingerprint
+## 3. Point the build at it
 
-The SHA-256 fingerprint is not secret. Record it below and compare it on
-every release:
-
-```bash
-keytool -list -v -keystore upload-keystore.jks -alias upload   # SHA256:
-apksigner verify --print-certs app-release.apk                 # SHA-256 digest
-```
-
-| Certificate | SHA-256 |
-|---|---|
-| upload (release) | _not generated yet_ |
-
-If a release APK does not match, **do not publish it**.
-
-## 4. Local builds
-
-Create `apps/client/android/key.properties`:
+Create `apps/client/android/key.properties` (git-ignored), `chmod 600`:
 
 ```properties
 storePassword=...
 keyPassword=...
 keyAlias=upload
-storeFile=upload-keystore.jks
+storeFile=/home/<you>/.android-keystores/nisabitus/upload-keystore.jks
 ```
 
-`storeFile` resolves relative to `apps/client/android/app/`.
+Use an absolute `storeFile`; a relative one resolves against
+`apps/client/android/app/`.
 
-## 5. CI secrets
+## 4. Record the certificate fingerprint
 
-In GitHub → Settings → Secrets and variables → Actions:
+The SHA-256 fingerprint is not secret. `release_apk.sh` reads the line below
+and refuses to upload an APK signed with anything else. While it says
+`PENDING`, the script prints the fingerprint of the APK it built and stops.
 
-| Secret | Content |
-|---|---|
-| `ANDROID_KEYSTORE_BASE64` | `base64 -w0 upload-keystore.jks` (macOS: `base64 -i upload-keystore.jks`) |
-| `ANDROID_KEYSTORE_PASSWORD` | keystore password |
-| `ANDROID_KEY_ALIAS` | alias (`upload`) |
-| `ANDROID_KEY_PASSWORD` | key password |
+```bash
+keytool -list -v -keystore ~/.android-keystores/nisabitus/upload-keystore.jks -alias upload
+```
 
-A release workflow must check that all four are set and fail otherwise, then
-decode the keystore into `android/app/upload-keystore.jks` and write
-`android/key.properties` before building. No silent fallback to debug.
+Write it as lowercase hex without colons:
+
+APK_CERT_SHA256: PENDING
+
+If a release APK does not match, **do not publish it**.
+
+## 5. Release procedure
+
+Requirements: the Android SDK with build-tools (`$ANDROID_HOME` set, for
+`apksigner`), Flutter, and an authenticated `gh`.
+
+1. Bump `version:` in `apps/client/pubspec.yaml`, commit.
+2. Tag and push the tag: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+3. Create the GitHub release. A release workflow that builds the other
+   artifacts is still pending (P1, see `TODO.md`); until then create it by hand
+   with `gh release create vX.Y.Z`.
+4. With a clean tree checked out at the tag:
+
+   ```bash
+   cd apps/client
+   tool/release_apk.sh --dry-run vX.Y.Z   # builds and verifies, no upload
+   tool/release_apk.sh vX.Y.Z
+   ```
+
+   It checks the tree, the tag, the pubspec version, `key.properties`, `gh`
+   and the release; builds; verifies the certificate; and uploads
+   `nisabitus-vX.Y.Z.apk` plus its `.sha256`.
+
+The script's pure checks are covered by `tool/release_apk_test.sh`.
 
 ## Users of APKs signed with the debug key
 

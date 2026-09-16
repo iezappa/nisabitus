@@ -312,9 +312,11 @@ looks like.
       the standard's next-day rule — deliberate), and "Delete all my data"
       (typed confirmation; keeps language, theme and accent).
 - [x] ~~P0-3 release keystore signing~~ in `build.gradle.kts`; see
-      `docs/RELEASING.md`. **Open:** generate the keystore, load the four
-      secrets, add the Android release workflow, record the SHA-256
-      fingerprint. The failing no-keystore build was not verified (no SDK on
+      `docs/RELEASING.md`. APKs are signed locally and uploaded with
+      `apps/client/tool/release_apk.sh` (no keystore in CI). **Open:**
+      generate the keystore locally, record its SHA-256 fingerprint in
+      `docs/RELEASING.md`, install the Android SDK. The release workflow for
+      the other artifacts is still pending (P1). The failing no-keystore build was not verified (no SDK on
       the machine it was written on).
 - [ ] **P0-4** migrate integer ids to UUIDs.
 - [ ] **P1** CSV export; licenses page and privacy/terms links in About;
