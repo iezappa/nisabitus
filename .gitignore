@@ -24,3 +24,8 @@ About Nísabit.txt
 
 # Golden diffs, written by the test runner when a screenshot does not match.
 apps/client/test/screenshots/failures/
+
+# Android release signing. Never committed: see docs/RELEASING.md.
+key.properties
+*.jks
+*.keystore
