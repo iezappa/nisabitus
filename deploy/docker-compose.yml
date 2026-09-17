@@ -1,0 +1,59 @@
+# docker-compose for ZimaOS / CasaOS ("App Store" -> "+" -> "Install a customized app" -> Import).
+#
+# Filled in for Nisabitus: import as is. Change the published port (8081)
+# if it is taken on your server, in both places below.
+#
+# Field names of the x-casaos blocks follow the apps published in
+# IceWhaleTech/CasaOS-AppStore (e.g. Apps/Syncthing/docker-compose.yml).
+#
+# No volumes on purpose: this container only SERVES the app files. Local-first
+# data lives in each user's browser/device storage (OPFS/IndexedDB), never on
+# this server. Recreating or updating the container loses nothing.
+
+name: nisabitus
+services:
+  nisabitus:
+    image: ghcr.io/iezappa/nisabitus:latest
+    container_name: nisabitus
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - target: 8080
+        published: "8081"
+        protocol: tcp
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+    x-casaos:
+      ports:
+        - container: "8080"
+          description:
+            en_US: Web UI port
+            es_ES: Puerto de la interfaz web
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: nisabitus
+  author: Zeke Zappa Developments (iezappa)
+  developer: Zeke Zappa Developments (iezappa)
+  category: Productivity
+  icon: https://raw.githubusercontent.com/iezappa/nisabitus/main/apps/client/assets/branding/logo_paper.png
+  tagline:
+    en_US: Habits, health and journal, private and offline
+    es_ES: Hábitos, salud y diario, privado y sin conexión
+  description:
+    en_US: |
+      Serves the web/PWA build of Nisabitus. Data is stored on each
+      user's device, not on this server. Use export/import for backups.
+    es_ES: |
+      Sirve la versión web/PWA de Nisabitus. Los datos se guardan en el
+      dispositivo de cada persona, no en este servidor. Usa exportar/importar
+      como backup.
+  title:
+    en_US: Nisabitus
+  index: /
+  port_map: "8081"
+  scheme: http
