@@ -1,0 +1,240 @@
+# Release pipeline for a local-first Flutter app (Profile A).
+#
+# Trigger: push a tag like v1.2.0
+#   git tag v1.2.0 && git push origin v1.2.0
+#
+# Produces:
+#   - GitHub Release with Linux, Windows and macOS archives and update.json
+#     (the signed Android APK is attached manually afterwards, see Caveats)
+#   - Web build zip (nisabitus-vX.Y.Z-web.zip, base href /) on the Release.
+#     GitHub Pages is NOT deployed here: deploy-pages.yml publishes every push
+#     to main at https://iezappa.github.io/nisabitus/
+#   - Multi-arch Docker image ghcr.io/iezappa/nisabitus:<version> and :latest
+#
+# One-time repo setup:
+#   - Commit apps/client/web/sqlite3.wasm and apps/client/web/drift_worker.js
+#   - Commit apps/client/web/sw.js, apps/client/web/flutter_bootstrap.js and
+#     apps/client/tool/generate_sw.sh (own service worker, STACK-APPS-DINAMICAS.md 8.2)
+#   - Commit apps/client/web/update.json ({"version","schemaChange","minSupportedVersion"});
+#     it is also attached to the GitHub Release (STACK-APPS-DINAMICAS.md 8.2)
+#   - pubspec.yaml version x.y.z+build must match the tag vx.y.z
+#   - Commit PRIVACY.md and TERMS.md at the repo root (templates/legal, CUMPLIMIENTO.md)
+#
+# Caveats:
+#   - The Android APK is NOT built here. The maintainer builds and signs it
+#     locally with the app's release keystore and uploads it to this release
+#     with apps/client/tool/release_apk.sh (FIRMA-ANDROID.md,
+#     STACK-APPS-DINAMICAS.md 8.1). Never store the keystore or its passwords
+#     in repository secrets.
+#   - macOS/Windows builds are unsigned: Gatekeeper/SmartScreen will warn.
+
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write   # create the GitHub Release
+  packages: write   # push to GHCR
+
+env:
+  APP_DIR: apps/client
+  # Pinned like ci.yml and deploy-pages.yml.
+  FLUTTER_VERSION: 3.47.1
+
+defaults:
+  run:
+    working-directory: apps/client
+
+jobs:
+  # Fails fast if pubspec.yaml version or update.json do not match the tag,
+  # or if the compliance gate fails.
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check pubspec version matches tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          PUBSPEC_VERSION="$(sed -n 's/^version:[[:space:]]*\([0-9][0-9.]*\).*/\1/p' pubspec.yaml)"
+          if [ "v${PUBSPEC_VERSION}" != "${TAG}" ]; then
+            echo "::error::pubspec.yaml version '${PUBSPEC_VERSION}' does not match tag '${TAG}'"
+            exit 1
+          fi
+          if [ -f web/update.json ] && ! grep -q "\"version\"[[:space:]]*:[[:space:]]*\"${PUBSPEC_VERSION}\"" web/update.json; then
+            echo "::error::web/update.json version does not match tag '${TAG}'"
+            exit 1
+          fi
+      # Compliance gate (CUMPLIMIENTO.md): legal docs present and filled in,
+      # no analytics/ads/tracking packages unless explicitly allowlisted after
+      # implementing a consent flow. Space-separated package names.
+      - name: Check legal docs and tracking dependencies
+        env:
+          TRACKING_ALLOWLIST: ""
+        run: |
+          fail=0
+          for doc in ../../PRIVACY.md ../../TERMS.md; do
+            if [ ! -f "$doc" ]; then
+              echo "::error::Missing ${doc#../../} (templates/legal, CUMPLIMIENTO.md)"; fail=1
+            elif grep -q '{{' "$doc"; then
+              echo "::error::${doc#../../} still contains {{...}} placeholders"; fail=1
+            fi
+          done
+          for pkg in firebase_analytics google_mobile_ads facebook_app_events \
+                     appsflyer_sdk adjust_sdk amplitude_flutter mixpanel_flutter \
+                     posthog_flutter segment_analytics flutter_branch_sdk \
+                     sentry_flutter; do
+            if grep -Eq "^[[:space:]]+${pkg}:" pubspec.yaml; then
+              case " ${TRACKING_ALLOWLIST} " in
+                *" ${pkg} "*) echo "Allowlisted tracking package: ${pkg}" ;;
+                *) echo "::error::${pkg} in pubspec.yaml is not in TRACKING_ALLOWLIST (CUMPLIMIENTO.md items 5 and 8)"; fail=1 ;;
+              esac
+            fi
+          done
+          exit "$fail"
+
+  linux:
+    needs: version-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build linux --release
+      - run: tar -czf "../../${{ github.event.repository.name }}-${{ github.ref_name }}-linux-x64.tar.gz" -C build/linux/x64/release/bundle .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: "*-linux-x64.tar.gz"
+
+  windows:
+    needs: version-check
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build windows --release
+      - shell: pwsh
+        run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath "../../${{ github.event.repository.name }}-${{ github.ref_name }}-windows-x64.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: "*-windows-x64.zip"
+
+  macos:
+    needs: version-check
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build macos --release
+      - run: |
+          cd build/macos/Build/Products/Release
+          ditto -c -k --sequesterRsrc --keepParent *.app "$GITHUB_WORKSPACE/${{ github.event.repository.name }}-${{ github.ref_name }}-macos.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: "*-macos.zip"
+
+  web:
+    needs: version-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # Served from the root of its own origin, like the Docker image.
+      - run: flutter build web --release --base-href / --no-web-resources-cdn
+      # Own service worker: inject version + precache manifest (last step
+      # that touches build/web).
+      - run: sh tool/generate_sw.sh build/web pubspec.yaml
+      - run: cd build/web && zip -qr "$GITHUB_WORKSPACE/${{ github.event.repository.name }}-${{ github.ref_name }}-web.zip" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: "*-web.zip"
+
+  docker:
+    needs: version-check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
+      # The image is served at the root of its own origin: BASE_HREF=/ (default).
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            APP_DIR=${{ env.APP_DIR }}
+            BASE_HREF=/
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  release:
+    needs: [linux, windows, macos, web]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: apps/client/web/update.json
+          sparse-checkout-cone-mode: false
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: if [ -f apps/client/web/update.json ]; then cp apps/client/web/update.json dist/; fi
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          body: |
+            **Android:** the maintainer builds, signs and attaches the APK (`${{ github.event.repository.name }}-${{ github.ref_name }}-android.apk`) and its `.sha256` by hand with `apps/client/tool/release_apk.sh` shortly after this release is created. If they are not under Assets yet, check back later.
+
+            **Android:** el mantenedor adjunta a mano el APK firmado (`${{ github.event.repository.name }}-${{ github.ref_name }}-android.apk`) y su `.sha256` con `apps/client/tool/release_apk.sh` poco después de crear esta release. Si todavía no aparecen en Assets, vuelve a mirar más tarde.
