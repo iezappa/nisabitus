@@ -51,7 +51,7 @@ class Discipline {
   /// A thousand kilometres in one go is not a session either.
   static const maxDistanceKm = 1000.0;
 
-  final int id;
+  final String id;
 
   /// Free text, so the user's own vocabulary works. There is no catalogue
   /// behind this: what is practised is written as it is called.
@@ -80,7 +80,7 @@ class Discipline {
       recurrenceGroupId != null && recurrenceGroupId!.isNotEmpty;
 
   Discipline copyWith({
-    int? id,
+    String? id,
     DateTime? scheduledDate,
     bool? completed,
     String? recurrenceGroupId,

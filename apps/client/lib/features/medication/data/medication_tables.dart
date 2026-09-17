@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/database/record_columns.dart';
+
 /// Something the user takes, described once and ticked off many times.
 @DataClassName('MedicationRow')
-class Medications extends Table {
-  IntColumn get id => integer().autoIncrement()();
+class Medications extends Table with RecordColumns {
   TextColumn get name => text().withLength(min: 1, max: 255)();
 
   /// Stored as the canonical wire name of MedicationKind.
@@ -38,9 +39,8 @@ class Medications extends Table {
   columns: {#date, #medicationId},
   unique: true,
 )
-class MedicationIntakes extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get medicationId =>
-      integer().references(Medications, #id, onDelete: KeyAction.cascade)();
+class MedicationIntakes extends Table with RecordColumns {
+  TextColumn get medicationId =>
+      text().references(Medications, #id, onDelete: KeyAction.cascade)();
   DateTimeColumn get date => dateTime()();
 }

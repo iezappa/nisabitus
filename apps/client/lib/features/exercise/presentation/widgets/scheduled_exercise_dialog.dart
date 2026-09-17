@@ -104,13 +104,13 @@ class _ScheduledExerciseDialogState extends State<_ScheduledExerciseDialog> {
   /// A copy, because the form can add to it without closing.
   late final List<Exercise> _catalogue = [...widget.catalogue];
 
-  late int? _exerciseId =
+  late String? _exerciseId =
       widget.existing?.exerciseId ??
       (widget.catalogue.isEmpty ? null : widget.catalogue.first.id);
 
-  /// The dropdown entry that is not a movement. Negative so it can never
-  /// collide with a real id.
-  static const _createId = -1;
+  /// The dropdown entry that is not a movement. Empty, which no UUID ever
+  /// is, so it can never collide with a real id.
+  static const _createId = '';
 
   late final _sets = TextEditingController(
     text: '${widget.existing?.sets ?? 4}',
@@ -264,7 +264,7 @@ class _ScheduledExerciseDialogState extends State<_ScheduledExerciseDialog> {
                 Row(
                   children: [
                     Expanded(
-                      child: DropdownButtonFormField<int>(
+                      child: DropdownButtonFormField<String>(
                         initialValue: _exerciseId,
                         decoration: InputDecoration(
                           labelText: l10n.exercisePickOne,

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/pomodoro_draft.dart';
 import '../domain/pomodoro_repository.dart';
@@ -37,7 +38,7 @@ class DriftPomodoroRepository implements PomodoroRepository {
   }
 
   @override
-  Future<PomodoroSession?> byId(int id) async {
+  Future<PomodoroSession?> byId(String id) async {
     final row = await (_db.select(
       _db.pomodoroSessions,
     )..where((s) => s.id.equals(id))).getSingleOrNull();
@@ -53,35 +54,37 @@ class DriftPomodoroRepository implements PomodoroRepository {
     final begins = startedAt ?? DateTime.now();
     // Building the entity first lets the domain reject bad input before
     // anything reaches the database.
-    final validated = _fromDraft(draft, id: 0, startedAt: begins);
+    final validated = _fromDraft(draft, id: '', startedAt: begins);
 
-    final id = await _db
-        .into(_db.pomodoroSessions)
-        .insert(
-          PomodoroSessionsCompanion.insert(
-            name: validated.name,
-            category: Value(validated.category),
-            purpose: Value(validated.purpose),
-            cycles: Value(validated.cycles),
-            focusDuration: Value(validated.focusDuration),
-            breakDuration: Value(validated.breakDuration),
-            completedCycles: const Value(0),
-            status: PomodoroStatus.pending.wireName,
-            startedAt: begins,
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.pomodoroSessions)
+                .insertReturning(
+                  PomodoroSessionsCompanion.insert(
+                    name: validated.name,
+                    category: Value(validated.category),
+                    purpose: Value(validated.purpose),
+                    cycles: Value(validated.cycles),
+                    focusDuration: Value(validated.focusDuration),
+                    breakDuration: Value(validated.breakDuration),
+                    completedCycles: const Value(0),
+                    status: PomodoroStatus.pending.wireName,
+                    startedAt: begins,
+                  ),
+                ))
+            .id;
 
     return (await byId(id))!;
   }
 
   @override
-  Future<PomodoroSession> update(int id, PomodoroDraft draft) async {
+  Future<PomodoroSession> update(String id, PomodoroDraft draft) async {
     final existing = await _require(id);
     final validated = _fromDraft(draft, id: id, startedAt: existing.startedAt);
 
     await (_db.update(
       _db.pomodoroSessions,
-    )..where((s) => s.id.equals(id))).write(
+    )..where((s) => s.id.equals(id))).writeTouched(
       PomodoroSessionsCompanion(
         name: Value(validated.name),
         category: Value(validated.category),
@@ -96,26 +99,26 @@ class DriftPomodoroRepository implements PomodoroRepository {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await (_db.delete(
       _db.pomodoroSessions,
     )..where((s) => s.id.equals(id))).go();
   }
 
   @override
-  Future<PomodoroSession> completeCycle(int id) =>
+  Future<PomodoroSession> completeCycle(String id) =>
       _apply(id, (session) => session.completeCycle());
 
   @override
-  Future<PomodoroSession> finish(int id) =>
+  Future<PomodoroSession> finish(String id) =>
       _apply(id, (session) => session.finish());
 
   @override
-  Future<PomodoroSession> cancel(int id) =>
+  Future<PomodoroSession> cancel(String id) =>
       _apply(id, (session) => session.cancel());
 
   @override
-  Future<PomodoroSession> setStatus(int id, PomodoroStatus status) =>
+  Future<PomodoroSession> setStatus(String id, PomodoroStatus status) =>
       _apply(id, (session) => session.copyWith(status: status));
 
   @override
@@ -135,14 +138,14 @@ class DriftPomodoroRepository implements PomodoroRepository {
   }
 
   Future<PomodoroSession> _apply(
-    int id,
+    String id,
     PomodoroSession Function(PomodoroSession) change,
   ) async {
     final updated = change(await _require(id));
 
     await (_db.update(
       _db.pomodoroSessions,
-    )..where((s) => s.id.equals(id))).write(
+    )..where((s) => s.id.equals(id))).writeTouched(
       PomodoroSessionsCompanion(
         completedCycles: Value(updated.completedCycles),
         status: Value(updated.status.wireName),
@@ -152,7 +155,7 @@ class DriftPomodoroRepository implements PomodoroRepository {
     return updated;
   }
 
-  Future<PomodoroSession> _require(int id) async {
+  Future<PomodoroSession> _require(String id) async {
     final session = await byId(id);
     if (session == null) {
       throw StateError('Pomodoro session $id was not found');
@@ -162,7 +165,7 @@ class DriftPomodoroRepository implements PomodoroRepository {
 
   PomodoroSession _fromDraft(
     PomodoroDraft draft, {
-    required int id,
+    required String id,
     required DateTime startedAt,
   }) => PomodoroSession(
     id: id,

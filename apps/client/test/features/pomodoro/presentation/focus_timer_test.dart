@@ -6,7 +6,7 @@ void main() {
   late int cyclesReported;
 
   PomodoroSession session({int focus = 25, int rest = 5}) => PomodoroSession(
-    id: 1,
+    id: '1',
     name: 'Escribir',
     cycles: 4,
     focusDuration: focus,

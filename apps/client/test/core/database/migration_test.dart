@@ -62,7 +62,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final stored = await db.select(db.medications).getSingle();
     expect(stored.name, 'Vitamina D');
@@ -78,13 +78,18 @@ void main() {
     final schema = await verifier.schemaAt(1);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
-    final id = await db
-        .into(db.medications)
-        .insert(
-          MedicationsCompanion.insert(name: 'Vitamina D', kind: 'SUPPLEMENT'),
-        );
+    final id =
+        (await db
+                .into(db.medications)
+                .insertReturning(
+                  MedicationsCompanion.insert(
+                    name: 'Vitamina D',
+                    kind: 'SUPPLEMENT',
+                  ),
+                ))
+            .id;
     final day = DateTime(2026, 3, 11);
     await db
         .into(db.medicationIntakes)
@@ -123,7 +128,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final stored = await db.select(db.foodEntries).getSingle();
     expect(stored.name, 'Avena');
@@ -144,7 +149,7 @@ void main() {
       final schema = await verifier.schemaAt(1);
       final db = AppDatabase.forTesting(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 13);
+      await verifier.migrateAndValidate(db, 14);
 
       await db
           .into(db.foods)
@@ -176,7 +181,7 @@ void main() {
     final schema = await verifier.schemaAt(1);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final indices = await db
         .customSelect(
@@ -213,7 +218,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final exercise = await db.select(db.exercises).getSingle();
     expect(exercise.name, 'Sentadilla');
@@ -264,7 +269,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final leftovers = await db
         .customSelect(
@@ -292,7 +297,7 @@ void main() {
     final schema = await verifier.schemaAt(9);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final leftovers = await db
         .customSelect(
@@ -312,11 +317,15 @@ void main() {
       final schema = await verifier.schemaAt(1);
       final db = AppDatabase.forTesting(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 13);
+      await verifier.migrateAndValidate(db, 14);
 
-      final exerciseId = await db
-          .into(db.exercises)
-          .insert(ExercisesCompanion.insert(name: 'Sentadilla'));
+      final exerciseId =
+          (await db
+                  .into(db.exercises)
+                  .insertReturning(
+                    ExercisesCompanion.insert(name: 'Sentadilla'),
+                  ))
+              .id;
       await db
           .into(db.scheduledExercises)
           .insert(
@@ -345,7 +354,7 @@ void main() {
       final schema = await verifier.schemaAt(1);
       final db = AppDatabase.forTesting(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 13);
+      await verifier.migrateAndValidate(db, 14);
 
       final indices = await db
           .customSelect(
@@ -365,14 +374,14 @@ void main() {
     final schema = await verifier.schemaAt(1);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     expect(
       db
           .into(db.habitCompletions)
           .insert(
             HabitCompletionsCompanion.insert(
-              habitId: 999,
+              habitId: '999',
               completionDate: DateTime(2026, 3, 11),
             ),
           ),
@@ -403,7 +412,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final foods = await db.select(db.foods).get();
 
@@ -444,7 +453,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 13);
+    await verifier.migrateAndValidate(db, 14);
 
     final entry = await db.select(db.foodEntries).getSingle();
     expect(entry.name, 'Milanesa');

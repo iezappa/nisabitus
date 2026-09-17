@@ -8,7 +8,7 @@ class Exercise {
     this.videoUrl,
   }) : name = _validateName(name);
 
-  final int id;
+  final String id;
   final String name;
   final String? description;
 

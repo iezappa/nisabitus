@@ -58,7 +58,7 @@ class HydrationActions {
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.deleteEntry(id);
     _invalidate();
   }

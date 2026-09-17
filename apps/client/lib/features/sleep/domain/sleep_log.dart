@@ -31,7 +31,7 @@ class SleepLog {
     }
   }
 
-  final int id;
+  final String id;
   final double hours;
   final DateTime date;
 

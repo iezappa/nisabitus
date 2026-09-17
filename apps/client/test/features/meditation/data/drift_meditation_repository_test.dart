@@ -90,7 +90,7 @@ void main() {
 
   test('refuses to correct a sitting that is not there', () async {
     expect(
-      repository.update(404, const MeditationDraft(minutes: 20)),
+      repository.update('404', const MeditationDraft(minutes: 20)),
       throwsStateError,
     );
   });

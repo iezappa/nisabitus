@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/meditation.dart';
 import '../domain/meditation_repository.dart';
@@ -17,7 +18,7 @@ class DriftMeditationRepository implements MeditationRepository {
     final rows =
         await (_db.select(_db.meditationSessions)
               ..where((s) => s.date.equals(dateOnly(day)))
-              ..orderBy([(s) => OrderingTerm.asc(s.id)]))
+              ..orderBy([(s) => OrderingTerm.asc(s.rowId)]))
             .get();
 
     return rows.map(_toDomain).toList();
@@ -33,27 +34,29 @@ class DriftMeditationRepository implements MeditationRepository {
     // Building the entity first lets the domain reject an impossible sitting
     // before anything is written.
     final validated = MeditationSession(
-      id: 0,
+      id: '',
       date: date,
       minutes: draft.minutes,
       note: draft.note,
     );
 
-    final id = await _db
-        .into(_db.meditationSessions)
-        .insert(
-          MeditationSessionsCompanion.insert(
-            date: date,
-            minutes: validated.minutes,
-            note: Value(validated.note),
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.meditationSessions)
+                .insertReturning(
+                  MeditationSessionsCompanion.insert(
+                    date: date,
+                    minutes: validated.minutes,
+                    note: Value(validated.note),
+                  ),
+                ))
+            .id;
 
     return validated.copyWith(id: id);
   }
 
   @override
-  Future<MeditationSession> update(int id, MeditationDraft draft) async {
+  Future<MeditationSession> update(String id, MeditationDraft draft) async {
     final existing = await (_db.select(
       _db.meditationSessions,
     )..where((s) => s.id.equals(id))).getSingleOrNull();
@@ -70,7 +73,7 @@ class DriftMeditationRepository implements MeditationRepository {
 
     await (_db.update(
       _db.meditationSessions,
-    )..where((s) => s.id.equals(id))).write(
+    )..where((s) => s.id.equals(id))).writeTouched(
       MeditationSessionsCompanion(
         minutes: Value(validated.minutes),
         // An absent-or-null value rather than a skipped field: clearing a
@@ -83,7 +86,7 @@ class DriftMeditationRepository implements MeditationRepository {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await (_db.delete(
       _db.meditationSessions,
     )..where((s) => s.id.equals(id))).go();

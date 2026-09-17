@@ -12,9 +12,9 @@ void main() {
     TaskPriority priority = TaskPriority.medium,
     TaskStatus status = TaskStatus.todo,
   }) => Task(
-    id: ++nextId,
+    id: '${++nextId}',
     title: title,
-    projectId: 1,
+    projectId: '1',
     priority: priority,
     status: status,
     dueDate: due,

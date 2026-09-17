@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/meal.dart';
 import '../domain/nutrition.dart';
@@ -14,7 +15,7 @@ class DriftNutritionRepository implements NutritionRepository {
   final AppDatabase _db;
 
   /// The goals live in a single pinned row.
-  static const _goalId = 1;
+  static const _goalId = singletonId;
 
   @override
   Future<NutritionGoal> goal() async {
@@ -39,6 +40,7 @@ class DriftNutritionRepository implements NutritionRepository {
         .insertOnConflictUpdate(
           NutritionGoalsCompanion.insert(
             id: const Value(_goalId),
+            updatedAt: Value(DateTime.now()),
             calories: Value(goal.calories),
             protein: Value(goal.protein),
             carbs: Value(goal.carbs),
@@ -54,7 +56,7 @@ class DriftNutritionRepository implements NutritionRepository {
     final rows =
         await (_db.select(_db.foodEntries)
               ..where((e) => e.date.equals(dateOnly(day)))
-              ..orderBy([(e) => OrderingTerm.asc(e.id)]))
+              ..orderBy([(e) => OrderingTerm.asc(e.rowId)]))
             .get();
 
     return rows.map(_toDomain).toList();
@@ -73,7 +75,7 @@ class DriftNutritionRepository implements NutritionRepository {
     // Building the entity first lets the domain reject a blank name before
     // anything is written.
     final validated = FoodEntry(
-      id: 0,
+      id: '',
       date: date,
       name: draft.name,
       portion: draft.portion,
@@ -81,20 +83,22 @@ class DriftNutritionRepository implements NutritionRepository {
       meal: draft.meal,
     );
 
-    final id = await _db
-        .into(_db.foodEntries)
-        .insert(
-          FoodEntriesCompanion.insert(
-            date: date,
-            name: validated.name,
-            portion: Value(validated.portion),
-            calories: Value(validated.macros.calories),
-            protein: Value(validated.macros.protein),
-            carbs: Value(validated.macros.carbs),
-            fat: Value(validated.macros.fat),
-            meal: Value(validated.meal?.wireName),
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.foodEntries)
+                .insertReturning(
+                  FoodEntriesCompanion.insert(
+                    date: date,
+                    name: validated.name,
+                    portion: Value(validated.portion),
+                    calories: Value(validated.macros.calories),
+                    protein: Value(validated.macros.protein),
+                    carbs: Value(validated.macros.carbs),
+                    fat: Value(validated.macros.fat),
+                    meal: Value(validated.meal?.wireName),
+                  ),
+                ))
+            .id;
 
     // Nothing is filed in the food database here any more. An entry's macros
     // are for whatever was on the plate, and there is no honest way back from
@@ -106,7 +110,7 @@ class DriftNutritionRepository implements NutritionRepository {
   }
 
   @override
-  Future<FoodEntry> updateEntry(int id, FoodDraft draft) async {
+  Future<FoodEntry> updateEntry(String id, FoodDraft draft) async {
     final existing = await (_db.select(
       _db.foodEntries,
     )..where((e) => e.id.equals(id))).getSingleOrNull();
@@ -121,7 +125,9 @@ class DriftNutritionRepository implements NutritionRepository {
       meal: draft.meal,
     );
 
-    await (_db.update(_db.foodEntries)..where((e) => e.id.equals(id))).write(
+    await (_db.update(
+      _db.foodEntries,
+    )..where((e) => e.id.equals(id))).writeTouched(
       FoodEntriesCompanion(
         name: Value(validated.name),
         portion: Value(validated.portion),
@@ -140,7 +146,7 @@ class DriftNutritionRepository implements NutritionRepository {
   }
 
   @override
-  Future<void> deleteEntry(int id) async {
+  Future<void> deleteEntry(String id) async {
     await (_db.delete(_db.foodEntries)..where((e) => e.id.equals(id))).go();
   }
 
@@ -188,15 +194,16 @@ class DriftNutritionRepository implements NutritionRepository {
       proteinPer100g: Value(validated.per100g.protein),
       carbsPer100g: Value(validated.per100g.carbs),
       fatPer100g: Value(validated.per100g.fat),
+      updatedAt: Value(DateTime.now()),
     );
 
-    if (validated.id != 0) {
+    if (validated.id.isNotEmpty) {
       // A correction. `isBuiltIn` is left out on purpose: it records where the
       // row came from, and editing a shipped food does not make it the user's
       // invention any more than correcting a typo rewrites its history.
       await (_db.update(
         _db.foods,
-      )..where((f) => f.id.equals(validated.id))).write(values);
+      )..where((f) => f.id.equals(validated.id))).writeTouched(values);
 
       return validated;
     }
@@ -204,26 +211,31 @@ class DriftNutritionRepository implements NutritionRepository {
     // Upsert on the unique lower-case name, so writing down "avena" when
     // "Avena" is already there corrects that food rather than filing a second
     // one the picker would show twice.
-    final id = await _db
-        .into(_db.foods)
-        .insert(
-          FoodsCompanion.insert(
-            name: validated.name,
-            lowerName: lowerName,
-            caloriesPer100g: Value(validated.per100g.calories),
-            proteinPer100g: Value(validated.per100g.protein),
-            carbsPer100g: Value(validated.per100g.carbs),
-            fatPer100g: Value(validated.per100g.fat),
-            isBuiltIn: Value(validated.isBuiltIn),
-          ),
-          onConflict: DoUpdate((_) => values, target: [_db.foods.lowerName]),
-        );
+    final id =
+        (await _db
+                .into(_db.foods)
+                .insertReturning(
+                  FoodsCompanion.insert(
+                    name: validated.name,
+                    lowerName: lowerName,
+                    caloriesPer100g: Value(validated.per100g.calories),
+                    proteinPer100g: Value(validated.per100g.protein),
+                    carbsPer100g: Value(validated.per100g.carbs),
+                    fatPer100g: Value(validated.per100g.fat),
+                    isBuiltIn: Value(validated.isBuiltIn),
+                  ),
+                  onConflict: DoUpdate(
+                    (_) => values,
+                    target: [_db.foods.lowerName],
+                  ),
+                ))
+            .id;
 
     return validated.copyWith(id: id);
   }
 
   @override
-  Future<void> deleteFood(int id) async {
+  Future<void> deleteFood(String id) async {
     // Only the database row. What was eaten stays exactly as it was logged:
     // the entry copied its figures and never pointed back here.
     await (_db.delete(_db.foods)..where((f) => f.id.equals(id))).go();

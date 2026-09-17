@@ -8,7 +8,7 @@ void main() {
   final week = DateRange(monday, monday.add(const Duration(days: 6)));
   final goal = HydrationGoal(millilitres: 2000);
 
-  WaterEntry drink(int ml, DateTime day, {int id = 1}) =>
+  WaterEntry drink(int ml, DateTime day, {String id = '1'}) =>
       WaterEntry(id: id, date: day, millilitres: ml);
 
   test('is empty before anything was drunk', () {
@@ -20,8 +20,8 @@ void main() {
 
   test('adds the drinks of a day together', () {
     final stats = HydrationStats.from(week, [
-      drink(500, monday, id: 1),
-      drink(750, monday, id: 2),
+      drink(500, monday, id: '1'),
+      drink(750, monday, id: '2'),
     ], goal);
 
     expect(stats.total, 1250);
@@ -32,8 +32,8 @@ void main() {
     // A day with no record is silence. Dividing by seven would report a
     // thirst nobody suffered.
     final stats = HydrationStats.from(week, [
-      drink(2000, monday, id: 1),
-      drink(1000, monday.add(const Duration(days: 1)), id: 2),
+      drink(2000, monday, id: '1'),
+      drink(1000, monday.add(const Duration(days: 1)), id: '2'),
     ], goal);
 
     expect(stats.average, 1500);
@@ -41,8 +41,8 @@ void main() {
 
   test('counts the days that reached the target', () {
     final stats = HydrationStats.from(week, [
-      drink(2000, monday, id: 1),
-      drink(500, monday.add(const Duration(days: 1)), id: 2),
+      drink(2000, monday, id: '1'),
+      drink(500, monday.add(const Duration(days: 1)), id: '2'),
     ], goal);
 
     expect(stats.daysOnTarget, 1);
@@ -58,8 +58,8 @@ void main() {
 
   test('drops what falls outside the window it was asked about', () {
     final stats = HydrationStats.from(week, [
-      drink(2000, monday, id: 1),
-      drink(3000, monday.subtract(const Duration(days: 1)), id: 2),
+      drink(2000, monday, id: '1'),
+      drink(3000, monday.subtract(const Duration(days: 1)), id: '2'),
     ], goal);
 
     expect(stats.total, 2000);

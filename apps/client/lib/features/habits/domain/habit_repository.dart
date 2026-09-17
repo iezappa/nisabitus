@@ -20,19 +20,19 @@ abstract interface class HabitRepository {
 
   Future<Habit> create(HabitDraft draft, {DateTime? on});
 
-  Future<Habit> update(int id, HabitDraft draft, {DateTime? on});
+  Future<Habit> update(String id, HabitDraft draft, {DateTime? on});
 
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   /// Flips the habit between fulfilled and pending for the period containing
   /// [day], and returns it hydrated for that same day.
-  Future<Habit> toggleCompletion(int id, DateTime day);
+  Future<Habit> toggleCompletion(String id, DateTime day);
 
   /// Moves the habit to [status] for the period containing [day].
   ///
   /// Becoming done records a completion if the period has none; becoming
   /// pending or cancelled clears the completions of the period.
-  Future<Habit> changeStatus(int id, HabitStatus status, DateTime day);
+  Future<Habit> changeStatus(String id, HabitStatus status, DateTime day);
 
   /// Completions grouped by day, ascending, for the progress chart.
   /// Days with no completion are left out.

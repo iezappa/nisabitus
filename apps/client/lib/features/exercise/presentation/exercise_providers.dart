@@ -67,12 +67,12 @@ class ExerciseActions {
     return exercise;
   }
 
-  Future<void> updateExercise(int id, ExerciseDraft draft) async {
+  Future<void> updateExercise(String id, ExerciseDraft draft) async {
     await _repository.updateExercise(id, draft);
     _invalidate();
   }
 
-  Future<void> deleteExercise(int id) async {
+  Future<void> deleteExercise(String id) async {
     await _repository.deleteExercise(id);
     _invalidate();
   }
@@ -89,27 +89,27 @@ class ExerciseActions {
     _invalidate();
   }
 
-  Future<void> updateScheduled(int id, ScheduledExerciseDraft draft) async {
+  Future<void> updateScheduled(String id, ScheduledExerciseDraft draft) async {
     await _repository.updateScheduled(id, draft);
     _invalidate();
   }
 
-  Future<void> complete(int id, ExerciseCompletion completion) async {
+  Future<void> complete(String id, ExerciseCompletion completion) async {
     await _repository.complete(id, completion);
     _invalidate();
   }
 
-  Future<void> reopen(int id) async {
+  Future<void> reopen(String id) async {
     await _repository.reopen(id);
     _invalidate();
   }
 
-  Future<void> deleteScheduled(int id) async {
+  Future<void> deleteScheduled(String id) async {
     await _repository.deleteScheduled(id);
     _invalidate();
   }
 
-  Future<void> stopRecurrence(int id) async {
+  Future<void> stopRecurrence(String id) async {
     await _repository.stopRecurrence(id);
     _invalidate();
   }

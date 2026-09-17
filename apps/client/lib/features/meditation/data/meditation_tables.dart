@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/database/record_columns.dart';
+
 /// One sat session on one day.
 ///
 /// A row per session rather than one total per day: two ten-minute sittings
@@ -7,8 +9,7 @@ import 'package:drift/drift.dart';
 /// like a habit and which looked like one long effort.
 @DataClassName('MeditationSessionRow')
 @TableIndex(name: 'meditation_by_day', columns: {#date})
-class MeditationSessions extends Table {
-  IntColumn get id => integer().autoIncrement()();
+class MeditationSessions extends Table with RecordColumns {
   DateTimeColumn get date => dateTime()();
   IntColumn get minutes => integer()();
 

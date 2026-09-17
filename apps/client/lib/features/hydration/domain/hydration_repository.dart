@@ -17,7 +17,7 @@ abstract interface class HydrationRepository {
 
   Future<WaterEntry> addEntry(DateTime day, int millilitres);
 
-  Future<void> deleteEntry(int id);
+  Future<void> deleteEntry(String id);
 
   /// The figures the progress view shows for [range].
   Future<HydrationStats> statsFor(DateRange range);

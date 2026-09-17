@@ -43,15 +43,15 @@ abstract interface class DisciplineRepository {
     ExerciseRecurrence? recurrence,
   });
 
-  Future<Discipline> update(int id, DisciplineDraft draft);
+  Future<Discipline> update(String id, DisciplineDraft draft);
 
-  Future<Discipline> complete(int id, DisciplineCompletion completion);
+  Future<Discipline> complete(String id, DisciplineCompletion completion);
 
-  Future<Discipline> reopen(int id);
+  Future<Discipline> reopen(String id);
 
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   /// Stops a series from this day forward, leaving the days already
   /// practised exactly as they were.
-  Future<void> stopRecurrence(int id);
+  Future<void> stopRecurrence(String id);
 }

@@ -32,7 +32,10 @@ class DriftJournalRepository implements JournalRepository {
         .insert(
           MoodEntriesCompanion.insert(content: content.serialize(), date: date),
           onConflict: DoUpdate(
-            (_) => MoodEntriesCompanion(content: Value(content.serialize())),
+            (_) => MoodEntriesCompanion(
+              content: Value(content.serialize()),
+              updatedAt: Value(DateTime.now()),
+            ),
             target: [_db.moodEntries.date],
           ),
         );

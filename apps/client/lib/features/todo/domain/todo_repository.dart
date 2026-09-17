@@ -17,7 +17,7 @@ class TaskDraft {
   });
 
   final String title;
-  final int projectId;
+  final String projectId;
   final String? description;
   final String? category;
   final DateTime? startDate;
@@ -31,11 +31,11 @@ abstract interface class TodoRepository {
   Future<List<Project>> projects();
 
   /// How many tasks sit directly on each project, keyed by project id.
-  Future<Map<int, int>> directTaskCounts();
+  Future<Map<String, int>> directTaskCounts();
 
   Future<Project> createProject(
     String name, {
-    int? parentId,
+    String? parentId,
     String? description,
   });
 
@@ -44,17 +44,17 @@ abstract interface class TodoRepository {
   /// Throws when the move would break the tree; ask [ProjectTree.canMove]
   /// first if you want to disable the control instead.
   Future<Project> updateProject(
-    int id, {
+    String id, {
     required String name,
     String? description,
-    int? parentId,
+    String? parentId,
   });
 
-  Future<void> deleteProject(int id);
+  Future<void> deleteProject(String id);
 
   /// Tasks of a project, optionally including everything filed under its
   /// subprojects.
-  Future<List<Task>> tasks(int projectId, {bool includeDescendants});
+  Future<List<Task>> tasks(String projectId, {bool includeDescendants});
 
   /// Every task in the store, whatever project it belongs to.
   ///
@@ -64,17 +64,17 @@ abstract interface class TodoRepository {
 
   Future<Task> createTask(TaskDraft draft);
 
-  Future<Task> updateTask(int id, TaskDraft draft);
+  Future<Task> updateTask(String id, TaskDraft draft);
 
-  Future<void> deleteTask(int id);
+  Future<void> deleteTask(String id);
 
-  Future<Task> setTaskStatus(int id, TaskStatus status);
+  Future<Task> setTaskStatus(String id, TaskStatus status);
 
-  Future<List<TaskComment>> comments(int taskId);
+  Future<List<TaskComment>> comments(String taskId);
 
-  Future<TaskComment> addComment(int taskId, String content);
+  Future<TaskComment> addComment(String taskId, String content);
 
-  Future<void> deleteComment(int id);
+  Future<void> deleteComment(String id);
 
   /// The figures the progress view shows for [range].
   ///

@@ -51,7 +51,7 @@ class PomodoroSession {
     _bound(completedCycles, 'completedCycles', 0, 100);
   }
 
-  final int id;
+  final String id;
   final String name;
   final String? category;
   final String? purpose;

@@ -26,7 +26,7 @@ class DriftSleepRepository implements SleepRepository {
     final date = dateOnly(day);
     // Building the entity first lets the domain reject impossible hours
     // before anything is written.
-    final validated = SleepLog(id: 0, hours: hours, date: date);
+    final validated = SleepLog(id: '', hours: hours, date: date);
 
     // The unique index on the date is what makes this an update rather than
     // a second row for the same night.
@@ -35,7 +35,10 @@ class DriftSleepRepository implements SleepRepository {
         .insert(
           SleepLogsCompanion.insert(hours: validated.hours, date: date),
           onConflict: DoUpdate(
-            (_) => SleepLogsCompanion(hours: Value(validated.hours)),
+            (_) => SleepLogsCompanion(
+              hours: Value(validated.hours),
+              updatedAt: Value(DateTime.now()),
+            ),
             target: [_db.sleepLogs.date],
           ),
         );

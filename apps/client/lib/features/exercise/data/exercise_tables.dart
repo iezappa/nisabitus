@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/database/record_columns.dart';
+
 /// An exercise the user performs, described once and logged many times.
 @DataClassName('ExerciseRow')
-class Exercises extends Table {
-  IntColumn get id => integer().autoIncrement()();
+class Exercises extends Table with RecordColumns {
   TextColumn get name => text().withLength(min: 1, max: 255)();
   TextColumn get description => text().withLength(max: 5000).nullable()();
 
@@ -31,14 +32,12 @@ class Exercises extends Table {
 @DataClassName('ScheduledExerciseRow')
 @TableIndex(name: 'scheduled_exercise_by_day', columns: {#scheduledDate})
 @TableIndex(name: 'scheduled_exercise_by_group', columns: {#recurrenceGroupId})
-class ScheduledExercises extends Table {
-  IntColumn get id => integer().autoIncrement()();
-
+class ScheduledExercises extends Table with RecordColumns {
   /// The movement, from the catalogue. The reference video and the muscle
   /// group live there, so they are right once instead of copied onto every
   /// day the exercise comes round.
-  IntColumn get exerciseId =>
-      integer().references(Exercises, #id, onDelete: KeyAction.cascade)();
+  TextColumn get exerciseId =>
+      text().references(Exercises, #id, onDelete: KeyAction.cascade)();
 
   DateTimeColumn get scheduledDate => dateTime()();
 

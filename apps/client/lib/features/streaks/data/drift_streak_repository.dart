@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/streak.dart';
 import '../domain/streak_repository.dart';
@@ -15,7 +16,7 @@ class DriftStreakRepository implements StreakRepository {
   Future<List<Streak>> list() async {
     final rows = await (_db.select(
       _db.streaks,
-    )..orderBy([(s) => OrderingTerm.asc(s.id)])).get();
+    )..orderBy([(s) => OrderingTerm.asc(s.rowId)])).get();
 
     return rows.map(_toDomain).toList();
   }
@@ -25,24 +26,26 @@ class DriftStreakRepository implements StreakRepository {
     final today = dateOnly(on ?? DateTime.now());
     // Building the entity first lets the domain reject a blank name before
     // anything is written.
-    final validated = Streak.create(id: 0, name: name, createdAt: today);
+    final validated = Streak.create(id: '', name: name, createdAt: today);
 
-    final id = await _db
-        .into(_db.streaks)
-        .insert(
-          StreaksCompanion.insert(
-            name: validated.name,
-            count: Value(validated.count),
-            maxStreak: Value(validated.maxStreak),
-            lastUpdated: validated.lastUpdated,
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.streaks)
+                .insertReturning(
+                  StreaksCompanion.insert(
+                    name: validated.name,
+                    count: Value(validated.count),
+                    maxStreak: Value(validated.maxStreak),
+                    lastUpdated: validated.lastUpdated,
+                  ),
+                ))
+            .id;
 
     return _require(id);
   }
 
   @override
-  Future<Streak> rename(int id, String name) async {
+  Future<Streak> rename(String id, String name) async {
     final renamed = (await _require(id)).rename(name);
     await _write(renamed);
 
@@ -50,12 +53,12 @@ class DriftStreakRepository implements StreakRepository {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await (_db.delete(_db.streaks)..where((s) => s.id.equals(id))).go();
   }
 
   @override
-  Future<Streak> increment(int id, {DateTime? on}) async {
+  Future<Streak> increment(String id, {DateTime? on}) async {
     final today = dateOnly(on ?? DateTime.now());
     final incremented = (await _require(id)).increment(today);
 
@@ -78,7 +81,7 @@ class DriftStreakRepository implements StreakRepository {
   }
 
   @override
-  Future<Streak> reset(int id, {DateTime? on}) async {
+  Future<Streak> reset(String id, {DateTime? on}) async {
     final reset = (await _require(id)).reset(dateOnly(on ?? DateTime.now()));
     await _write(reset);
 
@@ -86,7 +89,7 @@ class DriftStreakRepository implements StreakRepository {
   }
 
   @override
-  Future<List<StreakPoint>> historyFor(int id) async {
+  Future<List<StreakPoint>> historyFor(String id) async {
     final rows =
         await (_db.select(_db.streakHistoryEntries)
               ..where((h) => h.streakId.equals(id))
@@ -102,7 +105,7 @@ class DriftStreakRepository implements StreakRepository {
   Future<List<StreakSeries>> chartSeries(DateRange range) async {
     final streaks = await (_db.select(
       _db.streaks,
-    )..orderBy([(s) => OrderingTerm.asc(s.id)])).get();
+    )..orderBy([(s) => OrderingTerm.asc(s.rowId)])).get();
     if (streaks.isEmpty) return const [];
 
     final history = await (_db.select(
@@ -111,7 +114,7 @@ class DriftStreakRepository implements StreakRepository {
 
     // Several increments can land on the same day; the line should show the
     // value the day ended on, so the highest wins.
-    final highestPerDay = <int, Map<DateTime, int>>{};
+    final highestPerDay = <String, Map<DateTime, int>>{};
     for (final row in history) {
       final perDay = highestPerDay.putIfAbsent(row.streakId, () => {});
       final day = dateOnly(row.reachedAt);
@@ -139,7 +142,7 @@ class DriftStreakRepository implements StreakRepository {
     return series;
   }
 
-  Future<Streak> _require(int id) async {
+  Future<Streak> _require(String id) async {
     final row = await (_db.select(
       _db.streaks,
     )..where((s) => s.id.equals(id))).getSingleOrNull();
@@ -151,7 +154,9 @@ class DriftStreakRepository implements StreakRepository {
   }
 
   Future<void> _write(Streak streak) async {
-    await (_db.update(_db.streaks)..where((s) => s.id.equals(streak.id))).write(
+    await (_db.update(
+      _db.streaks,
+    )..where((s) => s.id.equals(streak.id))).writeTouched(
       StreaksCompanion(
         name: Value(streak.name),
         count: Value(streak.count),

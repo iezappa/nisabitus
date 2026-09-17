@@ -149,8 +149,8 @@ class ScheduledExercise {
 
   static const maxWeightKg = 1000.0;
 
-  final int id;
-  final int exerciseId;
+  final String id;
+  final String exerciseId;
   final DateTime scheduledDate;
 
   final int sets;
@@ -185,7 +185,7 @@ class ScheduledExercise {
       recurrenceGroupId != null && recurrenceGroupId!.isNotEmpty;
 
   ScheduledExercise copyWith({
-    int? id,
+    String? id,
     DateTime? scheduledDate,
     bool? completed,
     String? recurrenceGroupId,

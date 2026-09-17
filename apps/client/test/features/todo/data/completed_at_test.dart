@@ -15,7 +15,7 @@ void main() {
   });
   tearDown(() => db.close());
 
-  Future<int> newTask() async {
+  Future<String> newTask() async {
     final project = await repository.createProject('Raíz');
     final task = await repository.createTask(
       TaskDraft(title: 'Tarea', projectId: project.id),
@@ -23,7 +23,7 @@ void main() {
     return task.id;
   }
 
-  Future<DateTime?> stampOf(int id) async {
+  Future<DateTime?> stampOf(String id) async {
     final row = await (db.select(
       db.todoTasks,
     )..where((t) => t.id.equals(id))).getSingle();

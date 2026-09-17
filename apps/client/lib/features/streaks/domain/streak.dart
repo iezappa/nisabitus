@@ -16,7 +16,7 @@ class Streak {
 
   /// A brand new streak, with both counters at zero.
   factory Streak.create({
-    required int id,
+    required String id,
     required String name,
     DateTime? createdAt,
   }) => Streak(
@@ -27,7 +27,7 @@ class Streak {
     lastUpdated: createdAt ?? DateTime.now(),
   );
 
-  final int id;
+  final String id;
   final String name;
   final int count;
   final int maxStreak;
@@ -113,8 +113,8 @@ class StreakHistoryEntry {
     required this.reachedAt,
   });
 
-  final int id;
-  final int streakId;
+  final String id;
+  final String streakId;
   final int count;
   final DateTime reachedAt;
 }

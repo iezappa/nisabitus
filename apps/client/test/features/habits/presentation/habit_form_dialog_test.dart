@@ -60,7 +60,7 @@ void main() {
       await openForm(
         tester,
         existing: Habit(
-          id: 1,
+          id: '1',
           name: 'Meditar',
           frequency: HabitFrequency.daily,
           status: HabitStatus.pending,

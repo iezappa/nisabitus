@@ -39,6 +39,7 @@ class BackupDocument {
     required this.schemaVersion,
     required this.exportedAt,
     required this.tables,
+    this.format = currentFormat,
   });
 
   /// Reads a file's text, refusing anything it cannot vouch for.
@@ -112,6 +113,7 @@ class BackupDocument {
     }
 
     return BackupDocument(
+      format: format,
       schemaVersion: schemaVersion,
       exportedAt: DateTime.fromMillisecondsSinceEpoch(exportedAt),
       tables: {
@@ -132,7 +134,14 @@ class BackupDocument {
 
   /// The document's own layout, which moves independently of the database
   /// schema: a rearranged file is not a migrated store.
-  static const currentFormat = 1;
+  ///
+  /// - 1: integer ids, no `updatedAt` (schema 13 and earlier).
+  /// - 2: UUID ids and `updatedAt` on every row (schema 14). Format 1 files
+  ///   are still read; the data layer rewrites their ids on the way in.
+  static const currentFormat = 2;
+
+  /// The layout this document was written in.
+  final int format;
 
   /// The database schema the rows were taken from.
   final int schemaVersion;

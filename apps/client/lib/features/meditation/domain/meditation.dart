@@ -26,7 +26,7 @@ class MeditationSession {
   /// Eight hours. Past that it is not a sitting, it is a typo.
   static const maxMinutes = 480;
 
-  final int id;
+  final String id;
   final DateTime date;
   final int minutes;
 
@@ -39,7 +39,7 @@ class MeditationSession {
     return trimmed.isEmpty ? null : trimmed;
   }
 
-  MeditationSession copyWith({int? id}) => MeditationSession(
+  MeditationSession copyWith({String? id}) => MeditationSession(
     id: id ?? this.id,
     date: date,
     minutes: minutes,

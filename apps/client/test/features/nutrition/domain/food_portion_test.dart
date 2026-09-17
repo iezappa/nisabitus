@@ -93,7 +93,7 @@ void main() {
 
   group('Food', () {
     test('works out what a weight of it comes to', () {
-      final food = Food(id: 1, name: 'Avena', per100g: avena);
+      final food = Food(id: '1', name: 'Avena', per100g: avena);
 
       expect(food.macrosFor(50).calories, 190);
     });

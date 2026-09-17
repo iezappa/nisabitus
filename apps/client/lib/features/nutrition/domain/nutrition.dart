@@ -98,7 +98,7 @@ class FoodEntry {
   }) : date = dateOnly(date),
        name = _validateName(name);
 
-  final int id;
+  final String id;
   final DateTime date;
   final String name;
 
@@ -119,7 +119,7 @@ class FoodEntry {
     return trimmed;
   }
 
-  FoodEntry copyWith({int? id}) => FoodEntry(
+  FoodEntry copyWith({String? id}) => FoodEntry(
     id: id ?? this.id,
     date: date,
     name: name,
@@ -149,7 +149,7 @@ class Food {
     this.isBuiltIn = false,
   }) : name = _validateName(name);
 
-  final int id;
+  final String id;
   final String name;
 
   /// What 100 g of it is made of. The unit is in the name because getting it
@@ -175,7 +175,7 @@ class Food {
   /// What [grams] of this food adds up to.
   Macros macrosFor(double grams) => scaleMacros(per100g, grams);
 
-  Food copyWith({int? id, String? name, Macros? per100g}) => Food(
+  Food copyWith({String? id, String? name, Macros? per100g}) => Food(
     id: id ?? this.id,
     name: name ?? this.name,
     per100g: per100g ?? this.per100g,

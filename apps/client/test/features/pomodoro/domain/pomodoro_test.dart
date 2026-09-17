@@ -5,7 +5,7 @@ import 'package:nisabitus/features/pomodoro/domain/pomodoro_stats.dart';
 
 void main() {
   PomodoroSession session({
-    int id = 1,
+    String id = '1',
     String name = 'Escribir',
     String? category,
     int cycles = 4,
@@ -158,8 +158,8 @@ void main() {
 
     test('adds up the focus minutes and the cycles', () {
       final stats = PomodoroStats.from(march, [
-        session(id: 1, completedCycles: 2, focusDuration: 25),
-        session(id: 2, completedCycles: 3, focusDuration: 30),
+        session(id: '1', completedCycles: 2, focusDuration: 25),
+        session(id: '2', completedCycles: 3, focusDuration: 30),
       ]);
 
       expect(stats.focusMinutes, 2 * 25 + 3 * 30);
@@ -168,8 +168,8 @@ void main() {
 
     test('leaves out sessions that never served a cycle', () {
       final stats = PomodoroStats.from(march, [
-        session(id: 1, category: 'Trabajo', completedCycles: 2),
-        session(id: 2, category: 'Trabajo', completedCycles: 0),
+        session(id: '1', category: 'Trabajo', completedCycles: 2),
+        session(id: '2', category: 'Trabajo', completedCycles: 0),
       ]);
 
       expect(stats.byCategory, {'Trabajo': 50});
@@ -183,13 +183,21 @@ void main() {
 
     test('groups the minutes by the day the session started', () {
       final stats = PomodoroStats.from(march, [
-        session(id: 1, completedCycles: 1, startedAt: DateTime(2026, 3, 11, 9)),
         session(
-          id: 2,
+          id: '1',
+          completedCycles: 1,
+          startedAt: DateTime(2026, 3, 11, 9),
+        ),
+        session(
+          id: '2',
           completedCycles: 2,
           startedAt: DateTime(2026, 3, 11, 18),
         ),
-        session(id: 3, completedCycles: 1, startedAt: DateTime(2026, 3, 12, 9)),
+        session(
+          id: '3',
+          completedCycles: 1,
+          startedAt: DateTime(2026, 3, 12, 9),
+        ),
       ]);
 
       expect(stats.perDay.where((point) => point.value > 0), [
@@ -201,7 +209,11 @@ void main() {
     test('carries one point for every day of the window', () {
       final week = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 7));
       final stats = PomodoroStats.from(week, [
-        session(id: 1, completedCycles: 1, startedAt: DateTime(2026, 3, 3, 9)),
+        session(
+          id: '1',
+          completedCycles: 1,
+          startedAt: DateTime(2026, 3, 3, 9),
+        ),
       ]);
 
       expect(stats.perDay.length, 7);

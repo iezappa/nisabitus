@@ -73,22 +73,22 @@ class HabitActions {
     _invalidate();
   }
 
-  Future<void> update(int id, HabitDraft draft) async {
+  Future<void> update(String id, HabitDraft draft) async {
     await _repository.update(id, draft, on: _today);
     _invalidate();
   }
 
-  Future<void> toggle(int id) async {
+  Future<void> toggle(String id) async {
     await _repository.toggleCompletion(id, _today);
     _invalidate();
   }
 
-  Future<void> changeStatus(int id, HabitStatus status) async {
+  Future<void> changeStatus(String id, HabitStatus status) async {
     await _repository.changeStatus(id, status, _today);
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.delete(id);
     _invalidate();
   }

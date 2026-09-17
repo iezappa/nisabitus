@@ -4,13 +4,13 @@ import 'package:nisabitus/features/meditation/domain/meditation.dart';
 void main() {
   final day = DateTime(2026, 3, 11);
 
-  MeditationSession sat(int minutes, {int id = 1, String? note}) =>
+  MeditationSession sat(int minutes, {String id = '1', String? note}) =>
       MeditationSession(id: id, date: day, minutes: minutes, note: note);
 
   group('MeditationSession', () {
     test('keeps the day it was sat on, without its time', () {
       final session = MeditationSession(
-        id: 1,
+        id: '1',
         date: DateTime(2026, 3, 11, 6, 30),
         minutes: 20,
       );
@@ -38,9 +38,9 @@ void main() {
     });
 
     test('carries everything through a copy', () {
-      final copy = sat(20, note: 'Bien').copyWith(id: 9);
+      final copy = sat(20, note: 'Bien').copyWith(id: '9');
 
-      expect(copy.id, 9);
+      expect(copy.id, '9');
       expect(copy.minutes, 20);
       expect(copy.note, 'Bien');
     });
@@ -54,7 +54,7 @@ void main() {
     test('adds the sittings of a day together', () {
       // Two ten-minute sittings are twenty minutes of practice, not two
       // separate days of it.
-      final today = DailyMeditation.from([sat(10, id: 1), sat(10, id: 2)]);
+      final today = DailyMeditation.from([sat(10, id: '1'), sat(10, id: '2')]);
 
       expect(today.minutes, 20);
       expect(today.sessions, hasLength(2));

@@ -65,12 +65,12 @@ class NutritionActions {
     _invalidate();
   }
 
-  Future<void> update(int id, FoodDraft draft) async {
+  Future<void> update(String id, FoodDraft draft) async {
     await _repository.updateEntry(id, draft);
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.deleteEntry(id);
     _invalidate();
   }
@@ -83,7 +83,7 @@ class NutritionActions {
 
   /// Drops a food from the database. What was already eaten is untouched:
   /// the database is a reference, not the record.
-  Future<void> deleteFood(int id) async {
+  Future<void> deleteFood(String id) async {
     await _repository.deleteFood(id);
     _invalidate();
   }

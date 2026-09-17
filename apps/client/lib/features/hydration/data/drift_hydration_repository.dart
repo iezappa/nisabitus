@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/hydration.dart';
 import '../domain/hydration_repository.dart';
@@ -13,7 +14,7 @@ class DriftHydrationRepository implements HydrationRepository {
   final AppDatabase _db;
 
   /// The target lives in a single pinned row.
-  static const _goalId = 1;
+  static const _goalId = singletonId;
 
   @override
   Future<HydrationGoal> goal() async {
@@ -33,6 +34,7 @@ class DriftHydrationRepository implements HydrationRepository {
         .insertOnConflictUpdate(
           HydrationGoalsCompanion.insert(
             id: const Value(_goalId),
+            updatedAt: Value(DateTime.now()),
             millilitres: Value(goal.millilitres),
           ),
         );
@@ -45,7 +47,7 @@ class DriftHydrationRepository implements HydrationRepository {
     final rows =
         await (_db.select(_db.waterEntries)
               ..where((e) => e.date.equals(dateOnly(day)))
-              ..orderBy([(e) => OrderingTerm.asc(e.id)]))
+              ..orderBy([(e) => OrderingTerm.asc(e.rowId)]))
             .get();
 
     return rows.map(_toDomain).toList();
@@ -63,22 +65,24 @@ class DriftHydrationRepository implements HydrationRepository {
     final date = dateOnly(day);
     // Building the entity first lets the domain reject an impossible drink
     // before anything is written.
-    final validated = WaterEntry(id: 0, date: date, millilitres: millilitres);
+    final validated = WaterEntry(id: '', date: date, millilitres: millilitres);
 
-    final id = await _db
-        .into(_db.waterEntries)
-        .insert(
-          WaterEntriesCompanion.insert(
-            date: date,
-            millilitres: validated.millilitres,
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.waterEntries)
+                .insertReturning(
+                  WaterEntriesCompanion.insert(
+                    date: date,
+                    millilitres: validated.millilitres,
+                  ),
+                ))
+            .id;
 
     return validated.copyWith(id: id);
   }
 
   @override
-  Future<void> deleteEntry(int id) async {
+  Future<void> deleteEntry(String id) async {
     await (_db.delete(_db.waterEntries)..where((e) => e.id.equals(id))).go();
   }
 

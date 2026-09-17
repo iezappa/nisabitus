@@ -36,9 +36,9 @@ abstract interface class NutritionRepository {
 
   Future<FoodEntry> addEntry(DateTime day, FoodDraft draft);
 
-  Future<FoodEntry> updateEntry(int id, FoodDraft draft);
+  Future<FoodEntry> updateEntry(String id, FoodDraft draft);
 
-  Future<void> deleteEntry(int id);
+  Future<void> deleteEntry(String id);
 
   /// The figures the progress view shows for [range].
   Future<NutritionStats> statsFor(DateRange range);
@@ -62,5 +62,5 @@ abstract interface class NutritionRepository {
   /// It cascades onto nothing. Every entry copied its figures when it was
   /// logged, so what was eaten survives a food being deleted, which is what
   /// the confirmation tells the user.
-  Future<void> deleteFood(int id);
+  Future<void> deleteFood(String id);
 }

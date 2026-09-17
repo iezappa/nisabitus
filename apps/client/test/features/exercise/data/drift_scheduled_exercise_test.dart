@@ -21,11 +21,11 @@ void main() {
   });
   tearDown(() => db.close());
 
-  Future<int> anExercise([String name = 'Sentadilla']) async =>
+  Future<String> anExercise([String name = 'Sentadilla']) async =>
       (await repository.createExercise(ExerciseDraft(name: name))).id;
 
   ScheduledExerciseDraft draft(
-    int exerciseId, {
+    String exerciseId, {
     int sets = 4,
     int reps = 8,
     double? weight = 80,
@@ -179,7 +179,7 @@ void main() {
       final exerciseId = await anExercise();
 
       expect(
-        repository.updateScheduled(404, draft(exerciseId)),
+        repository.updateScheduled('404', draft(exerciseId)),
         throwsStateError,
       );
     });

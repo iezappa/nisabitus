@@ -21,7 +21,7 @@ final pomodoroRevisionProvider = StateProvider<int>((ref) => 0);
 final pomodoroPageProvider = StateProvider<int>((ref) => 0);
 
 /// The session the focus screen is running, if any.
-final selectedSessionIdProvider = StateProvider<int?>((ref) => null);
+final selectedSessionIdProvider = StateProvider<String?>((ref) => null);
 
 final pomodoroStatsRangeProvider = StateProvider<ProgressRange>(
   (ref) => ProgressRange.defaultRange,
@@ -75,12 +75,12 @@ class PomodoroActions {
     _invalidate();
   }
 
-  Future<void> update(int id, PomodoroDraft draft) async {
+  Future<void> update(String id, PomodoroDraft draft) async {
     await _repository.update(id, draft);
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.delete(id);
     if (_ref.read(selectedSessionIdProvider) == id) {
       _ref.read(selectedSessionIdProvider.notifier).state = null;
@@ -88,24 +88,24 @@ class PomodoroActions {
     _invalidate();
   }
 
-  Future<void> completeCycle(int id) async {
+  Future<void> completeCycle(String id) async {
     await _repository.completeCycle(id);
     _invalidate();
   }
 
-  Future<void> finish(int id) async {
+  Future<void> finish(String id) async {
     await _repository.finish(id);
     _ref.read(selectedSessionIdProvider.notifier).state = null;
     _invalidate();
   }
 
-  Future<void> cancel(int id) async {
+  Future<void> cancel(String id) async {
     await _repository.cancel(id);
     _ref.read(selectedSessionIdProvider.notifier).state = null;
     _invalidate();
   }
 
-  Future<void> setStatus(int id, PomodoroStatus status) async {
+  Future<void> setStatus(String id, PomodoroStatus status) async {
     await _repository.setStatus(id, status);
     _invalidate();
   }

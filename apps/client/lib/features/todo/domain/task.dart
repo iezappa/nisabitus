@@ -67,7 +67,7 @@ class Task {
        startDate = startDate == null ? null : dateOnly(startDate),
        dueDate = dueDate == null ? null : dateOnly(dueDate);
 
-  final int id;
+  final String id;
   final String title;
   final String? description;
   final String? category;
@@ -75,7 +75,7 @@ class Task {
   final DateTime? dueDate;
   final TaskPriority priority;
   final TaskStatus status;
-  final int projectId;
+  final String projectId;
 
   /// The moment the task reached DONE, or null while it is open.
   ///
@@ -119,8 +119,8 @@ class TaskComment {
     required this.createdAt,
   });
 
-  final int id;
-  final int taskId;
+  final String id;
+  final String taskId;
   final String content;
   final DateTime createdAt;
 }

@@ -11,7 +11,7 @@ void main() {
     bool repeatForever = false,
     int targetCount = 1,
   }) => Habit(
-    id: 1,
+    id: '1',
     name: 'Meditar',
     frequency: frequency,
     targetCount: targetCount,
@@ -145,7 +145,7 @@ void main() {
     test('rejects a blank name', () {
       expect(
         () => Habit(
-          id: 1,
+          id: '1',
           name: '  ',
           frequency: HabitFrequency.daily,
           status: HabitStatus.pending,

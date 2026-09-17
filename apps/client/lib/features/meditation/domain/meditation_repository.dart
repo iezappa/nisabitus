@@ -20,9 +20,9 @@ abstract interface class MeditationRepository {
 
   Future<MeditationSession> add(DateTime day, MeditationDraft draft);
 
-  Future<MeditationSession> update(int id, MeditationDraft draft);
+  Future<MeditationSession> update(String id, MeditationDraft draft);
 
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   /// The figures the progress view shows for [range].
   Future<MeditationStats> statsFor(DateRange range);

@@ -35,12 +35,16 @@ abstract interface class MedicationRepository {
 
   /// Edits an entry. An entry brought back from paused starts again on
   /// [today]: what it did before the pause is not this regimen.
-  Future<Medication> update(int id, MedicationDraft draft, {DateTime? today});
+  Future<Medication> update(
+    String id,
+    MedicationDraft draft, {
+    DateTime? today,
+  });
 
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   /// Flips whether [id] was taken on [day].
-  Future<bool> toggleIntake(int id, DateTime day);
+  Future<bool> toggleIntake(String id, DateTime day);
 
   /// The figures the progress view shows for [range].
   Future<MedicationStats> statsFor(DateRange range);

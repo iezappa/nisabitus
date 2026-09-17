@@ -23,11 +23,11 @@ class WaterEntry {
   /// Five litres in one go is not a drink, it is a typo.
   static const maxMillilitres = 5000;
 
-  final int id;
+  final String id;
   final DateTime date;
   final int millilitres;
 
-  WaterEntry copyWith({int? id}) =>
+  WaterEntry copyWith({String? id}) =>
       WaterEntry(id: id ?? this.id, date: date, millilitres: millilitres);
 }
 

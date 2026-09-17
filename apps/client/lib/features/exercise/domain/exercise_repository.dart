@@ -36,7 +36,7 @@ class ScheduledExerciseDraft {
     this.feedback,
   });
 
-  final int exerciseId;
+  final String exerciseId;
   final int sets;
   final int reps;
   final double? weightKg;
@@ -62,10 +62,10 @@ abstract interface class ExerciseRepository {
 
   Future<Exercise> createExercise(ExerciseDraft draft);
 
-  Future<Exercise> updateExercise(int id, ExerciseDraft draft);
+  Future<Exercise> updateExercise(String id, ExerciseDraft draft);
 
   /// Removes the exercise and every day it was ever scheduled on.
-  Future<void> deleteExercise(int id);
+  Future<void> deleteExercise(String id);
 
   /// The figures the progress view shows for [range].
   Future<ExerciseStats> statsFor(DateRange range);
@@ -87,22 +87,22 @@ abstract interface class ExerciseRepository {
 
   /// Corrects one day. Never the series: the other days are their own rows.
   Future<ScheduledExercise> updateScheduled(
-    int id,
+    String id,
     ScheduledExerciseDraft draft,
   );
 
   /// Ticks it off, recording what actually happened while doing so.
-  Future<ScheduledExercise> complete(int id, ExerciseCompletion completion);
+  Future<ScheduledExercise> complete(String id, ExerciseCompletion completion);
 
   /// Puts it back to pending, leaving what was written about it alone.
-  Future<ScheduledExercise> reopen(int id);
+  Future<ScheduledExercise> reopen(String id);
 
-  Future<void> deleteScheduled(int id);
+  Future<void> deleteScheduled(String id);
 
   /// Stops a series from this day forward.
   ///
   /// Every later day that has not been done yet is removed; the days already
   /// lived stay exactly as they were. Stopping a repetition is not undoing
   /// the training that happened under it.
-  Future<void> stopRecurrence(int id);
+  Future<void> stopRecurrence(String id);
 }

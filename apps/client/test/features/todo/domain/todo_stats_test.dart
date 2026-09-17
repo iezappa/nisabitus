@@ -8,21 +8,21 @@ void main() {
   final today = DateTime(2026, 3, 12);
 
   Task task({
-    int id = 1,
+    String id = '1',
     TaskStatus status = TaskStatus.todo,
     DateTime? dueDate,
     DateTime? completedAt,
   }) => Task(
     id: id,
     title: 'Tarea',
-    projectId: 1,
+    projectId: '1',
     priority: TaskPriority.medium,
     status: status,
     dueDate: dueDate,
     completedAt: completedAt,
   );
 
-  Task done(DateTime at, {int id = 1}) =>
+  Task done(DateTime at, {String id = '1'}) =>
       task(id: id, status: TaskStatus.done, completedAt: at);
 
   group('TodoStats', () {
@@ -34,9 +34,9 @@ void main() {
 
     test('counts what was finished inside the window', () {
       final stats = TodoStats.from(range, [
-        done(DateTime(2026, 3, 10), id: 1),
-        done(DateTime(2026, 3, 12), id: 2),
-        done(DateTime(2026, 2, 1), id: 3),
+        done(DateTime(2026, 3, 10), id: '1'),
+        done(DateTime(2026, 3, 12), id: '2'),
+        done(DateTime(2026, 2, 1), id: '3'),
       ], today);
 
       expect(stats.completed, 2);
@@ -44,9 +44,9 @@ void main() {
 
     test('counts every unfinished task as open, whatever its dates', () {
       final stats = TodoStats.from(range, [
-        task(id: 1),
-        task(id: 2, status: TaskStatus.inProgress),
-        done(DateTime(2026, 3, 10), id: 3),
+        task(id: '1'),
+        task(id: '2', status: TaskStatus.inProgress),
+        done(DateTime(2026, 3, 10), id: '3'),
       ], today);
 
       expect(stats.open, 2);
@@ -55,14 +55,14 @@ void main() {
 
     test('counts a task overdue only while it is still open', () {
       final stats = TodoStats.from(range, [
-        task(id: 1, dueDate: DateTime(2026, 3, 10)),
+        task(id: '1', dueDate: DateTime(2026, 3, 10)),
         task(
-          id: 2,
+          id: '2',
           status: TaskStatus.done,
           dueDate: DateTime(2026, 3, 10),
           completedAt: DateTime(2026, 3, 11),
         ),
-        task(id: 3, dueDate: DateTime(2026, 3, 20)),
+        task(id: '3', dueDate: DateTime(2026, 3, 20)),
       ], today);
 
       expect(stats.overdue, 1);
@@ -70,8 +70,8 @@ void main() {
 
     test('plots completions for every day of the window, ascending', () {
       final stats = TodoStats.from(range, [
-        done(DateTime(2026, 3, 10), id: 1),
-        done(DateTime(2026, 3, 10), id: 2),
+        done(DateTime(2026, 3, 10), id: '1'),
+        done(DateTime(2026, 3, 10), id: '2'),
       ], today);
 
       expect(stats.perDay, hasLength(range.dayCount));

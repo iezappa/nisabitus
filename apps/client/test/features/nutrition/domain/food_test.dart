@@ -6,7 +6,7 @@ void main() {
   group('Food', () {
     test('keeps the name it was given, trimmed', () {
       final food = Food(
-        id: 1,
+        id: '1',
         name: '  Avena  ',
         per100g: const Macros(calories: 380),
       );
@@ -16,7 +16,7 @@ void main() {
 
     test('refuses a blank name', () {
       expect(
-        () => Food(id: 1, name: '   ', per100g: Macros.empty),
+        () => Food(id: '1', name: '   ', per100g: Macros.empty),
         throwsArgumentError,
       );
     });
@@ -26,7 +26,7 @@ void main() {
       // a row that wrongly claims to be shipped would survive a reseed for
       // the wrong reason.
       expect(
-        Food(id: 0, name: 'Licuado', per100g: Macros.empty).isBuiltIn,
+        Food(id: '0', name: 'Licuado', per100g: Macros.empty).isBuiltIn,
         isFalse,
       );
     });
@@ -34,7 +34,7 @@ void main() {
     test('keeps where it came from through a correction', () {
       // Correcting a shipped food does not turn it into the user's invention.
       final food = Food(
-        id: 1,
+        id: '1',
         name: 'Milanesa de carne',
         per100g: const Macros(calories: 280),
         isBuiltIn: true,
@@ -50,7 +50,7 @@ void main() {
   group('FoodEntry', () {
     test('remembers which meal it belonged to', () {
       final entry = FoodEntry(
-        id: 1,
+        id: '1',
         date: DateTime(2026, 3, 11),
         name: 'Avena',
         macros: Macros.empty,
@@ -64,7 +64,7 @@ void main() {
       // Every entry written before the app asked. They are not broken and
       // they are not breakfast.
       final entry = FoodEntry(
-        id: 1,
+        id: '1',
         date: DateTime(2026, 3, 11),
         name: 'Avena',
         macros: Macros.empty,
@@ -75,14 +75,14 @@ void main() {
 
     test('carries the meal through a copy', () {
       final entry = FoodEntry(
-        id: 0,
+        id: '0',
         date: DateTime(2026, 3, 11),
         name: 'Avena',
         macros: Macros.empty,
         meal: Meal.lunch,
       );
 
-      expect(entry.copyWith(id: 9).meal, Meal.lunch);
+      expect(entry.copyWith(id: '9').meal, Meal.lunch);
     });
 
     test('holds the figures for whatever was on the plate', () {
@@ -91,7 +91,7 @@ void main() {
       // against is not recorded — which is exactly why the food database is
       // seeded and added to on purpose rather than filled from what is eaten.
       final entry = FoodEntry(
-        id: 3,
+        id: '3',
         date: DateTime(2026, 3, 11),
         name: 'Avena',
         portion: '80 g',
@@ -106,7 +106,7 @@ void main() {
 
   group('DailyNutrition', () {
     FoodEntry at(Meal? meal, String name) => FoodEntry(
-      id: name.hashCode,
+      id: '${name.hashCode}',
       date: DateTime(2026, 3, 11),
       name: name,
       macros: const Macros(calories: 100),

@@ -17,7 +17,7 @@ import '../todo_providers.dart';
 /// shows the fields alone.
 Future<void> showTaskDialog(
   BuildContext context, {
-  required int projectId,
+  required String projectId,
   Task? existing,
 }) => showDialog<void>(
   context: context,
@@ -27,7 +27,7 @@ Future<void> showTaskDialog(
 class _TaskDialog extends ConsumerStatefulWidget {
   const _TaskDialog({required this.projectId, this.existing});
 
-  final int projectId;
+  final String projectId;
   final Task? existing;
 
   @override

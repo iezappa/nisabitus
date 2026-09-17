@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../../../core/time/weekday.dart';
 import '../domain/exercise.dart';
@@ -26,29 +27,31 @@ class DriftExerciseRepository implements ExerciseRepository {
   @override
   Future<Exercise> createExercise(ExerciseDraft draft) async {
     final validated = Exercise(
-      id: 0,
+      id: '',
       name: draft.name,
       description: draft.description,
       muscleGroup: draft.muscleGroup,
       videoUrl: draft.videoUrl,
     );
 
-    final id = await _db
-        .into(_db.exercises)
-        .insert(
-          ExercisesCompanion.insert(
-            name: validated.name,
-            description: Value(validated.description),
-            muscleGroup: Value(validated.muscleGroup),
-            videoUrl: Value(validated.videoUrl),
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.exercises)
+                .insertReturning(
+                  ExercisesCompanion.insert(
+                    name: validated.name,
+                    description: Value(validated.description),
+                    muscleGroup: Value(validated.muscleGroup),
+                    videoUrl: Value(validated.videoUrl),
+                  ),
+                ))
+            .id;
 
     return (await _exerciseById(id))!;
   }
 
   @override
-  Future<Exercise> updateExercise(int id, ExerciseDraft draft) async {
+  Future<Exercise> updateExercise(String id, ExerciseDraft draft) async {
     final validated = Exercise(
       id: id,
       name: draft.name,
@@ -57,7 +60,9 @@ class DriftExerciseRepository implements ExerciseRepository {
       videoUrl: draft.videoUrl,
     );
 
-    await (_db.update(_db.exercises)..where((e) => e.id.equals(id))).write(
+    await (_db.update(
+      _db.exercises,
+    )..where((e) => e.id.equals(id))).writeTouched(
       ExercisesCompanion(
         name: Value(validated.name),
         description: Value(validated.description),
@@ -70,12 +75,12 @@ class DriftExerciseRepository implements ExerciseRepository {
   }
 
   @override
-  Future<void> deleteExercise(int id) async {
+  Future<void> deleteExercise(String id) async {
     // The cascade in the schema takes every day it was scheduled on.
     await (_db.delete(_db.exercises)..where((e) => e.id.equals(id))).go();
   }
 
-  Future<Exercise?> _exerciseById(int id) async {
+  Future<Exercise?> _exerciseById(String id) async {
     final row = await (_db.select(
       _db.exercises,
     )..where((e) => e.id.equals(id))).getSingleOrNull();
@@ -109,7 +114,7 @@ class DriftExerciseRepository implements ExerciseRepository {
     final rows =
         await (_db.select(_db.scheduledExercises)
               ..where((e) => e.scheduledDate.equals(dateOnly(day)))
-              ..orderBy([(e) => OrderingTerm.asc(e.id)]))
+              ..orderBy([(e) => OrderingTerm.asc(e.rowId)]))
             .get();
 
     return rows.map(_toScheduled).toList();
@@ -130,7 +135,7 @@ class DriftExerciseRepository implements ExerciseRepository {
     // Built first so the domain rejects an impossible target before a
     // hundred copies of it reach the database.
     final validated = ScheduledExercise(
-      id: 0,
+      id: '',
       exerciseId: draft.exerciseId,
       scheduledDate: date,
       sets: draft.sets,
@@ -160,7 +165,7 @@ class DriftExerciseRepository implements ExerciseRepository {
 
   @override
   Future<ScheduledExercise> updateScheduled(
-    int id,
+    String id,
     ScheduledExerciseDraft draft,
   ) async {
     final existing = await _scheduledById(id);
@@ -188,7 +193,7 @@ class DriftExerciseRepository implements ExerciseRepository {
     // reaching into them from here is how a correction becomes a rewrite.
     await (_db.update(
       _db.scheduledExercises,
-    )..where((e) => e.id.equals(id))).write(
+    )..where((e) => e.id.equals(id))).writeTouched(
       ScheduledExercisesCompanion(
         exerciseId: Value(validated.exerciseId),
         sets: Value(validated.sets),
@@ -205,7 +210,7 @@ class DriftExerciseRepository implements ExerciseRepository {
 
   @override
   Future<ScheduledExercise> complete(
-    int id,
+    String id,
     ExerciseCompletion completion,
   ) async {
     final existing = await _scheduledById(id);
@@ -233,7 +238,7 @@ class DriftExerciseRepository implements ExerciseRepository {
 
     await (_db.update(
       _db.scheduledExercises,
-    )..where((e) => e.id.equals(id))).write(
+    )..where((e) => e.id.equals(id))).writeTouched(
       ScheduledExercisesCompanion(
         completed: const Value(true),
         weightKg: Value(validated.weightKg),
@@ -246,7 +251,7 @@ class DriftExerciseRepository implements ExerciseRepository {
   }
 
   @override
-  Future<ScheduledExercise> reopen(int id) async {
+  Future<ScheduledExercise> reopen(String id) async {
     final existing = await _scheduledById(id);
     if (existing == null) {
       throw StateError('Scheduled exercise $id was not found');
@@ -254,21 +259,24 @@ class DriftExerciseRepository implements ExerciseRepository {
 
     // The feedback stays. Un-ticking something is saying it is not finished,
     // not that it never happened.
-    await (_db.update(_db.scheduledExercises)..where((e) => e.id.equals(id)))
-        .write(const ScheduledExercisesCompanion(completed: Value(false)));
+    await (_db.update(
+      _db.scheduledExercises,
+    )..where((e) => e.id.equals(id))).writeTouched(
+      const ScheduledExercisesCompanion(completed: Value(false)),
+    );
 
     return existing.copyWith(completed: false);
   }
 
   @override
-  Future<void> deleteScheduled(int id) async {
+  Future<void> deleteScheduled(String id) async {
     await (_db.delete(
       _db.scheduledExercises,
     )..where((e) => e.id.equals(id))).go();
   }
 
   @override
-  Future<void> stopRecurrence(int id) async {
+  Future<void> stopRecurrence(String id) async {
     final existing = await _scheduledById(id);
     if (existing == null) {
       throw StateError('Scheduled exercise $id was not found');
@@ -293,32 +301,34 @@ class DriftExerciseRepository implements ExerciseRepository {
       // What is left is no longer waiting for more days to arrive.
       await (_db.update(
         _db.scheduledExercises,
-      )..where((e) => e.recurrenceGroupId.equals(groupId))).write(
+      )..where((e) => e.recurrenceGroupId.equals(groupId))).writeTouched(
         const ScheduledExercisesCompanion(repeatForever: Value(false)),
       );
     });
   }
 
-  Future<int> _insertScheduled(ScheduledExercise exercise) => _db
-      .into(_db.scheduledExercises)
-      .insert(
-        ScheduledExercisesCompanion.insert(
-          exerciseId: exercise.exerciseId,
-          scheduledDate: exercise.scheduledDate,
-          sets: exercise.sets,
-          reps: exercise.reps,
-          weightKg: Value(exercise.weightKg),
-          rpe: Value(exercise.rpe),
-          comments: Value(exercise.comments),
-          feedback: Value(exercise.feedback),
-          completed: Value(exercise.completed),
-          recurrenceGroupId: Value(exercise.recurrenceGroupId),
-          repeatDays: Value(Weekday.encode(exercise.repeatDays)),
-          repeatForever: Value(exercise.repeatForever),
-        ),
-      );
+  Future<String> _insertScheduled(ScheduledExercise exercise) async =>
+      (await _db
+              .into(_db.scheduledExercises)
+              .insertReturning(
+                ScheduledExercisesCompanion.insert(
+                  exerciseId: exercise.exerciseId,
+                  scheduledDate: exercise.scheduledDate,
+                  sets: exercise.sets,
+                  reps: exercise.reps,
+                  weightKg: Value(exercise.weightKg),
+                  rpe: Value(exercise.rpe),
+                  comments: Value(exercise.comments),
+                  feedback: Value(exercise.feedback),
+                  completed: Value(exercise.completed),
+                  recurrenceGroupId: Value(exercise.recurrenceGroupId),
+                  repeatDays: Value(Weekday.encode(exercise.repeatDays)),
+                  repeatForever: Value(exercise.repeatForever),
+                ),
+              ))
+          .id;
 
-  Future<ScheduledExercise?> _scheduledById(int id) async {
+  Future<ScheduledExercise?> _scheduledById(String id) async {
     final row = await (_db.select(
       _db.scheduledExercises,
     )..where((e) => e.id.equals(id))).getSingleOrNull();

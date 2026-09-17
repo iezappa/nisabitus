@@ -61,17 +61,17 @@ class MedicationActions {
     _invalidate();
   }
 
-  Future<void> update(int id, MedicationDraft draft) async {
+  Future<void> update(String id, MedicationDraft draft) async {
     await _repository.update(id, draft, today: _ref.read(todayProvider));
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.delete(id);
     _invalidate();
   }
 
-  Future<void> toggle(int id) async {
+  Future<void> toggle(String id) async {
     await _repository.toggleIntake(id, _ref.read(selectedDayProvider));
     _invalidate();
   }

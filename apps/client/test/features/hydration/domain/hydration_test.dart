@@ -4,13 +4,13 @@ import 'package:nisabitus/features/hydration/domain/hydration.dart';
 void main() {
   final day = DateTime(2026, 3, 11);
 
-  WaterEntry drink(int ml, {int id = 1}) =>
+  WaterEntry drink(int ml, {String id = '1'}) =>
       WaterEntry(id: id, date: day, millilitres: ml);
 
   group('WaterEntry', () {
     test('keeps the day it was drunk on, without its time', () {
       final entry = WaterEntry(
-        id: 1,
+        id: '1',
         date: DateTime(2026, 3, 11, 17, 42),
         millilitres: 250,
       );
@@ -50,8 +50,8 @@ void main() {
 
     test('adds up every drink of the day', () {
       final today = DailyHydration.from([
-        drink(250, id: 1),
-        drink(500, id: 2),
+        drink(250, id: '1'),
+        drink(500, id: '2'),
       ], HydrationGoal.fallback);
 
       expect(today.total, 750);

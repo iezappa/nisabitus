@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/medication.dart';
 import '../domain/medication_repository.dart';
@@ -41,29 +42,31 @@ class DriftMedicationRepository implements MedicationRepository {
 
   @override
   Future<Medication> create(MedicationDraft draft, {DateTime? today}) async {
-    final validated = _fromDraft(draft, id: 0);
+    final validated = _fromDraft(draft, id: '');
     final start = dateOnly(today ?? DateTime.now());
 
-    final id = await _db
-        .into(_db.medications)
-        .insert(
-          MedicationsCompanion.insert(
-            name: validated.name,
-            kind: validated.kind.wireName,
-            dose: Value(validated.dose),
-            schedule: Value(validated.schedule),
-            notes: Value(validated.notes),
-            active: Value(validated.active),
-            activeFrom: Value(start),
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.medications)
+                .insertReturning(
+                  MedicationsCompanion.insert(
+                    name: validated.name,
+                    kind: validated.kind.wireName,
+                    dose: Value(validated.dose),
+                    schedule: Value(validated.schedule),
+                    notes: Value(validated.notes),
+                    active: Value(validated.active),
+                    activeFrom: Value(start),
+                  ),
+                ))
+            .id;
 
     return (await _byId(id))!;
   }
 
   @override
   Future<Medication> update(
-    int id,
+    String id,
     MedicationDraft draft, {
     DateTime? today,
   }) async {
@@ -75,7 +78,9 @@ class DriftMedicationRepository implements MedicationRepository {
     // nobody was on. Editing an entry that never stopped leaves it alone.
     final resumed = validated.active && current != null && !current.active;
 
-    await (_db.update(_db.medications)..where((m) => m.id.equals(id))).write(
+    await (_db.update(
+      _db.medications,
+    )..where((m) => m.id.equals(id))).writeTouched(
       MedicationsCompanion(
         name: Value(validated.name),
         kind: Value(validated.kind.wireName),
@@ -93,13 +98,13 @@ class DriftMedicationRepository implements MedicationRepository {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     // The cascade in the schema takes every day it was ticked on.
     await (_db.delete(_db.medications)..where((m) => m.id.equals(id))).go();
   }
 
   @override
-  Future<bool> toggleIntake(int id, DateTime day) async {
+  Future<bool> toggleIntake(String id, DateTime day) async {
     final date = dateOnly(day);
     final removed = await (_db.delete(
       _db.medicationIntakes,
@@ -116,7 +121,7 @@ class DriftMedicationRepository implements MedicationRepository {
     return true;
   }
 
-  Future<Medication?> _byId(int id) async {
+  Future<Medication?> _byId(String id) async {
     final row = await (_db.select(
       _db.medications,
     )..where((m) => m.id.equals(id))).getSingleOrNull();
@@ -124,15 +129,16 @@ class DriftMedicationRepository implements MedicationRepository {
     return row == null ? null : _toDomain(row);
   }
 
-  Medication _fromDraft(MedicationDraft draft, {required int id}) => Medication(
-    id: id,
-    name: draft.name,
-    kind: draft.kind,
-    dose: draft.dose,
-    schedule: draft.schedule,
-    notes: draft.notes,
-    active: draft.active,
-  );
+  Medication _fromDraft(MedicationDraft draft, {required String id}) =>
+      Medication(
+        id: id,
+        name: draft.name,
+        kind: draft.kind,
+        dose: draft.dose,
+        schedule: draft.schedule,
+        notes: draft.notes,
+        active: draft.active,
+      );
 
   @override
   Future<MedicationStats> statsFor(DateRange range) async {

@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/database/record_columns.dart';
+
 /// One session of something practised for a time, on one day.
 ///
 /// Kept apart from the scheduled exercises on purpose: a swim has a duration
@@ -11,8 +13,7 @@ import 'package:drift/drift.dart';
 @DataClassName('DisciplineRow')
 @TableIndex(name: 'discipline_by_day', columns: {#scheduledDate})
 @TableIndex(name: 'discipline_by_group', columns: {#recurrenceGroupId})
-class Disciplines extends Table {
-  IntColumn get id => integer().autoIncrement()();
+class Disciplines extends Table with RecordColumns {
   TextColumn get name => text().withLength(min: 1, max: 255)();
   DateTimeColumn get scheduledDate => dateTime()();
 

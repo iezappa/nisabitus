@@ -8,7 +8,7 @@ void main() {
   final goal = NutritionGoal(calories: 2000, protein: 120, carbs: 220, fat: 70);
 
   FoodEntry entry(DateTime day, int kcal) => FoodEntry(
-    id: 0,
+    id: '0',
     date: day,
     name: 'Avena',
     macros: Macros(calories: kcal),

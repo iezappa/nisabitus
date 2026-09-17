@@ -54,12 +54,12 @@ class MeditationActions {
     _invalidate();
   }
 
-  Future<void> update(int id, MeditationDraft draft) async {
+  Future<void> update(String id, MeditationDraft draft) async {
     await _repository.update(id, draft);
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.delete(id);
     _invalidate();
   }

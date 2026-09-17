@@ -7,10 +7,10 @@ class Project {
     this.description,
   }) : name = _validateName(name);
 
-  final int id;
+  final String id;
   final String name;
   final String? description;
-  final int? parentId;
+  final String? parentId;
 
   static String _validateName(String value) {
     final trimmed = value.trim();
@@ -40,22 +40,22 @@ class ProjectTree {
   /// How deep the hierarchy may go, counting a root as level one.
   static const maxDepth = 3;
 
-  final Map<int, Project> _byId;
-  final List<int> _order;
+  final Map<String, Project> _byId;
+  final List<String> _order;
 
   Iterable<Project> get all => _order.map((id) => _byId[id]!);
 
   /// Direct children of [parentId], or the roots when it is null.
-  List<Project> childrenOf(int? parentId) =>
+  List<Project> childrenOf(String? parentId) =>
       all.where((project) => project.parentId == parentId).toList();
 
   /// Every project below [id], at any level.
-  List<Project> descendantsOf(int id) => [
+  List<Project> descendantsOf(String id) => [
     for (final child in childrenOf(id)) ...[child, ...descendantsOf(child.id)],
   ];
 
   /// Level of [id]: one for a root, two for its children, and so on.
-  int depthOf(int id) {
+  int depthOf(String id) {
     var depth = 1;
     var current = _byId[id]?.parentId;
     while (current != null) {
@@ -66,7 +66,7 @@ class ProjectTree {
   }
 
   /// How many levels the branch rooted at [id] spans, itself included.
-  int heightOf(int id) {
+  int heightOf(String id) {
     final children = childrenOf(id);
     if (children.isEmpty) return 1;
 
@@ -81,7 +81,7 @@ class ProjectTree {
   /// Three ways this fails: hanging a project off itself, off one of its own
   /// descendants — which would cut the branch loose from the tree — or
   /// somewhere that would push the resulting branch past [maxDepth].
-  bool canMove(int id, {required int? under}) {
+  bool canMove(String id, {required String? under}) {
     if (!_byId.containsKey(id)) return false;
     if (under == null) return heightOf(id) <= maxDepth;
     if (!_byId.containsKey(under)) return false;
@@ -92,10 +92,10 @@ class ProjectTree {
   }
 
   /// Whether a new child may be created under [parentId].
-  bool canAddChild(int parentId) => depthOf(parentId) < maxDepth;
+  bool canAddChild(String parentId) => depthOf(parentId) < maxDepth;
 
   /// Direct and inherited task counts for every project.
-  Map<int, TaskCount> taskCounts(Map<int, int> directCounts) => {
+  Map<String, TaskCount> taskCounts(Map<String, int> directCounts) => {
     for (final project in all)
       project.id: (
         direct: directCounts[project.id] ?? 0,

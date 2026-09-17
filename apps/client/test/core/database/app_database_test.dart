@@ -10,17 +10,19 @@ void main() {
   setUp(() => db = AppDatabase.forTesting(NativeDatabase.memory()));
   tearDown(() => db.close());
 
-  Future<int> insertHabit() => db
-      .into(db.habits)
-      .insert(
-        HabitsCompanion.insert(
-          name: 'Meditar',
-          frequency: 'DAILY',
-          status: 'PENDING',
-          createdAt: DateTime(2026, 3, 11),
-          scheduledDate: DateTime(2026, 3, 11),
-        ),
-      );
+  Future<String> insertHabit() async =>
+      (await db
+              .into(db.habits)
+              .insertReturning(
+                HabitsCompanion.insert(
+                  name: 'Meditar',
+                  frequency: 'DAILY',
+                  status: 'PENDING',
+                  createdAt: DateTime(2026, 3, 11),
+                  scheduledDate: DateTime(2026, 3, 11),
+                ),
+              ))
+          .id;
 
   group('foreign keys', () {
     test('are enforced, rejecting a completion with no habit', () {
@@ -29,7 +31,7 @@ void main() {
             .into(db.habitCompletions)
             .insert(
               HabitCompletionsCompanion.insert(
-                habitId: 999,
+                habitId: '999',
                 completionDate: DateTime(2026, 3, 11),
               ),
             ),
@@ -54,24 +56,33 @@ void main() {
     });
 
     test('cascade down the project tree to tasks and their comments', () async {
-      final rootId = await db
-          .into(db.projects)
-          .insert(ProjectsCompanion.insert(name: 'Nisabitus'));
-      final childId = await db
-          .into(db.projects)
-          .insert(
-            ProjectsCompanion.insert(name: 'Módulo 1', parentId: Value(rootId)),
-          );
-      final taskId = await db
-          .into(db.todoTasks)
-          .insert(
-            TodoTasksCompanion.insert(
-              title: 'Escribir el test',
-              priority: 'MEDIUM',
-              status: 'TODO',
-              projectId: childId,
-            ),
-          );
+      final rootId =
+          (await db
+                  .into(db.projects)
+                  .insertReturning(ProjectsCompanion.insert(name: 'Nisabitus')))
+              .id;
+      final childId =
+          (await db
+                  .into(db.projects)
+                  .insertReturning(
+                    ProjectsCompanion.insert(
+                      name: 'Módulo 1',
+                      parentId: Value(rootId),
+                    ),
+                  ))
+              .id;
+      final taskId =
+          (await db
+                  .into(db.todoTasks)
+                  .insertReturning(
+                    TodoTasksCompanion.insert(
+                      title: 'Escribir el test',
+                      priority: 'MEDIUM',
+                      status: 'TODO',
+                      projectId: childId,
+                    ),
+                  ))
+              .id;
       await db
           .into(db.taskComments)
           .insert(

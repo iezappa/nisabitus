@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/habit.dart';
 import '../domain/habit_draft.dart';
@@ -50,7 +51,7 @@ class DriftHabitRepository implements HabitRepository {
             ))
             .get();
 
-    final fulfilled = <int>{
+    final fulfilled = <String>{
       for (final completion in completions)
         if (periods[completion.habitId]!.contains(completion.completionDate))
           completion.habitId,
@@ -67,23 +68,29 @@ class DriftHabitRepository implements HabitRepository {
     final today = dateOnly(on ?? DateTime.now());
     // Building the entity first means the domain rules reject bad input
     // before anything reaches the database.
-    final validated = _fromDraft(draft, id: 0, createdAt: today);
+    final validated = _fromDraft(draft, id: '', createdAt: today);
 
-    final id = await _db
-        .into(_db.habits)
-        .insert(
-          _toCompanion(validated, createdAt: today, scheduledDate: today),
-        );
+    final id =
+        (await _db
+                .into(_db.habits)
+                .insertReturning(
+                  _toCompanion(
+                    validated,
+                    createdAt: today,
+                    scheduledDate: today,
+                  ),
+                ))
+            .id;
 
     return _hydrate(id, today);
   }
 
   @override
-  Future<Habit> update(int id, HabitDraft draft, {DateTime? on}) async {
+  Future<Habit> update(String id, HabitDraft draft, {DateTime? on}) async {
     final existing = await _requireRow(id);
     final validated = _fromDraft(draft, id: id, createdAt: existing.createdAt);
 
-    await (_db.update(_db.habits)..where((h) => h.id.equals(id))).write(
+    await (_db.update(_db.habits)..where((h) => h.id.equals(id))).writeTouched(
       _toCompanion(
         validated,
         createdAt: existing.createdAt,
@@ -95,12 +102,12 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await (_db.delete(_db.habits)..where((h) => h.id.equals(id))).go();
   }
 
   @override
-  Future<Habit> toggleCompletion(int id, DateTime day) async {
+  Future<Habit> toggleCompletion(String id, DateTime day) async {
     final row = await _requireRow(id);
     final period = HabitFrequency.parse(row.frequency).periodFor(day);
     final removed = await _clearPeriod(id, period);
@@ -117,7 +124,11 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<Habit> changeStatus(int id, HabitStatus status, DateTime day) async {
+  Future<Habit> changeStatus(
+    String id,
+    HabitStatus status,
+    DateTime day,
+  ) async {
     final row = await _requireRow(id);
     final period = HabitFrequency.parse(row.frequency).periodFor(day);
 
@@ -174,7 +185,7 @@ class DriftHabitRepository implements HabitRepository {
     return (await query.getSingle()).read(count) ?? 0;
   }
 
-  Future<HabitRow> _requireRow(int id) async {
+  Future<HabitRow> _requireRow(String id) async {
     final row = await (_db.select(
       _db.habits,
     )..where((h) => h.id.equals(id))).getSingleOrNull();
@@ -185,7 +196,7 @@ class DriftHabitRepository implements HabitRepository {
     return row;
   }
 
-  Future<Habit> _hydrate(int id, DateTime day) async {
+  Future<Habit> _hydrate(String id, DateTime day) async {
     final row = await _requireRow(id);
     final period = HabitFrequency.parse(row.frequency).periodFor(day);
     final completed = await _countInPeriod(id, period) > 0;
@@ -193,7 +204,7 @@ class DriftHabitRepository implements HabitRepository {
     return _toDomain(row, completed: completed);
   }
 
-  Future<int> _countInPeriod(int id, DateRange period) async {
+  Future<int> _countInPeriod(String id, DateRange period) async {
     final rows =
         await (_db.select(_db.habitCompletions)..where(
               (c) =>
@@ -205,7 +216,7 @@ class DriftHabitRepository implements HabitRepository {
     return rows.length;
   }
 
-  Future<int> _clearPeriod(int id, DateRange period) =>
+  Future<int> _clearPeriod(String id, DateRange period) =>
       (_db.delete(_db.habitCompletions)..where(
             (c) =>
                 c.habitId.equals(id) &
@@ -213,7 +224,7 @@ class DriftHabitRepository implements HabitRepository {
           ))
           .go();
 
-  Future<void> _recordCompletion(int id, DateTime day) async {
+  Future<void> _recordCompletion(String id, DateTime day) async {
     await _db
         .into(_db.habitCompletions)
         .insert(
@@ -224,15 +235,15 @@ class DriftHabitRepository implements HabitRepository {
         );
   }
 
-  Future<void> _writeStatus(int id, HabitStatus status) async {
-    await (_db.update(_db.habits)..where((h) => h.id.equals(id))).write(
+  Future<void> _writeStatus(String id, HabitStatus status) async {
+    await (_db.update(_db.habits)..where((h) => h.id.equals(id))).writeTouched(
       HabitsCompanion(status: Value(status.wireName)),
     );
   }
 
   Habit _fromDraft(
     HabitDraft draft, {
-    required int id,
+    required String id,
     required DateTime createdAt,
   }) => Habit(
     id: id,

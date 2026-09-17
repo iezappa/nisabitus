@@ -46,22 +46,22 @@ class StreakActions {
     _invalidate();
   }
 
-  Future<void> rename(int id, String name) async {
+  Future<void> rename(String id, String name) async {
     await _repository.rename(id, name);
     _invalidate();
   }
 
-  Future<void> increment(int id, {DateTime? on}) async {
+  Future<void> increment(String id, {DateTime? on}) async {
     await _repository.increment(id, on: on);
     _invalidate();
   }
 
-  Future<void> reset(int id) async {
+  Future<void> reset(String id) async {
     await _repository.reset(id);
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.delete(id);
     _invalidate();
   }

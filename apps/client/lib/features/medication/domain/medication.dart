@@ -39,7 +39,7 @@ class Medication {
     this.activeFrom,
   }) : name = _validateName(name);
 
-  final int id;
+  final String id;
   final String name;
   final MedicationKind kind;
   final String? dose;
@@ -81,7 +81,7 @@ class MedicationDay {
   /// history or has not begun, and neither is a task for that day.
   factory MedicationDay.from(
     List<Medication> medications,
-    Set<int> takenIds, {
+    Set<String> takenIds, {
     required DateTime day,
   }) => MedicationDay(
     statuses: [

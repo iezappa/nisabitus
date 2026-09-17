@@ -13,8 +13,8 @@ void main() {
     double? weightKg = 50,
     bool completed = true,
   }) => ScheduledExercise(
-    id: 0,
-    exerciseId: 1,
+    id: '0',
+    exerciseId: '1',
     scheduledDate: day,
     sets: sets,
     reps: reps,

@@ -61,7 +61,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<int> seedExercise([String name = 'Sentadilla']) async =>
+  Future<String> seedExercise([String name = 'Sentadilla']) async =>
       (await repository().createExercise(ExerciseDraft(name: name))).id;
 
   Future<ScheduledExercise> seedScheduled({

@@ -10,7 +10,7 @@ class JournalEntry {
     required this.content,
   });
 
-  final int id;
+  final String id;
   final DateTime date;
   final JournalContent content;
 }

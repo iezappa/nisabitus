@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/database/record_columns.dart';
+
 /// A habit the user intends to repeat over time.
 @DataClassName('HabitRow')
-class Habits extends Table {
-  IntColumn get id => integer().autoIncrement()();
+class Habits extends Table with RecordColumns {
   TextColumn get name => text().withLength(min: 1, max: 255)();
   TextColumn get description => text().withLength(max: 5000).nullable()();
   TextColumn get category => text().withLength(max: 255).nullable()();
@@ -43,9 +44,8 @@ class Habits extends Table {
   columns: {#habitId, #completionDate},
 )
 @DataClassName('HabitCompletionRow')
-class HabitCompletions extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get habitId =>
-      integer().references(Habits, #id, onDelete: KeyAction.cascade)();
+class HabitCompletions extends Table with RecordColumns {
+  TextColumn get habitId =>
+      text().references(Habits, #id, onDelete: KeyAction.cascade)();
   DateTimeColumn get completionDate => dateTime()();
 }

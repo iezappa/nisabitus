@@ -44,27 +44,27 @@ class DisciplineActions {
     _invalidate();
   }
 
-  Future<void> update(int id, DisciplineDraft draft) async {
+  Future<void> update(String id, DisciplineDraft draft) async {
     await _repository.update(id, draft);
     _invalidate();
   }
 
-  Future<void> complete(int id, DisciplineCompletion completion) async {
+  Future<void> complete(String id, DisciplineCompletion completion) async {
     await _repository.complete(id, completion);
     _invalidate();
   }
 
-  Future<void> reopen(int id) async {
+  Future<void> reopen(String id) async {
     await _repository.reopen(id);
     _invalidate();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repository.delete(id);
     _invalidate();
   }
 
-  Future<void> stopRecurrence(int id) async {
+  Future<void> stopRecurrence(String id) async {
     await _repository.stopRecurrence(id);
     _invalidate();
   }

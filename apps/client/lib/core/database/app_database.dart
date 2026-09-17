@@ -14,7 +14,9 @@ import '../../features/pomodoro/data/pomodoro_tables.dart';
 import '../../features/sleep/data/sleep_tables.dart';
 import '../../features/streaks/data/streak_tables.dart';
 import '../../features/todo/data/todo_tables.dart';
+import 'record_columns.dart';
 import 'storage_durability.dart';
+import 'uuid.dart';
 
 part 'app_database.g.dart';
 
@@ -85,7 +87,10 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 13;
+  static const currentSchemaVersion = 14;
+
+  /// The id of the only row in a single-row table, such as the daily goals.
+  static const singletonId = 'singleton';
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -137,6 +142,125 @@ class AppDatabase extends _$AppDatabase {
         await m.create(entity);
       }
     }
+  }
+
+  /// Which table each reference column points at, by SQL name.
+  static const _references = {
+    ('habit_completions', 'habit_id'): 'habits',
+    ('streak_history_entries', 'streak_id'): 'streaks',
+    ('projects', 'parent_id'): 'projects',
+    ('todo_tasks', 'project_id'): 'projects',
+    ('task_comments', 'task_id'): 'todo_tasks',
+    ('scheduled_exercises', 'exercise_id'): 'exercises',
+    ('medication_intakes', 'medication_id'): 'medications',
+  };
+
+  /// Where a row's first `updatedAt` comes from, when it has a better answer
+  /// than the moment of the migration.
+  static const _lastWrittenColumn = {
+    'habits': 'created_at',
+    'task_comments': 'created_at',
+    'streaks': 'last_updated',
+  };
+
+  static const _singletonTables = {'nutrition_goals', 'hydration_goals'};
+
+  /// The v14 step: integer ids become UUIDs, references follow them.
+  ///
+  /// SQLite cannot make a UUID, so the ids are drawn in Dart first and
+  /// written to a scratch map of `(table, old id) -> new id`. Each table is
+  /// then rebuilt with [Migrator.alterTable], reading its own new id and every
+  /// reference's new id out of that map — so a child ends up pointing at the
+  /// same parent it pointed at before, whatever order the tables go in.
+  ///
+  /// Only tables whose id is still an integer are converted. A table an
+  /// earlier step of this same upgrade created is already in the v14 shape,
+  /// and empty.
+  ///
+  /// A reference to a parent that no longer exists cannot be translated, and
+  /// with foreign keys enforced it could never have been shown. Those rows
+  /// are removed first rather than failing the whole upgrade on them.
+  Future<void> _giveEveryRecordAUuid(Migrator m) async {
+    final legacy = <TableInfo<Table, dynamic>>[];
+    for (final table in allTables) {
+      final columns = await customSelect(
+        'PRAGMA table_info("${table.actualTableName}")',
+      ).get();
+      final id = columns.where((c) => c.read<String>('name') == 'id');
+      if (id.isNotEmpty &&
+          id.single.read<String>('type').toUpperCase() == 'INTEGER') {
+        legacy.add(table);
+      }
+    }
+    if (legacy.isEmpty) return;
+
+    final names = {for (final table in legacy) table.actualTableName};
+
+    // Orphans first, until a pass removes nothing: deleting a project whose
+    // parent is gone orphans its own children in turn.
+    var removed = true;
+    while (removed) {
+      removed = false;
+      for (final MapEntry(key: (child, column), value: parent)
+          in _references.entries) {
+        if (!names.contains(child) || !names.contains(parent)) continue;
+        final gone = await customUpdate(
+          'DELETE FROM "$child" WHERE "$column" IS NOT NULL '
+          'AND "$column" NOT IN (SELECT id FROM "$parent")',
+          updateKind: UpdateKind.delete,
+        );
+        removed = removed || gone > 0;
+      }
+    }
+
+    await customStatement(
+      'CREATE TEMP TABLE uuid_id_map (tbl TEXT NOT NULL, old_id INTEGER NOT '
+      'NULL, new_id TEXT NOT NULL, PRIMARY KEY (tbl, old_id))',
+    );
+    for (final name in names) {
+      final ids = await customSelect('SELECT id FROM "$name"').get();
+      for (final row in ids) {
+        await customStatement(
+          'INSERT INTO uuid_id_map (tbl, old_id, new_id) VALUES (?, ?, ?)',
+          [
+            name,
+            row.read<int>('id'),
+            _singletonTables.contains(name) ? singletonId : newUuid(),
+          ],
+        );
+      }
+    }
+
+    final now = DateTime.now();
+    Expression<String> mapped(String table, String column, String target) =>
+        CustomExpression<String>(
+          '(SELECT new_id FROM uuid_id_map WHERE tbl = \'$target\' '
+          'AND old_id = "$table"."$column")',
+        );
+
+    for (final table in legacy) {
+      final name = table.actualTableName;
+      final byName = table.columnsByName;
+      final lastWritten = _lastWrittenColumn[name];
+
+      await m.alterTable(
+        TableMigration(
+          table,
+          newColumns: [byName['updated_at']!],
+          columnTransformer: {
+            byName['id']!: mapped(name, 'id', name),
+            byName['updated_at']!: lastWritten == null
+                ? Variable<DateTime>(now)
+                : CustomExpression<DateTime>('"$name"."$lastWritten"'),
+            for (final MapEntry(key: (child, column), value: parent)
+                in _references.entries)
+              if (child == name) byName[column]!: mapped(name, column, parent),
+          },
+        ),
+      );
+    }
+
+    await customStatement('DROP TABLE uuid_id_map');
   }
 
   @override
@@ -315,6 +439,12 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 13) {
         await seedBuiltInFoods();
+      }
+      // v14 gives every record a UUID and an `updatedAt`
+      // (STACK-APPS-DINAMICAS.md 1.1). Last, so it sees every table in the
+      // shape the steps above left it in.
+      if (from < 14) {
+        await transaction(() => _giveEveryRecordAUuid(m));
       }
     },
     beforeOpen: (details) async {

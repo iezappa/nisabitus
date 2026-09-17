@@ -21,7 +21,7 @@ class StreakSeries {
   /// count started over.
   factory StreakSeries.from(
     DateRange range, {
-    required int streakId,
+    required String streakId,
     required String name,
     required Map<DateTime, int> highestPerDay,
   }) => StreakSeries._(
@@ -30,7 +30,7 @@ class StreakSeries {
     points: dailySeries(range, highestPerDay),
   );
 
-  final int streakId;
+  final String streakId;
   final String name;
 
   /// Ascending by day, one point for every day of the window.
@@ -43,18 +43,18 @@ abstract interface class StreakRepository {
 
   Future<Streak> create(String name, {DateTime? on});
 
-  Future<Streak> rename(int id, String name);
+  Future<Streak> rename(String id, String name);
 
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   /// Adds one to the count and appends the matching history point.
-  Future<Streak> increment(int id, {DateTime? on});
+  Future<Streak> increment(String id, {DateTime? on});
 
   /// Sends the count back to zero, keeping the record. Writes no history.
-  Future<Streak> reset(int id, {DateTime? on});
+  Future<Streak> reset(String id, {DateTime? on});
 
   /// Every history point of one streak, ascending by day.
-  Future<List<StreakPoint>> historyFor(int id);
+  Future<List<StreakPoint>> historyFor(String id);
 
   /// One series per streak that has history inside [range].
   ///

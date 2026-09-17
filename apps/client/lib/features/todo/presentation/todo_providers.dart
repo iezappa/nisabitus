@@ -62,7 +62,7 @@ final todoStatsProvider = FutureProvider<TodoStats>((ref) {
       );
 });
 
-final selectedProjectIdProvider = StateProvider<int?>((ref) => null);
+final selectedProjectIdProvider = StateProvider<String?>((ref) => null);
 final includeDescendantsProvider = StateProvider<bool>((ref) => true);
 final todoViewModeProvider = StateProvider<TodoViewMode>(
   (ref) => TodoViewMode.kanban,
@@ -73,7 +73,7 @@ final taskFiltersProvider = StateProvider<TaskFilters>(
 
 /// The project tree plus the task counts the sidebar shows.
 final projectTreeProvider =
-    FutureProvider<({ProjectTree tree, Map<int, TaskCount> counts})>((
+    FutureProvider<({ProjectTree tree, Map<String, TaskCount> counts})>((
       ref,
     ) async {
       ref.watch(todoRevisionProvider);
@@ -121,7 +121,7 @@ final tasksProvider = FutureProvider<List<Task>>((ref) async {
   }).toList();
 });
 
-final commentsProvider = FutureProvider.family<List<TaskComment>, int>((
+final commentsProvider = FutureProvider.family<List<TaskComment>, String>((
   ref,
   taskId,
 ) {
@@ -138,22 +138,22 @@ class TodoActions {
 
   TodoRepository get _repository => _ref.read(todoRepositoryProvider);
 
-  Future<void> createProject(String name, {int? parentId}) async {
+  Future<void> createProject(String name, {String? parentId}) async {
     final project = await _repository.createProject(name, parentId: parentId);
     _ref.read(selectedProjectIdProvider.notifier).state = project.id;
     _invalidate();
   }
 
   Future<void> updateProject(
-    int id, {
+    String id, {
     required String name,
-    int? parentId,
+    String? parentId,
   }) async {
     await _repository.updateProject(id, name: name, parentId: parentId);
     _invalidate();
   }
 
-  Future<void> deleteProject(int id) async {
+  Future<void> deleteProject(String id) async {
     // The selection may be the project itself or something under it, both of
     // which are about to stop existing.
     final tree = (await _ref.read(projectTreeProvider.future)).tree;
@@ -171,27 +171,27 @@ class TodoActions {
     _invalidate();
   }
 
-  Future<void> updateTask(int id, TaskDraft draft) async {
+  Future<void> updateTask(String id, TaskDraft draft) async {
     await _repository.updateTask(id, draft);
     _invalidate();
   }
 
-  Future<void> deleteTask(int id) async {
+  Future<void> deleteTask(String id) async {
     await _repository.deleteTask(id);
     _invalidate();
   }
 
-  Future<void> setStatus(int id, TaskStatus status) async {
+  Future<void> setStatus(String id, TaskStatus status) async {
     await _repository.setTaskStatus(id, status);
     _invalidate();
   }
 
-  Future<void> addComment(int taskId, String content) async {
+  Future<void> addComment(String taskId, String content) async {
     await _repository.addComment(taskId, content);
     _invalidate();
   }
 
-  Future<void> deleteComment(int id) async {
+  Future<void> deleteComment(String id) async {
     await _repository.deleteComment(id);
     _invalidate();
   }

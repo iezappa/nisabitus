@@ -5,7 +5,7 @@ void main() {
   final goal = NutritionGoal(calories: 2000, protein: 100, carbs: 200, fat: 60);
 
   FoodEntry entry({
-    int id = 1,
+    String id = '1',
     String name = 'Avena',
     int kcal = 300,
     int p = 10,
@@ -64,7 +64,7 @@ void main() {
   group('FoodEntry', () {
     test('normalizes the date to the day', () {
       final e = FoodEntry(
-        id: 1,
+        id: '1',
         date: DateTime(2026, 3, 11, 21, 30),
         name: 'Cena',
         macros: Macros.empty,
@@ -76,7 +76,7 @@ void main() {
     test('rejects a blank name', () {
       expect(
         () => FoodEntry(
-          id: 1,
+          id: '1',
           date: DateTime(2026, 3, 11),
           name: '  ',
           macros: Macros.empty,
@@ -96,8 +96,8 @@ void main() {
 
     test('adds up every entry of the day', () {
       final day = DailyNutrition.from([
-        entry(id: 1, kcal: 300, p: 10, c: 50, f: 5),
-        entry(id: 2, kcal: 700, p: 40, c: 60, f: 20),
+        entry(id: '1', kcal: 300, p: 10, c: 50, f: 5),
+        entry(id: '2', kcal: 700, p: 40, c: 60, f: 20),
       ], goal);
 
       expect(day.total.calories, 1000);

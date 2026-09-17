@@ -90,8 +90,8 @@ void main() {
       String? comments,
       String? feedback,
     }) => ScheduledExercise(
-      id: 1,
-      exerciseId: 1,
+      id: '1',
+      exerciseId: '1',
       scheduledDate: monday,
       sets: sets,
       reps: reps,
@@ -103,8 +103,8 @@ void main() {
 
     test('keeps the day it was scheduled for, without its time', () {
       final row = ScheduledExercise(
-        id: 1,
-        exerciseId: 1,
+        id: '1',
+        exerciseId: '1',
         scheduledDate: DateTime(2026, 3, 9, 18, 30),
         sets: 4,
         reps: 8,
@@ -149,7 +149,7 @@ void main() {
 
     test('copies itself onto another day untouched', () {
       final copy = scheduled(comments: 'Bajar hasta paralelo')
-          .copyWith(id: 0, scheduledDate: DateTime(2026, 3, 11));
+          .copyWith(id: '0', scheduledDate: DateTime(2026, 3, 11));
 
       expect(copy.scheduledDate, DateTime(2026, 3, 11));
       expect(copy.sets, 4);

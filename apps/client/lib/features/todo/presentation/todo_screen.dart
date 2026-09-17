@@ -251,7 +251,7 @@ class _Kanban extends ConsumerWidget {
   const _Kanban({required this.tasks, required this.projectId});
 
   final List<Task> tasks;
-  final int projectId;
+  final String projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -282,7 +282,7 @@ class _Column extends ConsumerWidget {
 
   final TaskStatus status;
   final List<Task> tasks;
-  final int projectId;
+  final String projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -354,7 +354,7 @@ class _TaskList extends ConsumerWidget {
   const _TaskList({required this.tasks, required this.projectId});
 
   final List<Task> tasks;
-  final int projectId;
+  final String projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

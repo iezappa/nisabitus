@@ -4,6 +4,7 @@ import '../../../core/database/app_database.dart';
 import '../domain/backup_document.dart';
 import '../domain/backup_repository.dart';
 import '../domain/restore_report.dart';
+import 'legacy_backup_ids.dart';
 
 /// One table, in the two directions a backup needs it.
 typedef _TableCodec = ({
@@ -84,8 +85,12 @@ class DriftBackupRepository implements BackupRepository {
   );
 
   @override
-  Future<RestoreReport> restore(BackupDocument document) => _db.transaction(
+  Future<RestoreReport> restore(BackupDocument original) => _db.transaction(
     () async {
+      // Files written before v14 carry integer ids; they are given UUIDs,
+      // references and all, before anything touches the store.
+      final document = upgradeLegacyIds(original);
+
       // Children first on the way out, parents first on the way in:
       // foreign keys are enforced as each statement runs, not at the end.
       for (final table in _tables.reversed) {

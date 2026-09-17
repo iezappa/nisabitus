@@ -517,7 +517,7 @@ void main() {
 
     testWidgets('streak editor', (tester) async {
       final streak = Streak(
-        id: 1,
+        id: '1',
         name: 'Sin azúcar',
         count: 9,
         maxStreak: 14,
@@ -559,20 +559,22 @@ Future<void> seed(AppDatabase db, DateTime today) async {
   DateTime dayBefore(int days) => today.subtract(Duration(days: days));
 
   for (final name in const ['Meditar', 'Leer', 'Caminar']) {
-    final id = await db
-        .into(db.habits)
-        .insert(
-          HabitsCompanion.insert(
-            name: name,
-            description: Value('Todos los días, apenas me levanto'),
-            category: const Value('Bienestar'),
-            frequency: 'DAILY',
-            status: 'PENDING',
-            createdAt: dayBefore(30),
-            scheduledDate: today,
-            repeatForever: const Value(true),
-          ),
-        );
+    final id =
+        (await db
+                .into(db.habits)
+                .insertReturning(
+                  HabitsCompanion.insert(
+                    name: name,
+                    description: Value('Todos los días, apenas me levanto'),
+                    category: const Value('Bienestar'),
+                    frequency: 'DAILY',
+                    status: 'PENDING',
+                    createdAt: dayBefore(30),
+                    scheduledDate: today,
+                    repeatForever: const Value(true),
+                  ),
+                ))
+            .id;
     for (var i = 0; i < 12; i++) {
       if (i % 4 == 3) continue; // a missed day here and there
       await db
@@ -715,26 +717,30 @@ Future<void> seed(AppDatabase db, DateTime today) async {
         ),
       );
 
-  final vitamin = await db
-      .into(db.medications)
-      .insert(
-        MedicationsCompanion.insert(
-          name: 'Vitamina D',
-          kind: 'SUPPLEMENT',
-          dose: const Value('1000 UI'),
-          schedule: const Value('Con el desayuno'),
-          activeFrom: Value(dayBefore(20)),
-        ),
-      );
+  final vitamin =
+      (await db
+              .into(db.medications)
+              .insertReturning(
+                MedicationsCompanion.insert(
+                  name: 'Vitamina D',
+                  kind: 'SUPPLEMENT',
+                  dose: const Value('1000 UI'),
+                  schedule: const Value('Con el desayuno'),
+                  activeFrom: Value(dayBefore(20)),
+                ),
+              ))
+          .id;
   await db
       .into(db.medicationIntakes)
       .insert(
         MedicationIntakesCompanion.insert(medicationId: vitamin, date: today),
       );
 
-  final project = await db
-      .into(db.projects)
-      .insert(ProjectsCompanion.insert(name: 'Nisabitus'));
+  final project =
+      (await db
+              .into(db.projects)
+              .insertReturning(ProjectsCompanion.insert(name: 'Nisabitus')))
+          .id;
   for (final (title, status, priority) in const [
     ('Escribir los tests de migración', 'DONE', 'HIGH'),
     ('Mirar la UI de una vez', 'IN_PROGRESS', 'HIGH'),

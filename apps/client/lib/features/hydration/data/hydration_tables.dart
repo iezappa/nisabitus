@@ -1,16 +1,14 @@
 import 'package:drift/drift.dart';
 
+import '../../../core/database/record_columns.dart';
+
 /// The daily water target.
 ///
 /// A single row: there is one user and one target. The id is pinned so
 /// saving always replaces it rather than piling up revisions.
 @DataClassName('HydrationGoalRow')
-class HydrationGoals extends Table {
-  IntColumn get id => integer().withDefault(const Constant(1))();
+class HydrationGoals extends Table with SingletonColumns {
   IntColumn get millilitres => integer().withDefault(const Constant(2000))();
-
-  @override
-  Set<Column> get primaryKey => {id};
 }
 
 /// One drink on one day.
@@ -20,8 +18,7 @@ class HydrationGoals extends Table {
 /// guess, not a record.
 @DataClassName('WaterEntryRow')
 @TableIndex(name: 'water_by_day', columns: {#date})
-class WaterEntries extends Table {
-  IntColumn get id => integer().autoIncrement()();
+class WaterEntries extends Table with RecordColumns {
   DateTimeColumn get date => dateTime()();
   IntColumn get millilitres => integer()();
 }

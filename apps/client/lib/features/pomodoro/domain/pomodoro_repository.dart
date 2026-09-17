@@ -25,24 +25,24 @@ abstract interface class PomodoroRepository {
   /// Sessions newest first, five to a page.
   Future<PomodoroPage> list({int page, int pageSize});
 
-  Future<PomodoroSession?> byId(int id);
+  Future<PomodoroSession?> byId(String id);
 
   Future<PomodoroSession> create(PomodoroDraft draft, {DateTime? startedAt});
 
-  Future<PomodoroSession> update(int id, PomodoroDraft draft);
+  Future<PomodoroSession> update(String id, PomodoroDraft draft);
 
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   /// Records one finished focus phase. This is what the timer calls.
-  Future<PomodoroSession> completeCycle(int id);
+  Future<PomodoroSession> completeCycle(String id);
 
   /// Moves the session to [status] without touching its cycles.
-  Future<PomodoroSession> setStatus(int id, PomodoroStatus status);
+  Future<PomodoroSession> setStatus(String id, PomodoroStatus status);
 
   /// Closes the session early, counting every planned cycle as served.
-  Future<PomodoroSession> finish(int id);
+  Future<PomodoroSession> finish(String id);
 
-  Future<PomodoroSession> cancel(int id);
+  Future<PomodoroSession> cancel(String id);
 
   /// Figures for the sessions started inside [range].
   Future<PomodoroStats> statsFor(DateRange range);

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
@@ -17,13 +18,13 @@ class DriftTodoRepository implements TodoRepository {
   Future<List<Project>> projects() async {
     final rows = await (_db.select(
       _db.projects,
-    )..orderBy([(p) => OrderingTerm.asc(p.id)])).get();
+    )..orderBy([(p) => OrderingTerm.asc(p.rowId)])).get();
 
     return rows.map(_toProject).toList();
   }
 
   @override
-  Future<Map<int, int>> directTaskCounts() async {
+  Future<Map<String, int>> directTaskCounts() async {
     final counter = _db.todoTasks.id.count();
     final query = _db.selectOnly(_db.todoTasks)
       ..addColumns([_db.todoTasks.projectId, counter])
@@ -38,12 +39,12 @@ class DriftTodoRepository implements TodoRepository {
   @override
   Future<Project> createProject(
     String name, {
-    int? parentId,
+    String? parentId,
     String? description,
   }) async {
     // Validating through the entity keeps the rule in one place.
     final validated = Project(
-      id: 0,
+      id: '',
       name: name,
       parentId: parentId,
       description: description,
@@ -60,25 +61,27 @@ class DriftTodoRepository implements TodoRepository {
       }
     }
 
-    final id = await _db
-        .into(_db.projects)
-        .insert(
-          ProjectsCompanion.insert(
-            name: validated.name,
-            description: Value(validated.description),
-            parentId: Value(parentId),
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.projects)
+                .insertReturning(
+                  ProjectsCompanion.insert(
+                    name: validated.name,
+                    description: Value(validated.description),
+                    parentId: Value(parentId),
+                  ),
+                ))
+            .id;
 
     return (await _projectById(id))!;
   }
 
   @override
   Future<Project> updateProject(
-    int id, {
+    String id, {
     required String name,
     String? description,
-    int? parentId,
+    String? parentId,
   }) async {
     final validated = Project(
       id: id,
@@ -102,7 +105,9 @@ class DriftTodoRepository implements TodoRepository {
       }
     }
 
-    await (_db.update(_db.projects)..where((p) => p.id.equals(id))).write(
+    await (_db.update(
+      _db.projects,
+    )..where((p) => p.id.equals(id))).writeTouched(
       ProjectsCompanion(
         name: Value(validated.name),
         description: Value(validated.description),
@@ -114,21 +119,21 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
-  Future<void> deleteProject(int id) async {
+  Future<void> deleteProject(String id) async {
     // The cascade in the schema takes the subprojects and their tasks.
     await (_db.delete(_db.projects)..where((p) => p.id.equals(id))).go();
   }
 
   @override
   Future<List<Task>> tasks(
-    int projectId, {
+    String projectId, {
     bool includeDescendants = false,
   }) async {
     final all = await projects();
     final tree = ProjectTree(all);
     final names = {for (final project in all) project.id: project.name};
 
-    final ids = <int>{
+    final ids = <String>{
       projectId,
       if (includeDescendants)
         ...tree.descendantsOf(projectId).map((project) => project.id),
@@ -137,7 +142,7 @@ class DriftTodoRepository implements TodoRepository {
     final rows =
         await (_db.select(_db.todoTasks)
               ..where((t) => t.projectId.isIn(ids))
-              ..orderBy([(t) => OrderingTerm.asc(t.id)]))
+              ..orderBy([(t) => OrderingTerm.asc(t.rowId)]))
             .get();
 
     return [
@@ -158,7 +163,7 @@ class DriftTodoRepository implements TodoRepository {
     };
     final rows = await (_db.select(
       _db.todoTasks,
-    )..orderBy([(t) => OrderingTerm.asc(t.id)])).get();
+    )..orderBy([(t) => OrderingTerm.asc(t.rowId)])).get();
 
     return [
       for (final row in rows) _toTask(row, projectName: names[row.projectId]),
@@ -167,31 +172,35 @@ class DriftTodoRepository implements TodoRepository {
 
   @override
   Future<Task> createTask(TaskDraft draft) async {
-    final validated = _fromDraft(draft, id: 0);
+    final validated = _fromDraft(draft, id: '');
 
-    final id = await _db
-        .into(_db.todoTasks)
-        .insert(
-          TodoTasksCompanion.insert(
-            title: validated.title,
-            description: Value(validated.description),
-            category: Value(validated.category),
-            startDate: Value(validated.startDate),
-            dueDate: Value(validated.dueDate),
-            priority: validated.priority.wireName,
-            status: validated.status.wireName,
-            projectId: validated.projectId,
-            completedAt: Value(
-              validated.status == TaskStatus.done ? DateTime.now() : null,
-            ),
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.todoTasks)
+                .insertReturning(
+                  TodoTasksCompanion.insert(
+                    title: validated.title,
+                    description: Value(validated.description),
+                    category: Value(validated.category),
+                    startDate: Value(validated.startDate),
+                    dueDate: Value(validated.dueDate),
+                    priority: validated.priority.wireName,
+                    status: validated.status.wireName,
+                    projectId: validated.projectId,
+                    completedAt: Value(
+                      validated.status == TaskStatus.done
+                          ? DateTime.now()
+                          : null,
+                    ),
+                  ),
+                ))
+            .id;
 
     return (await _taskById(id))!;
   }
 
   @override
-  Future<Task> updateTask(int id, TaskDraft draft) async {
+  Future<Task> updateTask(String id, TaskDraft draft) async {
     final validated = _fromDraft(draft, id: id);
     // Editing a task that was already done keeps the original moment; only
     // a change of status moves it.
@@ -199,7 +208,9 @@ class DriftTodoRepository implements TodoRepository {
       _db.todoTasks,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
 
-    await (_db.update(_db.todoTasks)..where((t) => t.id.equals(id))).write(
+    await (_db.update(
+      _db.todoTasks,
+    )..where((t) => t.id.equals(id))).writeTouched(
       TodoTasksCompanion(
         title: Value(validated.title),
         description: Value(validated.description),
@@ -221,13 +232,15 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
-  Future<void> deleteTask(int id) async {
+  Future<void> deleteTask(String id) async {
     await (_db.delete(_db.todoTasks)..where((t) => t.id.equals(id))).go();
   }
 
   @override
-  Future<Task> setTaskStatus(int id, TaskStatus status) async {
-    await (_db.update(_db.todoTasks)..where((t) => t.id.equals(id))).write(
+  Future<Task> setTaskStatus(String id, TaskStatus status) async {
+    await (_db.update(
+      _db.todoTasks,
+    )..where((t) => t.id.equals(id))).writeTouched(
       TodoTasksCompanion(
         status: Value(status.wireName),
         // Stamped on the way into DONE and cleared on the way out, so
@@ -240,7 +253,7 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
-  Future<List<TaskComment>> comments(int taskId) async {
+  Future<List<TaskComment>> comments(String taskId) async {
     final rows =
         await (_db.select(_db.taskComments)
               ..where((c) => c.taskId.equals(taskId))
@@ -259,32 +272,34 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
-  Future<TaskComment> addComment(int taskId, String content) async {
+  Future<TaskComment> addComment(String taskId, String content) async {
     final text = content.trim();
     if (text.isEmpty) {
       throw ArgumentError.value(content, 'content', 'The comment is empty');
     }
 
     final now = DateTime.now();
-    final id = await _db
-        .into(_db.taskComments)
-        .insert(
-          TaskCommentsCompanion.insert(
-            taskId: taskId,
-            content: text,
-            createdAt: now,
-          ),
-        );
+    final id =
+        (await _db
+                .into(_db.taskComments)
+                .insertReturning(
+                  TaskCommentsCompanion.insert(
+                    taskId: taskId,
+                    content: text,
+                    createdAt: now,
+                  ),
+                ))
+            .id;
 
     return TaskComment(id: id, taskId: taskId, content: text, createdAt: now);
   }
 
   @override
-  Future<void> deleteComment(int id) async {
+  Future<void> deleteComment(String id) async {
     await (_db.delete(_db.taskComments)..where((c) => c.id.equals(id))).go();
   }
 
-  Future<Project?> _projectById(int id) async {
+  Future<Project?> _projectById(String id) async {
     final row = await (_db.select(
       _db.projects,
     )..where((p) => p.id.equals(id))).getSingleOrNull();
@@ -296,7 +311,7 @@ class DriftTodoRepository implements TodoRepository {
   Future<TodoStats> statsFor(DateRange range, {DateTime? today}) async =>
       TodoStats.from(range, await allTasks(), today ?? DateTime.now());
 
-  Future<Task?> _taskById(int id) async {
+  Future<Task?> _taskById(String id) async {
     final row = await (_db.select(
       _db.todoTasks,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
@@ -304,7 +319,7 @@ class DriftTodoRepository implements TodoRepository {
     return row == null ? null : _toTask(row);
   }
 
-  Task _fromDraft(TaskDraft draft, {required int id}) => Task(
+  Task _fromDraft(TaskDraft draft, {required String id}) => Task(
     id: id,
     title: draft.title,
     description: draft.description,

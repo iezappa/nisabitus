@@ -227,9 +227,9 @@ class _FoodDefinitionDialogState extends State<_FoodDefinitionDialog> {
 
     Navigator.of(context).pop(
       Food(
-        // Zero is a food the database does not have yet; anything else is a
+        // An empty id is a food the database does not have yet; anything else is a
         // correction to the row that id belongs to.
-        id: widget.existing?.id ?? 0,
+        id: widget.existing?.id ?? '',
         name: _name.text,
         per100g: Macros(
           calories: _read(_calories),

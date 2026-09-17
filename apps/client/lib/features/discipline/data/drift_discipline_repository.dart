@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
 import '../../../core/time/weekday.dart';
 import '../../exercise/domain/scheduled_exercise.dart';
@@ -18,7 +19,7 @@ class DriftDisciplineRepository implements DisciplineRepository {
     final rows =
         await (_db.select(_db.disciplines)
               ..where((d) => d.scheduledDate.equals(dateOnly(day)))
-              ..orderBy([(d) => OrderingTerm.asc(d.id)]))
+              ..orderBy([(d) => OrderingTerm.asc(d.rowId)]))
             .get();
 
     return rows.map(_toDomain).toList();
@@ -36,7 +37,7 @@ class DriftDisciplineRepository implements DisciplineRepository {
     // Built first so the domain rejects an impossible session before a
     // hundred copies of it reach the database.
     final validated = Discipline(
-      id: 0,
+      id: '',
       name: draft.name,
       scheduledDate: date,
       durationMinutes: draft.durationMinutes,
@@ -62,7 +63,7 @@ class DriftDisciplineRepository implements DisciplineRepository {
   }
 
   @override
-  Future<Discipline> update(int id, DisciplineDraft draft) async {
+  Future<Discipline> update(String id, DisciplineDraft draft) async {
     final existing = await _byId(id);
     if (existing == null) throw StateError('Discipline $id was not found');
 
@@ -81,7 +82,9 @@ class DriftDisciplineRepository implements DisciplineRepository {
     );
 
     // This day only. The other days of the series are their own rows.
-    await (_db.update(_db.disciplines)..where((d) => d.id.equals(id))).write(
+    await (_db.update(
+      _db.disciplines,
+    )..where((d) => d.id.equals(id))).writeTouched(
       DisciplinesCompanion(
         name: Value(validated.name),
         durationMinutes: Value(validated.durationMinutes),
@@ -94,7 +97,10 @@ class DriftDisciplineRepository implements DisciplineRepository {
   }
 
   @override
-  Future<Discipline> complete(int id, DisciplineCompletion completion) async {
+  Future<Discipline> complete(
+    String id,
+    DisciplineCompletion completion,
+  ) async {
     final existing = await _byId(id);
     if (existing == null) throw StateError('Discipline $id was not found');
 
@@ -113,7 +119,9 @@ class DriftDisciplineRepository implements DisciplineRepository {
       repeatForever: existing.repeatForever,
     );
 
-    await (_db.update(_db.disciplines)..where((d) => d.id.equals(id))).write(
+    await (_db.update(
+      _db.disciplines,
+    )..where((d) => d.id.equals(id))).writeTouched(
       DisciplinesCompanion(
         completed: const Value(true),
         durationMinutes: Value(validated.durationMinutes),
@@ -126,26 +134,25 @@ class DriftDisciplineRepository implements DisciplineRepository {
   }
 
   @override
-  Future<Discipline> reopen(int id) async {
+  Future<Discipline> reopen(String id) async {
     final existing = await _byId(id);
     if (existing == null) throw StateError('Discipline $id was not found');
 
     // The feedback stays: un-ticking says it is not finished, not that it
     // never happened.
-    await (_db.update(_db.disciplines)..where((d) => d.id.equals(id))).write(
-      const DisciplinesCompanion(completed: Value(false)),
-    );
+    await (_db.update(_db.disciplines)..where((d) => d.id.equals(id)))
+        .writeTouched(const DisciplinesCompanion(completed: Value(false)));
 
     return existing.copyWith(completed: false);
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await (_db.delete(_db.disciplines)..where((d) => d.id.equals(id))).go();
   }
 
   @override
-  Future<void> stopRecurrence(int id) async {
+  Future<void> stopRecurrence(String id) async {
     final existing = await _byId(id);
     if (existing == null) throw StateError('Discipline $id was not found');
 
@@ -164,30 +171,34 @@ class DriftDisciplineRepository implements DisciplineRepository {
           ))
           .go();
 
-      await (_db.update(_db.disciplines)
-            ..where((d) => d.recurrenceGroupId.equals(groupId)))
-          .write(const DisciplinesCompanion(repeatForever: Value(false)));
+      await (_db.update(
+        _db.disciplines,
+      )..where((d) => d.recurrenceGroupId.equals(groupId))).writeTouched(
+        const DisciplinesCompanion(repeatForever: Value(false)),
+      );
     });
   }
 
-  Future<int> _insert(Discipline discipline) => _db
-      .into(_db.disciplines)
-      .insert(
-        DisciplinesCompanion.insert(
-          name: discipline.name,
-          scheduledDate: discipline.scheduledDate,
-          durationMinutes: discipline.durationMinutes,
-          distanceKm: Value(discipline.distanceKm),
-          notes: Value(discipline.notes),
-          feedback: Value(discipline.feedback),
-          completed: Value(discipline.completed),
-          recurrenceGroupId: Value(discipline.recurrenceGroupId),
-          repeatDays: Value(Weekday.encode(discipline.repeatDays)),
-          repeatForever: Value(discipline.repeatForever),
-        ),
-      );
+  Future<String> _insert(Discipline discipline) async =>
+      (await _db
+              .into(_db.disciplines)
+              .insertReturning(
+                DisciplinesCompanion.insert(
+                  name: discipline.name,
+                  scheduledDate: discipline.scheduledDate,
+                  durationMinutes: discipline.durationMinutes,
+                  distanceKm: Value(discipline.distanceKm),
+                  notes: Value(discipline.notes),
+                  feedback: Value(discipline.feedback),
+                  completed: Value(discipline.completed),
+                  recurrenceGroupId: Value(discipline.recurrenceGroupId),
+                  repeatDays: Value(Weekday.encode(discipline.repeatDays)),
+                  repeatForever: Value(discipline.repeatForever),
+                ),
+              ))
+          .id;
 
-  Future<Discipline?> _byId(int id) async {
+  Future<Discipline?> _byId(String id) async {
     final row = await (_db.select(
       _db.disciplines,
     )..where((d) => d.id.equals(id))).getSingleOrNull();

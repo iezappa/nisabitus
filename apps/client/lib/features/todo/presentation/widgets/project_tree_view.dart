@@ -12,7 +12,7 @@ class ProjectTreeView extends ConsumerWidget {
   const ProjectTreeView({required this.tree, required this.counts, super.key});
 
   final ProjectTree tree;
-  final Map<int, TaskCount> counts;
+  final Map<String, TaskCount> counts;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +36,7 @@ class _Node extends ConsumerWidget {
 
   final Project project;
   final ProjectTree tree;
-  final Map<int, TaskCount> counts;
+  final Map<String, TaskCount> counts;
   final int depth;
 
   @override

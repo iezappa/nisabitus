@@ -6,7 +6,8 @@ void main() {
 
   // Pinned to [today]: increment reads the gap since the last update, so a
   // streak born "now" would answer differently on every run.
-  Streak newStreak() => Streak.create(id: 1, name: 'Meditar', createdAt: today);
+  Streak newStreak() =>
+      Streak.create(id: '1', name: 'Meditar', createdAt: today);
 
   group('Streak.create', () {
     test('starts both counters at zero', () {
@@ -17,11 +18,11 @@ void main() {
     });
 
     test('rejects a blank name', () {
-      expect(() => Streak.create(id: 1, name: '   '), throwsArgumentError);
+      expect(() => Streak.create(id: '1', name: '   '), throwsArgumentError);
     });
 
     test('trims the name', () {
-      expect(Streak.create(id: 1, name: '  Meditar ').name, 'Meditar');
+      expect(Streak.create(id: '1', name: '  Meditar ').name, 'Meditar');
     });
   });
 
@@ -104,7 +105,7 @@ void main() {
     test('rescues a record that is behind the count', () {
       // Guards against inconsistent imported data, where count outran maxStreak.
       final inconsistent = Streak(
-        id: 1,
+        id: '1',
         name: 'Meditar',
         count: 9,
         maxStreak: 4,

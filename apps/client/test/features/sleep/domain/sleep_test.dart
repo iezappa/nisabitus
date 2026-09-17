@@ -5,7 +5,7 @@ import 'package:nisabitus/features/sleep/domain/sleep_stats.dart';
 
 void main() {
   SleepLog log(double hours, [int day = 1]) =>
-      SleepLog(id: day, hours: hours, date: DateTime(2026, 3, day));
+      SleepLog(id: '$day', hours: hours, date: DateTime(2026, 3, day));
 
   // Wide enough to hold every night these tests write down.
   final march = DateRange(DateTime(2026, 3, 1), DateTime(2026, 3, 31));
@@ -38,7 +38,7 @@ void main() {
 
     test('normalizes the date to the day', () {
       final entry = SleepLog(
-        id: 1,
+        id: '1',
         hours: 7.5,
         date: DateTime(2026, 3, 11, 23, 40),
       );
