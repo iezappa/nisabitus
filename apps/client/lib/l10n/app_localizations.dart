@@ -3169,6 +3169,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Borrar todo'**
   String get eraseAllAction;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In es, this message translates to:
+  /// **'Política de privacidad'**
+  String get privacyPolicy;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In es, this message translates to:
+  /// **'Términos de uso'**
+  String get termsOfUse;
+
+  /// No description provided for @developerContact.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacto'**
+  String get developerContact;
+
+  /// No description provided for @developerContactBody.
+  ///
+  /// In es, this message translates to:
+  /// **'{developer} · reportes y consultas en GitHub'**
+  String developerContactBody(String developer);
+
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In es, this message translates to:
+  /// **'Licencias'**
+  String get openSourceLicenses;
 }
 
 class _AppLocalizationsDelegate

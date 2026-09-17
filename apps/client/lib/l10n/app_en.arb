@@ -553,5 +553,11 @@
     }
   },
   "eraseAllExportFirst": "Export first",
-  "eraseAllAction": "Delete everything"
+  "eraseAllAction": "Delete everything",
+  "privacyPolicy": "Privacy policy",
+  "termsOfUse": "Terms of use",
+  "developerContact": "Contact",
+  "developerContactBody": "{developer} · reports and questions on GitHub",
+  "@developerContactBody": {"placeholders": {"developer": {"type": "String"}}},
+  "openSourceLicenses": "Licenses"
 }

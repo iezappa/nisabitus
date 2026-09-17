@@ -851,5 +851,11 @@
     }
   },
   "eraseAllExportFirst": "Exportar antes",
-  "eraseAllAction": "Borrar todo"
+  "eraseAllAction": "Borrar todo",
+  "privacyPolicy": "Política de privacidad",
+  "termsOfUse": "Términos de uso",
+  "developerContact": "Contacto",
+  "developerContactBody": "{developer} · reportes y consultas en GitHub",
+  "@developerContactBody": {"placeholders": {"developer": {"type": "String"}}},
+  "openSourceLicenses": "Licencias"
 }

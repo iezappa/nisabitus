@@ -153,4 +153,26 @@ void main() {
       reason: 'a notice you have to tap to read is a notice nobody reads',
     );
   });
+
+  testWidgets('lists privacy, terms, contact and licenses under About', (
+    tester,
+  ) async {
+    await pumpSettings(tester);
+
+    double top(Finder finder) => tester.getTopLeft(finder).dy;
+
+    for (final row in [
+      'Política de privacidad',
+      'Términos de uso',
+      'Contacto',
+      'Licencias',
+    ]) {
+      expect(find.text(row), findsOneWidget, reason: row);
+      expect(top(find.text('ACERCA DE')), lessThan(top(find.text(row))));
+    }
+    expect(
+      find.textContaining('Zeke Zappa Developments (iezappa)'),
+      findsOneWidget,
+    );
+  });
 }

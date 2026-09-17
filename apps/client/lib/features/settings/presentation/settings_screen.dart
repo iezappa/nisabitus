@@ -7,6 +7,7 @@ import '../../../core/widgets/section_label.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../backup/presentation/widgets/backup_card.dart';
 import '../../backup/presentation/widgets/erase_all_data_tile.dart';
+import '../../legal/presentation/about_links.dart';
 import '../../release_notes/presentation/widgets/release_notes_tile.dart';
 import '../../shared/support_actions.dart';
 import '../domain/accent_color.dart';
@@ -188,6 +189,7 @@ class _AboutSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: Gap.sm),
+        const AboutLinks(),
         ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.school_outlined),

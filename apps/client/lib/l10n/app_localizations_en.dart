@@ -1700,4 +1700,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eraseAllAction => 'Delete everything';
+
+  @override
+  String get privacyPolicy => 'Privacy policy';
+
+  @override
+  String get termsOfUse => 'Terms of use';
+
+  @override
+  String get developerContact => 'Contact';
+
+  @override
+  String developerContactBody(String developer) {
+    return '$developer · reports and questions on GitHub';
+  }
+
+  @override
+  String get openSourceLicenses => 'Licenses';
 }

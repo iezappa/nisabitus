@@ -1705,4 +1705,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get eraseAllAction => 'Borrar todo';
+
+  @override
+  String get privacyPolicy => 'Política de privacidad';
+
+  @override
+  String get termsOfUse => 'Términos de uso';
+
+  @override
+  String get developerContact => 'Contacto';
+
+  @override
+  String developerContactBody(String developer) {
+    return '$developer · reportes y consultas en GitHub';
+  }
+
+  @override
+  String get openSourceLicenses => 'Licencias';
 }
