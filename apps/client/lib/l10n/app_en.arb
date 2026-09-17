@@ -563,5 +563,14 @@
   "backupExportCsv": "Export CSV",
   "backupCsvHint": "The CSV is for reading your data in a spreadsheet; it cannot be imported. To back up, use Export.",
   "backupCsvExported": "{count, plural, =1{CSV saved: 1 record} other{CSV saved: {count} records}}",
-  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}}
+  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}},
+  "updateAvailableTitle": "A new version is available",
+  "updateAvailableBody": "Version {version} is available.",
+  "@updateAvailableBody": {"placeholders": {"version": {"type": "String"}}},
+  "updateAvailableBackupHint": "This version changes how your data is stored. Export a backup before updating.",
+  "updateUnsupportedPath": "Your version is too old to update directly. Export a backup and check the instructions.",
+  "updateActionReload": "Update",
+  "updateActionDownload": "Download",
+  "updateActionExport": "Export",
+  "updateActionDismiss": "Not now"
 }

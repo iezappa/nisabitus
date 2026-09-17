@@ -1735,4 +1735,32 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get updateAvailableTitle => 'A new version is available';
+
+  @override
+  String updateAvailableBody(String version) {
+    return 'Version $version is available.';
+  }
+
+  @override
+  String get updateAvailableBackupHint =>
+      'This version changes how your data is stored. Export a backup before updating.';
+
+  @override
+  String get updateUnsupportedPath =>
+      'Your version is too old to update directly. Export a backup and check the instructions.';
+
+  @override
+  String get updateActionReload => 'Update';
+
+  @override
+  String get updateActionDownload => 'Download';
+
+  @override
+  String get updateActionExport => 'Export';
+
+  @override
+  String get updateActionDismiss => 'Not now';
 }

@@ -3217,6 +3217,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count, plural, =1{CSV guardado: 1 registro} other{CSV guardado: {count} registros}}'**
   String backupCsvExported(int count);
+
+  /// No description provided for @updateAvailableTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una versión nueva'**
+  String get updateAvailableTitle;
+
+  /// No description provided for @updateAvailableBody.
+  ///
+  /// In es, this message translates to:
+  /// **'La versión {version} está disponible.'**
+  String updateAvailableBody(String version);
+
+  /// No description provided for @updateAvailableBackupHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta versión cambia cómo se guardan tus datos. Exportá un respaldo antes de actualizar.'**
+  String get updateAvailableBackupHint;
+
+  /// No description provided for @updateUnsupportedPath.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu versión es muy antigua para actualizar directo. Exportá un respaldo y consultá las instrucciones.'**
+  String get updateUnsupportedPath;
+
+  /// No description provided for @updateActionReload.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get updateActionReload;
+
+  /// No description provided for @updateActionDownload.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar'**
+  String get updateActionDownload;
+
+  /// No description provided for @updateActionExport.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar'**
+  String get updateActionExport;
+
+  /// No description provided for @updateActionDismiss.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get updateActionDismiss;
 }
 
 class _AppLocalizationsDelegate

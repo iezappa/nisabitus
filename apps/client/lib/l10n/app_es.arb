@@ -861,5 +861,14 @@
   "backupExportCsv": "Exportar CSV",
   "backupCsvHint": "El CSV es para leer tus datos en una planilla; no se puede importar. Para respaldar usá Exportar.",
   "backupCsvExported": "{count, plural, =1{CSV guardado: 1 registro} other{CSV guardado: {count} registros}}",
-  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}}
+  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}},
+  "updateAvailableTitle": "Hay una versión nueva",
+  "updateAvailableBody": "La versión {version} está disponible.",
+  "@updateAvailableBody": {"placeholders": {"version": {"type": "String"}}},
+  "updateAvailableBackupHint": "Esta versión cambia cómo se guardan tus datos. Exportá un respaldo antes de actualizar.",
+  "updateUnsupportedPath": "Tu versión es muy antigua para actualizar directo. Exportá un respaldo y consultá las instrucciones.",
+  "updateActionReload": "Actualizar",
+  "updateActionDownload": "Descargar",
+  "updateActionExport": "Exportar",
+  "updateActionDismiss": "Ahora no"
 }
