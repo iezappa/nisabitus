@@ -284,8 +284,13 @@ The build is published to GitHub Pages by `deploy-pages.yml` on every push to
       1. Host where headers can be set (Cloudflare Pages, Netlify: a
          `_headers` file) and point the domain there. **Still open.**
       2. Keep Pages and register a service worker that re-injects the headers
-         client-side — collides with Flutter's own service worker. **Still
-         open.**
+         client-side. **Still open**, but no longer blocked by Flutter's own
+         worker: `web/sw.js` is ours now (8.2), and re-injecting the headers
+         would be a change to it.
+      4. Serve it yourself: the Docker image in `deploy/` sends COOP/COEP, so
+         a ZimaOS server over Tailscale gets OPFS. **Written, unverified** —
+         `docker build` was never run (no access to the daemon on the machine
+         it was written on), let alone deployed to a server.
       3. ~~Say so in the app.~~ **Done.** drift's chosen implementation maps
          to `StorageDurability`; IndexedDB and memory show a dismissible
          banner that offers to export. `navigator.storage.persist()` is
@@ -321,10 +326,28 @@ looks like.
       its SHA-256 fingerprint in `docs/SIGNING.md`, install the Android SDK. The release workflow for
       the other artifacts is still pending (P1). The failing no-keystore build was not verified (no SDK on
       the machine it was written on).
-- [ ] **P0-4** migrate integer ids to UUIDs.
-- [ ] **P1** CSV export; licenses page and privacy/terms links in About;
-      service worker of our own for the web build (8.2); an iOS "Add to
-      Home Screen" onboarding slide; OPFS still untested in CI.
+- [x] ~~**P0-4** migrate integer ids to UUIDs.~~ Schema **v14**: every table
+      carries a text UUID `id` and an `updatedAt`, the two single-row goal
+      tables use the fixed `singleton` id, and the repositories stamp
+      `updatedAt` on every write (`record_columns.dart`). The migration draws
+      the ids in Dart into a scratch `(table, old id) -> uuid` map and
+      rebuilds each table through `TableMigration`, translating its own id and
+      every foreign key through that map in one transaction; rows pointing at
+      a parent that no longer exists are deleted first rather than failing the
+      upgrade. Backups are **format 2**; format 1 files (integer ids) are
+      still imported, remapped the same way. Asserted by
+      `migration_v14_test.dart`, `updated_at_test.dart` and
+      `legacy_backup_import_test.dart`.
+- [x] ~~**P1** CSV export; licenses page and privacy/terms links in About;
+      service worker of our own for the web build (8.2)~~ — all three landed:
+      one multi-section CSV (reading copy, not a backup), `ACERCA DE` with the
+      bundled privacy policy and terms, contact and `showLicensePage`, and
+      `web/sw.js` + `web/flutter_bootstrap.js` + `tool/generate_sw.sh`.
+- [ ] **Still P1:** an iOS "Add to Home Screen" onboarding slide; OPFS still
+      untested in CI; the service worker checklist of §8.2 is a **manual**
+      one — nobody has yet walked a real browser through installing it, going
+      offline, and updating (points 1-6 of that checklist), and nobody has
+      opened the PWA on an iPhone.
 
 ## 4. Conformance with the shared standard
 
@@ -333,7 +356,14 @@ The standard is
 It is the canonical copy: `Estandarización/` here is a working copy, ignored
 by git, and loses to that repository on any disagreement.
 
-Last checked against it: **2026-09-02**.
+Last checked against it: **2026-09-17** (Estandarizador fb593db).
+
+- [ ] **Publish the next release from a tag.** `release.yml` exists now and
+      is unproven: nothing has run it. Before tagging, bump `pubspec.yaml`
+      **and** `apps/client/web/update.json` together (the version-check job
+      compares both against the tag) and set `"schemaChange": true` on the
+      first release carrying schema v14, so the banner asks for a backup
+      before updating. The GHCR package has to be made public once by hand.
 
 - [ ] **Sentry is a decision, not a debt.** §5 lists it under observability,
       and this app is offline-first with no account and no server: shipping
@@ -351,8 +381,10 @@ Walk this when the standard changes, or before a release:
       against Estandarizador fb593db, 2026-09-16). Keystore created: pending.
       Backup verified: pending. Fingerprint recorded in `docs/SIGNING.md`:
       pending. `build.gradle.kts` fails without `key.properties`: done
-      (`0983a02`). CI without APK signing: done (no signing job; release
-      workflow still pending). `tool/release_apk.sh`: aligned with the template.
+      (`0983a02`). CI without APK signing: done — `release.yml` builds Linux,
+      Windows, macOS, the web zip and the Docker image and says in the release
+      body that the maintainer attaches the signed APK with
+      `tool/release_apk.sh`. `tool/release_apk.sh`: aligned with the template.
 
 - [ ] **§2.1 Product patterns.** i18n through ARB files, onboarding shown
       once, local PIN (absent here on purpose), disclaimer visible in
@@ -365,7 +397,7 @@ the other repository. Walk it when §2.2 changes or before a release; the date
 is half the indicator, because "conformant" with no date only says somebody
 looked once.
 
-**§2.2 Settings** — Conformant: yes · Last walked: 2026-09-02 ·
+**§2.2 Settings** — Conformant: yes · Last walked: 2026-09-17 ·
 Asserted by: `test/features/settings/settings_layout_test.dart`
 
 - [x] Body inside the shared page widget, with a capped measure
@@ -378,6 +410,11 @@ Asserted by: `test/features/settings/settings_layout_test.dart`
 - [x] Short fixed sets in `SegmentedButton`, not `DropdownButton`
 - [x] Support block: the only `Card`, and with no title of its own inside
 - [x] Disclaimer printed in full, outside any `ListTile`
+- [x] `ACERCA DE` with privacy, terms, contact and licences (2.3)
+- [x] `meetsGuideline` for tap targets and contrast, light and dark
+      (`test/accessibility/accessibility_test.dart`)
+- [x] Backup notice first in TUS DATOS, then export JSON, export CSV, import,
+      and "Borrar todos mis datos" last, with confirmation
 - [x] Layout test present and green
 
 Declared deviations, carried back to the canonical repository:
