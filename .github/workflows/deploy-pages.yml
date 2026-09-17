@@ -72,6 +72,12 @@ jobs:
           cp build/web/index.html build/web/404.html
           touch build/web/.nojekyll
 
+      # Own service worker (STACK-APPS-DINAMICAS.md 8.2): inject the version
+      # and the precache manifest into build/web/sw.js. Last step that touches
+      # build/web, so 404.html is already in place (and excluded).
+      - name: Generate the service worker
+        run: sh tool/generate_sw.sh build/web pubspec.yaml
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/client/build/web
