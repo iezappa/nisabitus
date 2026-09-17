@@ -21,6 +21,7 @@ import '../data/picker_backup_files.dart';
 import '../domain/backup_document.dart';
 import '../domain/backup_files.dart';
 import '../domain/backup_reminder.dart';
+import '../domain/csv_report.dart';
 import '../domain/backup_repository.dart';
 import '../domain/restore_report.dart';
 
@@ -83,7 +84,10 @@ class BackupActions {
       final document = await _ref.read(backupRepositoryProvider).export();
       final saved = await _ref
           .read(backupFilesProvider)
-          .save(_fileNameFor(document.exportedAt), document.encode());
+          .save(
+            _fileNameFor(document.exportedAt, 'nisabit', 'json'),
+            document.encode(),
+          );
 
       if (!saved) return const BackupCancelled();
 
@@ -93,6 +97,27 @@ class BackupActions {
       _ref.invalidate(backupReminderProvider);
 
       return BackupSucceeded(document.rowCount);
+    } on Object catch (error) {
+      return BackupFailed(error);
+    }
+  }
+
+  /// Saves every table as a CSV file for reading in a spreadsheet.
+  ///
+  /// Not a backup — it cannot be imported — so it does not count towards
+  /// the reminder the way [export] does.
+  Future<BackupOutcome> exportCsv() async {
+    try {
+      final tables = await _ref.read(backupRepositoryProvider).readableTables();
+      final rows = tables.values.fold(0, (sum, rows) => sum + rows.length);
+      final saved = await _ref
+          .read(backupFilesProvider)
+          .save(
+            _fileNameFor(_ref.read(clockProvider)(), 'nisabitus', 'csv'),
+            encodeCsvReport(tables),
+          );
+
+      return saved ? BackupSucceeded(rows) : const BackupCancelled();
     } on Object catch (error) {
       return BackupFailed(error);
     }
@@ -147,11 +172,11 @@ class BackupActions {
 
   /// Dated rather than timestamped: a person looking at a folder wants to
   /// know which day a backup is from, not which second.
-  static String _fileNameFor(DateTime moment) {
+  static String _fileNameFor(DateTime moment, String prefix, String extension) {
     final month = '${moment.month}'.padLeft(2, '0');
     final day = '${moment.day}'.padLeft(2, '0');
 
-    return 'nisabit-${moment.year}-$month-$day.json';
+    return '$prefix-${moment.year}-$month-$day.$extension';
   }
 }
 

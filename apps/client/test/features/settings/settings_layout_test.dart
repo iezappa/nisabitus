@@ -136,6 +136,14 @@ void main() {
 
     expect(top(find.text('TUS DATOS')), lessThan(top(notice)));
     expect(top(notice), lessThan(top(find.text('Exportar'))));
+    expect(
+      top(find.text('Exportar')),
+      lessThanOrEqualTo(top(find.text('Exportar CSV'))),
+    );
+    expect(
+      top(find.text('Exportar CSV')),
+      lessThanOrEqualTo(top(find.text('Importar'))),
+    );
     expect(top(find.text('Importar')), lessThan(top(erase)));
     expect(top(erase), lessThan(top(find.text('SOPORTE'))));
   });

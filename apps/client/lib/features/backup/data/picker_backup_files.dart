@@ -12,14 +12,17 @@ import '../domain/backup_files.dart';
 class PickerBackupFiles implements BackupFiles {
   const PickerBackupFiles();
 
-  static const _mimeType = 'application/json';
+  /// Read off the name: the JSON backup and the CSV reading copy go through
+  /// the same dialog.
+  static String _mimeTypeFor(String fileName) =>
+      fileName.endsWith('.csv') ? 'text/csv' : 'application/json';
 
   @override
   Future<bool> save(String fileName, String contents) async {
     final location = await FilePicker.saveFile(
       fileName: fileName,
       bytes: Uint8List.fromList(utf8.encode(contents)),
-      mimeType: _mimeType,
+      mimeType: _mimeTypeFor(fileName),
     );
 
     return location != null;

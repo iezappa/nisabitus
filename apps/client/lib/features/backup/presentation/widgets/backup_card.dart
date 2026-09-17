@@ -42,6 +42,11 @@ class _BackupCardState extends ConsumerState<BackupCard> {
     (l10n, rows) => l10n.backupExported(rows),
   );
 
+  Future<void> _exportCsv() => _run(
+    ref.read(backupActionsProvider).exportCsv,
+    (l10n, rows) => l10n.backupCsvExported(rows),
+  );
+
   Future<void> _import() async {
     if (!await _confirmReplace()) return;
 
@@ -136,12 +141,24 @@ class _BackupCardState extends ConsumerState<BackupCard> {
             const SizedBox(width: Gap.md),
             Expanded(
               child: OutlinedButton.icon(
-                onPressed: _busy ? null : _import,
-                icon: const Icon(Icons.download_outlined),
-                label: Text(l10n.backupImport),
+                onPressed: _busy ? null : _exportCsv,
+                icon: const Icon(Icons.table_chart_outlined),
+                label: Text(l10n.backupExportCsv),
               ),
             ),
           ],
+        ),
+        const SizedBox(height: Gap.sm),
+        // A reading copy: the JSON export above is the file that restores.
+        Text(l10n.backupCsvHint, style: theme.textTheme.bodySmall),
+        const SizedBox(height: Gap.md),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: _busy ? null : _import,
+            icon: const Icon(Icons.download_outlined),
+            label: Text(l10n.backupImport),
+          ),
         ),
       ],
     );

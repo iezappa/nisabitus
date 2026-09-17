@@ -130,6 +130,50 @@ void main() {
     });
   });
 
+  group('CSV export', () {
+    test('saves a readable .csv with a section per table', () async {
+      await seedHabit('Meditar');
+
+      final outcome = await actions().exportCsv();
+
+      expect(outcome, isA<BackupSucceeded>());
+      expect((outcome as BackupSucceeded).rows, 1);
+      expect(
+        files.savedName,
+        matches(RegExp(r'^nisabitus-\d{4}-\d{2}-\d{2}\.csv$')),
+      );
+      final lines = files.savedContents!
+          .replaceFirst('\uFEFF', '')
+          .split('\r\n');
+      final section = lines.indexOf('habits');
+      expect(section, greaterThanOrEqualTo(0));
+      expect(lines[section + 1], contains('name'));
+      expect(lines[section + 2], contains('Meditar'));
+    });
+
+    test('writes dates as ISO-8601 text, not epoch numbers', () async {
+      await seedHabit();
+
+      await actions().exportCsv();
+
+      expect(files.savedContents, matches(RegExp(r'\d{4}-\d{2}-\d{2}T')));
+    });
+
+    test('is not a backup: it does not reset the reminder', () async {
+      await seedHabit();
+
+      await actions().exportCsv();
+
+      expect(container.read(backupHistoryProvider).lastExportAt, isNull);
+    });
+
+    test('backing out of the dialog is not a failure', () async {
+      files.accepted = false;
+
+      expect(await actions().exportCsv(), isA<BackupCancelled>());
+    });
+  });
+
   group('import', () {
     Future<String> exportedText() async {
       await actions().export();

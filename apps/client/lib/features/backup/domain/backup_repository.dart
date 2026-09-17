@@ -6,6 +6,11 @@ abstract interface class BackupRepository {
   /// Everything currently stored, as one document.
   Future<BackupDocument> export();
 
+  /// Every table, rows as column-to-value maps with dates as ISO-8601 text.
+  ///
+  /// For reading, not restoring: see [export] for the file that restores.
+  Future<Map<String, List<Map<String, Object?>>>> readableTables();
+
   /// Replaces the whole store with what [document] holds.
   ///
   /// Replace, not merge. Merging twenty-two tables that reference each other by

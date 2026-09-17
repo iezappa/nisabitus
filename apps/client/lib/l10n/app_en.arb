@@ -559,5 +559,9 @@
   "developerContact": "Contact",
   "developerContactBody": "{developer} · reports and questions on GitHub",
   "@developerContactBody": {"placeholders": {"developer": {"type": "String"}}},
-  "openSourceLicenses": "Licenses"
+  "openSourceLicenses": "Licenses",
+  "backupExportCsv": "Export CSV",
+  "backupCsvHint": "The CSV is for reading your data in a spreadsheet; it cannot be imported. To back up, use Export.",
+  "backupCsvExported": "{count, plural, =1{CSV saved: 1 record} other{CSV saved: {count} records}}",
+  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}}
 }

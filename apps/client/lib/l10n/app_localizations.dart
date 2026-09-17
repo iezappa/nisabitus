@@ -3199,6 +3199,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Licencias'**
   String get openSourceLicenses;
+
+  /// No description provided for @backupExportCsv.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar CSV'**
+  String get backupExportCsv;
+
+  /// No description provided for @backupCsvHint.
+  ///
+  /// In es, this message translates to:
+  /// **'El CSV es para leer tus datos en una planilla; no se puede importar. Para respaldar usá Exportar.'**
+  String get backupCsvHint;
+
+  /// No description provided for @backupCsvExported.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{CSV guardado: 1 registro} other{CSV guardado: {count} registros}}'**
+  String backupCsvExported(int count);
 }
 
 class _AppLocalizationsDelegate

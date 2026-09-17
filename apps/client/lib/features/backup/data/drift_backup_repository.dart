@@ -9,6 +9,7 @@ import '../domain/restore_report.dart';
 typedef _TableCodec = ({
   String name,
   Future<List<Map<String, dynamic>>> Function() dump,
+  Future<List<Map<String, dynamic>>> Function() readable,
   Future<void> Function(List<Map<String, dynamic>> rows) fill,
   Future<void> Function() clear,
 });
@@ -71,6 +72,16 @@ class DriftBackupRepository implements BackupRepository {
       tables: tables,
     );
   }
+
+  @override
+  Future<Map<String, List<Map<String, Object?>>>> readableTables() async => {
+    for (final table in _tables) table.name: await table.readable(),
+  };
+
+  /// Dates as text a person can read in a spreadsheet.
+  static const _readableSerializer = ValueSerializer.defaults(
+    serializeDateTimeValuesAsString: true,
+  );
 
   @override
   Future<RestoreReport> restore(BackupDocument document) => _db.transaction(
@@ -139,6 +150,9 @@ class DriftBackupRepository implements BackupRepository {
     name: table.actualTableName,
     dump: () async =>
         (await _db.select(table).get()).map((row) => row.toJson()).toList(),
+    readable: () async => (await _db.select(table).get())
+        .map((row) => row.toJson(serializer: _readableSerializer))
+        .toList(),
     fill: (rows) async {
       if (rows.isEmpty) return;
 

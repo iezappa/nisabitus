@@ -1717,4 +1717,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openSourceLicenses => 'Licenses';
+
+  @override
+  String get backupExportCsv => 'Export CSV';
+
+  @override
+  String get backupCsvHint =>
+      'The CSV is for reading your data in a spreadsheet; it cannot be imported. To back up, use Export.';
+
+  @override
+  String backupCsvExported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'CSV saved: $count records',
+      one: 'CSV saved: 1 record',
+    );
+    return '$_temp0';
+  }
 }
