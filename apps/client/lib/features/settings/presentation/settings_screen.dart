@@ -303,22 +303,33 @@ class _AccentPicker extends ConsumerWidget {
                       .read(accentPreferenceProvider.notifier)
                       .set(accent.id),
                   radius: 28,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: accent.resolve(brightness),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: accent == current
-                            ? Theme.of(context).colorScheme.onSurface
-                            : Colors.transparent,
-                        width: 2,
+                  // 48x48 around a 40 swatch: the circle is what is seen,
+                  // the square is what a finger has to hit.
+                  child: SizedBox.square(
+                    dimension: 48,
+                    child: Center(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: accent.resolve(brightness),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: accent == current
+                                ? Theme.of(context).colorScheme.onSurface
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                        ),
+                        child: accent == current
+                            ? const Icon(
+                                Icons.check,
+                                size: 20,
+                                color: Colors.white,
+                              )
+                            : null,
                       ),
                     ),
-                    child: accent == current
-                        ? const Icon(Icons.check, size: 20, color: Colors.white)
-                        : null,
                   ),
                 ),
               ),
