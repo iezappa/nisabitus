@@ -13,6 +13,8 @@
 # Only the tiny nginx stage is resolved per target platform: no QEMU emulation
 # of the Flutter SDK is needed.
 
+# Pinned to the toolchain CI tests with (release.yml passes the same tag, so
+# this default only applies to a local `docker build`).
 ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:3.47.1
 
 # ---------- Stage 1: build Flutter web ----------
