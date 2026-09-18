@@ -72,6 +72,10 @@ dev_dependencies:
   mocktail: ^1.0.5
   flutter_launcher_icons: ^0.14.4
 
+  # Reads .github/workflows/ from a test, so the release pipeline is guarded
+  # by the suite rather than by whoever remembers to look at it.
+  yaml: ^3.1.2
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
