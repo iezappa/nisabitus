@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/backup_reminder.dart';
 import '../backup_feedback.dart';
 import '../backup_providers.dart';
+import 'storage_warning_banner.dart';
 
 /// The periodic nudge to export, docked under the open tab.
 ///
@@ -17,7 +18,10 @@ class BackupReminderBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Watched even while hidden, so it is current the moment it can show.
     final reminder = ref.watch(backupReminderProvider).valueOrNull;
+    // The storage warning already asks for an export; one banner is enough.
+    if (ref.watch(storageWarningShownProvider)) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context);
 
     final message = switch (reminder) {

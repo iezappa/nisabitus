@@ -13,6 +13,16 @@ import '../backup_providers.dart';
 /// been dismissed, so the next launch says it again.
 final storageWarningDismissedProvider = StateProvider<bool>((ref) => false);
 
+/// Whether the storage warning is on screen right now.
+///
+/// The backup reminder asks for the same export, so it stands aside while
+/// this is up instead of stacking a second banner under it.
+final storageWarningShownProvider = Provider<bool>(
+  (ref) =>
+      ref.watch(storageDurabilityProvider) != StorageDurability.durable &&
+      !ref.watch(storageWarningDismissedProvider),
+);
+
 /// Says so when the browser gave the database storage that can lose it.
 ///
 /// Non-blocking — the app is usable on IndexedDB, and plenty of people only
@@ -24,8 +34,7 @@ class StorageWarningBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final durability = ref.watch(storageDurabilityProvider);
-    final dismissed = ref.watch(storageWarningDismissedProvider);
-    if (durability == StorageDurability.durable || dismissed) {
+    if (!ref.watch(storageWarningShownProvider)) {
       return const SizedBox.shrink();
     }
 
