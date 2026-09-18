@@ -61,4 +61,44 @@ void main() {
     expect(steps, contains('analyze'));
     expect(steps, contains('flutter test'));
   });
+
+  // A `uses: owner/action@v4` resolves whatever the v4 tag points at on the
+  // day the workflow runs, and a tag is mutable: whoever controls the action
+  // repository — or anyone who takes that account over — can move it onto new
+  // code, which then runs here with the token that writes releases and pushes
+  // to GHCR. A commit SHA cannot be moved. The version stays in a trailing
+  // comment so the pin is still readable and Dependabot can still bump it.
+  test('every action is pinned to a commit SHA', () {
+    final dir = Directory('../../.github/workflows');
+    expect(dir.existsSync(), isTrue, reason: 'run from apps/client');
+
+    final files = dir.listSync().whereType<File>().where(
+      (f) => f.path.endsWith('.yml') || f.path.endsWith('.yaml'),
+    );
+    expect(files, isNotEmpty);
+
+    // `uses: owner/repo@ref` or `owner/repo/path@ref`. A `./local` action is
+    // this repository's own commit and `docker://` has no tag to move, so
+    // neither is a supply-chain hop; both are left alone.
+    final uses = RegExp(r'uses:\s*([^\s#]+)');
+    final pinned = RegExp(r'^[^./][^@]*@[0-9a-f]{40}$');
+    final unpinned = <String>[];
+
+    for (final file in files) {
+      for (final line in file.readAsLinesSync()) {
+        final ref = uses.firstMatch(line)?.group(1);
+        if (ref == null) continue;
+        if (ref.startsWith('./') || ref.startsWith('docker://')) continue;
+        if (!pinned.hasMatch(ref)) {
+          unpinned.add('${file.uri.pathSegments.last}: $ref');
+        }
+      }
+    }
+
+    expect(
+      unpinned,
+      isEmpty,
+      reason: 'pin these to a full commit SHA with a trailing # vX.Y.Z',
+    );
+  });
 }
