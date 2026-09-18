@@ -390,6 +390,20 @@ looks like.
       or an unreadable release tag is now written down through an injected
       reporter (`debugPrint` in debug, nothing in release); the user still
       sees nothing, because there is still nothing they could do.
+- [ ] **P1 — Load the Content-Security-Policy in a browser.**
+      `deploy/nginx.conf` now sends a CSP, `X-Frame-Options: DENY` and
+      `Referrer-Policy: no-referrer` on the two document-serving locations
+      (the entry points and the SPA fallback; a header on a `.js` or `.wasm`
+      response governs nothing). The policy was read off what the release web
+      build contains — one external script, WebAssembly, blob workers, no
+      third-party origin — and **never exercised in a real browser**: neither
+      nginx nor a Docker daemon is reachable on the machine that wrote it, so
+      the config has never been loaded and the app has never been served under
+      it. Serve the image, open the site, watch the console for
+      "Refused to ...", and check the database still comes up on OPFS instead
+      of falling back to IndexedDB. The directives most likely to bite are
+      `script-src blob:` (Flutter's renderer workers) and
+      `style-src 'unsafe-inline'` (the engine's injected stylesheet).
 
 ## 4. Conformance with the shared standard
 
