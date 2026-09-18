@@ -83,15 +83,29 @@ class AppShell extends ConsumerWidget {
     if (MediaQuery.sizeOf(context).width < 720) {
       return Scaffold(
         body: _WithNotices(child: child),
+        // Up to seven tabs share a phone's width, and a label broken
+        // mid-word ("Pomodo/ro") reads worse than a clipped one. Labels stay
+        // on one line, and past Material's five destinations only the open
+        // tab is named; the rest keep their icon and a tooltip.
         bottomNavigationBar: NavigationBar(
           selectedIndex: selected,
           onDestinationSelected: go,
+          labelBehavior: visible.length > 5
+              ? NavigationDestinationLabelBehavior.onlyShowSelected
+              : null,
           destinations: [
             for (final tab in visible)
-              NavigationDestination(
-                icon: Icon(tab.icon),
-                selectedIcon: Icon(tab.selectedIcon),
-                label: tab.label(l10n),
+              // Per destination: the bar's own Material resets any text
+              // style set around it.
+              DefaultTextStyle.merge(
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                child: NavigationDestination(
+                  icon: Icon(tab.icon),
+                  selectedIcon: Icon(tab.selectedIcon),
+                  label: tab.label(l10n),
+                ),
               ),
           ],
         ),
