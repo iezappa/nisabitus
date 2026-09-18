@@ -17,6 +17,8 @@ Nisabitus is a free app developed by Zeke Zappa Developments (iezappa). This pol
 
 The app uses your device's or browser's storage (a local database and, in the web version, `localStorage`, IndexedDB, OPFS and the service worker cache) **only to work**: to keep your data and settings and to run offline. It uses no tracking cookies.
 
+On Android the app switches off the system backup, so neither Google's automatic backup nor the transfer to a new phone copies the app's database anywhere. The only copy that leaves the device is one you export yourself.
+
 ## Internet connections
 
 - The app checks whether a new version exists (GitHub, or the server that delivers the web version). That check carries none of your data. It cannot be turned off: on Android and desktop, GitHub sees your IP address and the time of the check, as with any connection.

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- API 31+ (Android 12). android:allowBackup="false" stops cloud backup on
+     every API level but does NOT stop device-to-device transfer here, so both
+     channels are denied explicitly.
+
+     The app's storage holds the journal, sleep, food, medication and every
+     other record (the Drift database lives in the application documents
+     directory). PRIVACY.md
+     promises that data never leaves the device; nothing of it may be copied
+     to a Google account or handed to a new phone by the system.
+
+     <exclude domain="root" path="."/> covers the whole no-backup data area,
+     including the documents directory, shared preferences and databases. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+    </device-transfer>
+</data-extraction-rules>

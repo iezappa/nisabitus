@@ -1,8 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Everything the app stores stays on this device (PRIVACY.md): the Drift
+         database holds the journal, sleep, food, medication and every other
+         record. Android's default would let Auto Backup copy it to the user's
+         Google account. allowBackup="false" covers cloud backup on every API
+         level; the two rule files also deny device-to-device transfer (API
+         31+) and leave Auto Backup nothing to copy on older releases. -->
     <application
         android:label="Nisabitus"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/full_backup_content">
         <activity
             android:name=".MainActivity"
             android:exported="true"
