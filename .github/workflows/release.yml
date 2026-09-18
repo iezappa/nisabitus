@@ -40,6 +40,15 @@ permissions:
 
 env:
   APP_DIR: apps/client
+  # The tag and the repository name, reached through the environment instead
+  # of being interpolated into every `run:` script. `${{ github.ref_name }}`
+  # is pasted into the shell as text before it runs, so a ref whose name
+  # contained shell metacharacters would become code; as a variable it is
+  # only ever data. Tags here are pushed by the maintainer, so this is
+  # defence in depth rather than a live hole — but the archive names are
+  # built in four different shells, and only one of them has to be wrong.
+  TAG: ${{ github.ref_name }}
+  REPO_NAME: ${{ github.event.repository.name }}
   # Pinned like ci.yml and deploy-pages.yml.
   FLUTTER_VERSION: 3.47.1
 
@@ -54,9 +63,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      # TAG comes from the workflow env above, not from a step-level copy.
       - name: Check pubspec version matches tag
-        env:
-          TAG: ${{ github.ref_name }}
         run: |
           PUBSPEC_VERSION="$(sed -n 's/^version:[[:space:]]*\([0-9][0-9.]*\).*/\1/p' pubspec.yaml)"
           if [ "v${PUBSPEC_VERSION}" != "${TAG}" ]; then
@@ -133,7 +141,7 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build linux --release
-      - run: tar -czf "../../${{ github.event.repository.name }}-${{ github.ref_name }}-linux-x64.tar.gz" -C build/linux/x64/release/bundle .
+      - run: tar -czf "../../${REPO_NAME}-${TAG}-linux-x64.tar.gz" -C build/linux/x64/release/bundle .
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: linux
@@ -152,7 +160,7 @@ jobs:
       - run: flutter pub get
       - run: flutter build windows --release
       - shell: pwsh
-        run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath "../../${{ github.event.repository.name }}-${{ github.ref_name }}-windows-x64.zip"
+        run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath "../../${env:REPO_NAME}-${env:TAG}-windows-x64.zip"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: windows
@@ -172,7 +180,7 @@ jobs:
       - run: flutter build macos --release
       - run: |
           cd build/macos/Build/Products/Release
-          ditto -c -k --sequesterRsrc --keepParent *.app "$GITHUB_WORKSPACE/${{ github.event.repository.name }}-${{ github.ref_name }}-macos.zip"
+          ditto -c -k --sequesterRsrc --keepParent *.app "$GITHUB_WORKSPACE/${REPO_NAME}-${TAG}-macos.zip"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: macos
@@ -194,7 +202,7 @@ jobs:
       # Own service worker: inject version + precache manifest (last step
       # that touches build/web).
       - run: sh tool/generate_sw.sh build/web pubspec.yaml
-      - run: cd build/web && zip -qr "$GITHUB_WORKSPACE/${{ github.event.repository.name }}-${{ github.ref_name }}-web.zip" .
+      - run: cd build/web && zip -qr "$GITHUB_WORKSPACE/${REPO_NAME}-${TAG}-web.zip" .
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: web
@@ -258,6 +266,6 @@ jobs:
           files: dist/*
           generate_release_notes: true
           body: |
-            **Android:** the maintainer builds, signs and attaches the APK (`${{ github.event.repository.name }}-${{ github.ref_name }}-android.apk`) and its `.sha256` by hand with `apps/client/tool/release_apk.sh` shortly after this release is created. If they are not under Assets yet, check back later.
+            **Android:** the maintainer builds, signs and attaches the APK (`${{ env.REPO_NAME }}-${{ env.TAG }}-android.apk`) and its `.sha256` by hand with `apps/client/tool/release_apk.sh` shortly after this release is created. If they are not under Assets yet, check back later.
 
-            **Android:** el mantenedor adjunta a mano el APK firmado (`${{ github.event.repository.name }}-${{ github.ref_name }}-android.apk`) y su `.sha256` con `apps/client/tool/release_apk.sh` poco después de crear esta release. Si todavía no aparecen en Assets, vuelve a mirar más tarde.
+            **Android:** el mantenedor adjunta a mano el APK firmado (`${{ env.REPO_NAME }}-${{ env.TAG }}-android.apk`) y su `.sha256` con `apps/client/tool/release_apk.sh` poco después de crear esta release. Si todavía no aparecen en Assets, vuelve a mirar más tarde.
