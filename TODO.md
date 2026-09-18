@@ -404,6 +404,15 @@ looks like.
       of falling back to IndexedDB. The directives most likely to bite are
       `script-src blob:` (Flutter's renderer workers) and
       `style-src 'unsafe-inline'` (the engine's injected stylesheet).
+- [x] ~~Security review follow-ups (2026-09-18).~~ CSP, X-Frame-Options and
+      Referrer-Policy on the document locations (unverified in a browser, see
+      above); every workflow action pinned to a commit SHA and guarded by
+      `release_workflow_test.dart`; the tag and repo name reach release
+      scripts through `env:`; the docker job passes `FLUTTER_IMAGE` from
+      `FLUTTER_VERSION`; the CSV report also defuses a leading tab or CR.
+      The update check stays mandatory — like the sibling apps — and the
+      privacy policy now says so and what it reveals (IP and time to GitHub
+      on native builds). An opt-out toggle is possible later if asked for.
 
 ## 4. Conformance with the shared standard
 

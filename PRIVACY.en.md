@@ -1,6 +1,6 @@
 # Nisabitus privacy policy
 
-Last updated: 2026-09-17
+Last updated: 2026-09-18
 
 Nisabitus is a free app developed by Zeke Zappa Developments (iezappa). This policy explains what happens to your data, in plain language.
 
@@ -17,7 +17,7 @@ The app uses your device's or browser's storage (a local database and, in the we
 
 ## Internet connections
 
-- The app checks whether a new version exists (GitHub, or the server that delivers the web version). That check carries none of your data.
+- The app checks whether a new version exists (GitHub, or the server that delivers the web version). That check carries none of your data. It cannot be turned off: on Android and desktop, GitHub sees your IP address and the time of the check, as with any connection.
 - Links you open yourself (donations, contact, exercise videos) open in your browser and are subject to that site's policy.
 
 ## Sensitive data
