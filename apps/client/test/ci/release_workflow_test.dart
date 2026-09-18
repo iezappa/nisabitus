@@ -101,4 +101,22 @@ void main() {
       reason: 'pin these to a full commit SHA with a trailing # vX.Y.Z',
     );
   });
+
+  // The compliance gate refuses a release whose published legal text is
+  // missing in either language or still carries template placeholders.
+  test('the compliance gate checks both languages of the legal docs', () {
+    final steps = (workflow['jobs']['version-check']['steps'] as YamlList)
+        .map((step) => '${(step as YamlMap)['run'] ?? ''}')
+        .join('\n');
+
+    for (final doc in [
+      'PRIVACY.md',
+      'PRIVACY.es.md',
+      'TERMS.md',
+      'TERMS.es.md',
+    ]) {
+      expect(steps, contains('../../$doc'), reason: doc);
+    }
+    expect(steps, contains("grep -q '{{'"));
+  });
 }

@@ -1,80 +1,82 @@
-# Publicar Nisabitus en ZimaOS
+# Publishing Nisabitus on ZimaOS
 
-> Guía para servir la versión web/PWA de Nisabitus desde un servidor ZimaOS doméstico, para uso familiar.
+**English** · [Español](ZIMAOS.es.md)
 
-**Antes de empezar, lo más importante:** el servidor **solo sirve la app**. Los datos de cada persona se guardan en **su propio navegador o dispositivo**, no en ZimaOS. Dos familiares no comparten datos, y si alguien borra la app o los datos del sitio, pierde lo que no haya exportado. El backup es el **export JSON** desde Ajustes → Tus datos.
+> A guide to serving the web/PWA version of Nisabitus from a home ZimaOS server, for family use.
 
-## Requisitos
+**Before you start, the most important thing:** the server **only serves the app**. Each person's data is stored in **their own browser or device**, not on ZimaOS. Two family members do not share data, and if someone deletes the app or the site's data, they lose whatever they have not exported. The backup is the **JSON export** from Settings → Your data.
 
-- Una release publicada (tag `v*`): el workflow `release` sube la imagen `ghcr.io/iezappa/nisabitus`.
-- ZimaOS con acceso a la interfaz web y a internet.
+## Requirements
 
-## 1. Publicar la imagen
+- A published release (tag `v*`): the `release` workflow pushes the image `ghcr.io/iezappa/nisabitus`.
+- ZimaOS with access to its web interface and to the internet.
+
+## 1. Publish the image
 
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-El workflow `release` construye y sube `ghcr.io/iezappa/nisabitus:1.0.0` y `:latest` para `amd64` y `arm64`.
+The `release` workflow builds and pushes `ghcr.io/iezappa/nisabitus:1.0.0` and `:latest` for `amd64` and `arm64`.
 
-La primera vez, haz **público** el paquete: GitHub → tu perfil u organización → *Packages* → el paquete → *Package settings* → *Change visibility* → *Public*. Si queda privado, ZimaOS no podrá descargarlo sin credenciales.
+The first time, make the package **public**: GitHub → your profile or organization → *Packages* → the package → *Package settings* → *Change visibility* → *Public*. If it stays private, ZimaOS cannot download it without credentials.
 
-## 2. Instalar en ZimaOS
+## 2. Install on ZimaOS
 
-1. Descarga `deploy/docker-compose.yml`. Ya viene completo; solo cambia el puerto `8081` (dos lugares) si está ocupado en tu servidor.
-2. En ZimaOS abre **App Store** → botón **"+"** (esquina superior) → **Install a customized app**.
-3. Usa **Import** y pega o sube el `docker-compose.yml`. Revisa que la imagen y el puerto sean los esperados.
-4. **Install**. Al terminar aparece el ícono en el escritorio de ZimaOS.
-5. Comprueba que carga en `http://<ip-de-zimaos>:8081`. **Esta URL es solo para verificar**, no para que la familia la use (ver paso 3).
+1. Download `deploy/docker-compose.yml`. It comes complete; only change the port `8081` (two places) if it is already in use on your server.
+2. On ZimaOS open **App Store** → **"+"** button (top corner) → **Install a customized app**.
+3. Use **Import** and paste or upload the `docker-compose.yml`. Check that the image and the port are the expected ones.
+4. **Install**. When it finishes, the icon appears on the ZimaOS desktop.
+5. Check that it loads at `http://<zimaos-ip>:8081`. **This URL is only for checking**, not for the family to use (see step 3).
 
-> Los nombres de menú pueden variar entre versiones de ZimaOS. Si no encuentras "Install a customized app", busca la opción de instalación personalizada o de importar docker-compose en la App Store.
+> Menu names may vary between ZimaOS versions. If you cannot find "Install a customized app", look for the custom install or docker-compose import option in the App Store.
 
-## 3. HTTPS para la familia con Tailscale
+## 3. HTTPS for the family with Tailscale
 
-Instalar la PWA, el service worker y el almacenamiento OPFS exigen HTTPS. `http://IP:puerto` carga, pero no es instalable y puede perder funciones.
+Installing the PWA, the service worker and OPFS storage all require HTTPS. `http://IP:port` loads, but it is not installable and may lose features.
 
-1. Instala **Tailscale** desde la App Store de ZimaOS e inicia sesión con tu cuenta de Tailscale.
-2. En la consola de administración de Tailscale habilita **MagicDNS** y **HTTPS Certificates**.
-3. En una terminal de ZimaOS (SSH), expón la app:
+1. Install **Tailscale** from the ZimaOS App Store and sign in with your Tailscale account.
+2. In the Tailscale admin console enable **MagicDNS** and **HTTPS Certificates**.
+3. In a ZimaOS terminal (SSH), expose the app:
 
    ```bash
    tailscale serve --bg http://127.0.0.1:8081
    tailscale serve status
    ```
 
-   Si Tailscale corre como contenedor, ejecuta el comando dentro de él (`docker exec -it <contenedor-tailscale> tailscale serve --bg http://<ip-de-zimaos>:8081`), porque `127.0.0.1` dentro del contenedor no es el host.
-4. La app queda en `https://<nombre-del-servidor>.<tu-tailnet>.ts.net/`.
-5. Cada familiar instala Tailscale en su dispositivo y se une a tu tailnet (invitación o compartir el nodo).
+   If Tailscale runs as a container, run the command inside it (`docker exec -it <tailscale-container> tailscale serve --bg http://<zimaos-ip>:8081`), because `127.0.0.1` inside the container is not the host.
+4. The app is then at `https://<server-name>.<your-tailnet>.ts.net/`.
+5. Each family member installs Tailscale on their device and joins your tailnet (by invitation or by sharing the node).
 
-**Usa siempre la URL `ts.net`, también dentro de casa.** El almacenamiento del navegador es por origen: los datos guardados entrando por la IP local no aparecen al entrar por `ts.net`, y viceversa. Una sola URL para todo.
+**Always use the `ts.net` URL, at home too.** Browser storage is per origin: data saved when going in through the local IP does not appear when going in through `ts.net`, and vice versa. One URL for everything.
 
-## 4. Instalar la app en cada dispositivo
+## 4. Install the app on each device
 
-| Dispositivo | Cómo |
+| Device | How |
 |---|---|
-| **iPhone / iPad** | Abrir la URL `ts.net` en **Safari** → Compartir → **Agregar a inicio**. Usar siempre el ícono de inicio, no la pestaña de Safari: así el almacenamiento no se borra por inactividad de Safari. |
-| **Android** | Chrome → menú → **Instalar app**. Alternativa: descargar el APK de GitHub Releases (funciona sin servidor ni Tailscale). |
-| **Windows / macOS / Linux** | Chrome o Edge → ícono de instalar en la barra de direcciones. Alternativa: binario de GitHub Releases. |
+| **iPhone / iPad** | Open the `ts.net` URL in **Safari** → Share → **Add to Home Screen**. Always use the Home Screen icon, not the Safari tab: that way storage is not cleared because of Safari inactivity. |
+| **Android** | Chrome → menu → **Install app**. Alternative: download the APK from GitHub Releases (works without a server or Tailscale). |
+| **Windows / macOS / Linux** | Chrome or Edge → install icon in the address bar. Alternative: binary from GitHub Releases. |
 
-Tras instalar, abrir la app una vez con conexión y comprobar en Ajustes que el export JSON funciona.
+After installing, open the app once online and check in Settings that the JSON export works.
 
-## 5. Datos y backups
+## 5. Data and backups
 
-- Cada persona exporta su JSON periódicamente (la app lo recuerda) y lo guarda fuera del navegador: Archivos de iCloud/Drive, o una carpeta compartida de ZimaOS.
-- Para pasar a otro dispositivo: exportar en el viejo, importar en el nuevo.
-- Reinstalar o actualizar el contenedor **no** afecta los datos: no están en el servidor.
+- Each person exports their JSON periodically (the app reminds them) and keeps it outside the browser: iCloud/Drive Files, or a ZimaOS shared folder.
+- To move to another device: export on the old one, import on the new one.
+- Reinstalling or updating the container does **not** affect the data: it is not on the server.
 
-## 6. Actualizar
+## 6. Update
 
-1. Publica un tag nuevo (`v1.1.0`). El workflow actualiza `:latest`.
-2. En ZimaOS, abre los ajustes de la app y usa la opción de actualizar/volver a descargar la imagen, o por SSH:
+1. Publish a new tag (`v1.1.0`). The workflow updates `:latest`.
+2. On ZimaOS, open the app's settings and use the option to update/pull the image again, or over SSH:
 
    ```bash
    docker pull ghcr.io/iezappa/nisabitus:latest
    ```
 
-   y reinicia la app desde la interfaz de ZimaOS para que el contenedor se recree con la imagen nueva.
-3. Al abrir la app con conexión, el service worker propio (`sw.js`) descarga la versión nueva en segundo plano y la app muestra **"Hay una versión nueva"**. Al tocar **Actualizar**, la app se recarga con la versión nueva y borra la caché anterior.
+   and restart the app from the ZimaOS interface so the container is recreated with the new image.
+3. When the app is opened online, its own service worker (`sw.js`) downloads the new version in the background and the app shows **"A new version is available"**. Tapping **Update** reloads the app with the new version and deletes the previous cache.
 
-Si la versión nueva cambia el esquema de Drift, la migración corre en cada dispositivo al abrir la app. Pide a la familia un export JSON **antes** de publicar releases con cambios de esquema.
+If the new version changes the Drift schema, the migration runs on each device when the app is opened. Ask the family for a JSON export **before** publishing releases with schema changes.

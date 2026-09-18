@@ -18,7 +18,7 @@
 #   - Commit apps/client/web/update.json ({"version","schemaChange","minSupportedVersion"});
 #     it is also attached to the GitHub Release (STACK-APPS-DINAMICAS.md 8.2)
 #   - pubspec.yaml version x.y.z+build must match the tag vx.y.z
-#   - Commit PRIVACY.md and TERMS.md at the repo root (templates/legal, CUMPLIMIENTO.md)
+#   - Commit PRIVACY.md, TERMS.md and their .es.md translations at the repo root (templates/legal, CUMPLIMIENTO.md)
 #
 # Caveats:
 #   - The Android APK is NOT built here. The maintainer builds and signs it
@@ -83,7 +83,7 @@ jobs:
           TRACKING_ALLOWLIST: ""
         run: |
           fail=0
-          for doc in ../../PRIVACY.md ../../TERMS.md; do
+          for doc in ../../PRIVACY.md ../../PRIVACY.es.md ../../TERMS.md ../../TERMS.es.md; do
             if [ ! -f "$doc" ]; then
               echo "::error::Missing ${doc#../../} (templates/legal, CUMPLIMIENTO.md)"; fail=1
             elif grep -q '{{' "$doc"; then

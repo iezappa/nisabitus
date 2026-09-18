@@ -34,6 +34,28 @@ Last updated: today
       ]);
     });
 
+    test('skips the language switcher line, in either language', () {
+      for (final switcher in [
+        '**English** · [Español](PRIVACY.es.md)',
+        '[English](PRIVACY.md) · **Español**',
+      ]) {
+        final document = LegalDocument.parse('# Title\n\n$switcher\n\nBody');
+
+        expect(document.blocks, const [
+          LegalBlock.heading('Title', level: 1),
+          LegalBlock.paragraph('Body'),
+        ], reason: switcher);
+      }
+    });
+
+    test('keeps an ordinary paragraph that merely contains a link', () {
+      final document = LegalDocument.parse('See [the terms](TERMS.md) too.');
+
+      expect(document.blocks, const [
+        LegalBlock.paragraph('See [the terms](TERMS.md) too.'),
+      ]);
+    });
+
     test('skips HTML comments, even across lines', () {
       final document = LegalDocument.parse('''
 <!--

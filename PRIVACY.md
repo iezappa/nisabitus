@@ -1,44 +1,46 @@
-# Política de privacidad de Nisabitus
+# Nisabitus privacy policy
 
-Última actualización: 2026-09-18
+**English** · [Español](PRIVACY.es.md)
 
-Nisabitus es una app gratuita desarrollada por Zeke Zappa Developments (iezappa). Esta política explica qué pasa con tus datos, en lenguaje simple.
+Last updated: 2026-09-18
 
-## Qué datos guarda la app
+Nisabitus is a free app developed by Zeke Zappa Developments (iezappa). This policy explains what happens to your data, in plain language.
 
-- Todo lo que escribes o registras en la app (hábitos, rachas, sueño, diario, tareas, alimentación, hidratación, entrenamiento, meditación y medicación) se guarda **solo en tu dispositivo**.
-- **No sale de tu dispositivo** y **no se guarda en ningún servidor**: ni en los del desarrollador ni en el servidor que entrega la versión web.
-- El desarrollador **no puede ver, recuperar ni borrar** tus datos.
-- No hay cuentas, ni analítica, ni publicidad.
+## What data the app keeps
 
-## Almacenamiento en tu dispositivo
+- Everything you write or record in the app (habits, streaks, sleep, journal, tasks, food, water, training, meditation and medication) is stored **only on your device**.
+- It **never leaves your device** and **is not stored on any server**: not the developer's, and not the server that delivers the web version.
+- The developer **cannot see, recover or delete** your data.
+- There are no accounts, no analytics and no ads.
 
-La app usa el almacenamiento de tu dispositivo o navegador (base de datos local y, en la versión web, `localStorage`, IndexedDB, OPFS y la caché del service worker) **solo para funcionar**: guardar tus datos, tus ajustes y permitir el uso sin conexión. No usa cookies de seguimiento.
+## Storage on your device
 
-## Conexiones a internet
+The app uses your device's or browser's storage (a local database and, in the web version, `localStorage`, IndexedDB, OPFS and the service worker cache) **only to work**: to keep your data and settings and to run offline. It uses no tracking cookies.
 
-- La app consulta si hay una versión nueva (GitHub o el servidor que entrega la versión web). Esa consulta no incluye tus datos. No se puede desactivar: en Android y escritorio, GitHub ve tu dirección IP y la hora de la consulta, como con cualquier conexión.
-- Los enlaces que abres a mano (donaciones, contacto, videos de ejercicios) se abren en tu navegador y quedan sujetos a la política de ese sitio.
+## Internet connections
 
-## Datos sensibles
+- The app checks whether a new version exists (GitHub, or the server that delivers the web version). That check carries none of your data. It cannot be turned off: on Android and desktop, GitHub sees your IP address and the time of the check, as with any connection.
+- Links you open yourself (donations, contact, exercise videos) open in your browser and are subject to that site's policy.
 
-Si registras información sobre tu salud (medicación, alimentación, sueño, entrenamiento o tu estado de ánimo), es un dato sensible.
-Como nunca sale de tu dispositivo, el desarrollador no lo recibe ni lo trata.
+## Sensitive data
 
-## Tus derechos y cómo borrar tus datos
+Information about your health (medication, food, sleep, training or your mood) is sensitive data.
+Because it never leaves your device, the developer neither receives nor processes it.
 
-- **Borrar todo:** Ajustes → Tus datos → **Borrar todos mis datos**. También se borran al desinstalar la app o borrar los datos del sitio en el navegador.
-- **Copia de tus datos:** Ajustes → Tus datos → **Exportar**.
-- Como el desarrollador no tiene tus datos, no puede entregarlos ni borrarlos por ti.
+## Your rights and how to delete your data
 
-## Menores
+- **Delete everything:** Settings → Your data → **Delete all my data**. Your data is also deleted when you uninstall the app or clear the site's data in your browser.
+- **A copy of your data:** Settings → Your data → **Export**.
+- Since the developer does not hold your data, they cannot hand it over or delete it for you.
 
-Nisabitus no está dirigida a menores de 13 años.
+## Children
 
-## Cambios
+Nisabitus is not directed at children under 13.
 
-Si esta política cambia, se actualiza la fecha de arriba y se menciona en las novedades de la app.
+## Changes
 
-## Contacto
+If this policy changes, the date above is updated and the change is mentioned in the app's release notes.
+
+## Contact
 
 Zeke Zappa Developments (iezappa) — https://github.com/iezappa/nisabitus/issues

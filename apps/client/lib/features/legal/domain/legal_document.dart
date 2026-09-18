@@ -59,6 +59,10 @@ class LegalDocument {
       final heading = _heading.firstMatch(line);
       if (line.isEmpty) {
         flush();
+      } else if (_languageSwitcher.hasMatch(line)) {
+        // The `**English** · [Español](X.es.md)` line links the published
+        // translations on GitHub; inside the app the locale already chose.
+        flush();
       } else if (heading != null) {
         flush();
         blocks.add(
@@ -80,6 +84,10 @@ class LegalDocument {
   }
 
   static final _comment = RegExp(r'<!--.*?-->', dotAll: true);
+  static final _languageSwitcher = RegExp(
+    r'^(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\.md\))'
+    r'( · (\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\.md\)))+$',
+  );
   static final _heading = RegExp(r'^(#{1,6})\s+(.*)$');
 
   static String _inline(String text) =>

@@ -1,41 +1,43 @@
-# Términos de uso de Nisabitus
+# Nisabitus terms of use
 
-Última actualización: 2026-09-17
+**English** · [Español](TERMS.es.md)
 
-Al usar Nisabitus aceptas estos términos. Si no estás de acuerdo, no uses la app.
+Last updated: 2026-09-17
 
-## La app
+By using Nisabitus you accept these terms. If you do not agree, do not use the app.
 
-- Nisabitus es **gratuita**, desarrollada por Zeke Zappa Developments (iezappa). No tiene compras, suscripciones ni cargos ocultos.
-- Se entrega **"tal como está"**, sin garantías de ningún tipo. Puede tener errores o dejar de actualizarse.
-- No está dirigida a menores de 13 años.
+## The app
 
-## Tus datos
+- Nisabitus is **free**, developed by Zeke Zappa Developments (iezappa). It has no purchases, subscriptions or hidden charges.
+- It is provided **"as is"**, without warranties of any kind. It may contain errors or stop being updated.
+- It is not directed at children under 13.
 
-- Tus datos viven **solo en tu dispositivo**. **Tú eres responsable de hacer respaldos** (Ajustes → Tus datos → Exportar).
-- El desarrollador no puede recuperar datos perdidos por desinstalar la app, resetear el dispositivo o borrar los datos del navegador.
+## Your data
 
-## Salud
+- Your data lives **only on your device**. **You are responsible for making backups** (Settings → Your data → Export).
+- The developer cannot recover data lost by uninstalling the app, resetting the device or clearing the browser's data.
 
-- Nisabitus **no es un dispositivo médico** ni una aplicación médica o nutricional: es un registro. No diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas, y **no reemplaza la atención de un profesional de la salud**.
-- Antes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, consulta a un profesional de la salud. Ante una emergencia, llama al **911**.
+## Health
 
-## Donaciones
+- Nisabitus **is not a medical device** nor a medical or nutritional application: it is a log. It does not diagnose, interpret symptoms, calculate doses, or recommend treatments, diets or routines, and it **does not replace care from a health professional**.
+- Before starting, changing or stopping a medication, a supplement, a diet or a training plan, talk to a health professional. In an emergency, call your local emergency number (**911** in Argentina).
 
-Las donaciones son **voluntarias**, no dan acceso a funciones adicionales y se hacen en plataformas externas. Los reembolsos, si existen, dependen de la política de esa plataforma.
+## Donations
 
-## Licencia
+Donations are **voluntary**, unlock no additional features and are made on external platforms. Refunds, if any, depend on that platform's policy.
 
-El código se distribuye bajo la licencia indicada en el archivo `LICENSE` del repositorio. Las licencias de bibliotecas, fuentes e íconos se ven en Ajustes → Acerca de → Licencias.
+## License
 
-## Responsabilidad
+The code is distributed under the license in the repository's `LICENSE` file. The licenses of libraries, fonts and icons are listed in Settings → About → Licenses.
 
-En la medida que la ley lo permita, Zeke Zappa Developments (iezappa) no es responsable por daños derivados del uso de la app o de la pérdida de datos.
+## Liability
 
-## Cambios
+To the extent permitted by law, Zeke Zappa Developments (iezappa) is not liable for damages arising from the use of the app or from data loss.
 
-Estos términos pueden cambiar. La fecha de arriba indica la última versión.
+## Changes
 
-## Contacto
+These terms may change. The date above shows the latest version.
+
+## Contact
 
 Zeke Zappa Developments (iezappa) — https://github.com/iezappa/nisabitus/issues

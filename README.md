@@ -1,291 +1,293 @@
 # Nisabitus
 
-Hábitos, rachas, sueño, diario, tareas, alimentación, hidratación, entrenamiento, meditación y medicación en una sola app. Privada y sin conexión: sin cuentas, sin servidor, sin analítica.
+**English** · [Español](README.es.md)
 
-- **Descargas:** https://github.com/iezappa/nisabitus/releases/latest
-- **Versión web (iPhone, iPad y cualquier navegador):** https://iezappa.github.io/nisabitus/ (o la URL `ts.net` de tu servidor ZimaOS, si la familia usa uno: elige una y no la cambies)
+Habits, streaks, sleep, journal, tasks, nutrition, hydration, training, meditation and medication in a single app. Private and offline: no accounts, no server, no analytics.
+
+- **Downloads:** https://github.com/iezappa/nisabitus/releases/latest
+- **Web version (iPhone, iPad and any browser):** https://iezappa.github.io/nisabitus/ (or the `ts.net` URL of your ZimaOS server, if the family uses one: pick one and do not change it)
 
 > [!WARNING]
-> **Tus datos viven SOLO en tu dispositivo.**
+> **Your data lives ONLY on your device.**
 >
-> *Your data lives ONLY on your device. Export a backup regularly: Settings → Your data → Export.*
+> *Tus datos viven SOLO en tu dispositivo. Exporta un respaldo con frecuencia: Ajustes → Tus datos → Exportar.*
 >
-> - No se guardan en los servidores del desarrollador. Tampoco en el servidor ZimaOS: ese servidor solo entrega la app, no guarda nada tuyo.
-> - Si desinstalas la app, pierdes o reseteas el dispositivo, o borras los datos del navegador o de Safari, **tus datos se pierden para siempre**.
-> - La única copia de seguridad es la que hagas tú.
+> - It is not stored on the developer's servers. Nor on the ZimaOS server: that server only delivers the app, it stores nothing of yours.
+> - If you uninstall the app, lose or reset the device, or clear the browser's or Safari's data, **your data is lost forever**.
+> - The only backup is the one you make yourself.
 >
-> **Haz un respaldo con frecuencia (recomendado: una vez por semana):**
+> **Back up often (recommended: once a week):**
 >
-> 1. Abre la app → **Ajustes** → **Tus datos** → **Exportar**.
-> 2. Guarda el archivo `.json` en un lugar seguro **fuera de este dispositivo**: iCloud Drive, Google Drive, OneDrive, un correo a ti mismo u otro dispositivo.
+> 1. Open the app → **Settings** → **Your data** → **Export**.
+> 2. Save the `.json` file somewhere safe **off this device**: iCloud Drive, Google Drive, OneDrive, an email to yourself or another device.
 >
-> **Para recuperar tus datos** (dispositivo nuevo, reinstalación):
+> **To recover your data** (new device, reinstall):
 >
-> 1. Instala la app y ábrela.
-> 2. **Ajustes** → **Tus datos** → **Importar** → elige tu último archivo `.json`.
-> 3. Confirma. Los datos del archivo reemplazan a los que haya en la app.
+> 1. Install the app and open it.
+> 2. **Settings** → **Your data** → **Import** → choose your latest `.json` file.
+> 3. Confirm. The data in the file replaces whatever is in the app.
 
-## Índice
+## Contents
 
-- [Servidor propio (ZimaOS)](#servidor-propio-zimaos)
+- [Self-hosted server (ZimaOS)](#self-hosted-server-zimaos)
 - [Windows](#windows)
 - [Ubuntu (Linux)](#ubuntu-linux)
 - [macOS](#macos)
-- [iPhone y iPad](#iphone-y-ipad)
+- [iPhone and iPad](#iphone-and-ipad)
 - [Android](#android)
-- [Actualizaciones](#actualizaciones)
-- [Privacidad](#privacidad)
-- [Para desarrolladores](#para-desarrolladores)
+- [Updates](#updates)
+- [Privacy](#privacy)
+- [For developers](#for-developers)
 
 ---
 
-## Servidor propio (ZimaOS)
+## Self-hosted server (ZimaOS)
 
-Solo lo necesita **quien administra el servidor**. El resto de la familia salta a su dispositivo.
+Only **whoever runs the server** needs this. The rest of the family can skip to their device.
 
-El servidor publica la versión web de la app para que la familia la use desde el navegador o la instale como app (PWA). Resumen:
+The server publishes the web version of the app so the family can use it from the browser or install it as an app (PWA). Summary:
 
-1. Publicar una versión con un tag (`vX.Y.Z`): GitHub construye la imagen `ghcr.io/iezappa/nisabitus`. La primera vez, hacer público el paquete en GitHub.
-2. Importar `deploy/docker-compose.yml` (ya completo; puerto 8081) en ZimaOS: **App Store** → **+** → **Install a customized app** → **Import**.
-3. Instalar **Tailscale** en ZimaOS, habilitar HTTPS y exponer la app con `tailscale serve`. La app queda en `https://<tu-servidor>.<tu-tailnet>.ts.net/`.
-4. Cada familiar instala Tailscale en su dispositivo y se une a la tailnet.
+1. Publish a version with a tag (`vX.Y.Z`): GitHub builds the image `ghcr.io/iezappa/nisabitus`. The first time, make the package public on GitHub.
+2. Import `deploy/docker-compose.yml` (already complete; port 8081) into ZimaOS: **App Store** → **+** → **Install a customized app** → **Import**.
+3. Install **Tailscale** on ZimaOS, enable HTTPS and expose the app with `tailscale serve`. The app is then at `https://<your-server>.<your-tailnet>.ts.net/`.
+4. Each family member installs Tailscale on their device and joins the tailnet.
 
-**Guía completa:** [`deploy/ZIMAOS.md`](deploy/ZIMAOS.md).
+**Full guide:** [`deploy/ZIMAOS.md`](deploy/ZIMAOS.md).
 
-**Requisitos:** ZimaOS con acceso a internet y una cuenta de Tailscale.
+**Requirements:** ZimaOS with internet access and a Tailscale account.
 
-**Actualizar:** publicar un tag nuevo y volver a descargar la imagen `:latest` en ZimaOS (detalle en la guía). Al abrir la app con conexión, los usuarios ven **"Hay una versión nueva"** y tocan **Actualizar**.
+**Updating:** publish a new tag and pull the `:latest` image again on ZimaOS (details in the guide). When they open the app online, users see **"A new version is available"** and tap **Update**.
 
-**Tus datos:** actualizar, reinstalar o borrar el contenedor **no** afecta los datos de nadie, porque no están en el servidor. Usa **siempre la misma URL** (`https://<tu-servidor>.<tu-tailnet>.ts.net/`), también dentro de casa: si entras por la IP local, el navegador lo trata como otro sitio y la app aparecerá vacía.
+**Your data:** updating, reinstalling or deleting the container does **not** affect anyone's data, because it is not on the server. **Always use the same URL** (`https://<your-server>.<your-tailnet>.ts.net/`), at home too: if you go in through the local IP, the browser treats it as a different site and the app will appear empty.
 
 ---
 
 ## Windows
 
-**Requisitos:** Windows 10 u 11 de 64 bits.
+**Requirements:** 64-bit Windows 10 or 11.
 
-**Instalar:**
+**Install:**
 
-1. Entra a https://github.com/iezappa/nisabitus/releases/latest.
-2. En **Assets**, descarga `nisabitus-vX.Y.Z-windows-x64.zip`.
-3. Clic derecho sobre el `.zip` → **Extraer todo** → elige una carpeta fija, por ejemplo `Documentos\Nisabitus`. No lo ejecutes desde dentro del `.zip`.
-4. Abre la carpeta y haz doble clic en el archivo `.exe`.
-5. Windows mostrará **"Windows protegió su PC"** porque la app no está firmada. Haz clic en **Más información** → **Ejecutar de todas formas**. Solo pasa la primera vez.
-6. Opcional: clic derecho sobre el `.exe` → **Mostrar más opciones** → **Enviar a** → **Escritorio (crear acceso directo)**.
+1. Go to https://github.com/iezappa/nisabitus/releases/latest.
+2. Under **Assets**, download `nisabitus-vX.Y.Z-windows-x64.zip`.
+3. Right-click the `.zip` → **Extract All** → choose a permanent folder, for example `Documents\Nisabitus`. Do not run it from inside the `.zip`.
+4. Open the folder and double-click the `.exe` file.
+5. Windows will show **"Windows protected your PC"** because the app is not signed. Click **More info** → **Run anyway**. This only happens the first time.
+6. Optional: right-click the `.exe` → **Show more options** → **Send to** → **Desktop (create shortcut)**.
 
-> No muevas ni borres los demás archivos de la carpeta (`.dll`, carpeta `data`): el `.exe` los necesita.
+> Do not move or delete the other files in the folder (`.dll` files, the `data` folder): the `.exe` needs them.
 
-**Actualizar:**
+**Update:**
 
-1. Haz un respaldo (**Ajustes → Tus datos → Exportar**).
-2. Cierra la app.
-3. Descarga el `.zip` nuevo y extráelo **en la misma carpeta**, reemplazando los archivos.
+1. Make a backup (**Settings → Your data → Export**).
+2. Close the app.
+3. Download the new `.zip` and extract it **into the same folder**, replacing the files.
 
-**Tus datos:** se guardan en tu usuario de Windows, fuera de la carpeta de la app, así que reemplazar la carpeta no los borra. Sí se pierden si formateas el equipo o cambias de usuario de Windows: guarda el respaldo en OneDrive, Google Drive u otro dispositivo.
+**Your data:** it is stored in your Windows user profile, outside the app folder, so replacing the folder does not delete it. It is lost if you format the computer or switch Windows users: keep the backup in OneDrive, Google Drive or on another device.
 
 ---
 
 ## Ubuntu (Linux)
 
-**Requisitos:** Ubuntu 22.04 o posterior, de 64 bits (x86_64). No hay versión para ARM.
+**Requirements:** 64-bit (x86_64) Ubuntu 22.04 or later. There is no ARM version.
 
-**Instalar:**
+**Install:**
 
-1. Instala las bibliotecas del sistema (una sola vez):
+1. Install the system libraries (once):
 
    ```bash
    sudo apt update
    sudo apt install libgtk-3-0
    ```
 
-2. Descarga `nisabitus-vX.Y.Z-linux-x64.tar.gz` desde https://github.com/iezappa/nisabitus/releases/latest.
-3. Extrae en una carpeta fija y ejecuta:
+2. Download `nisabitus-vX.Y.Z-linux-x64.tar.gz` from https://github.com/iezappa/nisabitus/releases/latest.
+3. Extract it into a permanent folder and run it:
 
    ```bash
    mkdir -p ~/Apps/nisabitus
-   tar -xzf ~/Descargas/nisabitus-vX.Y.Z-linux-x64.tar.gz -C ~/Apps/nisabitus
-   ls ~/Apps/nisabitus        # el ejecutable es el archivo sin extensión junto a las carpetas data y lib
-   ~/Apps/nisabitus/<ejecutable>
+   tar -xzf ~/Downloads/nisabitus-vX.Y.Z-linux-x64.tar.gz -C ~/Apps/nisabitus
+   ls ~/Apps/nisabitus        # the executable is the file without an extension next to the data and lib folders
+   ~/Apps/nisabitus/<executable>
    ```
 
-   Si tu carpeta de descargas se llama `Downloads`, cambia la ruta.
+   If your downloads folder has another name (for example `Descargas`), change the path.
 
-4. Opcional, para verla en el menú de aplicaciones, crea `~/.local/share/applications/nisabitus.desktop`:
+4. Optional, to see it in the applications menu, create `~/.local/share/applications/nisabitus.desktop`:
 
    ```ini
    [Desktop Entry]
    Type=Application
    Name=Nisabitus
-   Exec=/home/<tu-usuario>/Apps/nisabitus/<ejecutable>
-   Icon=/home/<tu-usuario>/Apps/nisabitus/data/flutter_assets/<ruta-del-icono>.png
+   Exec=/home/<your-user>/Apps/nisabitus/<executable>
+   Icon=/home/<your-user>/Apps/nisabitus/data/flutter_assets/<icon-path>.png
    Terminal=false
    Categories=Utility;
    ```
 
-   Usa rutas completas (sin `~`). Si no tienes ícono, borra la línea `Icon=`.
+   Use full paths (no `~`). If you have no icon, delete the `Icon=` line.
 
-**Actualizar:**
+**Update:**
 
-1. Haz un respaldo (**Ajustes → Tus datos → Exportar**) y cierra la app.
-2. Borra el contenido de `~/Apps/nisabitus` y extrae ahí el `.tar.gz` nuevo (paso 3).
+1. Make a backup (**Settings → Your data → Export**) and close the app.
+2. Delete the contents of `~/Apps/nisabitus` and extract the new `.tar.gz` there (step 3).
 
-**Tus datos:** se guardan en tu carpeta personal (normalmente bajo `~/.local/share/`), no en `~/Apps/nisabitus`, así que reemplazar la app no los borra. Se pierden si reinstalas Ubuntu o borras tu carpeta personal: guarda el respaldo fuera del equipo.
+**Your data:** it is stored in your home folder (usually under `~/.local/share/`), not in `~/Apps/nisabitus`, so replacing the app does not delete it. It is lost if you reinstall Ubuntu or delete your home folder: keep the backup off the computer.
 
 ---
 
 ## macOS
 
-**Requisitos:** un Mac con macOS reciente (Intel o Apple Silicon).
+**Requirements:** a Mac with a recent macOS (Intel or Apple Silicon).
 
-**Instalar:**
+**Install:**
 
-1. Descarga `nisabitus-vX.Y.Z-macos.zip` desde https://github.com/iezappa/nisabitus/releases/latest.
-2. Haz doble clic en el `.zip`: aparece la app (`.app`).
-3. Arrastra la app a la carpeta **Aplicaciones**.
-4. La app no está firmada, así que macOS la bloquea la primera vez. Ábrela así:
-   - **Clic derecho** (o Control + clic) sobre la app → **Abrir** → **Abrir**.
-   - Si no aparece la opción, intenta abrirla normalmente, ve a **Ajustes del Sistema** → **Privacidad y seguridad**, baja hasta el aviso sobre la app y pulsa **Abrir igualmente**. Confirma con tu contraseña.
-5. Si macOS dice que la app **"está dañada"**, abre **Terminal** y ejecuta (ajusta el nombre de la app):
+1. Download `nisabitus-vX.Y.Z-macos.zip` from https://github.com/iezappa/nisabitus/releases/latest.
+2. Double-click the `.zip`: the app (`.app`) appears.
+3. Drag the app into the **Applications** folder.
+4. The app is not signed, so macOS blocks it the first time. Open it like this:
+   - **Right-click** (or Control-click) the app → **Open** → **Open**.
+   - If the option does not appear, try opening it normally, go to **System Settings** → **Privacy & Security**, scroll down to the notice about the app and click **Open Anyway**. Confirm with your password.
+5. If macOS says the app **"is damaged"**, open **Terminal** and run (adjust the app name):
 
    ```bash
-   xattr -dr com.apple.quarantine "/Applications/<Nombre>.app"
+   xattr -dr com.apple.quarantine "/Applications/<Name>.app"
    ```
 
-**Actualizar:**
+**Update:**
 
-1. Haz un respaldo (**Ajustes → Tus datos → Exportar**) y cierra la app.
-2. Descarga el `.zip` nuevo, reemplaza la app en **Aplicaciones** y repite el paso 4 si macOS vuelve a bloquearla.
+1. Make a backup (**Settings → Your data → Export**) and close the app.
+2. Download the new `.zip`, replace the app in **Applications** and repeat step 4 if macOS blocks it again.
 
-**Tus datos:** se guardan en tu usuario de macOS (dentro de `~/Library`), no dentro de la app, así que reemplazarla no los borra. Se pierden si borras tu usuario o reseteas el Mac: guarda el respaldo en iCloud Drive u otro dispositivo.
+**Your data:** it is stored in your macOS user account (inside `~/Library`), not inside the app, so replacing the app does not delete it. It is lost if you delete your user account or reset the Mac: keep the backup in iCloud Drive or on another device.
 
 ---
 
-## iPhone y iPad
+## iPhone and iPad
 
-No hay versión en App Store. Se usa la **versión web instalada en la pantalla de inicio**, que funciona como una app. **Funciona sin conexión después de abrirla una vez con internet** (la primera apertura descarga la app al dispositivo; cierra y vuelve a abrir la app antes de probar sin conexión).
+There is no App Store version. You use the **web version installed on the Home Screen**, which works like an app. **It works offline after you have opened it once with internet** (the first launch downloads the app to the device; close and reopen the app before trying it offline).
 
-**Requisitos:** iOS o iPadOS 17 o posterior (recomendado), **Safari**. Si la app se sirve desde el servidor familiar, también Tailscale instalado y conectado.
+**Requirements:** iOS or iPadOS 17 or later (recommended), **Safari**. If the app is served from the family server, Tailscale installed and connected as well.
 
-**Instalar:**
+**Install:**
 
-1. Abre **Safari**. Tiene que ser Safari: desde otros navegadores no se instala bien.
-2. Entra a https://iezappa.github.io/nisabitus/ (o la URL `ts.net` de tu servidor ZimaOS, si la familia usa uno: elige una y no la cambies).
-3. Toca el botón **Compartir** (cuadrado con flecha hacia arriba).
-4. Baja y toca **Agregar a inicio**. Si no lo ves, toca **Editar acciones** y agrégalo.
-5. Toca **Agregar**.
-6. **Abre la app siempre desde el ícono de la pantalla de inicio**, no desde una pestaña de Safari.
+1. Open **Safari**. It has to be Safari: it does not install properly from other browsers.
+2. Go to https://iezappa.github.io/nisabitus/ (or the `ts.net` URL of your ZimaOS server, if the family uses one: pick one and do not change it).
+3. Tap the **Share** button (square with an upward arrow).
+4. Scroll down and tap **Add to Home Screen**. If you do not see it, tap **Edit Actions** and add it.
+5. Tap **Add**.
+6. **Always open the app from the Home Screen icon**, not from a Safari tab.
 
-> **Importante:** la app del ícono y la pestaña de Safari guardan sus datos por separado. Si cargas datos en Safari no aparecerán en el ícono, y viceversa. Además, Safari puede borrar los datos de sitios que no usas durante varios días; la app del ícono, usada con regularidad, no. Usa solo el ícono.
+> **Important:** the icon app and the Safari tab store their data separately. Data you enter in Safari will not appear in the icon app, and vice versa. Also, Safari may delete the data of sites you do not use for several days; the icon app, used regularly, does not. Use only the icon.
 
-> Usa **siempre la misma dirección** (https://iezappa.github.io/nisabitus/ (o la URL `ts.net` de tu servidor ZimaOS, si la familia usa uno: elige una y no la cambies)). Si entras por otra dirección, la app aparecerá vacía.
+> **Always use the same address** (https://iezappa.github.io/nisabitus/ (or the `ts.net` URL of your ZimaOS server, if the family uses one: pick one and do not change it)). If you go in through another address, the app will appear empty.
 
-**Actualizar:** abre la app con conexión; cuando aparezca **"Hay una versión nueva"**, toca **Actualizar**. Si no aparece, ciérrala por completo (deslizar hacia arriba) y ábrela otra vez.
+**Update:** open the app online; when **"A new version is available"** appears, tap **Update**. If it does not appear, close the app completely (swipe up) and open it again.
 
-> Si iOS borra los datos del sitio (o borras el ícono), también se borra la copia sin conexión: vuelve a abrir la app una vez con internet.
+> If iOS deletes the site's data (or you delete the icon), the offline copy is deleted too: open the app once more with internet.
 
-**Tus datos:** se guardan solo en este iPhone o iPad, dentro de la app del ícono. Se pierden si borras el ícono de la pantalla de inicio, si borras los datos de sitios web en **Ajustes → Safari** o si reseteas el dispositivo. Exporta y guarda el archivo en **Archivos → iCloud Drive**. Borrar el ícono equivale a desinstalar: **exporta antes**.
+**Your data:** it is stored only on this iPhone or iPad, inside the icon app. It is lost if you delete the icon from the Home Screen, clear website data in **Settings → Safari** or reset the device. Export and save the file in **Files → iCloud Drive**. Deleting the icon is the same as uninstalling: **export first**.
 
 ---
 
 ## Android
 
-Hay dos opciones. Elige **una** y quédate con ella.
+There are two options. Choose **one** and stick with it.
 
-> **La app instalada por APK y la app instalada desde Chrome guardan datos por separado.** No se comparten. Si cambias de una a otra, exporta en la vieja e importa en la nueva.
+> **The app installed from the APK and the app installed from Chrome store their data separately.** They do not share it. If you switch from one to the other, export in the old one and import in the new one.
 
-### Opción 1: APK (recomendada, no necesita servidor ni internet)
+### Option 1: APK (recommended, needs no server and no internet)
 
-**Requisitos:** Android 7 o posterior (recomendado).
+**Requirements:** Android 7 or later (recommended).
 
-**Instalar:**
+**Install:**
 
-1. En el teléfono, abre https://github.com/iezappa/nisabitus/releases/latest.
-2. En **Assets**, descarga `nisabitus-vX.Y.Z-android.apk`.
-3. Abre el archivo descargado. Android pedirá permiso para instalar apps de origen desconocido: toca **Configuración** → activa **Permitir desde esta fuente** → vuelve atrás.
-4. Toca **Instalar**. Si Google Play Protect muestra un aviso, elige **Instalar de todas formas** (la app no viene de Play Store).
+1. On the phone, open https://github.com/iezappa/nisabitus/releases/latest.
+2. Under **Assets**, download `nisabitus-vX.Y.Z-android.apk`.
+3. Open the downloaded file. Android will ask for permission to install apps from unknown sources: tap **Settings** → turn on **Allow from this source** → go back.
+4. Tap **Install**. If Google Play Protect shows a warning, choose **Install anyway** (the app does not come from the Play Store).
 
-**Actualizar:** la app te avisa con un aviso **"Hay una versión nueva"** al abrirla con conexión. Toca **Descargar**, haz un respaldo si el aviso lo pide e instala el APK encima. **No desinstales la app anterior**: desinstalar borra los datos. Todas las versiones van firmadas con la misma clave, así que se instalan encima sin problema. Si Android dice que el paquete "entra en conflicto" con el existente, **no desinstales**: exporta tus datos y avisa al desarrollador.
+**Update:** the app tells you with a **"A new version is available"** notice when you open it online. Tap **Download**, make a backup if the notice asks for one and install the APK over the existing app. **Do not uninstall the previous app**: uninstalling deletes the data. Every version is signed with the same key, so it installs over the old one without trouble. If Android says the package "conflicts" with the existing one, **do not uninstall**: export your data and tell the developer.
 
-**Actualizaciones automáticas (opcional) con Obtainium:**
+**Automatic updates (optional) with Obtainium:**
 
-1. Instala Obtainium desde https://github.com/ImranR98/Obtainium/releases (o F-Droid).
-2. En Obtainium toca **Agregar app** y pega `https://github.com/iezappa/nisabitus`.
-3. Toca **Agregar**. Obtainium te notifica cuando hay una versión nueva y la instala encima.
+1. Install Obtainium from https://github.com/ImranR98/Obtainium/releases (or F-Droid).
+2. In Obtainium tap **Add App** and paste `https://github.com/iezappa/nisabitus`.
+3. Tap **Add**. Obtainium notifies you when there is a new version and installs it over the existing app.
 
-> **Si instalaste la app antes de la primera versión firmada con el keystore de release (ver [`docs/SIGNING.md`](docs/SIGNING.md)):** esa versión usaba otra firma y no se puede actualizar encima. Una sola vez: **Exportar** → desinstalar → instalar el APK nuevo → **Importar**. Si no exportas antes de desinstalar, pierdes tus datos.
+> **If you installed the app before the first version signed with the release keystore (see [`docs/SIGNING.md`](docs/SIGNING.md)):** that version used a different signature and cannot be updated in place. Once only: **Export** → uninstall → install the new APK → **Import**. If you do not export before uninstalling, you lose your data.
 
-**Tus datos:** se guardan dentro de la app. Se pierden si la desinstalas, si tocas **Borrar almacenamiento** en los ajustes de la app o si reseteas el teléfono. Guarda el respaldo en Google Drive u otro dispositivo.
+**Your data:** it is stored inside the app. It is lost if you uninstall it, tap **Clear storage** in the app's settings or reset the phone. Keep the backup in Google Drive or on another device.
 
-### Opción 2: instalar desde Chrome (PWA)
+### Option 2: install from Chrome (PWA)
 
-1. Abre **Chrome** y entra a https://iezappa.github.io/nisabitus/ (o la URL `ts.net` de tu servidor ZimaOS, si la familia usa uno: elige una y no la cambies).
-2. Menú **⋮** → **Instalar app** (o **Agregar a la pantalla principal** → **Instalar**).
-3. Abre la app desde su ícono y usa siempre la misma dirección.
+1. Open **Chrome** and go to https://iezappa.github.io/nisabitus/ (or the `ts.net` URL of your ZimaOS server, if the family uses one: pick one and do not change it).
+2. Menu **⋮** → **Install app** (or **Add to Home screen** → **Install**).
+3. Open the app from its icon and always use the same address.
 
-Funciona sin conexión después de abrirla una vez con internet.
+It works offline after you have opened it once with internet.
 
-**Actualizar:** al abrir la app con conexión aparece **"Hay una versión nueva"**: toca **Actualizar** y la app se recarga.
+**Update:** when you open the app online, **"A new version is available"** appears: tap **Update** and the app reloads.
 
-**Tus datos:** se guardan en Chrome para esa dirección. Se pierden si desinstalas la app, borras los datos de Chrome o del sitio, o reseteas el teléfono.
+**Your data:** it is stored in Chrome for that address. It is lost if you uninstall the app, clear Chrome's or the site's data, or reset the phone.
 
 ---
 
-## Actualizaciones
+## Updates
 
-La app revisa si hay una versión nueva al abrirse con conexión (en computadoras y Android, como mucho cada 6 horas). Sin conexión no pasa nada: sigue funcionando igual (en la versión web, después de haberla abierto una vez con internet).
+The app checks for a new version when it opens online (on computers and Android, at most every 6 hours). Offline nothing happens: it keeps working the same (on the web version, after it has been opened once with internet).
 
-| Dispositivo | Cómo te enteras | Cómo actualizas |
+| Device | How you find out | How you update |
 |---|---|---|
-| iPhone y iPad | Aviso "Hay una versión nueva" | Toca **Actualizar**. Si no aparece, cierra la app por completo (deslizar hacia arriba) y ábrela otra vez. |
-| Android (APK) | Aviso "Hay una versión nueva" | **Descargar** e instalar encima, o automático con Obtainium (ver [Android](#android)). |
-| Android (Chrome) y navegador | Aviso "Hay una versión nueva" | Toca **Actualizar**. |
-| Windows, Ubuntu, macOS | Aviso "Hay una versión nueva" | Abre la página de la versión; sigue los pasos **Actualizar** de tu sistema. |
+| iPhone and iPad | "A new version is available" notice | Tap **Update**. If it does not appear, close the app completely (swipe up) and open it again. |
+| Android (APK) | "A new version is available" notice | **Download** and install over the existing app, or automatically with Obtainium (see [Android](#android)). |
+| Android (Chrome) and browser | "A new version is available" notice | Tap **Update**. |
+| Windows, Ubuntu, macOS | "A new version is available" notice | Open the release page; follow the **Update** steps for your system. |
 
-- **Si el aviso pide un respaldo**, la versión nueva cambia cómo se guardan los datos: toca **Exportar** y guarda el archivo **antes** de actualizar.
-- Después de actualizar, la app muestra **Novedades** con los cambios de la versión.
-
----
-
-## Privacidad
-
-Nisabitus no tiene cuentas, analítica ni publicidad, y tus datos no salen de tu dispositivo. Para borrarlos: **Ajustes → Tus datos → Borrar todos mis datos**.
-
-- [Política de privacidad](PRIVACY.md)
-- [Términos de uso](TERMS.md)
-- English: [Privacy policy](PRIVACY.en.md) · [Terms of use](TERMS.en.md)
-
-Contacto: Zeke Zappa Developments (iezappa) — https://github.com/iezappa/nisabitus/issues
+- **If the notice asks for a backup**, the new version changes how data is stored: tap **Export** and save the file **before** updating.
+- After updating, the app shows **What's new** with the changes in that version.
 
 ---
 
-## Para desarrolladores
+## Privacy
 
-Stack y reglas: `STACK-APPS-DINAMICAS.md` (perfil A) del repo Estandarizador. Pendientes y decisiones: [`TODO.md`](TODO.md); publicación: [`docs/RELEASING.md`](docs/RELEASING.md). Proyecto Flutter en `apps/client`.
+Nisabitus has no accounts, analytics or advertising, and your data does not leave your device. To delete it: **Settings → Your data → Delete all my data**.
+
+- [Privacy policy](PRIVACY.md)
+- [Terms of use](TERMS.md)
+- Español: [Política de privacidad](PRIVACY.es.md) · [Términos de uso](TERMS.es.md)
+
+Contact: Zeke Zappa Developments (iezappa) — https://github.com/iezappa/nisabitus/issues
+
+---
+
+## For developers
+
+Stack and rules: `STACK-APPS-DINAMICAS.md` (profile A) in the Estandarizador repo. Open items and decisions: [`TODO.md`](TODO.md); releasing: [`docs/RELEASING.md`](docs/RELEASING.md). The Flutter project is in `apps/client`.
 
 ```bash
 cd apps/client
 flutter pub get
-dart run build_runner build      # código generado de Drift
+dart run build_runner build      # Drift generated code
 flutter test
-flutter run -d chrome            # o linux / windows / macos / un dispositivo Android
+flutter run -d chrome            # or linux / windows / macos / an Android device
 ```
 
-Probar la imagen web localmente:
+Test the web image locally:
 
 ```bash
 docker build -f deploy/Dockerfile -t nisabitus .
 docker run --rm -p 8080:8080 nisabitus    # http://localhost:8080
 ```
 
-Publicar una versión (Releases con Linux, Windows, macOS y web, e imagen `ghcr.io/iezappa/nisabitus`; GitHub Pages se publica en cada push a `main` con `deploy-pages.yml`):
+Publish a version (Releases with Linux, Windows, macOS and web, and the image `ghcr.io/iezappa/nisabitus`; GitHub Pages is published on every push to `main` by `deploy-pages.yml`):
 
 ```bash
-# La versión de pubspec.yaml (x.y.z+build) y web/update.json deben coincidir con el tag
+# The pubspec.yaml version (x.y.z+build) and web/update.json must match the tag
 git tag vX.Y.Z && git push origin vX.Y.Z
 ```
 
-El CI no compila el APK: tras crear la release, el mantenedor lo firma en local con el keystore de release y lo sube con `tool/release_apk.sh vX.Y.Z` (ejecutado desde `apps/client`). El keystore no está en GitHub. Huella SHA-256 esperada del certificado: `la registrada en [`docs/SIGNING.md`](docs/SIGNING.md) (pendiente hasta que se genere el keystore)` (comprobar con `apksigner verify --print-certs`).
+CI does not build the APK: after the release is created, the maintainer signs it locally with the release keystore and uploads it with `tool/release_apk.sh vX.Y.Z` (run from `apps/client`). The keystore is not on GitHub. Expected SHA-256 fingerprint of the certificate: `the one recorded in [`docs/SIGNING.md`](docs/SIGNING.md) (pending until the keystore is generated)` (check with `apksigner verify --print-certs`).
 
-La versión web trae su propio service worker (`web/sw.js`, registrado en `web/flutter_bootstrap.js`); el CI y el Dockerfile ejecutan `tool/generate_sw.sh` tras `flutter build web`. Si una release rompe el service worker, publica el kill switch (`web/sw-killswitch.js`, instrucciones dentro).
+The web version ships its own service worker (`web/sw.js`, registered in `web/flutter_bootstrap.js`); CI and the Dockerfile run `tool/generate_sw.sh` after `flutter build web`. If a release breaks the service worker, publish the kill switch (`web/sw-killswitch.js`, instructions inside).
 
-Si la versión cambia el esquema de Drift, sube `schemaVersion`, agrega el test de migración y marca `"schemaChange": true` en `web/update.json`: el aviso de actualización pedirá un export antes de actualizar.
+If the version changes the Drift schema, bump `schemaVersion`, add the migration test and set `"schemaChange": true` in `web/update.json`: the update notice will ask for an export before updating.

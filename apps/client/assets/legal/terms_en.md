@@ -1,5 +1,7 @@
 # Nisabitus terms of use
 
+**English** · [Español](TERMS.es.md)
+
 Last updated: 2026-09-17
 
 By using Nisabitus you accept these terms. If you do not agree, do not use the app.

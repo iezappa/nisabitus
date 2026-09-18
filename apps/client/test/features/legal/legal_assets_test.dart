@@ -6,8 +6,9 @@ import 'package:nisabitus/features/legal/domain/legal_document.dart';
 
 /// The in-app copies of the legal documents are the published ones.
 ///
-/// Flutter can only bundle files inside the package, so `PRIVACY.md` and
-/// `TERMS.md` at the repository root are copied into `assets/legal/`. A copy
+/// Flutter can only bundle files inside the package, so `PRIVACY.md`,
+/// `TERMS.md` and their `.es.md` translations at the repository root are
+/// copied into `assets/legal/`. A copy
 /// that drifts from the published text would show the user terms nobody
 /// published, so this compares them byte for byte.
 void main() {
@@ -15,10 +16,10 @@ void main() {
   const root = '../..';
 
   const published = {
-    'privacy_es.md': 'PRIVACY.md',
-    'privacy_en.md': 'PRIVACY.en.md',
-    'terms_es.md': 'TERMS.md',
-    'terms_en.md': 'TERMS.en.md',
+    'privacy_en.md': 'PRIVACY.md',
+    'privacy_es.md': 'PRIVACY.es.md',
+    'terms_en.md': 'TERMS.md',
+    'terms_es.md': 'TERMS.es.md',
   };
 
   for (final MapEntry(key: asset, value: source) in published.entries) {
@@ -40,10 +41,21 @@ void main() {
     }
   });
 
-  test('falls back to Spanish for a language that is not shipped', () {
+  test('the locale picks the document in its language', () {
+    expect(
+      AssetLegalDocuments.pathFor(LegalDocumentKind.privacy, 'es'),
+      'assets/legal/privacy_es.md',
+    );
+    expect(
+      AssetLegalDocuments.pathFor(LegalDocumentKind.privacy, 'en'),
+      'assets/legal/privacy_en.md',
+    );
+  });
+
+  test('falls back to English for a language that is not shipped', () {
     expect(
       AssetLegalDocuments.pathFor(LegalDocumentKind.terms, 'fr'),
-      'assets/legal/terms_es.md',
+      'assets/legal/terms_en.md',
     );
   });
 }
