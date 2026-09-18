@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../release_notes/domain/app_version.dart';
 import '../domain/update_info.dart';
+import 'update_check_problem.dart';
 
 /// The PWA: compares `version.json` from the server with the running build,
 /// and asks the service worker whether a new version is installed and
@@ -15,24 +16,46 @@ class WebUpdateService implements UpdateService {
     required this._now,
     required AppVersion currentVersion,
     required this._hasWaitingWorker,
+    UpdateCheckProblemReporter onProblem = reportUpdateCheckProblem,
   }) : _base = baseUri,
-       _current = currentVersion;
+       _current = currentVersion,
+       _onProblem = onProblem;
 
   final http.Client _client;
   final Uri _base;
   final DateTime Function() _now;
   final AppVersion _current;
   final Future<bool> Function() _hasWaitingWorker;
+  final UpdateCheckProblemReporter _onProblem;
 
   @override
   Future<UpdateInfo?> check() async {
+    // Two failures that look identical to the user and are nothing alike to
+    // whoever ships the app: the fetch not arriving, which is normal and
+    // fixes itself, and the fetch arriving in a shape this app cannot read,
+    // which does not. Only the second is written down.
+    final String body;
     try {
-      final served = parseReleaseVersion(
-        (jsonDecode(await _fetch('version.json'))
-                as Map<String, dynamic>)['version']
-            as String?,
+      body = await _fetch('version.json');
+    } on Object {
+      return null;
+    }
+
+    final AppVersion? served;
+    try {
+      served = parseReleaseVersion(
+        (jsonDecode(body) as Map<String, dynamic>)['version'] as String?,
       );
-      final newer = served != null && served > _current;
+      if (served == null) {
+        throw const FormatException('no readable "version"');
+      }
+    } on Object catch (error) {
+      _onProblem('version.json', error);
+      return null;
+    }
+
+    try {
+      final newer = served > _current;
       final waiting = await _hasWaitingWorker();
       if (!newer && !waiting) return null;
 

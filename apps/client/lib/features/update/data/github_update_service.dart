@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../release_notes/domain/app_version.dart';
 import '../domain/update_info.dart';
+import 'update_check_problem.dart';
 
 /// Native builds (Android, Windows, Linux, macOS): asks GitHub Releases.
 ///
@@ -18,7 +19,9 @@ class GitHubUpdateService implements UpdateService {
     required this._now,
     required AppVersion currentVersion,
     required this._isAndroid,
-  }) : _current = currentVersion;
+    UpdateCheckProblemReporter onProblem = reportUpdateCheckProblem,
+  }) : _current = currentVersion,
+       _onProblem = onProblem;
 
   static const latestReleaseUrl =
       'https://api.github.com/repos/iezappa/nisabitus/releases/latest';
@@ -31,6 +34,7 @@ class GitHubUpdateService implements UpdateService {
   final DateTime Function() _now;
   final AppVersion _current;
   final bool _isAndroid;
+  final UpdateCheckProblemReporter _onProblem;
 
   @override
   Future<UpdateInfo?> check() async {
@@ -39,19 +43,40 @@ class GitHubUpdateService implements UpdateService {
     if (last != null && now.difference(last) < throttle) return null;
     await _prefs.setString(lastCheckKey, now.toIso8601String());
 
+    // Not reaching GitHub is normal — offline, rate limited, a bad day at
+    // the API — and fixes itself. An answer this app cannot read does not:
+    // that is a release published in a shape the update check does not
+    // understand, and nobody would ever hear about it. Only the second is
+    // written down; the user sees the same silence either way.
+    final http.Response response;
     try {
-      final response = await _client
+      response = await _client
           .get(
             Uri.parse(latestReleaseUrl),
             headers: const {'Accept': 'application/vnd.github+json'},
           )
           .timeout(timeout);
-      if (response.statusCode != 200) return null;
+    } on Object {
+      return null;
+    }
+    if (response.statusCode != 200) return null;
 
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final latest = parseReleaseVersion(json['tag_name'] as String?);
-      if (latest == null || !(latest > _current)) return null;
+    final Map<String, dynamic> json;
+    final AppVersion latest;
+    try {
+      json = jsonDecode(response.body) as Map<String, dynamic>;
+      final tag = parseReleaseVersion(json['tag_name'] as String?);
+      if (tag == null) {
+        throw FormatException('unreadable tag_name', json['tag_name']);
+      }
+      latest = tag;
+    } on Object catch (error) {
+      _onProblem('the GitHub release', error);
+      return null;
+    }
+    if (!(latest > _current)) return null;
 
+    try {
       final assets = [
         for (final asset in (json['assets'] as List? ?? const []))
           if (asset is Map<String, dynamic>) asset,

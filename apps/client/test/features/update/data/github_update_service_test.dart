@@ -11,12 +11,14 @@ void main() {
   late SharedPreferences prefs;
   late DateTime now;
   var calls = 0;
+  final problems = <String>[];
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     prefs = await SharedPreferences.getInstance();
     now = DateTime(2026, 9, 17, 12);
     calls = 0;
+    problems.clear();
   });
 
   String release({String tag = 'v1.3.0', bool apk = true}) => jsonEncode({
@@ -58,6 +60,7 @@ void main() {
     now: () => now,
     currentVersion: AppVersion.parse(current),
     isAndroid: android,
+    onProblem: (what, cause) => problems.add(what),
   );
 
   test('reports a newer release with its page and schema flag', () async {
@@ -106,10 +109,34 @@ void main() {
   test('a network error is null, never an exception', () async {
     final failing = MockClient((_) async => throw http.ClientException('off'));
     expect(await service(client: failing).check(), isNull);
+    expect(problems, isEmpty, reason: 'no network is normal');
   });
 
   test('a server error is null', () async {
     final failing = MockClient((_) async => http.Response('', 500));
     expect(await service(client: failing).check(), isNull);
+    expect(problems, isEmpty, reason: 'a 500 is the server having a bad day');
+  });
+
+  // Silence to the user either way — there is nothing they could do — but a
+  // release whose shape this app cannot read stays unreadable until somebody
+  // is told, and every check after it would be silent for the wrong reason.
+  test('records an answer that is not JSON', () async {
+    final broken = MockClient((_) async => http.Response('<html>', 200));
+    expect(await service(client: broken).check(), isNull);
+    expect(problems, ['the GitHub release']);
+  });
+
+  test('records a release whose tag is not a version', () async {
+    final broken = MockClient(
+      (_) async => http.Response(release(tag: 'latest'), 200),
+    );
+    expect(await service(client: broken).check(), isNull);
+    expect(problems, ['the GitHub release']);
+  });
+
+  test('says nothing about a release it read perfectly well', () async {
+    await service().check();
+    expect(problems, isEmpty);
   });
 }
