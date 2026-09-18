@@ -237,4 +237,25 @@ void main() {
       expect(find.text('Diario'), findsOneWidget);
     });
   });
+
+  testWidgets('says so when the new habit could not be saved', (tester) async {
+    // A write that throws used to vanish: the form closed, the list stayed
+    // as it was, and nothing told the user their habit was never kept.
+    await db.customStatement(
+      "CREATE TRIGGER refuse BEFORE INSERT ON habits "
+      "BEGIN SELECT RAISE(ABORT, 'refused'); END",
+    );
+    await pumpScreen(tester);
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Nombre'),
+      'Meditar',
+    );
+    await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No se pudo guardar. Intentá de nuevo.'), findsOneWidget);
+  });
 }

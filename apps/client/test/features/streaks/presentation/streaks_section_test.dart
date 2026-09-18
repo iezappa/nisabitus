@@ -293,4 +293,20 @@ void main() {
       expect(find.text('Racha 1'), findsWidgets);
     });
   });
+
+  testWidgets('says so when the new streak could not be saved', (tester) async {
+    await db.customStatement(
+      "CREATE TRIGGER refuse BEFORE INSERT ON streaks "
+      "BEGIN SELECT RAISE(ABORT, 'refused'); END",
+    );
+    await pump(tester);
+
+    await tester.tap(find.byTooltip('Nueva racha'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Sin azúcar');
+    await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No se pudo guardar. Intentá de nuevo.'), findsOneWidget);
+  });
 }

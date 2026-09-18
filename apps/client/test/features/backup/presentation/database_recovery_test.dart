@@ -163,6 +163,21 @@ void main() {
       expect(find.text('Reset local database'), findsOneWidget);
     });
 
+    testWidgets('asks to close the older tab, and offers nothing destructive', (
+      tester,
+    ) async {
+      await pump(tester, const DatabaseHeldByOlderVersion(13));
+
+      expect(find.text('the app'), findsNothing);
+      expect(
+        find.text('Another tab is running an older version'),
+        findsOneWidget,
+      );
+      // The store is sound: resetting it here would destroy good data.
+      expect(find.text('Reset local database'), findsNothing);
+      expect(find.text('Import a backup'), findsNothing);
+    });
+
     testWidgets('asks before resetting, and says the data goes', (
       tester,
     ) async {

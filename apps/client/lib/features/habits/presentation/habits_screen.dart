@@ -6,6 +6,7 @@ import '../../../core/widgets/async_section.dart';
 import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/module_scaffold.dart';
+import '../../../core/widgets/save_failure.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../streaks/presentation/streaks_section.dart';
@@ -75,9 +76,11 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
             context,
             initialFrequency: _currentFrequency,
           );
-          if (draft != null) {
-            await ref.read(habitActionsProvider).create(draft);
-          }
+          if (draft == null || !context.mounted) return;
+          await reportSaveFailure(
+            context,
+            () => ref.read(habitActionsProvider).create(draft),
+          );
         },
         tooltip: l10n.habitNew,
         child: const Icon(Icons.add),

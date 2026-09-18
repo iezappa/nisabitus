@@ -1763,4 +1763,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateActionDismiss => 'Not now';
+
+  @override
+  String get saveFailed => 'Couldn\'t save. Please try again.';
+
+  @override
+  String get staleStoreTitle => 'Another tab is running an older version';
+
+  @override
+  String get staleStoreBody =>
+      'Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page.';
 }

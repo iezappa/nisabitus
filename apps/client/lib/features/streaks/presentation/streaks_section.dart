@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/name_prompt_dialog.dart';
+import '../../../core/widgets/save_failure.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../core/widgets/wheel_scroll_area.dart';
 import '../../../l10n/app_localizations.dart';
@@ -26,7 +27,8 @@ class StreaksSection extends ConsumerWidget {
 
     Future<void> createStreak() async {
       final name = await promptForName(context, title: l10n.streakNew);
-      if (name != null) await actions.create(name);
+      if (name == null || !context.mounted) return;
+      await reportSaveFailure(context, () => actions.create(name));
     }
 
     return Column(

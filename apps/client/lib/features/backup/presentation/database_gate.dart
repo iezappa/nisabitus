@@ -26,6 +26,9 @@ class DatabaseGate extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final health = ref.watch(databaseHealthProvider).valueOrNull;
+    if (health is DatabaseHeldByOlderVersion) {
+      return const _OlderVersionOpenScreen();
+    }
     if (health is! DatabaseUnopenable) return child;
 
     // Its own navigator: this sits above the app's, and the confirmation
@@ -166,6 +169,49 @@ class _DatabaseRecoveryScreenState
                 ),
                 icon: const Icon(Icons.restart_alt),
                 label: Text(l10n.recoveryReset),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Asks the user to close the tab that still runs the previous release.
+///
+/// Offers nothing destructive: the store is sound, only held at the old
+/// schema by that tab, and it upgrades on the next load once the tab is gone.
+class _OlderVersionOpenScreen extends StatelessWidget {
+  const _OlderVersionOpenScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      body: SafeArea(
+        child: CenteredContent(
+          child: ListView(
+            padding: const EdgeInsets.all(Gap.xl),
+            children: [
+              Icon(
+                Icons.tab_outlined,
+                size: 56,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(height: Gap.lg),
+              Text(
+                l10n.staleStoreTitle,
+                style: theme.textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: Gap.md),
+              Text(
+                l10n.staleStoreBody,
+                style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+                textAlign: TextAlign.center,
               ),
             ],
           ),

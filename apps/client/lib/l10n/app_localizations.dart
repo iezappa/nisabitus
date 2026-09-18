@@ -3265,6 +3265,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ahora no'**
   String get updateActionDismiss;
+
+  /// No description provided for @saveFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar. Intentá de nuevo.'**
+  String get saveFailed;
+
+  /// No description provided for @staleStoreTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay otra pestaña con una versión anterior'**
+  String get staleStoreTitle;
+
+  /// No description provided for @staleStoreBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página.'**
+  String get staleStoreBody;
 }
 
 class _AppLocalizationsDelegate

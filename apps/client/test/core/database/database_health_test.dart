@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_health.dart';
+
+import 'generated/schema.dart';
 
 void main() {
   late Directory dir;
@@ -76,4 +80,40 @@ void main() {
       },
     );
   });
+
+  group('a store an older version of the app already holds open', () {
+    // On the web every tab shares one drift worker, and the first tab to
+    // connect opens the store. A tab still running the previous release keeps
+    // it open at the old schema; a tab with this release then connects to
+    // that same open store and drift, seeing it already open, never runs the
+    // upgrade. Every write then fails on a column the old schema lacks.
+    Future<AppDatabase> joinStoreOpenedAtV13() async {
+      final schema = await SchemaVerifier(GeneratedHelper()).schemaAt(13);
+      final connection = schema.newConnection();
+      await _OlderRelease(connection).customSelect('SELECT 1').get();
+
+      final db = AppDatabase.forTesting(connection.executor);
+      addTearDown(db.close);
+      return db;
+    }
+
+    test('is reported as held by an older version, not healthy', () async {
+      final db = await joinStoreOpenedAtV13();
+
+      final health = await probeDatabase(db);
+
+      expect(health, isA<DatabaseHeldByOlderVersion>());
+      expect((health as DatabaseHeldByOlderVersion).foundVersion, 13);
+    });
+  });
+}
+
+class _OlderRelease extends GeneratedDatabase {
+  _OlderRelease(super.executor);
+
+  @override
+  Iterable<TableInfo<Table, dynamic>> get allTables => const [];
+
+  @override
+  int get schemaVersion => 13;
 }
