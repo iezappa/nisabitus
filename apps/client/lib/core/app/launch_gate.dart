@@ -14,9 +14,17 @@ import '../../features/settings/presentation/widgets/tutorial_dialog.dart';
 /// take it: the first-run wizard, and the announcement of what changed since
 /// the user was last here. A first run wins and silences the other — someone
 /// installing the app today was never around for the releases it lists.
+///
+/// It sits in the app builder, above the navigator, so its own context cannot
+/// open a dialog: dialogs go through [navigatorKey] instead.
 class LaunchGate extends ConsumerStatefulWidget {
-  const LaunchGate({required this.child, super.key});
+  const LaunchGate({
+    required this.navigatorKey,
+    required this.child,
+    super.key,
+  });
 
+  final GlobalKey<NavigatorState> navigatorKey;
   final Widget child;
 
   @override
@@ -49,7 +57,10 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
       notes = null;
     }
 
-    if (!mounted) return;
+    // The navigator is built in the same frame as this gate, so it is there
+    // by now; if it is not, there is nowhere to greet anyone.
+    final dialogs = widget.navigatorKey.currentContext;
+    if (!mounted || dialogs == null || !dialogs.mounted) return;
 
     if (onboarding) {
       // Stamped before the wizard is even answered: whatever the user does
@@ -57,20 +68,20 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
       if (notes != null) {
         ref.read(releaseNotesActionsProvider).markSeen(notes.current);
       }
-      await showTutorial(context, onboarding: true);
+      await showTutorial(dialogs, onboarding: true);
       return;
     }
 
     // Someone onboarded before the backup notice existed has never been told
     // their data lives only here. Once, before anything else is announced.
     if (!ref.read(backupNoticeAcceptedProvider)) {
-      await showBackupNoticeDialog(context);
-      if (!mounted) return;
+      await showBackupNoticeDialog(dialogs);
+      if (!mounted || !dialogs.mounted) return;
     }
 
     if (ref.read(unseenReleasesProvider(language)).isEmpty) return;
 
-    await showReleaseNotes(context, unseenOnly: true);
+    await showReleaseNotes(dialogs, unseenOnly: true);
   }
 
   @override

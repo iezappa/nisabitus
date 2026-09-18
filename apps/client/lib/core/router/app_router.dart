@@ -19,7 +19,8 @@ import '../widgets/brand_logo.dart';
 import '../widgets/settings_button.dart';
 import 'app_tab.dart';
 
-GoRouter buildRouter() => GoRouter(
+GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) => GoRouter(
+  navigatorKey: navigatorKey,
   initialLocation: AppTab.habits.path,
   routes: [
     ShellRoute(

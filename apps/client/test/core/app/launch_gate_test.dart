@@ -57,10 +57,12 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(900, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
+    final navigatorKey = GlobalKey<NavigatorState>();
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
+          navigatorKey: navigatorKey,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -70,7 +72,11 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           // Pinned: these assertions read the Spanish copy.
           locale: const Locale('es'),
-          home: const LaunchGate(child: Scaffold(body: Text('la app'))),
+          // Mounted where main.dart mounts it: in the app builder, above the
+          // navigator, so its own context cannot open a dialog.
+          builder: (context, child) =>
+              LaunchGate(navigatorKey: navigatorKey, child: child!),
+          home: const Scaffold(body: Text('la app')),
         ),
       ),
     );

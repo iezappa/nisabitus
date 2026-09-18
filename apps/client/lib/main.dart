@@ -43,7 +43,8 @@ class NisabitApp extends ConsumerStatefulWidget {
 class _NisabitAppState extends ConsumerState<NisabitApp> {
   // Built once: rebuilding the router on every frame would drop the
   // navigation state.
-  late final _router = buildRouter();
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  late final _router = buildRouter(navigatorKey: _navigatorKey);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +70,12 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
       debugShowCheckedModeBanner: false,
       // The database gate goes first: there is no point greeting someone
       // into an app whose store would not open.
-      builder: (context, child) =>
-          DatabaseGate(child: LaunchGate(child: child ?? const SizedBox())),
+      builder: (context, child) => DatabaseGate(
+        child: LaunchGate(
+          navigatorKey: _navigatorKey,
+          child: child ?? const SizedBox(),
+        ),
+      ),
     );
   }
 }
