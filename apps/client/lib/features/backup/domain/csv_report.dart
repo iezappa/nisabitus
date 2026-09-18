@@ -11,8 +11,9 @@
 ///
 /// RFC 4180 quoting with CRLF line ends, and a UTF-8 byte order mark so
 /// spreadsheet software reads "Ñoquis" as written. A cell that starts with
-/// `=`, `+`, `-` or `@` is prefixed with `'`, so a note cannot run as a
-/// formula when the file is opened.
+/// `=`, `+`, `-`, `@`, a tab or a carriage return is prefixed with `'`, so a
+/// note cannot run as a formula when the file is opened (spreadsheets skip a
+/// leading tab or CR before deciding, so those hide a formula too).
 String encodeCsvReport(Map<String, List<Map<String, Object?>>> tables) {
   final sections = <String>[];
 
@@ -34,7 +35,7 @@ String encodeCsvReport(Map<String, List<Map<String, Object?>>> tables) {
 String _cell(Object? value) {
   if (value == null) return '';
   var text = '$value';
-  if (value is String && text.isNotEmpty && '=+-@'.contains(text[0])) {
+  if (value is String && text.isNotEmpty && '=+-@\t\r'.contains(text[0])) {
     text = "'$text";
   }
   if (text.contains(RegExp('[",\r\n]'))) {

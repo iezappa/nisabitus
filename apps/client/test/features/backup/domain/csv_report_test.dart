@@ -70,6 +70,18 @@ void main() {
     expect(csv, endsWith("'=SUM(A1),'+54 11,'-3,'@x\r\n"));
   });
 
+  // Spreadsheets drop a leading tab or carriage return before deciding
+  // whether a cell is a formula, so "\t=SUM(A1)" runs like "=SUM(A1)".
+  test('defuses a formula hidden behind a leading tab or carriage return', () {
+    final csv = encodeCsvReport({
+      't': [
+        {'a': '\t=SUM(A1)', 'b': '\r=SUM(A1)'},
+      ],
+    });
+
+    expect(csv, endsWith('\'\t=SUM(A1),"\'\r=SUM(A1)"\r\n'));
+  });
+
   test('uses every column that appears in any row, in first-seen order', () {
     final csv = encodeCsvReport({
       't': [
