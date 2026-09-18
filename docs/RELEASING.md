@@ -7,6 +7,11 @@ certificate fingerprint are in [`SIGNING.md`](SIGNING.md). The general
 procedure is the shared standard,
 [`FIRMA-ANDROID.md`](https://github.com/iezappa/standardizer_multiplatform/blob/main/FIRMA-ANDROID.md).
 
+Before a web release is announced, walk
+[`WEB-RELEASE-CHECKLIST.md`](WEB-RELEASE-CHECKLIST.md) through a real browser.
+The service worker has no automated coverage, so that checklist is the only
+thing standing between a bad `sw.js` and an app that will not start offline.
+
 ## Android APK
 
 Requirements: the Android SDK with build-tools (`apksigner` on `PATH` or under

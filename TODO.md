@@ -347,7 +347,49 @@ looks like.
       untested in CI; the service worker checklist of §8.2 is a **manual**
       one — nobody has yet walked a real browser through installing it, going
       offline, and updating (points 1-6 of that checklist), and nobody has
-      opened the PWA on an iPhone.
+      opened the PWA on an iPhone. That checklist is now written down and
+      runnable step by step: [`docs/WEB-RELEASE-CHECKLIST.md`
+      ](docs/WEB-RELEASE-CHECKLIST.md) — offline launch, update-and-reload,
+      iOS added to the home screen, and the kill-switch drill. **Writing it
+      down is not running it.** `web/sw.js` and `web/flutter_bootstrap.js`
+      remain the only files in the app with no automated coverage at all, and
+      `tool/test_web.sh` cannot stand in for it: `flutter drive` serves a
+      debug build that never went through `tool/generate_sw.sh`, so the worker
+      it would exercise still carries `__APP_VERSION__` and an empty precache
+      manifest — it would prove something about a file that does not ship.
+- [x] ~~A migration that is interrupted bricks the store.~~ drift writes
+      `user_version` only after the whole `onUpgrade` callback returns, and
+      only the v14 step was inside a transaction, so a process killed between
+      two steps left a store claiming the old version with part of the new
+      shape on disk. The replay hit `duplicate column` and the app never
+      opened again. Now: one transaction around every step, **and** every step
+      made idempotent anyway (`_addColumnIfMissing` asks `PRAGMA table_info`,
+      indices go up `IF NOT EXISTS`) so a store already half-upgraded by an
+      older build can still open. drift's step-by-step migrations do not help
+      — `runMigrationSteps` does not bump `user_version` between steps either.
+      `migration_interrupted_test.dart` builds that state by hand.
+- [x] ~~Two rows in a single-row goal table failed the v14 upgrade.~~ Nothing
+      before v14 enforced the one row, and the step maps every row to the same
+      `singleton` id. The highest id now wins — with an autoincrementing id
+      that is the row written last — and the rest are dropped
+      (`migration_v14_singletons_test.dart`).
+- [x] ~~Nothing tested the v14 orphan deletion with an actual orphan.~~
+      `migration_v14_test.dart` seeded only valid references, so its
+      `foreign_key_check` assertion passed with the whole deletion loop
+      removed. `migration_v14_orphans_test.dart` seeds real orphans in every
+      reference and one chain four levels deep, so a loop that runs once
+      instead of to convergence fails.
+- [x] ~~`release.yml` built and published without running anything.~~ Only the
+      version and compliance gate stood in front of it, and a tag can be
+      pushed from a branch CI never saw. A `check` job now runs the same
+      format, analysis and tests as `ci.yml`, and every build job needs it.
+      `test/ci/release_workflow_test.dart` reads the workflow, so a build job
+      added later without the gate fails in the suite.
+- [x] ~~An update check could not tell a broken server from no network.~~ Both
+      services answered every failure with `null`. A malformed `version.json`
+      or an unreadable release tag is now written down through an injected
+      reporter (`debugPrint` in debug, nothing in release); the user still
+      sees nothing, because there is still nothing they could do.
 
 ## 4. Conformance with the shared standard
 
