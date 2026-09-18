@@ -21,6 +21,8 @@ class GitHubUpdateService implements UpdateService {
     required this._isAndroid,
     UpdateCheckProblemReporter onProblem = reportUpdateCheckProblem,
   }) : _current = currentVersion,
+       // A named parameter cannot be written `this._onProblem`.
+       // ignore: prefer_initializing_formals
        _onProblem = onProblem;
 
   static const latestReleaseUrl =

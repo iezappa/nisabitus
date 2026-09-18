@@ -19,6 +19,8 @@ class WebUpdateService implements UpdateService {
     UpdateCheckProblemReporter onProblem = reportUpdateCheckProblem,
   }) : _base = baseUri,
        _current = currentVersion,
+       // A named parameter cannot be written `this._onProblem`.
+       // ignore: prefer_initializing_formals
        _onProblem = onProblem;
 
   final http.Client _client;
