@@ -3272,6 +3272,12 @@ abstract class AppLocalizations {
   /// **'No se pudo guardar. Intentá de nuevo.'**
   String get saveFailed;
 
+  /// No description provided for @deleteFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo borrar. Intentá de nuevo.'**
+  String get deleteFailed;
+
   /// No description provided for @staleStoreTitle.
   ///
   /// In es, this message translates to:

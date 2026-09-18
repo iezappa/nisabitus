@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/widgets/save_failure.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../../../core/widgets/async_section.dart';
@@ -68,7 +69,8 @@ class _Entry extends ConsumerWidget {
               onSave: actions.save,
               onDelete: () async {
                 if (await confirmDelete(context, l10n.journalEntry)) {
-                  await actions.delete();
+                  if (!context.mounted) return;
+                  await reportDeleteFailure(context, actions.delete);
                 }
               },
             ),

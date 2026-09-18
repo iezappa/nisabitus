@@ -12,6 +12,8 @@ import 'package:nisabitus/features/hydration/presentation/hydration_providers.da
 import 'package:nisabitus/features/hydration/presentation/hydration_view.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 
+import '../../../support/refuse_writes.dart';
+
 void main() {
   late AppDatabase db;
   late ProviderContainer container;
@@ -90,6 +92,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(await repository().entriesFor(day), isEmpty);
+  });
+
+  testWidgets('says so when the glass could not be taken back', (tester) async {
+    await repository().addEntry(day, 250);
+    await refuseWrites(db, 'water_entries', operation: 'DELETE');
+    await pumpView(tester);
+
+    await tester.tap(find.byTooltip('Borrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No se pudo borrar. Intentá de nuevo.'), findsOneWidget);
+    expect(await repository().entriesFor(day), hasLength(1));
   });
 
   testWidgets('says what is left of the target', (tester) async {

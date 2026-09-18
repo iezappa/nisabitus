@@ -574,6 +574,7 @@
   "updateActionExport": "Export",
   "updateActionDismiss": "Not now",
   "saveFailed": "Couldn't save. Please try again.",
+  "deleteFailed": "Couldn't delete. Please try again.",
   "staleStoreTitle": "Another tab is running an older version",
   "staleStoreBody": "Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page."
 }

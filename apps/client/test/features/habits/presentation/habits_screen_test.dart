@@ -13,6 +13,8 @@ import 'package:nisabitus/features/habits/presentation/habits_screen.dart';
 import 'package:nisabitus/features/streaks/presentation/streak_providers.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 
+import '../../../support/refuse_writes.dart';
+
 void main() {
   late AppDatabase db;
   late ProviderContainer container;
@@ -241,10 +243,7 @@ void main() {
   testWidgets('says so when the new habit could not be saved', (tester) async {
     // A write that throws used to vanish: the form closed, the list stayed
     // as it was, and nothing told the user their habit was never kept.
-    await db.customStatement(
-      "CREATE TRIGGER refuse BEFORE INSERT ON habits "
-      "BEGIN SELECT RAISE(ABORT, 'refused'); END",
-    );
+    await refuseWrites(db, 'habits');
     await pumpScreen(tester);
 
     await tester.tap(find.byType(FloatingActionButton));
@@ -257,5 +256,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('No se pudo guardar. Intentá de nuevo.'), findsOneWidget);
+  });
+
+  testWidgets('says so when the habit could not be deleted', (tester) async {
+    await container
+        .read(habitActionsProvider)
+        .create(
+          const HabitDraft(name: 'Meditar', frequency: HabitFrequency.daily),
+        );
+    await refuseWrites(db, 'habits', operation: 'DELETE');
+    await pumpScreen(tester);
+
+    await tester.longPress(find.text('Meditar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Borrar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Borrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No se pudo borrar. Intentá de nuevo.'), findsOneWidget);
+    expect(find.text('Meditar'), findsOneWidget);
   });
 }

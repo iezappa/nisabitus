@@ -10,6 +10,8 @@ import 'package:nisabitus/features/streaks/presentation/streak_providers.dart';
 import 'package:nisabitus/features/streaks/presentation/streaks_section.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 
+import '../../../support/refuse_writes.dart';
+
 void main() {
   late AppDatabase db;
   late ProviderContainer container;
@@ -268,6 +270,22 @@ void main() {
       expect(find.text('Todavía no hay rachas'), findsOneWidget);
     });
 
+    testWidgets('says so when the streak could not be deleted', (tester) async {
+      await seed(1);
+      await refuseWrites(db, 'streaks', operation: 'DELETE');
+      await pump(tester);
+      await tester.tap(find.text('RACHA 1'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.delete_outline));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Borrar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('No se pudo borrar. Intentá de nuevo.'), findsOneWidget);
+      expect(find.text('RACHA 1'), findsOneWidget);
+    });
+
     testWidgets('keeps the streak when the confirmation is refused', (
       tester,
     ) async {
@@ -295,10 +313,7 @@ void main() {
   });
 
   testWidgets('says so when the new streak could not be saved', (tester) async {
-    await db.customStatement(
-      "CREATE TRIGGER refuse BEFORE INSERT ON streaks "
-      "BEGIN SELECT RAISE(ABORT, 'refused'); END",
-    );
+    await refuseWrites(db, 'streaks');
     await pump(tester);
 
     await tester.tap(find.byTooltip('Nueva racha'));

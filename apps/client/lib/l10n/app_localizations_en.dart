@@ -1768,6 +1768,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveFailed => 'Couldn\'t save. Please try again.';
 
   @override
+  String get deleteFailed => 'Couldn\'t delete. Please try again.';
+
+  @override
   String get staleStoreTitle => 'Another tab is running an older version';
 
   @override

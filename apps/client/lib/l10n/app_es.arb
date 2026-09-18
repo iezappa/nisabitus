@@ -872,6 +872,7 @@
   "updateActionExport": "Exportar",
   "updateActionDismiss": "Ahora no",
   "saveFailed": "No se pudo guardar. Intentá de nuevo.",
+  "deleteFailed": "No se pudo borrar. Intentá de nuevo.",
   "staleStoreTitle": "Hay otra pestaña con una versión anterior",
   "staleStoreBody": "Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página."
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import 'confirm_dialog.dart';
+import 'save_failure.dart';
 
 /// A dialog title with the bin in the corner.
 ///
@@ -46,7 +47,8 @@ class DialogTitle extends StatelessWidget {
                 deleteLabel ?? text,
                 body: deleteBody,
               )) {
-                await delete();
+                if (!context.mounted) return;
+                await reportDeleteFailure(context, delete);
                 if (context.mounted) Navigator.of(context).pop();
               }
             },

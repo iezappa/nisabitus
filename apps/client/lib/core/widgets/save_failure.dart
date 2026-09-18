@@ -13,18 +13,42 @@ import '../../l10n/app_localizations.dart';
 Future<void> reportSaveFailure(
   BuildContext context,
   Future<void> Function() save,
-) async {
+) => _reportFailure(
+  context,
+  save,
+  message: AppLocalizations.of(context).saveFailed,
+  log: 'Saving a new entry failed',
+);
+
+/// Runs [delete] and tells the user when it throws.
+///
+/// The same silence as a failed save, the other way round: the row vanishes
+/// from under the user's finger in their head, stays in the store, and turns
+/// up again later with no word about why. Returns whether it went through.
+Future<bool> reportDeleteFailure(
+  BuildContext context,
+  Future<void> Function() delete,
+) => _reportFailure(
+  context,
+  delete,
+  message: AppLocalizations.of(context).deleteFailed,
+  log: 'Deleting an entry failed',
+);
+
+Future<bool> _reportFailure(
+  BuildContext context,
+  Future<void> Function() write, {
+  required String message,
+  required String log,
+}) async {
+  // Read before the await: the dialog that asked may be gone by the end.
   final messenger = ScaffoldMessenger.maybeOf(context);
-  final message = AppLocalizations.of(context).saveFailed;
   try {
-    await save();
+    await write();
+    return true;
   } on Object catch (error, stack) {
-    developer.log(
-      'Saving a new entry failed',
-      name: 'nisabitus',
-      error: error,
-      stackTrace: stack,
-    );
+    developer.log(log, name: 'nisabitus', error: error, stackTrace: stack);
     messenger?.showSnackBar(SnackBar(content: Text(message)));
+    return false;
   }
 }

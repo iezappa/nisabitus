@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/widgets/save_failure.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/confirm_dialog.dart';
 import '../../../../core/widgets/dialog_title.dart';
@@ -249,7 +250,11 @@ class _Comments extends ConsumerWidget {
                           tooltip: l10n.actionDelete,
                           onPressed: () async {
                             if (await confirmDelete(context, comment.content)) {
-                              await actions.deleteComment(comment.id);
+                              if (!context.mounted) return;
+                              await reportDeleteFailure(
+                                context,
+                                () => actions.deleteComment(comment.id),
+                              );
                             }
                           },
                         ),

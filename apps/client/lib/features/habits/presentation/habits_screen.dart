@@ -156,7 +156,11 @@ class _HabitList extends ConsumerWidget {
                 },
                 onDelete: () async {
                   if (await confirmDelete(context, habit.name)) {
-                    await actions.delete(habit.id);
+                    if (!context.mounted) return;
+                    await reportDeleteFailure(
+                      context,
+                      () => actions.delete(habit.id),
+                    );
                   }
                 },
               ),

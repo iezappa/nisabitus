@@ -102,8 +102,9 @@ class _PlanSection extends ConsumerWidget {
           context,
           existing: exercise,
           onDelete: () async {
-            deleted = true;
             await actions.deleteExercise(exercise.id);
+            // Only once it is gone: a delete that throws leaves it in place.
+            deleted = true;
           },
         );
         if (deleted) return const ExerciseRemoved();

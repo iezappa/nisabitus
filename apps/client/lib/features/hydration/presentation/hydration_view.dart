@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/widgets/save_failure.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
@@ -84,7 +85,10 @@ class HydrationView extends ConsumerWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.close),
                       tooltip: l10n.actionDelete,
-                      onPressed: () => actions.delete(entry.id),
+                      onPressed: () => reportDeleteFailure(
+                        context,
+                        () => actions.delete(entry.id),
+                      ),
                     ),
                   ),
                 ),
