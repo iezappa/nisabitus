@@ -220,6 +220,23 @@ class AppDatabase extends _$AppDatabase {
 
     final names = {for (final table in legacy) table.actualTableName};
 
+    // A single-row table that holds two rows would map both to the same
+    // `singleton` id and fail the upgrade on a duplicate primary key. Nothing
+    // before v14 enforced the single row, so a repository bug, a restored
+    // backup or a half-finished write could leave one — a difference the user
+    // never sees and did not cause, and it must not cost them the store.
+    //
+    // The highest id wins. With an autoincrementing id that is the row
+    // written last, so it is the goal the app was already reading and the one
+    // the user set most recently. There is no `updatedAt` to ask before v14;
+    // this is the closest thing the old schema has to one.
+    for (final name in names.where(_singletonTables.contains)) {
+      await customUpdate(
+        'DELETE FROM "$name" WHERE id < (SELECT MAX(id) FROM "$name")',
+        updateKind: UpdateKind.delete,
+      );
+    }
+
     // Orphans first, until a pass removes nothing: deleting a project whose
     // parent is gone orphans its own children in turn.
     var removed = true;
