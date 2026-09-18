@@ -15,13 +15,21 @@ class EraseAllDataTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final error = Theme.of(context).colorScheme.error;
 
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(Icons.delete_forever_outlined, color: error),
-      title: Text(l10n.eraseAllData, style: TextStyle(color: error)),
-      onTap: () => showDialog<void>(
-        context: context,
-        builder: (_) => const _EraseAllDataDialog(),
+    // A container of its own, or a screen reader folds the row into the
+    // section heading above it and never announces it as something to press.
+    return Semantics(
+      container: true,
+      button: true,
+      child: MergeSemantics(
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(Icons.delete_forever_outlined, color: error),
+          title: Text(l10n.eraseAllData, style: TextStyle(color: error)),
+          onTap: () => showDialog<void>(
+            context: context,
+            builder: (_) => const _EraseAllDataDialog(),
+          ),
+        ),
       ),
     );
   }
