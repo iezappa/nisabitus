@@ -619,22 +619,30 @@
   },
   "@disciplineMinutes": {
     "placeholders": {
-      "value": { "type": "int" }
+      "value": {
+        "type": "int"
+      }
     }
   },
   "@disciplineKm": {
     "placeholders": {
-      "value": { "type": "String" }
+      "value": {
+        "type": "String"
+      }
     }
   },
   "@disciplineValidationMinutes": {
     "placeholders": {
-      "max": { "type": "int" }
+      "max": {
+        "type": "int"
+      }
     }
   },
   "@disciplineValidationDistance": {
     "placeholders": {
-      "max": { "type": "int" }
+      "max": {
+        "type": "int"
+      }
     }
   },
   "@nutritionGrams": {
@@ -856,15 +864,33 @@
   "termsOfUse": "Términos de uso",
   "developerContact": "Contacto",
   "developerContactBody": "{developer} · reportes y consultas en GitHub",
-  "@developerContactBody": {"placeholders": {"developer": {"type": "String"}}},
+  "@developerContactBody": {
+    "placeholders": {
+      "developer": {
+        "type": "String"
+      }
+    }
+  },
   "openSourceLicenses": "Licencias",
   "backupExportCsv": "Exportar CSV",
   "backupCsvHint": "El CSV es para leer tus datos en una planilla; no se puede importar. Para respaldar usá Exportar.",
   "backupCsvExported": "{count, plural, =1{CSV guardado: 1 registro} other{CSV guardado: {count} registros}}",
-  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}},
+  "@backupCsvExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "updateAvailableTitle": "Hay una versión nueva",
   "updateAvailableBody": "La versión {version} está disponible.",
-  "@updateAvailableBody": {"placeholders": {"version": {"type": "String"}}},
+  "@updateAvailableBody": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "updateAvailableBackupHint": "Esta versión cambia cómo se guardan tus datos. Exportá un respaldo antes de actualizar.",
   "updateUnsupportedPath": "Tu versión es muy antigua para actualizar directo. Exportá un respaldo y consultá las instrucciones.",
   "updateActionReload": "Actualizar",
@@ -874,5 +900,146 @@
   "saveFailed": "No se pudo guardar. Intentá de nuevo.",
   "deleteFailed": "No se pudo borrar. Intentá de nuevo.",
   "staleStoreTitle": "Hay otra pestaña con una versión anterior",
-  "staleStoreBody": "Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página."
+  "staleStoreBody": "Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página.",
+  "todoColumns": "Columnas",
+  "todoEditColumns": "Editar columnas",
+  "todoNewColumn": "Nueva columna",
+  "todoColumnName": "Nombre de la columna",
+  "todoColumnCountsAsDone": "Cuenta como terminada",
+  "todoColumnCountsAsDoneHint": "Las tareas que caen acá dejan de estar vencidas y cuentan como completadas en el progreso.",
+  "todoColumnHoldsTasks": "Esta columna todavía tiene {count} tarea(s). Movelas antes de eliminarla.",
+  "@todoColumnHoldsTasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoColumnLastOne": "El tablero necesita al menos una columna.",
+  "todoColumnMoveLeft": "Mover a la izquierda",
+  "todoColumnMoveRight": "Mover a la derecha",
+  "todoTaskDetail": "Detalle de la tarea",
+  "todoNoDescription": "Sin descripción",
+  "todoFieldColumn": "Columna",
+  "todoUpdates": "Novedades",
+  "todoAddUpdate": "Agregar una novedad",
+  "todoProjectAllDone": "Todo hecho",
+  "todoProjectOverdue": "Con tareas vencidas",
+  "todoProjectDueToday": "Con tareas para hoy",
+  "todoProjectOpen": "Con tareas abiertas",
+  "todoProjectEmpty": "Sin tareas",
+  "todoProjectProgress": "{done} de {total} terminadas",
+  "@todoProjectProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "actionClose": "Cerrar",
+  "todoChecklist": "Checklist",
+  "todoAddChecklistItem": "Agregar un ítem",
+  "todoChecklistProgress": "{done} de {total}",
+  "@todoChecklistProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todoInColumn": "en la columna",
+  "todoDetails": "Detalles",
+  "todoNoUpdates": "Sin novedades todavía",
+  "todoBoardOf": "Tablero de {project}",
+  "@todoBoardOf": {
+    "placeholders": {
+      "project": {
+        "type": "String"
+      }
+    }
+  },
+  "nutritionComposition": "Composición",
+  "nutritionComposedHint": "Sumá alimentos con su peso y los macros se calculan solos. Podés corregirlos a mano después.",
+  "nutritionSaveAsDish": "Guardar la combinación como plato",
+  "nutritionSaveAsDishHint": "Queda en tu base de alimentos para elegirlo de una próxima vez.",
+  "nutritionDishSaved": "Plato guardado en tu base",
+  "nutritionTotal": "Total",
+  "nutritionRemoveFood": "Quitar",
+  "nutritionHowMuch": "¿Cuánto pesa?",
+  "nutritionPartOf": "{name}, {grams} g",
+  "@nutritionPartOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "grams": {
+        "type": "int"
+      }
+    }
+  },
+  "habitsAllCategories": "Todas",
+  "habitsFilterByCategory": "Filtrar por categoría",
+  "habitsNoCategory": "Sin categoría",
+  "habitsNewCategory": "Nueva categoría…",
+  "planVideo": "Ver el video",
+  "planVideoTitle": "Video del ejercicio",
+  "planVideoOpen": "Abrir afuera",
+  "planVideoExternalOnly": "Este enlace no se puede mostrar acá adentro. Se abre en tu navegador.",
+  "planVideoNotice": "El video se carga desde su sitio; eso es la única cosa que sale del dispositivo.",
+  "steps": "Pasos",
+  "stepsToday": "Pasos del día",
+  "stepsNone": "Todavía no anotaste los pasos de este día.",
+  "stepsRecord": "Anotar pasos",
+  "stepsEdit": "Corregir",
+  "stepsClear": "Borrar el registro",
+  "stepsCount": "{steps} pasos",
+  "@stepsCount": {
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "stepsGoal": "Meta diaria",
+  "stepsGoalEdit": "Cambiar la meta",
+  "stepsGoalReached": "Meta alcanzada",
+  "stepsOfGoal": "{walked} de {goal}",
+  "@stepsOfGoal": {
+    "placeholders": {
+      "walked": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "stepsAverage": "Promedio por día",
+  "stepsBest": "Mejor día",
+  "stepsDaysLogged": "Días anotados",
+  "stepsGoalDays": "Días con la meta",
+  "stepsPerDay": "Pasos por día",
+  "stepsEmptyHint": "Anotá los pasos de un día y acá vas a ver cómo viene la semana.",
+  "stepsValidation": "Poné un número entre 0 y {max}.",
+  "@stepsValidation": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "stepsAveragedOverLogged": "Promediado sobre los días que anotaste, no sobre los {days} de la ventana.",
+  "@stepsAveragedOverLogged": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }

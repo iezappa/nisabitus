@@ -53,6 +53,10 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
       listOnly: Column(
         children: [
           const StreaksSection(),
+          // The streaks band and the frequency tabs are two different
+          // controls; sitting flush they read as one, and the tabs look like
+          // they belong to the streaks above them.
+          const SizedBox(height: Gap.lg),
           TabBar(
             controller: _tabs,
             tabs: [
@@ -75,6 +79,8 @@ class _HabitsScreenState extends ConsumerState<HabitsScreen>
           final draft = await showHabitForm(
             context,
             initialFrequency: _currentFrequency,
+            categories:
+                ref.read(habitCategoriesProvider).valueOrNull ?? const [],
           );
           if (draft == null || !context.mounted) return;
           await reportSaveFailure(
@@ -150,6 +156,9 @@ class _HabitList extends ConsumerWidget {
                   final draft = await showHabitForm(
                     context,
                     existing: habit,
+                    categories:
+                        ref.read(habitCategoriesProvider).valueOrNull ??
+                        const [],
                     onDelete: () => actions.delete(habit.id),
                   );
                   if (draft != null) await actions.update(habit.id, draft);

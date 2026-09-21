@@ -61,7 +61,7 @@ final dashboardProvider = FutureProvider<DashboardSummary>((ref) async {
     ref.watch(journalRepositoryProvider).forDay(today),
   ).wait;
 
-  final open = tasks.where((task) => task.status != TaskStatus.done).toList();
+  final open = tasks.where((task) => !task.countsAsDone).toList();
 
   return DashboardSummary(
     openTasks: open.length,

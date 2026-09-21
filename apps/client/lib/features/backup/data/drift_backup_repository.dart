@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../todo/domain/board_column.dart';
 import '../domain/backup_document.dart';
 import '../domain/backup_repository.dart';
 import '../domain/restore_report.dart';
@@ -45,14 +46,21 @@ class DriftBackupRepository implements BackupRepository {
     // Projects reference other projects, so their rows are ordered again
     // inside the table before they are written.
     _codec(_db.projects, ProjectRow.fromJson, order: _parentsFirst),
+    // Before the tasks that sit in them, and after the projects they belong
+    // to: a board is part of a project.
+    _codec(_db.boardColumns, BoardColumnRow.fromJson),
     _codec(_db.todoTasks, TodoTaskRow.fromJson),
     _codec(_db.taskComments, TaskCommentRow.fromJson),
+    _codec(_db.taskChecklistItems, TaskChecklistItemRow.fromJson),
     _codec(_db.nutritionGoals, NutritionGoalRow.fromJson),
     _codec(_db.foodEntries, FoodEntryRow.fromJson),
+    _codec(_db.foodEntryItems, FoodEntryItemRow.fromJson),
     _codec(_db.foods, FoodRow.fromJson),
     _codec(_db.exercises, ExerciseRow.fromJson),
     _codec(_db.scheduledExercises, ScheduledExerciseRow.fromJson),
     _codec(_db.disciplines, DisciplineRow.fromJson),
+    _codec(_db.stepLogs, StepLogRow.fromJson),
+    _codec(_db.stepGoals, StepGoalRow.fromJson),
     _codec(_db.medications, MedicationRow.fromJson),
     _codec(_db.medicationIntakes, MedicationIntakeRow.fromJson),
     _codec(_db.hydrationGoals, HydrationGoalRow.fromJson),
@@ -97,14 +105,29 @@ class DriftBackupRepository implements BackupRepository {
         await table.clear();
       }
 
+      // A file written before the board became rows carries no columns at
+      // all, and its tasks name a `status` instead. Seeded rather than
+      // refused: the columns are the app's own, and a backup taken before
+      // they existed is not a damaged backup.
+      var tables = document.tables;
+      final needsBoards = (tables['board_columns'] ?? const []).isEmpty;
+
       var rows = 0;
       for (final table in _tables) {
         // A table the document does not mention stays empty. The document
         // describes a whole store, so silence about a table means it held
         // nothing, not that it should be left alone.
-        final placed = document.tables[table.name] ?? const [];
+        final placed = tables[table.name] ?? const [];
         await table.fill(placed);
         rows += placed.length;
+
+        // Between the projects and the tasks that need somewhere to sit: a
+        // board belongs to a project, so the projects have to be in place
+        // before one can be given to them.
+        if (needsBoards && table.name == _db.projects.actualTableName) {
+          await _db.seedMissingBoards();
+          tables = await _moveTasksOntoTheBoard(tables);
+        }
       }
 
       // Counted here rather than in the document, which has no idea which
@@ -116,7 +139,7 @@ class DriftBackupRepository implements BackupRepository {
       return RestoreReport(
         rows: rows,
         ignoredTables: {
-          for (final entry in document.tables.entries)
+          for (final entry in tables.entries)
             if (entry.value.isNotEmpty && !known.contains(entry.key)) entry.key,
         },
       );
@@ -126,9 +149,16 @@ class DriftBackupRepository implements BackupRepository {
   @override
   Future<bool> holdsUserData() async {
     for (final table in _tables) {
-      final shipped = table.name == _db.foods.actualTableName
-          ? ' WHERE is_built_in = 0'
-          : '';
+      final shipped = switch (table.name) {
+        // What the app shipped is not what the user wrote. A renamed column
+        // has had its key cleared and counts: renaming one is something the
+        // user did.
+        final name when name == _db.foods.actualTableName =>
+          ' WHERE is_built_in = 0',
+        final name when name == _db.boardColumns.actualTableName =>
+          ' WHERE built_in_key IS NULL',
+        _ => '',
+      };
       final row = await _db
           .customSelect(
             'SELECT EXISTS(SELECT 1 FROM "${table.name}"$shipped) AS present',
@@ -146,6 +176,58 @@ class DriftBackupRepository implements BackupRepository {
     }
     await _db.seedBuiltInFoods();
   });
+
+  /// Points the tasks of a pre-board document at a column.
+  ///
+  /// Those files say `status: "IN_PROGRESS"`, which was the wire name of an
+  /// enum. The three names map onto the three seeded columns of the task's
+  /// own project; anything else — a fork's own status, a hand-edited file —
+  /// lands in that project's first column rather than being refused, which
+  /// is what the store migration does with the same value and for the same
+  /// reason: the task keeps everything it had and sits somewhere visible.
+  Future<Map<String, List<Map<String, dynamic>>>> _moveTasksOntoTheBoard(
+    Map<String, List<Map<String, dynamic>>> tables,
+  ) async {
+    final name = _db.todoTasks.actualTableName;
+    final rows = tables[name];
+    if (rows == null || rows.isEmpty) return tables;
+
+    // Only the rows that actually name a status. A document can be stamped
+    // with an older schema than its rows are shaped for, and rewriting a
+    // task that already names a column would point it somewhere guessed.
+    if (!rows.any((row) => row.containsKey('status'))) return tables;
+
+    final byProject = <String, Map<String?, String>>{};
+    for (final column in await _db.select(_db.boardColumns).get()) {
+      (byProject[column.projectId] ??= {})[column.builtInKey] = column.id;
+    }
+
+    return {
+      ...tables,
+      name: [
+        for (final row in rows)
+          if (!row.containsKey('status'))
+            row
+          else
+            {
+              ...row,
+              'columnId': _columnForStatus(
+                byProject[row['projectId']?.toString()] ?? const {},
+                row['status'],
+              ),
+            }..remove('status'),
+      ],
+    };
+  }
+
+  /// The column of one project's board that a pre-board `status` names.
+  String? _columnForStatus(Map<String?, String> board, Object? status) {
+    if (board.isEmpty) return null;
+
+    return board[status?.toString().trim().toUpperCase()] ??
+        board[BoardColumn.todoKey] ??
+        board.values.first;
+  }
 
   _TableCodec _codec<T extends Table, D extends DataClass>(
     TableInfo<T, D> table,

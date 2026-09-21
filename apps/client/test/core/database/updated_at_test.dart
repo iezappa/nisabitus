@@ -30,7 +30,6 @@ import 'package:nisabitus/features/pomodoro/domain/pomodoro_draft.dart';
 import 'package:nisabitus/features/sleep/data/drift_sleep_repository.dart';
 import 'package:nisabitus/features/streaks/data/drift_streak_repository.dart';
 import 'package:nisabitus/features/todo/data/drift_todo_repository.dart';
-import 'package:nisabitus/features/todo/domain/task.dart';
 import 'package:nisabitus/features/todo/domain/todo_repository.dart';
 
 void main() {
@@ -96,10 +95,11 @@ void main() {
         TaskDraft(title: 'Pintar todo', projectId: project.id),
       ),
     );
-    await expectTouched(
-      'todo_tasks',
-      () => repo.setTaskStatus(task.id, TaskStatus.done),
-    );
+    // Moving a task is a write like any other, and the board's columns are
+    // rows now rather than an enum.
+    final done = (await repo.boardColumns(project.id))
+        .firstWhere((column) => column.countsAsDone);
+    await expectTouched('todo_tasks', () => repo.moveTask(task.id, done.id));
   });
 
   test('exercise: movement, scheduled day, complete and reopen', () async {

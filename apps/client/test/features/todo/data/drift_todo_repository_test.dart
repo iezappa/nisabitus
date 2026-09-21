@@ -4,6 +4,7 @@ import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/time/date_range.dart';
 import 'package:nisabitus/features/todo/data/drift_todo_repository.dart';
 import 'package:nisabitus/features/todo/domain/project.dart';
+import 'package:nisabitus/features/todo/domain/board_column.dart';
 import 'package:nisabitus/features/todo/domain/task.dart';
 import 'package:nisabitus/features/todo/domain/todo_repository.dart';
 
@@ -139,7 +140,11 @@ void main() {
         TaskDraft(title: 'Tarea', projectId: root.id),
       );
 
-      expect(task.status, TaskStatus.todo);
+      // No column named, so it lands in the board's default: the leftmost
+      // one that does not already mean finished.
+      final board = Board(await repository.boardColumns(root.id));
+      expect(task.columnId, board.defaultColumn!.id);
+      expect(task.countsAsDone, isFalse);
       expect(task.priority, TaskPriority.medium);
     });
 
@@ -155,9 +160,13 @@ void main() {
         TaskDraft(title: 'Tarea', projectId: root.id),
       );
 
-      final moved = await repository.setTaskStatus(task.id, TaskStatus.done);
+      final done = (await repository.boardColumns(root.id))
+          .firstWhere((column) => column.builtInKey == BoardColumn.doneKey);
 
-      expect(moved.status, TaskStatus.done);
+      final moved = await repository.moveTask(task.id, done.id);
+
+      expect(moved.columnId, done.id);
+      expect(moved.countsAsDone, isTrue);
     });
 
     test('can be edited and deleted', () async {
@@ -285,7 +294,12 @@ void main() {
         TaskDraft(title: 'Hecha', projectId: project.id),
       );
 
-      await repository.setTaskStatus(task.id, TaskStatus.done);
+      await repository.moveTask(
+        task.id,
+        (await repository.boardColumns(project.id))
+            .firstWhere((column) => column.builtInKey == BoardColumn.doneKey)
+            .id,
+      );
 
       final stats = await repository.statsFor(
         DateRange.lastDays(7),

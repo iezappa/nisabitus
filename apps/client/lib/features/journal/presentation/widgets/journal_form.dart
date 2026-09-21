@@ -204,7 +204,24 @@ class _Field extends StatelessWidget {
     minLines: lines,
     maxLines: lines == 1 ? 1 : lines + 4,
     textCapitalization: TextCapitalization.sentences,
-    decoration: InputDecoration(labelText: label, hintText: hint),
+    decoration: InputDecoration(
+      labelText: label,
+      // The prompt sits under the box, not inside it.
+      //
+      // It was a `hintText`, which is painted exactly where the user types.
+      // On these fields that went wrong twice over: a hint and a label were
+      // both asked for, and on a box six lines tall the un-floated label is
+      // centred down the middle of it while the hint waits at the top — two
+      // pieces of grey text in a box that has neither. As `helperText` there
+      // is nothing in the writing area but what was written, and the
+      // question stays legible while it is being answered, which for a
+      // journal is the better half of the trade anyway.
+      helperText: hint,
+      helperMaxLines: 2,
+      // Puts the label on the first line of a tall field instead of halfway
+      // down it. The name is about hints; the behaviour is about the label.
+      alignLabelWithHint: lines > 1,
+    ),
   );
 }
 

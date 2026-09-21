@@ -9,7 +9,7 @@ void main() {
 
   Task task({
     String id = '1',
-    TaskStatus status = TaskStatus.todo,
+    bool done = false,
     DateTime? dueDate,
     DateTime? completedAt,
   }) => Task(
@@ -17,13 +17,16 @@ void main() {
     title: 'Tarea',
     projectId: '1',
     priority: TaskPriority.medium,
-    status: status,
+    // The column is a row now; what these tests care about is whether
+    // landing there finishes the work.
+    columnId: done ? 'done' : 'todo',
+    countsAsDone: done,
     dueDate: dueDate,
     completedAt: completedAt,
   );
 
   Task done(DateTime at, {String id = '1'}) =>
-      task(id: id, status: TaskStatus.done, completedAt: at);
+      task(id: id, done: true, completedAt: at);
 
   group('TodoStats', () {
     test('reads as empty when there are no tasks at all', () {
@@ -45,7 +48,7 @@ void main() {
     test('counts every unfinished task as open, whatever its dates', () {
       final stats = TodoStats.from(range, [
         task(id: '1'),
-        task(id: '2', status: TaskStatus.inProgress),
+        task(id: '2', done: false),
         done(DateTime(2026, 3, 10), id: '3'),
       ], today);
 
@@ -58,7 +61,7 @@ void main() {
         task(id: '1', dueDate: DateTime(2026, 3, 10)),
         task(
           id: '2',
-          status: TaskStatus.done,
+          done: true,
           dueDate: DateTime(2026, 3, 10),
           completedAt: DateTime(2026, 3, 11),
         ),

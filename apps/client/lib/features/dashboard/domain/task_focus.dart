@@ -16,7 +16,7 @@ abstract final class TaskFocus {
     DateTime today, {
     int limit = TaskFocus.limit,
   }) {
-    final open = tasks.where((task) => task.status != TaskStatus.done).toList()
+    final open = tasks.where((task) => !task.countsAsDone).toList()
       ..sort((a, b) => _compare(a, b, today));
 
     return open.take(limit).toList();

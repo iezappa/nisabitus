@@ -88,3 +88,40 @@ class Foods extends Table with RecordColumns {
   // searching for a name — so it is ordered by name, and "recently used"
   // would only bury the seed under whatever was logged this morning.
 }
+
+/// One food that went into a composed entry, with what it weighed.
+///
+/// A lunch is often two or three things — pollo con arroz — and the only way
+/// to record that used to be one entry per ingredient or one entry with the
+/// macros added up by hand. This table holds the parts, so the entry can be
+/// read back as what it was made of rather than as a total nobody can check.
+///
+/// **The figures are copied, and there is no reference to [Foods].** That is
+/// the rule the entry itself follows and for the same reason: what was eaten
+/// is a record of a day, and correcting a food's composition today must not
+/// rewrite what last Tuesday's lunch says it was.
+///
+/// The entry's own macro columns stay authoritative. These parts explain that
+/// total; they do not replace it.
+@DataClassName('FoodEntryItemRow')
+@TableIndex(name: 'entry_item_by_entry', columns: {#entryId, #position})
+class FoodEntryItems extends Table with RecordColumns {
+  TextColumn get entryId =>
+      text().references(FoodEntries, #id, onDelete: KeyAction.cascade)();
+
+  /// The food's name as it was when this was logged.
+  TextColumn get name => text().withLength(min: 1, max: 255)();
+
+  /// What went on the scale. Real rather than integer: half a gram matters
+  /// for oil and for salt.
+  RealColumn get grams => real()();
+
+  /// What 100 g of it was made of, copied at the moment it was logged.
+  IntColumn get caloriesPer100g => integer().withDefault(const Constant(0))();
+  IntColumn get proteinPer100g => integer().withDefault(const Constant(0))();
+  IntColumn get carbsPer100g => integer().withDefault(const Constant(0))();
+  IntColumn get fatPer100g => integer().withDefault(const Constant(0))();
+
+  /// The order they were added in, which is the order they read best.
+  IntColumn get position => integer()();
+}

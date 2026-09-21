@@ -281,13 +281,13 @@ void main() {
     test('writes down a food of the user own', () async {
       final saved = await repository.saveFood(
         Food(
-          id: '',
+          id: Food.unsaved,
           name: 'Licuado de banana',
           per100g: const Macros(calories: 90, protein: 2, carbs: 18, fat: 1),
         ),
       );
 
-      expect(saved.id, isNotEmpty);
+      expect(saved.id, isNot(Food.unsaved));
       expect(saved.isBuiltIn, isFalse);
 
       final stored = (await repository.foods()).firstWhere(
@@ -299,10 +299,10 @@ void main() {
 
     test('files the same food once however it was capitalised', () async {
       await repository.saveFood(
-        Food(id: '', name: 'Ñoquis caseros', per100g: Macros.empty),
+        Food(id: Food.unsaved, name: 'Ñoquis caseros', per100g: Macros.empty),
       );
       await repository.saveFood(
-        Food(id: '', name: 'ñoquis caseros', per100g: Macros.empty),
+        Food(id: Food.unsaved, name: 'ñoquis caseros', per100g: Macros.empty),
       );
 
       final matches = (await repository.foods()).where(
@@ -313,7 +313,11 @@ void main() {
 
     test('corrects a food it already had', () async {
       final saved = await repository.saveFood(
-        Food(id: '', name: 'Licuado', per100g: const Macros(calories: 90)),
+        Food(
+          id: Food.unsaved,
+          name: 'Licuado',
+          per100g: const Macros(calories: 90),
+        ),
       );
 
       await repository.saveFood(
@@ -334,7 +338,11 @@ void main() {
       // The database is a reference. Deleting from it must not rewrite the
       // record of a day that was actually lived.
       final saved = await repository.saveFood(
-        Food(id: '', name: 'Licuado', per100g: const Macros(calories: 90)),
+        Food(
+          id: Food.unsaved,
+          name: 'Licuado',
+          per100g: const Macros(calories: 90),
+        ),
       );
       await repository.addEntry(monday, draft(name: 'Licuado', kcal: 135));
 
@@ -354,7 +362,7 @@ void main() {
       // says what was eaten last week, whatever the database says today.
       final saved = await repository.saveFood(
         Food(
-          id: '',
+          id: Food.unsaved,
           name: 'Avena casera',
           per100g: const Macros(calories: 380),
         ),

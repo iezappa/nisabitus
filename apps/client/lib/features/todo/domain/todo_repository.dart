@@ -1,4 +1,5 @@
 import '../../../core/time/date_range.dart';
+import 'board_column.dart';
 import 'project.dart';
 import 'task.dart';
 import 'todo_stats.dart';
@@ -13,7 +14,7 @@ class TaskDraft {
     this.startDate,
     this.dueDate,
     this.priority = TaskPriority.medium,
-    this.status = TaskStatus.todo,
+    this.columnId,
   });
 
   final String title;
@@ -23,7 +24,10 @@ class TaskDraft {
   final DateTime? startDate;
   final DateTime? dueDate;
   final TaskPriority priority;
-  final TaskStatus status;
+
+  /// Where on the board it goes. Null lets the repository choose — the
+  /// leftmost column that does not already mean finished.
+  final String? columnId;
 }
 
 /// The port the to-do module talks to.
@@ -68,7 +72,63 @@ abstract interface class TodoRepository {
 
   Future<void> deleteTask(String id);
 
-  Future<Task> setTaskStatus(String id, TaskStatus status);
+  /// Moves a task to another column, which is what a drag across the board
+  /// and the picker in the editor both do.
+  ///
+  /// [columnId] may name a column of another project's board: the board on
+  /// screen is the selected project's, and "include subprojects" puts other
+  /// projects' tasks on it. The task lands in the column of its **own**
+  /// board that means the same — see [Board.equivalentOf].
+  Future<Task> moveTask(String id, String columnId);
+
+  /// One project's board, left to right.
+  Future<List<BoardColumn>> boardColumns(String projectId);
+
+  /// Appends a column to the right of a project's board.
+  Future<BoardColumn> createColumn(
+    String projectId,
+    String name, {
+    bool countsAsDone = false,
+  });
+
+  /// Renames a column, changes whether it means finished, or both.
+  ///
+  /// Renaming a column the app seeded makes it the user's: see
+  /// [BoardColumn.renamedTo].
+  Future<BoardColumn> updateColumn(
+    String id, {
+    required String name,
+    required bool countsAsDone,
+  });
+
+  /// Drops a column.
+  ///
+  /// Throws [StateError] when it still holds tasks, or when it is the last
+  /// column left — a task has to sit somewhere.
+  Future<void> deleteColumn(String id);
+
+  /// Writes the board's left-to-right order, [ids] being the new one.
+  Future<void> reorderColumns(List<String> ids);
+
+  /// How many tasks sit in each column, keyed by column id.
+  ///
+  /// What the editor needs to say why a column cannot be dropped.
+  Future<Map<String, int>> columnTaskCounts();
+
+  /// One task's checklist, top to bottom.
+  Future<List<ChecklistItem>> checklist(String taskId);
+
+  /// Appends a line to the bottom of a task's checklist.
+  Future<ChecklistItem> addChecklistItem(String taskId, String content);
+
+  /// Ticks a line, unticks it, or rewrites it.
+  Future<ChecklistItem> updateChecklistItem(
+    String id, {
+    String? content,
+    bool? done,
+  });
+
+  Future<void> deleteChecklistItem(String id);
 
   Future<List<TaskComment>> comments(String taskId);
 

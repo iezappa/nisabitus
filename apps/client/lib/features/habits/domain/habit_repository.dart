@@ -36,11 +36,32 @@ abstract interface class HabitRepository {
 
   /// Completions grouped by day, ascending, for the progress chart.
   /// Days with no completion are left out.
-  Future<List<DailyCompletionCount>> completionsPerDay(DateRange range);
+  ///
+  /// [category] narrows every figure to the habits filed under it, so the
+  /// progress side can answer "how is `orden` going" rather than only "how is
+  /// everything going". Null is every habit, which is not the same as a
+  /// habit whose category is blank.
+  Future<List<DailyCompletionCount>> completionsPerDay(
+    DateRange range, {
+    String? category,
+  });
 
   /// Total completions recorded inside [range].
-  Future<int> totalCompletions(DateRange range);
+  Future<int> totalCompletions(DateRange range, {String? category});
 
   /// How many habits exist, used to estimate the success rate.
-  Future<int> countHabits();
+  ///
+  /// Narrowed by [category] alongside the completions, or the rate would be
+  /// one category's completions over every habit there is.
+  Future<int> countHabits({String? category});
+
+  /// Every category the user has filed a habit under, sorted for reading.
+  ///
+  /// Derived from the habits themselves rather than kept in a table of its
+  /// own. A category exists because something is filed under it: that is what
+  /// makes the list right without anybody maintaining it, and what stops the
+  /// app accumulating categories nobody uses. The cost is that the last habit
+  /// out of a category takes the category with it, which is the same thing
+  /// said the other way round.
+  Future<List<String>> categories();
 }

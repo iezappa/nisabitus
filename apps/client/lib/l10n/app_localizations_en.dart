@@ -1776,4 +1776,226 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get staleStoreBody =>
       'Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page.';
+
+  @override
+  String get todoColumns => 'Columns';
+
+  @override
+  String get todoEditColumns => 'Edit columns';
+
+  @override
+  String get todoNewColumn => 'New column';
+
+  @override
+  String get todoColumnName => 'Column name';
+
+  @override
+  String get todoColumnCountsAsDone => 'Counts as finished';
+
+  @override
+  String get todoColumnCountsAsDoneHint =>
+      'Tasks landing here stop being overdue and count as completed in the progress figures.';
+
+  @override
+  String todoColumnHoldsTasks(int count) {
+    return 'This column still holds $count task(s). Move them before deleting it.';
+  }
+
+  @override
+  String get todoColumnLastOne => 'The board needs at least one column.';
+
+  @override
+  String get todoColumnMoveLeft => 'Move left';
+
+  @override
+  String get todoColumnMoveRight => 'Move right';
+
+  @override
+  String get todoTaskDetail => 'Task detail';
+
+  @override
+  String get todoNoDescription => 'No description';
+
+  @override
+  String get todoFieldColumn => 'Column';
+
+  @override
+  String get todoUpdates => 'Updates';
+
+  @override
+  String get todoAddUpdate => 'Add an update';
+
+  @override
+  String get todoProjectAllDone => 'All done';
+
+  @override
+  String get todoProjectOverdue => 'Has overdue tasks';
+
+  @override
+  String get todoProjectDueToday => 'Has tasks due today';
+
+  @override
+  String get todoProjectOpen => 'Has open tasks';
+
+  @override
+  String get todoProjectEmpty => 'No tasks';
+
+  @override
+  String todoProjectProgress(int done, int total) {
+    return '$done of $total finished';
+  }
+
+  @override
+  String get actionClose => 'Close';
+
+  @override
+  String get todoChecklist => 'Checklist';
+
+  @override
+  String get todoAddChecklistItem => 'Add an item';
+
+  @override
+  String todoChecklistProgress(int done, int total) {
+    return '$done of $total';
+  }
+
+  @override
+  String get todoInColumn => 'in list';
+
+  @override
+  String get todoDetails => 'Details';
+
+  @override
+  String get todoNoUpdates => 'No updates yet';
+
+  @override
+  String todoBoardOf(String project) {
+    return '$project board';
+  }
+
+  @override
+  String get nutritionComposition => 'What it is made of';
+
+  @override
+  String get nutritionComposedHint =>
+      'Add foods with their weight and the macros work themselves out. You can still correct them by hand.';
+
+  @override
+  String get nutritionSaveAsDish => 'Keep this combination as a dish';
+
+  @override
+  String get nutritionSaveAsDishHint =>
+      'It joins your food database, so you can pick it next time.';
+
+  @override
+  String get nutritionDishSaved => 'Dish saved to your database';
+
+  @override
+  String get nutritionTotal => 'Total';
+
+  @override
+  String get nutritionRemoveFood => 'Remove';
+
+  @override
+  String get nutritionHowMuch => 'How much does it weigh?';
+
+  @override
+  String nutritionPartOf(String name, int grams) {
+    return '$name, $grams g';
+  }
+
+  @override
+  String get habitsAllCategories => 'All';
+
+  @override
+  String get habitsFilterByCategory => 'Filter by category';
+
+  @override
+  String get habitsNoCategory => 'No category';
+
+  @override
+  String get habitsNewCategory => 'New category…';
+
+  @override
+  String get planVideo => 'Watch the video';
+
+  @override
+  String get planVideoTitle => 'Exercise video';
+
+  @override
+  String get planVideoOpen => 'Open outside';
+
+  @override
+  String get planVideoExternalOnly =>
+      'This link cannot be shown in here. It opens in your browser.';
+
+  @override
+  String get planVideoNotice =>
+      'The video loads from its own site; that is the one thing here that leaves the device.';
+
+  @override
+  String get steps => 'Steps';
+
+  @override
+  String get stepsToday => 'Steps for the day';
+
+  @override
+  String get stepsNone => 'No steps written down for this day yet.';
+
+  @override
+  String get stepsRecord => 'Write down steps';
+
+  @override
+  String get stepsEdit => 'Correct';
+
+  @override
+  String get stepsClear => 'Remove the entry';
+
+  @override
+  String stepsCount(String steps) {
+    return '$steps steps';
+  }
+
+  @override
+  String get stepsGoal => 'Daily target';
+
+  @override
+  String get stepsGoalEdit => 'Change the target';
+
+  @override
+  String get stepsGoalReached => 'Target reached';
+
+  @override
+  String stepsOfGoal(String walked, String goal) {
+    return '$walked of $goal';
+  }
+
+  @override
+  String get stepsAverage => 'Average per day';
+
+  @override
+  String get stepsBest => 'Best day';
+
+  @override
+  String get stepsDaysLogged => 'Days written down';
+
+  @override
+  String get stepsGoalDays => 'Days on target';
+
+  @override
+  String get stepsPerDay => 'Steps per day';
+
+  @override
+  String get stepsEmptyHint =>
+      'Write down a day\'s steps and the week shows up here.';
+
+  @override
+  String stepsValidation(String max) {
+    return 'Enter a number between 0 and $max.';
+  }
+
+  @override
+  String stepsAveragedOverLogged(int days) {
+    return 'Averaged over the days you wrote down, not over the $days in the window.';
+  }
 }

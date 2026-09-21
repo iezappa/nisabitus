@@ -10,13 +10,16 @@ void main() {
     required String title,
     DateTime? due,
     TaskPriority priority = TaskPriority.medium,
-    TaskStatus status = TaskStatus.todo,
+    bool done = false,
   }) => Task(
     id: '${++nextId}',
     title: title,
     projectId: '1',
     priority: priority,
-    status: status,
+    // The column is a row now; what these tests care about is whether
+    // landing there finishes the work.
+    columnId: done ? 'done' : 'todo',
+    countsAsDone: done,
     dueDate: due,
   );
 
@@ -78,11 +81,7 @@ void main() {
   group('what it leaves out', () {
     test('finished tasks, however overdue they look', () {
       final ranked = TaskFocus.rank([
-        task(
-          title: 'Hecha',
-          due: DateTime(2026, 1, 1),
-          status: TaskStatus.done,
-        ),
+        task(title: 'Hecha', due: DateTime(2026, 1, 1), done: true),
         task(title: 'Abierta'),
       ], today);
 

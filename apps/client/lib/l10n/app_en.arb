@@ -558,15 +558,33 @@
   "termsOfUse": "Terms of use",
   "developerContact": "Contact",
   "developerContactBody": "{developer} · reports and questions on GitHub",
-  "@developerContactBody": {"placeholders": {"developer": {"type": "String"}}},
+  "@developerContactBody": {
+    "placeholders": {
+      "developer": {
+        "type": "String"
+      }
+    }
+  },
   "openSourceLicenses": "Licenses",
   "backupExportCsv": "Export CSV",
   "backupCsvHint": "The CSV is for reading your data in a spreadsheet; it cannot be imported. To back up, use Export.",
   "backupCsvExported": "{count, plural, =1{CSV saved: 1 record} other{CSV saved: {count} records}}",
-  "@backupCsvExported": {"placeholders": {"count": {"type": "int"}}},
+  "@backupCsvExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "updateAvailableTitle": "A new version is available",
   "updateAvailableBody": "Version {version} is available.",
-  "@updateAvailableBody": {"placeholders": {"version": {"type": "String"}}},
+  "@updateAvailableBody": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "updateAvailableBackupHint": "This version changes how your data is stored. Export a backup before updating.",
   "updateUnsupportedPath": "Your version is too old to update directly. Export a backup and check the instructions.",
   "updateActionReload": "Update",
@@ -576,5 +594,146 @@
   "saveFailed": "Couldn't save. Please try again.",
   "deleteFailed": "Couldn't delete. Please try again.",
   "staleStoreTitle": "Another tab is running an older version",
-  "staleStoreBody": "Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page."
+  "staleStoreBody": "Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page.",
+  "todoColumns": "Columns",
+  "todoEditColumns": "Edit columns",
+  "todoNewColumn": "New column",
+  "todoColumnName": "Column name",
+  "todoColumnCountsAsDone": "Counts as finished",
+  "todoColumnCountsAsDoneHint": "Tasks landing here stop being overdue and count as completed in the progress figures.",
+  "todoColumnHoldsTasks": "This column still holds {count} task(s). Move them before deleting it.",
+  "@todoColumnHoldsTasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoColumnLastOne": "The board needs at least one column.",
+  "todoColumnMoveLeft": "Move left",
+  "todoColumnMoveRight": "Move right",
+  "todoTaskDetail": "Task detail",
+  "todoNoDescription": "No description",
+  "todoFieldColumn": "Column",
+  "todoUpdates": "Updates",
+  "todoAddUpdate": "Add an update",
+  "todoProjectAllDone": "All done",
+  "todoProjectOverdue": "Has overdue tasks",
+  "todoProjectDueToday": "Has tasks due today",
+  "todoProjectOpen": "Has open tasks",
+  "todoProjectEmpty": "No tasks",
+  "todoProjectProgress": "{done} of {total} finished",
+  "@todoProjectProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "actionClose": "Close",
+  "todoChecklist": "Checklist",
+  "todoAddChecklistItem": "Add an item",
+  "todoChecklistProgress": "{done} of {total}",
+  "@todoChecklistProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todoInColumn": "in list",
+  "todoDetails": "Details",
+  "todoNoUpdates": "No updates yet",
+  "todoBoardOf": "{project} board",
+  "@todoBoardOf": {
+    "placeholders": {
+      "project": {
+        "type": "String"
+      }
+    }
+  },
+  "nutritionComposition": "What it is made of",
+  "nutritionComposedHint": "Add foods with their weight and the macros work themselves out. You can still correct them by hand.",
+  "nutritionSaveAsDish": "Keep this combination as a dish",
+  "nutritionSaveAsDishHint": "It joins your food database, so you can pick it next time.",
+  "nutritionDishSaved": "Dish saved to your database",
+  "nutritionTotal": "Total",
+  "nutritionRemoveFood": "Remove",
+  "nutritionHowMuch": "How much does it weigh?",
+  "nutritionPartOf": "{name}, {grams} g",
+  "@nutritionPartOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "grams": {
+        "type": "int"
+      }
+    }
+  },
+  "habitsAllCategories": "All",
+  "habitsFilterByCategory": "Filter by category",
+  "habitsNoCategory": "No category",
+  "habitsNewCategory": "New category…",
+  "planVideo": "Watch the video",
+  "planVideoTitle": "Exercise video",
+  "planVideoOpen": "Open outside",
+  "planVideoExternalOnly": "This link cannot be shown in here. It opens in your browser.",
+  "planVideoNotice": "The video loads from its own site; that is the one thing here that leaves the device.",
+  "steps": "Steps",
+  "stepsToday": "Steps for the day",
+  "stepsNone": "No steps written down for this day yet.",
+  "stepsRecord": "Write down steps",
+  "stepsEdit": "Correct",
+  "stepsClear": "Remove the entry",
+  "stepsCount": "{steps} steps",
+  "@stepsCount": {
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
+  "stepsGoal": "Daily target",
+  "stepsGoalEdit": "Change the target",
+  "stepsGoalReached": "Target reached",
+  "stepsOfGoal": "{walked} of {goal}",
+  "@stepsOfGoal": {
+    "placeholders": {
+      "walked": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "stepsAverage": "Average per day",
+  "stepsBest": "Best day",
+  "stepsDaysLogged": "Days written down",
+  "stepsGoalDays": "Days on target",
+  "stepsPerDay": "Steps per day",
+  "stepsEmptyHint": "Write down a day's steps and the week shows up here.",
+  "stepsValidation": "Enter a number between 0 and {max}.",
+  "@stepsValidation": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "stepsAveragedOverLogged": "Averaged over the days you wrote down, not over the {days} in the window.",
+  "@stepsAveragedOverLogged": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }

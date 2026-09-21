@@ -1781,4 +1781,226 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get staleStoreBody =>
       'Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página.';
+
+  @override
+  String get todoColumns => 'Columnas';
+
+  @override
+  String get todoEditColumns => 'Editar columnas';
+
+  @override
+  String get todoNewColumn => 'Nueva columna';
+
+  @override
+  String get todoColumnName => 'Nombre de la columna';
+
+  @override
+  String get todoColumnCountsAsDone => 'Cuenta como terminada';
+
+  @override
+  String get todoColumnCountsAsDoneHint =>
+      'Las tareas que caen acá dejan de estar vencidas y cuentan como completadas en el progreso.';
+
+  @override
+  String todoColumnHoldsTasks(int count) {
+    return 'Esta columna todavía tiene $count tarea(s). Movelas antes de eliminarla.';
+  }
+
+  @override
+  String get todoColumnLastOne => 'El tablero necesita al menos una columna.';
+
+  @override
+  String get todoColumnMoveLeft => 'Mover a la izquierda';
+
+  @override
+  String get todoColumnMoveRight => 'Mover a la derecha';
+
+  @override
+  String get todoTaskDetail => 'Detalle de la tarea';
+
+  @override
+  String get todoNoDescription => 'Sin descripción';
+
+  @override
+  String get todoFieldColumn => 'Columna';
+
+  @override
+  String get todoUpdates => 'Novedades';
+
+  @override
+  String get todoAddUpdate => 'Agregar una novedad';
+
+  @override
+  String get todoProjectAllDone => 'Todo hecho';
+
+  @override
+  String get todoProjectOverdue => 'Con tareas vencidas';
+
+  @override
+  String get todoProjectDueToday => 'Con tareas para hoy';
+
+  @override
+  String get todoProjectOpen => 'Con tareas abiertas';
+
+  @override
+  String get todoProjectEmpty => 'Sin tareas';
+
+  @override
+  String todoProjectProgress(int done, int total) {
+    return '$done de $total terminadas';
+  }
+
+  @override
+  String get actionClose => 'Cerrar';
+
+  @override
+  String get todoChecklist => 'Checklist';
+
+  @override
+  String get todoAddChecklistItem => 'Agregar un ítem';
+
+  @override
+  String todoChecklistProgress(int done, int total) {
+    return '$done de $total';
+  }
+
+  @override
+  String get todoInColumn => 'en la columna';
+
+  @override
+  String get todoDetails => 'Detalles';
+
+  @override
+  String get todoNoUpdates => 'Sin novedades todavía';
+
+  @override
+  String todoBoardOf(String project) {
+    return 'Tablero de $project';
+  }
+
+  @override
+  String get nutritionComposition => 'Composición';
+
+  @override
+  String get nutritionComposedHint =>
+      'Sumá alimentos con su peso y los macros se calculan solos. Podés corregirlos a mano después.';
+
+  @override
+  String get nutritionSaveAsDish => 'Guardar la combinación como plato';
+
+  @override
+  String get nutritionSaveAsDishHint =>
+      'Queda en tu base de alimentos para elegirlo de una próxima vez.';
+
+  @override
+  String get nutritionDishSaved => 'Plato guardado en tu base';
+
+  @override
+  String get nutritionTotal => 'Total';
+
+  @override
+  String get nutritionRemoveFood => 'Quitar';
+
+  @override
+  String get nutritionHowMuch => '¿Cuánto pesa?';
+
+  @override
+  String nutritionPartOf(String name, int grams) {
+    return '$name, $grams g';
+  }
+
+  @override
+  String get habitsAllCategories => 'Todas';
+
+  @override
+  String get habitsFilterByCategory => 'Filtrar por categoría';
+
+  @override
+  String get habitsNoCategory => 'Sin categoría';
+
+  @override
+  String get habitsNewCategory => 'Nueva categoría…';
+
+  @override
+  String get planVideo => 'Ver el video';
+
+  @override
+  String get planVideoTitle => 'Video del ejercicio';
+
+  @override
+  String get planVideoOpen => 'Abrir afuera';
+
+  @override
+  String get planVideoExternalOnly =>
+      'Este enlace no se puede mostrar acá adentro. Se abre en tu navegador.';
+
+  @override
+  String get planVideoNotice =>
+      'El video se carga desde su sitio; eso es la única cosa que sale del dispositivo.';
+
+  @override
+  String get steps => 'Pasos';
+
+  @override
+  String get stepsToday => 'Pasos del día';
+
+  @override
+  String get stepsNone => 'Todavía no anotaste los pasos de este día.';
+
+  @override
+  String get stepsRecord => 'Anotar pasos';
+
+  @override
+  String get stepsEdit => 'Corregir';
+
+  @override
+  String get stepsClear => 'Borrar el registro';
+
+  @override
+  String stepsCount(String steps) {
+    return '$steps pasos';
+  }
+
+  @override
+  String get stepsGoal => 'Meta diaria';
+
+  @override
+  String get stepsGoalEdit => 'Cambiar la meta';
+
+  @override
+  String get stepsGoalReached => 'Meta alcanzada';
+
+  @override
+  String stepsOfGoal(String walked, String goal) {
+    return '$walked de $goal';
+  }
+
+  @override
+  String get stepsAverage => 'Promedio por día';
+
+  @override
+  String get stepsBest => 'Mejor día';
+
+  @override
+  String get stepsDaysLogged => 'Días anotados';
+
+  @override
+  String get stepsGoalDays => 'Días con la meta';
+
+  @override
+  String get stepsPerDay => 'Pasos por día';
+
+  @override
+  String get stepsEmptyHint =>
+      'Anotá los pasos de un día y acá vas a ver cómo viene la semana.';
+
+  @override
+  String stepsValidation(String max) {
+    return 'Poné un número entre 0 y $max.';
+  }
+
+  @override
+  String stepsAveragedOverLogged(int days) {
+    return 'Promediado sobre los días que anotaste, no sobre los $days de la ventana.';
+  }
 }

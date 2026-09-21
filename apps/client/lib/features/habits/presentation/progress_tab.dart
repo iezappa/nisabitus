@@ -8,11 +8,17 @@ import '../../../l10n/app_localizations.dart';
 import '../../streaks/presentation/streak_providers.dart';
 import '../../streaks/presentation/streaks_progress_view.dart';
 import 'habit_providers.dart';
+import 'widgets/category_filter.dart';
 
 /// The progress side of the Hábitos tab: habits and streaks under one window.
 ///
 /// Both modules read their own range provider, but the user sees a single
 /// control — two selectors on one screen would be noise, not choice.
+///
+/// The category filter sits above the figures and narrows both them and the
+/// chart, because "how is `orden` going" is a question about the same window
+/// and answering it in two places would let the two disagree. Streaks are
+/// left alone: a streak is not filed under a category.
 class ProgressTab extends ConsumerWidget {
   const ProgressTab({super.key});
 
@@ -44,6 +50,7 @@ class ProgressTab extends ConsumerWidget {
             icon: Icons.trending_up,
           ),
         ],
+        filter: const CategoryFilter(),
         chartLabel: l10n.habitsCompletionsPerDay,
         points: stats.isEmpty ? const [] : stats.perDay,
         emptyHint: l10n.chartEmptyHint,

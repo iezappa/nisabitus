@@ -3289,6 +3289,402 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página.'**
   String get staleStoreBody;
+
+  /// No description provided for @todoColumns.
+  ///
+  /// In es, this message translates to:
+  /// **'Columnas'**
+  String get todoColumns;
+
+  /// No description provided for @todoEditColumns.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar columnas'**
+  String get todoEditColumns;
+
+  /// No description provided for @todoNewColumn.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva columna'**
+  String get todoNewColumn;
+
+  /// No description provided for @todoColumnName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre de la columna'**
+  String get todoColumnName;
+
+  /// No description provided for @todoColumnCountsAsDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuenta como terminada'**
+  String get todoColumnCountsAsDone;
+
+  /// No description provided for @todoColumnCountsAsDoneHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Las tareas que caen acá dejan de estar vencidas y cuentan como completadas en el progreso.'**
+  String get todoColumnCountsAsDoneHint;
+
+  /// No description provided for @todoColumnHoldsTasks.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta columna todavía tiene {count} tarea(s). Movelas antes de eliminarla.'**
+  String todoColumnHoldsTasks(int count);
+
+  /// No description provided for @todoColumnLastOne.
+  ///
+  /// In es, this message translates to:
+  /// **'El tablero necesita al menos una columna.'**
+  String get todoColumnLastOne;
+
+  /// No description provided for @todoColumnMoveLeft.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover a la izquierda'**
+  String get todoColumnMoveLeft;
+
+  /// No description provided for @todoColumnMoveRight.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover a la derecha'**
+  String get todoColumnMoveRight;
+
+  /// No description provided for @todoTaskDetail.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de la tarea'**
+  String get todoTaskDetail;
+
+  /// No description provided for @todoNoDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin descripción'**
+  String get todoNoDescription;
+
+  /// No description provided for @todoFieldColumn.
+  ///
+  /// In es, this message translates to:
+  /// **'Columna'**
+  String get todoFieldColumn;
+
+  /// No description provided for @todoUpdates.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades'**
+  String get todoUpdates;
+
+  /// No description provided for @todoAddUpdate.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar una novedad'**
+  String get todoAddUpdate;
+
+  /// No description provided for @todoProjectAllDone.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo hecho'**
+  String get todoProjectAllDone;
+
+  /// No description provided for @todoProjectOverdue.
+  ///
+  /// In es, this message translates to:
+  /// **'Con tareas vencidas'**
+  String get todoProjectOverdue;
+
+  /// No description provided for @todoProjectDueToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Con tareas para hoy'**
+  String get todoProjectDueToday;
+
+  /// No description provided for @todoProjectOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Con tareas abiertas'**
+  String get todoProjectOpen;
+
+  /// No description provided for @todoProjectEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin tareas'**
+  String get todoProjectEmpty;
+
+  /// No description provided for @todoProjectProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total} terminadas'**
+  String todoProjectProgress(int done, int total);
+
+  /// No description provided for @actionClose.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get actionClose;
+
+  /// No description provided for @todoChecklist.
+  ///
+  /// In es, this message translates to:
+  /// **'Checklist'**
+  String get todoChecklist;
+
+  /// No description provided for @todoAddChecklistItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar un ítem'**
+  String get todoAddChecklistItem;
+
+  /// No description provided for @todoChecklistProgress.
+  ///
+  /// In es, this message translates to:
+  /// **'{done} de {total}'**
+  String todoChecklistProgress(int done, int total);
+
+  /// No description provided for @todoInColumn.
+  ///
+  /// In es, this message translates to:
+  /// **'en la columna'**
+  String get todoInColumn;
+
+  /// No description provided for @todoDetails.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalles'**
+  String get todoDetails;
+
+  /// No description provided for @todoNoUpdates.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin novedades todavía'**
+  String get todoNoUpdates;
+
+  /// No description provided for @todoBoardOf.
+  ///
+  /// In es, this message translates to:
+  /// **'Tablero de {project}'**
+  String todoBoardOf(String project);
+
+  /// No description provided for @nutritionComposition.
+  ///
+  /// In es, this message translates to:
+  /// **'Composición'**
+  String get nutritionComposition;
+
+  /// No description provided for @nutritionComposedHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Sumá alimentos con su peso y los macros se calculan solos. Podés corregirlos a mano después.'**
+  String get nutritionComposedHint;
+
+  /// No description provided for @nutritionSaveAsDish.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar la combinación como plato'**
+  String get nutritionSaveAsDish;
+
+  /// No description provided for @nutritionSaveAsDishHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Queda en tu base de alimentos para elegirlo de una próxima vez.'**
+  String get nutritionSaveAsDishHint;
+
+  /// No description provided for @nutritionDishSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Plato guardado en tu base'**
+  String get nutritionDishSaved;
+
+  /// No description provided for @nutritionTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'Total'**
+  String get nutritionTotal;
+
+  /// No description provided for @nutritionRemoveFood.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar'**
+  String get nutritionRemoveFood;
+
+  /// No description provided for @nutritionHowMuch.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cuánto pesa?'**
+  String get nutritionHowMuch;
+
+  /// No description provided for @nutritionPartOf.
+  ///
+  /// In es, this message translates to:
+  /// **'{name}, {grams} g'**
+  String nutritionPartOf(String name, int grams);
+
+  /// No description provided for @habitsAllCategories.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas'**
+  String get habitsAllCategories;
+
+  /// No description provided for @habitsFilterByCategory.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar por categoría'**
+  String get habitsFilterByCategory;
+
+  /// No description provided for @habitsNoCategory.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin categoría'**
+  String get habitsNoCategory;
+
+  /// No description provided for @habitsNewCategory.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva categoría…'**
+  String get habitsNewCategory;
+
+  /// No description provided for @planVideo.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver el video'**
+  String get planVideo;
+
+  /// No description provided for @planVideoTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Video del ejercicio'**
+  String get planVideoTitle;
+
+  /// No description provided for @planVideoOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir afuera'**
+  String get planVideoOpen;
+
+  /// No description provided for @planVideoExternalOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Este enlace no se puede mostrar acá adentro. Se abre en tu navegador.'**
+  String get planVideoExternalOnly;
+
+  /// No description provided for @planVideoNotice.
+  ///
+  /// In es, this message translates to:
+  /// **'El video se carga desde su sitio; eso es la única cosa que sale del dispositivo.'**
+  String get planVideoNotice;
+
+  /// No description provided for @steps.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasos'**
+  String get steps;
+
+  /// No description provided for @stepsToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasos del día'**
+  String get stepsToday;
+
+  /// No description provided for @stepsNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no anotaste los pasos de este día.'**
+  String get stepsNone;
+
+  /// No description provided for @stepsRecord.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotar pasos'**
+  String get stepsRecord;
+
+  /// No description provided for @stepsEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Corregir'**
+  String get stepsEdit;
+
+  /// No description provided for @stepsClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar el registro'**
+  String get stepsClear;
+
+  /// No description provided for @stepsCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{steps} pasos'**
+  String stepsCount(String steps);
+
+  /// No description provided for @stepsGoal.
+  ///
+  /// In es, this message translates to:
+  /// **'Meta diaria'**
+  String get stepsGoal;
+
+  /// No description provided for @stepsGoalEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar la meta'**
+  String get stepsGoalEdit;
+
+  /// No description provided for @stepsGoalReached.
+  ///
+  /// In es, this message translates to:
+  /// **'Meta alcanzada'**
+  String get stepsGoalReached;
+
+  /// No description provided for @stepsOfGoal.
+  ///
+  /// In es, this message translates to:
+  /// **'{walked} de {goal}'**
+  String stepsOfGoal(String walked, String goal);
+
+  /// No description provided for @stepsAverage.
+  ///
+  /// In es, this message translates to:
+  /// **'Promedio por día'**
+  String get stepsAverage;
+
+  /// No description provided for @stepsBest.
+  ///
+  /// In es, this message translates to:
+  /// **'Mejor día'**
+  String get stepsBest;
+
+  /// No description provided for @stepsDaysLogged.
+  ///
+  /// In es, this message translates to:
+  /// **'Días anotados'**
+  String get stepsDaysLogged;
+
+  /// No description provided for @stepsGoalDays.
+  ///
+  /// In es, this message translates to:
+  /// **'Días con la meta'**
+  String get stepsGoalDays;
+
+  /// No description provided for @stepsPerDay.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasos por día'**
+  String get stepsPerDay;
+
+  /// No description provided for @stepsEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Anotá los pasos de un día y acá vas a ver cómo viene la semana.'**
+  String get stepsEmptyHint;
+
+  /// No description provided for @stepsValidation.
+  ///
+  /// In es, this message translates to:
+  /// **'Poné un número entre 0 y {max}.'**
+  String stepsValidation(String max);
+
+  /// No description provided for @stepsAveragedOverLogged.
+  ///
+  /// In es, this message translates to:
+  /// **'Promediado sobre los días que anotaste, no sobre los {days} de la ventana.'**
+  String stepsAveragedOverLogged(int days);
 }
 
 class _AppLocalizationsDelegate

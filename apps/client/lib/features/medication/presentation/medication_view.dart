@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/preferences/preferences.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
@@ -9,8 +10,23 @@ import '../domain/medication.dart';
 import 'medication_providers.dart';
 import 'widgets/medication_form_dialog.dart';
 
+/// Whether the catalogue is open, remembered between launches.
+///
+/// Closed to begin with. What is due today is why this screen is opened; the
+/// list of everything the user takes is reference, and reference that is
+/// always unrolled pushes the day's work off the screen. Same mechanism the
+/// sleep insights card uses.
+final medicationCatalogueExpandedProvider =
+    StateNotifierProvider<BoolPreference, bool>(
+      (ref) => BoolPreference(
+        ref.watch(sharedPreferencesProvider),
+        'medication.catalogue.expanded',
+        fallback: false,
+      ),
+    );
+
 /// The medication half of the health section: what is due today on top, the
-/// full list underneath.
+/// full list underneath, folded away until it is asked for.
 class MedicationView extends ConsumerWidget {
   const MedicationView({super.key});
 
@@ -20,6 +36,14 @@ class MedicationView extends ConsumerWidget {
     final day = ref.watch(medicationDayProvider);
     final catalogue = ref.watch(medicationCatalogueProvider);
     final actions = ref.read(medicationActionsProvider);
+    final expanded = ref.watch(medicationCatalogueExpandedProvider);
+
+    // Counted while closed, so folding the list away does not also hide
+    // whether there is anything in it.
+    final stored = catalogue.valueOrNull?.length ?? 0;
+    final catalogueLabel = expanded || stored == 0
+        ? l10n.medsCatalogue
+        : '${l10n.medsCatalogue} · $stored';
 
     return ListView(
       padding: const EdgeInsets.only(bottom: 96),
@@ -81,70 +105,89 @@ class MedicationView extends ConsumerWidget {
             ],
           ),
         ),
-        SectionHeader(
-          label: l10n.medsCatalogue,
-          trailing: IconButton(
-            icon: const Icon(Icons.add, size: 20),
-            tooltip: l10n.medsNew,
-            onPressed: () async {
-              final draft = await showMedicationForm(context);
-              if (draft != null) await actions.create(draft);
-            },
+        // The whole header opens it, not just the chevron: a strip of text
+        // with one tappable glyph at the end is a target nobody finds.
+        InkWell(
+          onTap: () =>
+              ref.read(medicationCatalogueExpandedProvider.notifier).toggle(),
+          child: SectionHeader(
+            label: catalogueLabel,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.add, size: 20),
+                  tooltip: l10n.medsNew,
+                  onPressed: () async {
+                    final draft = await showMedicationForm(context);
+                    if (draft != null) await actions.create(draft);
+                  },
+                ),
+                Icon(
+                  expanded ? Icons.expand_less : Icons.expand_more,
+                  size: 20,
+                ),
+              ],
+            ),
           ),
         ),
-        catalogue.when(
-          loading: () => const SizedBox.shrink(),
-          error: (_, _) => const SizedBox.shrink(),
-          data: (items) => items.isEmpty
-              ? EmptyState(
-                  icon: Icons.medication_liquid_outlined,
-                  title: l10n.medsEmpty,
-                  hint: l10n.medsEmptyHint,
-                )
-              : Column(
-                  children: [
-                    for (final medication in items)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          Gap.lg,
-                          0,
-                          Gap.lg,
-                          Gap.sm,
-                        ),
-                        child: Opacity(
-                          // A paused entry stays visible but recedes: it is
-                          // history, not something to do today.
-                          opacity: medication.active ? 1 : 0.55,
-                          child: Card(
-                            child: ListTile(
-                              leading: _KindGlyph(kind: medication.kind),
-                              title: Text(medication.name),
-                              subtitle: Text(
-                                [
-                                  medication.kind == MedicationKind.medication
-                                      ? l10n.medsKindMedication
-                                      : l10n.medsKindSupplement,
-                                  if (medication.summary.isNotEmpty)
-                                    medication.summary,
-                                ].join(' · '),
+        if (!expanded)
+          const SizedBox.shrink()
+        else
+          catalogue.when(
+            loading: () => const SizedBox.shrink(),
+            error: (_, _) => const SizedBox.shrink(),
+            data: (items) => items.isEmpty
+                ? EmptyState(
+                    icon: Icons.medication_liquid_outlined,
+                    title: l10n.medsEmpty,
+                    hint: l10n.medsEmptyHint,
+                  )
+                : Column(
+                    children: [
+                      for (final medication in items)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            Gap.lg,
+                            0,
+                            Gap.lg,
+                            Gap.sm,
+                          ),
+                          child: Opacity(
+                            // A paused entry stays visible but recedes: it is
+                            // history, not something to do today.
+                            opacity: medication.active ? 1 : 0.55,
+                            child: Card(
+                              child: ListTile(
+                                leading: _KindGlyph(kind: medication.kind),
+                                title: Text(medication.name),
+                                subtitle: Text(
+                                  [
+                                    medication.kind == MedicationKind.medication
+                                        ? l10n.medsKindMedication
+                                        : l10n.medsKindSupplement,
+                                    if (medication.summary.isNotEmpty)
+                                      medication.summary,
+                                  ].join(' · '),
+                                ),
+                                onTap: () async {
+                                  final draft = await showMedicationForm(
+                                    context,
+                                    existing: medication,
+                                    onDelete: () =>
+                                        actions.delete(medication.id),
+                                  );
+                                  if (draft != null) {
+                                    await actions.update(medication.id, draft);
+                                  }
+                                },
                               ),
-                              onTap: () async {
-                                final draft = await showMedicationForm(
-                                  context,
-                                  existing: medication,
-                                  onDelete: () => actions.delete(medication.id),
-                                );
-                                if (draft != null) {
-                                  await actions.update(medication.id, draft);
-                                }
-                              },
                             ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-        ),
+                    ],
+                  ),
+          ),
       ],
     );
   }

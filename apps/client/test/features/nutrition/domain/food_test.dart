@@ -26,7 +26,11 @@ void main() {
       // a row that wrongly claims to be shipped would survive a reseed for
       // the wrong reason.
       expect(
-        Food(id: '0', name: 'Licuado', per100g: Macros.empty).isBuiltIn,
+        Food(
+          id: Food.unsaved,
+          name: 'Licuado',
+          per100g: Macros.empty,
+        ).isBuiltIn,
         isFalse,
       );
     });
@@ -75,7 +79,7 @@ void main() {
 
     test('carries the meal through a copy', () {
       final entry = FoodEntry(
-        id: '0',
+        id: Food.unsaved,
         date: DateTime(2026, 3, 11),
         name: 'Avena',
         macros: Macros.empty,

@@ -78,7 +78,18 @@ void main() {
                     TodoTasksCompanion.insert(
                       title: 'Escribir el test',
                       priority: 'MEDIUM',
-                      status: 'TODO',
+                      // The child project's own board, seeded here because
+                      // these rows are written straight to the tables rather
+                      // than through the repository. The cascade under test
+                      // is the project tree's.
+                      columnId: await (() async {
+                        await db.seedBoardColumnsFor(childId);
+                        return (await (db.select(
+                              db.boardColumns,
+                            )..where((c) => c.projectId.equals(childId))).get())
+                            .first
+                            .id;
+                      })(),
                       projectId: childId,
                     ),
                   ))

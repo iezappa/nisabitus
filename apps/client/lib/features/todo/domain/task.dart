@@ -25,27 +25,6 @@ enum TaskPriority {
   }
 }
 
-/// Which column of the board a task sits in.
-enum TaskStatus {
-  todo('TODO'),
-  inProgress('IN_PROGRESS'),
-  done('DONE');
-
-  const TaskStatus(this.wireName);
-
-  final String wireName;
-
-  static TaskStatus parse(String? value) {
-    final normalized = value?.trim().toUpperCase() ?? '';
-    if (normalized.isEmpty) return TaskStatus.todo;
-
-    for (final status in TaskStatus.values) {
-      if (status.wireName == normalized) return status;
-    }
-    throw ArgumentError.value(value, 'value', 'Unknown task status');
-  }
-}
-
 /// How a task's due date reads today.
 enum DueState { none, overdue, today, upcoming }
 
@@ -56,7 +35,8 @@ class Task {
     required String title,
     required this.projectId,
     required this.priority,
-    required this.status,
+    required this.columnId,
+    this.countsAsDone = false,
     this.description,
     this.category,
     DateTime? startDate,
@@ -74,7 +54,19 @@ class Task {
   final DateTime? startDate;
   final DateTime? dueDate;
   final TaskPriority priority;
-  final TaskStatus status;
+
+  /// The column of the board it sits in. What that column is called, and
+  /// whether it means finished, belongs to the column — see [BoardColumn].
+  final String columnId;
+
+  /// Whether the column it sits in counts as finished.
+  ///
+  /// Resolved when the task is read rather than stored, the same way
+  /// [projectName] is: it is a fact about the column, and copying it onto
+  /// the row would leave every task of a column stale the moment that column
+  /// changes.
+  final bool countsAsDone;
+
   final String projectId;
 
   /// The moment the task reached DONE, or null while it is open.
@@ -101,7 +93,7 @@ class Task {
   /// nobody.
   DueState dueState(DateTime today) {
     final due = dueDate;
-    if (due == null || status == TaskStatus.done) return DueState.none;
+    if (due == null || countsAsDone) return DueState.none;
 
     final day = dateOnly(today);
     if (due.isBefore(day)) return DueState.overdue;

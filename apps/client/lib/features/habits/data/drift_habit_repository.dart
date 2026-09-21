@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/database/record_columns.dart';
+import '../../../core/database/uuid.dart';
+import '../../../core/l10n/sort_key.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/habit.dart';
 import '../domain/habit_draft.dart';
@@ -68,21 +70,19 @@ class DriftHabitRepository implements HabitRepository {
     final today = dateOnly(on ?? DateTime.now());
     // Building the entity first means the domain rules reject bad input
     // before anything reaches the database.
-    final validated = _fromDraft(draft, id: '', createdAt: today);
+    final validated = _fromDraft(draft, id: newUuid(), createdAt: today);
 
-    final id =
-        (await _db
-                .into(_db.habits)
-                .insertReturning(
-                  _toCompanion(
-                    validated,
-                    createdAt: today,
-                    scheduledDate: today,
-                  ),
-                ))
-            .id;
+    await _db
+        .into(_db.habits)
+        .insert(
+          _toCompanion(
+            validated,
+            createdAt: today,
+            scheduledDate: today,
+          ).copyWith(id: Value(validated.id)),
+        );
 
-    return _hydrate(id, today);
+    return _hydrate(validated.id, today);
   }
 
   @override
@@ -145,10 +145,16 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<List<DailyCompletionCount>> completionsPerDay(DateRange range) async {
+  Future<List<DailyCompletionCount>> completionsPerDay(
+    DateRange range, {
+    String? category,
+  }) async {
+    final only = await _habitsIn(category);
     final rows =
         await (_db.select(_db.habitCompletions)..where(
-              (c) => c.completionDate.isBetweenValues(range.start, range.end),
+              (c) =>
+                  c.completionDate.isBetweenValues(range.start, range.end) &
+                  (only == null ? const Constant(true) : c.habitId.isIn(only)),
             ))
             .get();
 
@@ -163,26 +169,48 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<int> totalCompletions(DateRange range) async {
+  Future<int> totalCompletions(DateRange range, {String? category}) async {
+    final only = await _habitsIn(category);
     final count = _db.habitCompletions.id.count();
     final query = _db.selectOnly(_db.habitCompletions)
       ..addColumns([count])
       ..where(
         _db.habitCompletions.completionDate.isBetweenValues(
-          range.start,
-          range.end,
-        ),
+              range.start,
+              range.end,
+            ) &
+            (only == null
+                ? const Constant(true)
+                : _db.habitCompletions.habitId.isIn(only)),
       );
 
     return (await query.getSingle()).read(count) ?? 0;
   }
 
   @override
-  Future<int> countHabits() async {
+  Future<int> countHabits({String? category}) async {
     final count = _db.habits.id.count();
     final query = _db.selectOnly(_db.habits)..addColumns([count]);
+    if (category != null) {
+      query.where(_db.habits.category.equals(category));
+    }
 
     return (await query.getSingle()).read(count) ?? 0;
+  }
+
+  /// The ids of the habits filed under [category], or null for every habit.
+  ///
+  /// Null rather than "all the ids": an unfiltered query should not carry a
+  /// list of every habit in the store into its `WHERE`, and the two cases
+  /// read differently at the call site for exactly that reason.
+  Future<Set<String>?> _habitsIn(String? category) async {
+    if (category == null) return null;
+
+    final rows = await (_db.select(
+      _db.habits,
+    )..where((h) => h.category.equals(category))).get();
+
+    return {for (final row in rows) row.id};
   }
 
   Future<HabitRow> _requireRow(String id) async {
@@ -239,6 +267,28 @@ class DriftHabitRepository implements HabitRepository {
     await (_db.update(_db.habits)..where((h) => h.id.equals(id))).writeTouched(
       HabitsCompanion(status: Value(status.wireName)),
     );
+  }
+
+  @override
+  Future<List<String>> categories() async {
+    final query = _db.selectOnly(_db.habits)
+      ..addColumns([_db.habits.category])
+      ..groupBy([_db.habits.category]);
+
+    final names = [
+      for (final row in await query.get())
+        if (row.read(_db.habits.category)?.trim() case final name?
+            when name.isNotEmpty)
+          name,
+    ];
+
+    // Folded for the comparison only — see [sortKey], which is also what
+    // keeps "Órden" from filing after "Zapallo". Two spellings that differ by
+    // case are two categories in the rows, and the list says what is actually
+    // there rather than quietly showing one and hiding the other.
+    names.sort((a, b) => sortKey(a).compareTo(sortKey(b)));
+
+    return names;
   }
 
   Habit _fromDraft(

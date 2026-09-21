@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/widgets/dialog_title.dart';
+import '../../../../core/l10n/sort_key.dart';
+import '../../../../core/widgets/name_prompt_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/habit.dart';
 import '../../domain/habit_draft.dart';
@@ -16,12 +18,14 @@ Future<HabitDraft?> showHabitForm(
   Habit? existing,
   HabitFrequency initialFrequency = HabitFrequency.daily,
   Future<void> Function()? onDelete,
+  List<String> categories = const [],
 }) => showDialog<HabitDraft>(
   context: context,
   builder: (context) => _HabitFormDialog(
     existing: existing,
     initialFrequency: initialFrequency,
     onDelete: onDelete,
+    categories: categories,
   ),
 );
 
@@ -30,11 +34,19 @@ class _HabitFormDialog extends StatefulWidget {
     required this.existing,
     required this.initialFrequency,
     this.onDelete,
+    this.categories = const [],
   });
 
   final Habit? existing;
   final HabitFrequency initialFrequency;
   final Future<void> Function()? onDelete;
+
+  /// Categories the user has already filed a habit under.
+  ///
+  /// Passed in rather than read here, the same way the food form is told
+  /// which meal to start on: a dialog that goes to the database is a
+  /// dialog that cannot be built in a test without one.
+  final List<String> categories;
 
   @override
   State<_HabitFormDialog> createState() => _HabitFormDialogState();
@@ -44,7 +56,13 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _name;
   late final TextEditingController _description;
-  late final TextEditingController _category;
+
+  /// The category as chosen, or null for none.
+  ///
+  /// A value rather than a controller: the field is a dropdown now, and
+  /// a new category is typed into the prompt it opens rather than into
+  /// the field itself.
+  late String? _category;
   late final TextEditingController _target;
 
   late HabitFrequency _frequency;
@@ -58,7 +76,7 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
     final existing = widget.existing;
     _name = TextEditingController(text: existing?.name ?? '');
     _description = TextEditingController(text: existing?.description ?? '');
-    _category = TextEditingController(text: existing?.category ?? '');
+    _category = existing?.category?.trim();
     _target = TextEditingController(text: '${existing?.targetCount ?? 1}');
     _frequency = existing?.frequency ?? widget.initialFrequency;
     _repeatDays = {...?existing?.repeatDays};
@@ -70,7 +88,6 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
   void dispose() {
     _name.dispose();
     _description.dispose();
-    _category.dispose();
     _target.dispose();
     super.dispose();
   }
@@ -82,7 +99,7 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
       HabitDraft(
         name: _name.text,
         description: _blankToNull(_description.text),
-        category: _category.text.trim().isEmpty ? null : _category.text.trim(),
+        category: _category?.trim().isEmpty ?? true ? null : _category,
         frequency: _frequency,
         targetCount: int.tryParse(_target.text) ?? 1,
         endDate: _endDate,
@@ -144,10 +161,20 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
                   maxLines: 2,
                   minLines: 1,
                 ),
-                TextFormField(
-                  controller: _category,
-                  decoration: InputDecoration(labelText: l10n.fieldCategory),
-                  maxLength: 255,
+                // The app's own text field with a caret on it, rather than
+                // a `DropdownMenu`: that one brings its own decoration and
+                // ignores the app's, so it rendered as an outlined box in a
+                // form of filled ones. This is the same widget as every
+                // field above it and wears the same theme as `Frecuencia`
+                // below.
+                //
+                // Still a text field underneath, because the categories are
+                // offered and not imposed: a closed list would mean the first
+                // habit of a new category could not be written at all.
+                _CategoryField(
+                  value: _category,
+                  categories: widget.categories,
+                  onChanged: (value) => setState(() => _category = value),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<HabitFrequency>(
@@ -225,3 +252,119 @@ class _HabitFormDialogState extends State<_HabitFormDialog> {
 }
 
 /// The seven days as round toggles. Nothing selected means every day.
+
+/// The category field.
+///
+/// A `DropdownButtonFormField`, the same widget `Frecuencia` uses, because
+/// nothing else makes the two look alike **open**: a `MenuAnchor` draws its
+/// own kind of menu and a `DropdownMenu` brings its own decoration, and both
+/// were visibly not this form.
+///
+/// Which leaves writing a category that does not exist yet, since a dropdown
+/// cannot be typed into. The last entry opens the same name prompt the app
+/// already uses for a new project, so it is a gesture the user has met
+/// before rather than one invented here.
+class _CategoryField extends StatelessWidget {
+  const _CategoryField({
+    required this.value,
+    required this.categories,
+    required this.onChanged,
+  });
+
+  final String? value;
+  final List<String> categories;
+  final ValueChanged<String?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    // The habit's own category belongs in the list even when nothing else
+    // uses it any more — otherwise editing that habit would show a dropdown
+    // whose value is not one of its options.
+    final options = [
+      ...categories,
+      if (value case final current? when current.isNotEmpty)
+        if (!categories.contains(current)) current,
+    ]..sort((a, b) => sortKey(a).compareTo(sortKey(b)));
+
+    return DropdownButtonFormField<_CategoryChoice>(
+      initialValue: value == null || value!.isEmpty
+          ? const _NoCategory()
+          : _Existing(value!),
+      decoration: InputDecoration(labelText: l10n.fieldCategory),
+      items: [
+        DropdownMenuItem(
+          value: const _NoCategory(),
+          child: Text(l10n.habitsNoCategory),
+        ),
+        for (final category in options)
+          DropdownMenuItem(value: _Existing(category), child: Text(category)),
+        DropdownMenuItem(
+          value: const _NewCategory(),
+          child: Text(l10n.habitsNewCategory),
+        ),
+      ],
+      onChanged: (choice) async {
+        switch (choice) {
+          case _NoCategory():
+            onChanged(null);
+          case _Existing(:final name):
+            onChanged(name);
+          case _NewCategory():
+            final name = await promptForName(
+              context,
+              title: l10n.habitsNewCategory,
+            );
+            // Dismissing the prompt leaves the category where it was. A
+            // cancelled dialog must not be a way to clear a field.
+            if (name != null) onChanged(name.trim());
+          case null:
+            break;
+        }
+      },
+    );
+  }
+}
+
+/// What the category dropdown can be set to.
+///
+/// A type rather than a `String?` with a magic value in it: a category is
+/// free text, so any sentinel string is a category somebody could type.
+sealed class _CategoryChoice {
+  const _CategoryChoice();
+}
+
+class _NoCategory extends _CategoryChoice {
+  const _NoCategory();
+
+  @override
+  bool operator ==(Object other) => other is _NoCategory;
+
+  @override
+  int get hashCode => 0;
+}
+
+class _NewCategory extends _CategoryChoice {
+  const _NewCategory();
+
+  @override
+  bool operator ==(Object other) => other is _NewCategory;
+
+  @override
+  int get hashCode => 1;
+}
+
+class _Existing extends _CategoryChoice {
+  const _Existing(this.name);
+
+  final String name;
+
+  // Compared by name, because the dropdown matches its value against the
+  // items by equality and they are rebuilt on every frame.
+  @override
+  bool operator ==(Object other) => other is _Existing && other.name == name;
+
+  @override
+  int get hashCode => name.hashCode;
+}

@@ -9,11 +9,13 @@ import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/name_prompt_dialog.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
+import '../domain/board_column.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
 import 'todo_labels.dart';
 import 'todo_progress_view.dart';
 import 'todo_providers.dart';
+import 'widgets/board_columns_dialog.dart';
 import 'widgets/project_tree_view.dart';
 import 'widgets/task_card.dart';
 import 'widgets/task_dialog.dart';
@@ -56,6 +58,24 @@ class TodoScreen extends ConsumerWidget {
               : TodoViewMode.kanban,
         ),
         IconButton(
+          icon: const Icon(Icons.view_column_outlined),
+          tooltip: l10n.todoEditColumns,
+          // A board belongs to a project, so there is nothing to arrange
+          // until one is picked.
+          onPressed: selectedId == null
+              ? null
+              : () => showBoardColumnsDialog(
+                  context,
+                  projectId: selectedId,
+                  projectName:
+                      projects.valueOrNull?.tree.all
+                          .where((project) => project.id == selectedId)
+                          .firstOrNull
+                          ?.name ??
+                      '',
+                ),
+        ),
+        IconButton(
           icon: const Icon(Icons.create_new_folder_outlined),
           tooltip: l10n.todoNewProject,
           onPressed: newProject,
@@ -82,7 +102,11 @@ class TodoScreen extends ConsumerWidget {
             );
           }
 
-          final sidebar = ProjectTreeView(tree: data.tree, counts: data.counts);
+          final sidebar = ProjectTreeView(
+            tree: data.tree,
+            counts: data.counts,
+            tallies: data.tallies,
+          );
 
           if (!wide) {
             // On a narrow window the tree becomes a sheet: a permanent
@@ -255,32 +279,82 @@ class _Kanban extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.all(Gap.md),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final status in TaskStatus.values)
-            _Column(
-              status: status,
-              tasks: tasks.where((task) => task.status == status).toList(),
-              projectId: projectId,
+    final l10n = AppLocalizations.of(context);
+    final board = ref.watch(boardProvider);
+
+    return board.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) => Center(child: Text('$error')),
+      data: (data) => data.isEmpty
+          ? Center(
+              child: EmptyState(
+                icon: Icons.view_column_outlined,
+                title: l10n.todoColumns,
+                hint: l10n.todoColumnLastOne,
+              ),
+            )
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                // The columns used to be 280 wide whatever the window was, so
+                // a board of three left most of a desktop page empty and the
+                // work looked huddled in a corner. They share the width when
+                // it is there, and go back to scrolling sideways once there
+                // are more columns than fit — which is the only case where a
+                // fixed width was ever the right answer.
+                const gap = Gap.md;
+                const minWidth = 260.0;
+                final available = constraints.maxWidth - gap * 2;
+                final share =
+                    (available - gap * (data.columns.length - 1)) /
+                    data.columns.length;
+                final width = share >= minWidth ? share : minWidth;
+                final fits = share >= minWidth;
+
+                final row = Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final (index, column) in data.columns.indexed)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: index == data.columns.length - 1 ? 0 : gap,
+                        ),
+                        child: _Column(
+                          column: column,
+                          width: width,
+                          tasks: tasks
+                              .where((task) => task.columnId == column.id)
+                              .toList(),
+                          projectId: projectId,
+                        ),
+                      ),
+                  ],
+                );
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.all(gap),
+                  // Without this the row inside a horizontal scroll view is
+                  // free to be as narrow as its children, and the columns
+                  // would hug the left however wide they were told to be.
+                  physics: fits ? const NeverScrollableScrollPhysics() : null,
+                  child: row,
+                );
+              },
             ),
-        ],
-      ),
     );
   }
 }
 
 class _Column extends ConsumerWidget {
   const _Column({
-    required this.status,
+    required this.column,
+    required this.width,
     required this.tasks,
     required this.projectId,
   });
 
-  final TaskStatus status;
+  final BoardColumn column;
+  final double width;
   final List<Task> tasks;
   final String projectId;
 
@@ -292,12 +366,11 @@ class _Column extends ConsumerWidget {
 
     return DragTarget<Task>(
       // Dropping a task where it already is would be a pointless write.
-      onWillAcceptWithDetails: (details) => details.data.status != status,
+      onWillAcceptWithDetails: (details) => details.data.columnId != column.id,
       onAcceptWithDetails: (details) =>
-          ref.read(todoActionsProvider).setStatus(details.data.id, status),
+          ref.read(todoActionsProvider).moveTask(details.data.id, column.id),
       builder: (context, candidate, _) => Container(
-        width: 280,
-        margin: const EdgeInsets.only(right: Gap.md),
+        width: width,
         padding: const EdgeInsets.all(Gap.sm),
         decoration: BoxDecoration(
           color: candidate.isEmpty
@@ -314,7 +387,7 @@ class _Column extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SectionHeader(
-              label: '${l10n.statusName(status)} · ${tasks.length}',
+              label: '${l10n.columnName(column)} · ${tasks.length}',
             ),
             for (final task in tasks)
               Padding(
@@ -324,7 +397,7 @@ class _Column extends ConsumerWidget {
                   feedback: Material(
                     color: Colors.transparent,
                     child: SizedBox(
-                      width: 260,
+                      width: width - Gap.md,
                       child: TaskCard(task: task, today: today, onTap: () {}),
                     ),
                   ),

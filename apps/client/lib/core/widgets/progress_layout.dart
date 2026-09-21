@@ -27,6 +27,7 @@ class ProgressLayout extends ConsumerWidget {
     this.chartReference,
     this.emptyHint,
     this.extra,
+    this.filter,
     super.key,
   });
 
@@ -49,6 +50,12 @@ class ProgressLayout extends ConsumerWidget {
   /// Anything the module wants under the chart.
   final Widget? extra;
 
+  /// Shown under the window picker, above the figures.
+  ///
+  /// A module that narrows what it is showing puts the control here so it
+  /// reads as part of the same question the window picker asks.
+  final Widget? filter;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -57,6 +64,7 @@ class ProgressLayout extends ConsumerWidget {
       padding: const EdgeInsets.only(top: Gap.lg, bottom: 96),
       children: [
         RangeSelector(value: range, onChanged: onRangeChanged),
+        ?filter,
         // Two to a row: three or four figures crammed side by side turn the
         // number, which is what the user came to read, into the smallest
         // thing on screen. An odd last one takes the whole width.

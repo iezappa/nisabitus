@@ -19,6 +19,7 @@ import 'schema_v11.dart' as v11;
 import 'schema_v12.dart' as v12;
 import 'schema_v13.dart' as v13;
 import 'schema_v14.dart' as v14;
+import 'schema_v18.dart' as v18;
 
 class GeneratedHelper implements SchemaInstantiationHelper {
   @override
@@ -52,10 +53,28 @@ class GeneratedHelper implements SchemaInstantiationHelper {
         return v13.DatabaseAtV13(db);
       case 14:
         return v14.DatabaseAtV14(db);
+      case 18:
+        return v18.DatabaseAtV18(db);
       default:
         throw MissingSchemaException(version, versions);
     }
   }
 
-  static const versions = const [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  static const versions = const [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    18,
+  ];
 }

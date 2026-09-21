@@ -91,7 +91,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
     return db;
   }
 

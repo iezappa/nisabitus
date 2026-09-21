@@ -5,6 +5,8 @@ import '../../../core/widgets/async_section.dart';
 import '../../../core/widgets/progress_layout.dart';
 import '../../../core/widgets/stat_tile.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../steps/presentation/step_providers.dart';
+import '../../steps/presentation/widgets/steps_report.dart';
 import 'exercise_providers.dart';
 
 /// How the training went over the chosen window.
@@ -20,8 +22,12 @@ class ExerciseProgressView extends ConsumerWidget {
       value: ref.watch(exerciseStatsProvider),
       builder: (stats) => ProgressLayout(
         range: range,
-        onRangeChanged: (value) =>
-            ref.read(exerciseProgressRangeProvider.notifier).state = value,
+        onRangeChanged: (value) {
+          ref.read(exerciseProgressRangeProvider.notifier).state = value;
+          // Steps read their own range but the user sees one control: two
+          // windows on one screen that could disagree is worse than either.
+          ref.read(stepReportRangeProvider.notifier).state = value;
+        },
         tiles: [
           StatTile(
             label: l10n.exerciseVolume,
@@ -50,6 +56,10 @@ class ExerciseProgressView extends ConsumerWidget {
         chartLabel: l10n.exerciseVolumePerDay,
         points: stats.isEmpty ? const [] : stats.perDay,
         emptyHint: l10n.planEmptyHint,
+        // Under the training figures, reading the same window: walking is
+        // exercise, and a second range picker would be noise rather than
+        // choice.
+        extra: const StepsReport(),
       ),
     );
   }

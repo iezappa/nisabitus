@@ -6,13 +6,20 @@ import '../../../../core/widgets/name_prompt_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/project.dart';
 import '../todo_providers.dart';
+import 'project_dot.dart';
 
 /// The project hierarchy, indented by depth.
 class ProjectTreeView extends ConsumerWidget {
-  const ProjectTreeView({required this.tree, required this.counts, super.key});
+  const ProjectTreeView({
+    required this.tree,
+    required this.counts,
+    required this.tallies,
+    super.key,
+  });
 
   final ProjectTree tree;
   final Map<String, TaskCount> counts;
+  final Map<String, ProjectTally> tallies;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +27,13 @@ class ProjectTreeView extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: Gap.xl),
       children: [
         for (final root in tree.childrenOf(null))
-          _Node(project: root, tree: tree, counts: counts, depth: 1),
+          _Node(
+            project: root,
+            tree: tree,
+            counts: counts,
+            tallies: tallies,
+            depth: 1,
+          ),
       ],
     );
   }
@@ -31,12 +44,14 @@ class _Node extends ConsumerWidget {
     required this.project,
     required this.tree,
     required this.counts,
+    required this.tallies,
     required this.depth,
   });
 
   final Project project;
   final ProjectTree tree;
   final Map<String, TaskCount> counts;
+  final Map<String, ProjectTally> tallies;
   final int depth;
 
   @override
@@ -59,11 +74,13 @@ class _Node extends ConsumerWidget {
             selectedTileColor: theme.colorScheme.primary.withValues(
               alpha: 0.08,
             ),
-            leading: Icon(
-              children.isEmpty
-                  ? Icons.folder_outlined
-                  : Icons.folder_copy_outlined,
-              size: 18,
+            // The dot replaces the folder icon rather than joining it: two
+            // glyphs in a dense tile leave no room for the name, and the
+            // shape of the branch is already told by the indent.
+            leading: ProjectDot(
+              tally:
+                  tallies[project.id] ??
+                  (total: 0, done: 0, overdue: 0, dueToday: 0),
             ),
             title: Text(project.name, overflow: TextOverflow.ellipsis),
             subtitle: count == null || count.total == 0
@@ -121,7 +138,13 @@ class _Node extends ConsumerWidget {
           ),
         ),
         for (final child in children)
-          _Node(project: child, tree: tree, counts: counts, depth: depth + 1),
+          _Node(
+            project: child,
+            tree: tree,
+            counts: counts,
+            tallies: tallies,
+            depth: depth + 1,
+          ),
       ],
     );
   }

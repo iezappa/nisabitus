@@ -30,6 +30,19 @@ final habitsForFrequencyProvider =
 /// Incremented after every write so dependent queries refetch.
 final habitsRevisionProvider = StateProvider<int>((ref) => 0);
 
+/// Every category the user has filed a habit under.
+///
+/// Feeds both the picker in the form and the filter on the progress side, so
+/// the two can never offer different lists.
+final habitCategoriesProvider = FutureProvider<List<String>>((ref) {
+  ref.watch(habitsRevisionProvider);
+
+  return ref.watch(habitRepositoryProvider).categories();
+});
+
+/// The category the progress view is narrowed to, or null for all of them.
+final habitCategoryFilterProvider = StateProvider<String?>((ref) => null);
+
 /// The window the progress view is looking at.
 final habitProgressRangeProvider = StateProvider<ProgressRange>(
   (ref) => ProgressRange.defaultRange,
@@ -43,12 +56,13 @@ final habitStatsProvider = FutureProvider<HabitStats>((ref) async {
   final range = ref
       .watch(habitProgressRangeProvider)
       .toDateRange(from: ref.watch(habitDayProvider));
+  final category = ref.watch(habitCategoryFilterProvider);
 
   // Independent queries, so they run together rather than in sequence.
   final (completions, habitCount, perDay) = await (
-    repository.totalCompletions(range),
-    repository.countHabits(),
-    repository.completionsPerDay(range),
+    repository.totalCompletions(range, category: category),
+    repository.countHabits(category: category),
+    repository.completionsPerDay(range, category: category),
   ).wait;
 
   return HabitStats.from(

@@ -28,6 +28,13 @@
 // to whole numbers on purpose: a decimal place would claim a precision the
 // source does not have, and the user is weighing on a kitchen scale.
 //
+// A hundred foods, which is enough to cover most of what actually gets eaten
+// here without the list becoming something to browse rather than search. The
+// composed dishes added last — tarta, guiso, tortilla, ravioles, sándwich de
+// miga — carry the same uncertainty as the ones above them and more of it
+// than any raw ingredient: they are recipes, and a recipe is not a controlled
+// object.
+//
 // This is a starting point, not an authority. Anything here can be corrected
 // or deleted, and the user's own foods sit in the same table alongside it.
 //
@@ -57,6 +64,12 @@ typedef SeedFood = ({
 /// and scanned alphabetically, never browsed in insertion order.
 const argentineFoodSeed = <SeedFood>[
   // Carnes y parrilla
+  (name: 'Peceto', calories: 150, protein: 31, carbs: 0, fat: 3),
+  (name: 'Costillas de cerdo', calories: 250, protein: 26, carbs: 0, fat: 16),
+  (name: 'Bondiola de cerdo', calories: 270, protein: 24, carbs: 0, fat: 19),
+  (name: 'Mollejas', calories: 230, protein: 20, carbs: 0, fat: 17),
+  (name: 'Panceta', calories: 540, protein: 12, carbs: 1, fat: 53),
+  (name: 'Jamón crudo', calories: 240, protein: 27, carbs: 0, fat: 15),
   (name: 'Asado de tira', calories: 290, protein: 25, carbs: 0, fat: 21),
   (name: 'Bife de chorizo', calories: 250, protein: 27, carbs: 0, fat: 16),
   (name: 'Vacío', calories: 230, protein: 27, carbs: 0, fat: 13),
@@ -72,6 +85,18 @@ const argentineFoodSeed = <SeedFood>[
   (name: 'Atún al natural', calories: 116, protein: 26, carbs: 0, fat: 1),
 
   // Platos
+  (name: 'Empanada de humita', calories: 240, protein: 6, carbs: 28, fat: 11),
+  (
+    name: 'Tarta de jamón y queso',
+    calories: 260,
+    protein: 11,
+    carbs: 22,
+    fat: 14,
+  ),
+  (name: 'Guiso de lentejas', calories: 120, protein: 7, carbs: 16, fat: 3),
+  (name: 'Tortilla de papas', calories: 190, protein: 6, carbs: 16, fat: 11),
+  (name: 'Ravioles de ricota', calories: 200, protein: 9, carbs: 28, fat: 5),
+  (name: 'Sándwich de miga', calories: 280, protein: 11, carbs: 32, fat: 11),
   (name: 'Milanesa de carne', calories: 280, protein: 20, carbs: 15, fat: 15),
   (name: 'Milanesa de pollo', calories: 250, protein: 22, carbs: 15, fat: 11),
   (name: 'Empanada de carne', calories: 270, protein: 10, carbs: 27, fat: 13),
@@ -93,6 +118,14 @@ const argentineFoodSeed = <SeedFood>[
   (name: 'Galletitas de agua', calories: 420, protein: 10, carbs: 72, fat: 10),
 
   // Lácteos
+  (name: 'Queso de máquina', calories: 300, protein: 21, carbs: 2, fat: 23),
+  (
+    name: 'Dulce de leche repostero',
+    calories: 330,
+    protein: 6,
+    carbs: 57,
+    fat: 8,
+  ),
   (name: 'Leche entera', calories: 61, protein: 3, carbs: 5, fat: 3),
   (name: 'Leche descremada', calories: 35, protein: 3, carbs: 5, fat: 0),
   (name: 'Yogur entero', calories: 61, protein: 4, carbs: 5, fat: 3),
@@ -105,6 +138,9 @@ const argentineFoodSeed = <SeedFood>[
   (name: 'Huevo', calories: 145, protein: 13, carbs: 1, fat: 10),
 
   // Almacén
+  (name: 'Mayonesa', calories: 680, protein: 1, carbs: 2, fat: 75),
+  (name: 'Salsa de tomate', calories: 40, protein: 2, carbs: 7, fat: 1),
+  (name: 'Quinoa, cocida', calories: 120, protein: 4, carbs: 21, fat: 2),
   (name: 'Arroz blanco, cocido', calories: 130, protein: 3, carbs: 28, fat: 0),
   (name: 'Fideos, cocidos', calories: 155, protein: 6, carbs: 30, fat: 1),
   (name: 'Harina de trigo', calories: 364, protein: 10, carbs: 76, fat: 1),
@@ -120,6 +156,9 @@ const argentineFoodSeed = <SeedFood>[
   (name: 'Nueces', calories: 654, protein: 15, carbs: 14, fat: 65),
 
   // Verduras y frutas
+  (name: 'Brócoli, hervido', calories: 35, protein: 2, carbs: 7, fat: 0),
+  (name: 'Espinaca', calories: 23, protein: 3, carbs: 4, fat: 0),
+  (name: 'Mandarina', calories: 53, protein: 1, carbs: 13, fat: 0),
   (name: 'Papa, hervida', calories: 87, protein: 2, carbs: 20, fat: 0),
   (name: 'Papas fritas', calories: 310, protein: 4, carbs: 41, fat: 15),
   (name: 'Batata, hervida', calories: 76, protein: 1, carbs: 18, fat: 0),

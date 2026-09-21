@@ -95,6 +95,7 @@ class FoodEntry {
     required this.macros,
     this.portion,
     this.meal,
+    this.parts = const [],
   }) : date = dateOnly(date),
        name = _validateName(name);
 
@@ -105,7 +106,20 @@ class FoodEntry {
   /// Free text: "150 g", "1 plato", "2 unidades".
   final String? portion;
 
+  /// What the entry was worth. Authoritative, parts or no parts.
+  ///
+  /// When [parts] is not empty this is their sum, worked out once when the
+  /// entry was written and stored — not recomputed on every read. The parts
+  /// carry copies of what each food was made of at the time, so the total
+  /// and its explanation can never drift from each other.
   final Macros macros;
+
+  /// The foods this entry was made of, in the order they were added.
+  ///
+  /// Empty for an entry typed whole, which is every entry written before v17
+  /// and anything still written by hand. Emptiness is not a missing value: a
+  /// plate nobody broke down is a plate nobody broke down.
+  final List<FoodPart> parts;
 
   /// Which meal this belonged to, or null for an entry written before the
   /// app asked. Null is not "breakfast": it is nobody having said.
@@ -119,6 +133,14 @@ class FoodEntry {
     return trimmed;
   }
 
+  /// Whether the entry says what it was made of.
+  bool get isComposed => parts.isNotEmpty;
+
+  /// What the whole plate weighed, or null when it was not weighed.
+  double? get totalGrams => parts.isEmpty
+      ? null
+      : parts.fold<double>(0, (sum, part) => sum + part.grams);
+
   FoodEntry copyWith({String? id}) => FoodEntry(
     id: id ?? this.id,
     date: date,
@@ -126,7 +148,87 @@ class FoodEntry {
     portion: portion,
     macros: macros,
     meal: meal,
+    parts: parts,
   );
+}
+
+/// One food inside a composed entry, with what it weighed.
+///
+/// Carries its own copy of the per-100 g figures rather than pointing at a
+/// [Food]: correcting the database today must not rewrite what last week says
+/// was eaten, which is the same rule the entry itself follows.
+class FoodPart {
+  FoodPart({
+    required this.id,
+    required String name,
+    required this.grams,
+    required this.per100g,
+  }) : name = _validateName(name) {
+    if (grams < 0) {
+      throw ArgumentError.value(grams, 'grams', 'Must not be negative');
+    }
+  }
+
+  final String id;
+  final String name;
+
+  /// What went on the scale.
+  final double grams;
+
+  /// What 100 g of it was made of, as it stood when this was logged.
+  final Macros per100g;
+
+  /// What this part contributed to the plate.
+  Macros get macros => scaleMacros(per100g, grams);
+
+  static String _validateName(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      throw ArgumentError.value(value, 'name', 'The name is required');
+    }
+    return trimmed;
+  }
+}
+
+/// What a set of parts adds up to, and what the plate is made of per 100 g.
+extension FoodPartsReading on List<FoodPart> {
+  /// The sum of the parts.
+  ///
+  /// Each part is rounded to whole numbers as it is scaled, and the rounded
+  /// figures are what is added. Summing the unrounded values and rounding
+  /// once would be arithmetically tidier and would show a total that does not
+  /// match the parts printed under it — and the user checks the sum by eye.
+  Macros get total => fold(
+    Macros.empty,
+    (sum, part) => Macros(
+      calories: sum.calories + part.macros.calories,
+      protein: sum.protein + part.macros.protein,
+      carbs: sum.carbs + part.macros.carbs,
+      fat: sum.fat + part.macros.fat,
+    ),
+  );
+
+  double get grams => fold<double>(0, (sum, part) => sum + part.grams);
+
+  /// The whole plate quoted per 100 g, for saving it back as a food.
+  ///
+  /// Null when nothing was weighed: a composition with no weight has no
+  /// reference to be quoted against, and dividing by zero grams would invent
+  /// one.
+  Macros? get per100g {
+    final weight = grams;
+    if (weight <= 0) return null;
+
+    final sum = total;
+    int at(int value) => (value * 100 / weight).round();
+
+    return Macros(
+      calories: at(sum.calories),
+      protein: at(sum.protein),
+      carbs: at(sum.carbs),
+      fat: at(sum.fat),
+    );
+  }
 }
 
 /// An entry in the food database: what something is made of, per 100 g.
@@ -148,6 +250,14 @@ class Food {
     required this.per100g,
     this.isBuiltIn = false,
   }) : name = _validateName(name);
+
+  /// The id of a food the database does not hold yet.
+  ///
+  /// It used to be zero, which worked while ids were counted from one. A
+  /// UUID has no value that is obviously "none", so the absence is written
+  /// down rather than encoded in a number: an empty id means the form is
+  /// describing a food, not correcting a row.
+  static const unsaved = '';
 
   final String id;
   final String name;

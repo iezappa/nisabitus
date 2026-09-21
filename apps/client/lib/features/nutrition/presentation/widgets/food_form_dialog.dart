@@ -10,18 +10,26 @@ import '../../domain/nutrition_repository.dart';
 import '../nutrition_labels.dart';
 import 'food_database_dialog.dart';
 
+/// What the form hands back: the entry, and whether to keep the combination.
+///
+/// A record rather than a flag on [FoodDraft], because "also file this as a
+/// dish" is something the user asked the form to do, not a property of what
+/// was eaten. The draft describes the plate; this says what else to do about
+/// it.
+typedef FoodFormResult = ({FoodDraft draft, bool saveAsDish});
+
 /// Collects one food entry. Returns null when dismissed.
 ///
 /// [initialMeal] is which meal a new entry starts on. It is asked for rather
 /// than worked out here because working it out means reading the clock, and a
 /// dialog that reads the clock cannot be photographed: the same screenshot
 /// comes out different depending on the hour the test happened to run.
-Future<FoodDraft?> showFoodForm(
+Future<FoodFormResult?> showFoodForm(
   BuildContext context, {
   FoodEntry? existing,
   Future<void> Function()? onDelete,
   Meal? initialMeal,
-}) => showDialog<FoodDraft>(
+}) => showDialog<FoodFormResult>(
   context: context,
   builder: (context) => _FoodFormDialog(
     existing: existing,
@@ -51,14 +59,27 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
   late final _protein = _number(widget.existing?.macros.protein);
   late final _carbs = _number(widget.existing?.macros.carbs);
   late final _fat = _number(widget.existing?.macros.fat);
-  final _grams = TextEditingController();
 
-  /// The food this entry was taken from, while the form is still open.
+  /// What the plate is made of, while the form is open.
   ///
-  /// Only the figures are copied out of it — nothing about the saved entry
-  /// points back here. It is held on to so the weight field has something to
-  /// scale, and it is dropped the moment the dialog closes.
-  Food? _food;
+  /// A lunch is often two or three things, so this is a list rather than the
+  /// single food it used to be. Only the figures are copied out of each one
+  /// — nothing about the saved entry points back at the database, which is
+  /// the rule everywhere here: correcting a food today must not rewrite what
+  /// last week says was eaten.
+  late final List<_Part> _parts = [
+    for (final part in widget.existing?.parts ?? const <FoodPart>[])
+      _Part(name: part.name, grams: part.grams, per100g: part.per100g),
+  ];
+
+  /// Whether to file the combination as a dish of its own on save.
+  bool _saveAsDish = false;
+
+  /// Whether the name is still the one this form wrote from the parts.
+  ///
+  /// Kept so adding a second food can update "Pollo" to "Pollo + Arroz",
+  /// while a name the user typed themselves is never touched.
+  bool _nameIsOurs = false;
 
   /// An existing entry starts on whatever it was filed under, a new one on
   /// what the caller suggested. Only a starting point: the common case is
@@ -71,71 +92,99 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
 
   @override
   void dispose() {
-    for (final c in [
-      _name,
-      _portion,
-      _calories,
-      _protein,
-      _carbs,
-      _fat,
-      _grams,
-    ]) {
+    for (final c in [_name, _portion, _calories, _protein, _carbs, _fat]) {
       c.dispose();
+    }
+    for (final part in _parts) {
+      part.dispose();
     }
     super.dispose();
   }
 
   int _read(TextEditingController c) => int.tryParse(c.text.trim()) ?? 0;
 
-  /// Picks a food out of the database and starts it at 100 g.
+  /// Adds one food from the database to the plate, at 100 g.
   ///
   /// A hundred is the weight the food is quoted for, so the figures that
   /// appear are the ones the database actually holds. Starting at a blank
-  /// weight would show four empty fields and leave the user to guess what
-  /// the food was worth.
-  Future<void> _pickFromDatabase() async {
+  /// weight would show a part worth nothing and leave the user to guess.
+  ///
+  /// Offered while editing too, which the single-food version was not: that
+  /// one overwrote the whole form, and a button that wipes what you are
+  /// correcting is not a correction. Appending a part overwrites nothing.
+  Future<void> _addFromDatabase() async {
     final food = await showFoodDatabase(context);
     if (food == null || !mounted) return;
 
     setState(() {
-      _food = food;
-      _name.text = food.name;
-      _grams.text = '100';
+      _parts.add(_Part(name: food.name, grams: 100, per100g: food.per100g));
     });
-    _scale();
+    _recompute();
   }
 
-  /// Recomputes the macro fields from the weight, as it is typed.
+  void _removePart(int index) {
+    setState(() => _parts.removeAt(index).dispose());
+    _recompute();
+  }
+
+  /// Recomputes what is on screen from the parts.
   ///
   /// It writes into the visible fields rather than into a hidden total: the
   /// user has to be able to SEE what they are about to save, and a form that
-  /// scales invisibly is a form that is trusted until the day it is wrong.
-  /// The fields stay editable afterwards, so a figure can still be overridden
-  /// by hand.
-  void _scale() {
-    final food = _food;
-    if (food == null) return;
+  /// adds up invisibly is a form that is trusted until the day it is wrong.
+  /// The fields stay editable afterwards, so a figure can still be corrected
+  /// by hand — a plate is not always the sum of what went on the scale.
+  void _recompute() {
+    if (_parts.isEmpty) {
+      setState(() => _saveAsDish = false);
+      return;
+    }
 
-    final grams = parseGrams(_grams.text);
-    // A blank or impossible weight leaves the figures where they are. Wiping
-    // them to zero while someone is mid-keystroke reads as the form losing
-    // what it was just told.
-    if (grams == null) return;
+    final parts = _domainParts();
+    final total = parts.total;
+    final grams = parts.grams;
 
-    final macros = food.macrosFor(grams);
     setState(() {
-      _calories.text = _text(macros.calories);
-      _protein.text = _text(macros.protein);
-      _carbs.text = _text(macros.carbs);
-      _fat.text = _text(macros.fat);
-      // The portion is free text and stays free text — this only fills it in
-      // with what was actually weighed, and it can be typed over. A food
-      // nobody weighs is logged the way it always was: no database food, no
-      // weight, and "1 plato" written by hand.
-      _portion.text = AppLocalizations.of(context)
-          .nutritionGrams(grams.round());
+      _calories.text = _text(total.calories);
+      _protein.text = _text(total.protein);
+      _carbs.text = _text(total.carbs);
+      _fat.text = _text(total.fat);
+
+      // The portion is free text and stays free text; this only fills it in
+      // with what was actually weighed, and it can be typed over.
+      if (grams > 0) {
+        _portion.text = AppLocalizations.of(context)
+            .nutritionGrams(grams.round());
+      }
+
+      // A name of our own, until the user writes one. Theirs is never
+      // overwritten — see [_nameIsOurs].
+      if (_name.text.trim().isEmpty || _nameIsOurs) {
+        _name.text = _parts.map((part) => part.name).join(' + ');
+        _nameIsOurs = true;
+      }
+
+      // Nothing to keep as a dish unless it is a combination that was
+      // weighed: one food is already in the database, and a combination with
+      // no weight has no reference to be quoted per 100 g against.
+      if (_parts.length < 2 || grams <= 0) _saveAsDish = false;
     });
   }
+
+  /// The parts as the domain sees them, dropping any with no usable weight.
+  ///
+  /// A half-typed weight is not a part worth counting, and it must not take
+  /// the running total down with it while someone is mid-keystroke.
+  List<FoodPart> _domainParts() => [
+    for (final (index, part) in _parts.indexed)
+      if (part.weight case final grams?)
+        FoodPart(
+          id: '$index',
+          name: part.name,
+          grams: grams,
+          per100g: part.per100g,
+        ),
+  ];
 
   /// Zero reads as blank, the same way the fields started: a food logged
   /// without its fat known should not come back claiming zero grams of it.
@@ -144,8 +193,10 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
 
-    Navigator.of(context).pop(
-      FoodDraft(
+    final parts = _domainParts();
+
+    Navigator.of(context).pop((
+      draft: FoodDraft(
         name: _name.text,
         portion: _portion.text.trim().isEmpty ? null : _portion.text.trim(),
         macros: Macros(
@@ -155,8 +206,17 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
           fat: _read(_fat),
         ),
         meal: _meal,
+        parts: [
+          for (final part in parts)
+            FoodPartDraft(
+              name: part.name,
+              grams: part.grams,
+              per100g: part.per100g,
+            ),
+        ],
       ),
-    );
+      saveAsDish: _saveAsDish,
+    ));
   }
 
   @override
@@ -172,27 +232,25 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
         onDelete: widget.onDelete,
       ),
       content: SizedBox(
-        width: 420,
+        width: 460,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Only offered on a new entry: editing one is correcting
-                // what was written, and a button that overwrites the whole
-                // form is not a correction.
-                if (widget.existing == null)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      onPressed: _pickFromDatabase,
-                      icon: const Icon(Icons.restaurant_menu),
-                      label: Text(l10n.nutritionFoodDatabase),
-                    ),
-                  ),
+                _Composition(
+                  parts: _parts,
+                  onAdd: _addFromDatabase,
+                  onRemove: _removePart,
+                  onWeightChanged: _recompute,
+                ),
+                const SizedBox(height: Gap.md),
                 TextFormField(
                   controller: _name,
+                  // Typing over the name we wrote from the parts makes it
+                  // theirs, and we stop rewriting it.
+                  onChanged: (_) => _nameIsOurs = false,
                   autofocus: true,
                   maxLength: 255,
                   decoration: InputDecoration(labelText: l10n.fieldName),
@@ -208,25 +266,6 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
                     hintText: l10n.nutritionPortionHint,
                   ),
                 ),
-                // Only once a food has been picked. Without one there is
-                // nothing to scale, and a weight field over four hand-typed
-                // figures would imply an arithmetic that is not happening.
-                if (_food != null)
-                  TextFormField(
-                    controller: _grams,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: l10n.nutritionWeight,
-                      suffixText: 'g',
-                      helperText: l10n.nutritionWeightHint,
-                    ),
-                    onChanged: (_) => _scale(),
-                    validator: (value) => parseGrams(value ?? '') == null
-                        ? l10n.nutritionValidationGrams(maxPortionGrams.toInt())
-                        : null,
-                  ),
                 const SizedBox(height: Gap.sm),
                 _MacroField(
                   controller: _calories,
@@ -265,6 +304,22 @@ class _FoodFormDialogState extends State<_FoodFormDialog> {
                     ),
                   ],
                 ),
+                // Only for a real combination that was weighed: one food is
+                // already in the database, and a plate with no weight has no
+                // reference to be quoted per 100 g against.
+                if (_parts.length >= 2 && _domainParts().grams > 0)
+                  CheckboxListTile(
+                    value: _saveAsDish,
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text(l10n.nutritionSaveAsDish),
+                    subtitle: Text(
+                      l10n.nutritionSaveAsDishHint,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    onChanged: (value) =>
+                        setState(() => _saveAsDish = value ?? false),
+                  ),
                 const SizedBox(height: Gap.xl),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -358,5 +413,139 @@ class _MacroField extends StatelessWidget {
             : null;
       },
     );
+  }
+}
+
+/// One food on the plate, while the form is open.
+///
+/// Holds its own weight controller so typing in one part never rebuilds the
+/// others out from under the cursor.
+class _Part {
+  _Part({required this.name, required double grams, required this.per100g})
+    : grams = TextEditingController(
+        text: grams == grams.roundToDouble() ? '${grams.round()}' : '$grams',
+      );
+
+  final String name;
+  final TextEditingController grams;
+
+  /// What 100 g of it was made of, copied when it was picked.
+  final Macros per100g;
+
+  /// The weight as typed, or null when there is no usable number in it.
+  double? get weight => parseGrams(grams.text);
+
+  void dispose() => grams.dispose();
+}
+
+/// What the plate is made of: the parts, their weights, and the running sum.
+class _Composition extends StatelessWidget {
+  const _Composition({
+    required this.parts,
+    required this.onAdd,
+    required this.onRemove,
+    required this.onWeightChanged,
+  });
+
+  final List<_Part> parts;
+  final VoidCallback onAdd;
+  final ValueChanged<int> onRemove;
+  final VoidCallback onWeightChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.nutritionComposition,
+                style: theme.textTheme.titleSmall,
+              ),
+            ),
+            TextButton.icon(
+              onPressed: onAdd,
+              icon: const Icon(Icons.restaurant_menu, size: 18),
+              label: Text(l10n.nutritionFoodDatabase),
+            ),
+          ],
+        ),
+        if (parts.isEmpty)
+          Text(
+            l10n.nutritionComposedHint,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          )
+        else ...[
+          for (final (index, part) in parts.indexed)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Gap.sm),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(part.name, style: theme.textTheme.bodyMedium),
+                        Text(
+                          _contribution(context, part),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: Gap.sm),
+                  SizedBox(
+                    width: 112,
+                    child: TextFormField(
+                      controller: part.grams,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: InputDecoration(
+                        isDense: true,
+                        labelText: l10n.nutritionWeight,
+                        suffixText: 'g',
+                      ),
+                      onChanged: (_) => onWeightChanged(),
+                      validator: (value) => parseGrams(value ?? '') == null
+                          ? l10n.nutritionValidationGrams(
+                              maxPortionGrams.toInt(),
+                            )
+                          : null,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    tooltip: l10n.nutritionRemoveFood,
+                    onPressed: () => onRemove(index),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ],
+    );
+  }
+
+  /// What this part is worth at the weight typed, for the line under its name.
+  String _contribution(BuildContext context, _Part part) {
+    final l10n = AppLocalizations.of(context);
+    final grams = part.weight;
+    if (grams == null) return '—';
+
+    final macros = scaleMacros(part.per100g, grams);
+
+    return '${l10n.nutritionCalories} ${macros.calories} · '
+        'P ${macros.protein} · C ${macros.carbs} · G ${macros.fat}';
   }
 }

@@ -56,7 +56,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final task = await db.select(db.todoTasks).getSingle();
     expect(task.title, 'Sobrevivir');
@@ -79,7 +79,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     expect((await db.select(db.foodEntries).getSingle()).name, 'Milanesa');
   });
@@ -99,7 +99,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     expect((await db.select(db.exercises).getSingle()).name, 'Sentadilla');
   });
@@ -120,7 +120,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     expect((await db.select(db.medications).getSingle()).name, 'Vitamina D');
   });

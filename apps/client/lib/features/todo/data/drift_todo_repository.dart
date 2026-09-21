@@ -2,7 +2,9 @@ import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/database/record_columns.dart';
+import '../../../core/database/uuid.dart';
 import '../../../core/time/date_range.dart';
+import '../domain/board_column.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
 import '../domain/todo_repository.dart';
@@ -44,7 +46,7 @@ class DriftTodoRepository implements TodoRepository {
   }) async {
     // Validating through the entity keeps the rule in one place.
     final validated = Project(
-      id: '',
+      id: newUuid(),
       name: name,
       parentId: parentId,
       description: description,
@@ -61,19 +63,21 @@ class DriftTodoRepository implements TodoRepository {
       }
     }
 
-    final id =
-        (await _db
-                .into(_db.projects)
-                .insertReturning(
-                  ProjectsCompanion.insert(
-                    name: validated.name,
-                    description: Value(validated.description),
-                    parentId: Value(parentId),
-                  ),
-                ))
-            .id;
+    await _db
+        .into(_db.projects)
+        .insert(
+          ProjectsCompanion.insert(
+            id: Value(validated.id),
+            name: validated.name,
+            description: Value(validated.description),
+            parentId: Value(parentId),
+          ),
+        );
+    // Its own board, seeded with the three the app ships. Without it the
+    // project has nowhere to put its first task.
+    await _db.seedBoardColumnsFor(validated.id);
 
-    return (await _projectById(id))!;
+    return (await _projectById(validated.id))!;
   }
 
   @override
@@ -145,10 +149,13 @@ class DriftTodoRepository implements TodoRepository {
               ..orderBy([(t) => OrderingTerm.asc(t.rowId)]))
             .get();
 
+    final finishing = await _finishingColumns();
+
     return [
       for (final row in rows)
         _toTask(
           row,
+          finishing: finishing,
           // Only a task pulled in from elsewhere needs to say where it came
           // from; on its own board the label would be noise.
           projectName: row.projectId == projectId ? null : names[row.projectId],
@@ -165,45 +172,55 @@ class DriftTodoRepository implements TodoRepository {
       _db.todoTasks,
     )..orderBy([(t) => OrderingTerm.asc(t.rowId)])).get();
 
+    final finishing = await _finishingColumns();
+
     return [
-      for (final row in rows) _toTask(row, projectName: names[row.projectId]),
+      for (final row in rows)
+        _toTask(row, finishing: finishing, projectName: names[row.projectId]),
     ];
   }
 
   @override
   Future<Task> createTask(TaskDraft draft) async {
-    final validated = _fromDraft(draft, id: '');
+    final column = await _columnFor(draft);
+    final validated = _fromDraft(
+      draft,
+      id: newUuid(),
+      columnId: column.id,
+      countsAsDone: column.countsAsDone,
+    );
 
-    final id =
-        (await _db
-                .into(_db.todoTasks)
-                .insertReturning(
-                  TodoTasksCompanion.insert(
-                    title: validated.title,
-                    description: Value(validated.description),
-                    category: Value(validated.category),
-                    startDate: Value(validated.startDate),
-                    dueDate: Value(validated.dueDate),
-                    priority: validated.priority.wireName,
-                    status: validated.status.wireName,
-                    projectId: validated.projectId,
-                    completedAt: Value(
-                      validated.status == TaskStatus.done
-                          ? DateTime.now()
-                          : null,
-                    ),
-                  ),
-                ))
-            .id;
+    await _db
+        .into(_db.todoTasks)
+        .insert(
+          TodoTasksCompanion.insert(
+            id: Value(validated.id),
+            title: validated.title,
+            description: Value(validated.description),
+            category: Value(validated.category),
+            startDate: Value(validated.startDate),
+            dueDate: Value(validated.dueDate),
+            priority: validated.priority.wireName,
+            columnId: validated.columnId,
+            projectId: validated.projectId,
+            completedAt: Value(column.countsAsDone ? DateTime.now() : null),
+          ),
+        );
 
-    return (await _taskById(id))!;
+    return (await _taskById(validated.id))!;
   }
 
   @override
   Future<Task> updateTask(String id, TaskDraft draft) async {
-    final validated = _fromDraft(draft, id: id);
+    final column = await _columnFor(draft);
+    final validated = _fromDraft(
+      draft,
+      id: id,
+      columnId: column.id,
+      countsAsDone: column.countsAsDone,
+    );
     // Editing a task that was already done keeps the original moment; only
-    // a change of status moves it.
+    // moving it out of a finishing column clears it.
     final existing = await (_db.select(
       _db.todoTasks,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
@@ -218,10 +235,10 @@ class DriftTodoRepository implements TodoRepository {
         startDate: Value(validated.startDate),
         dueDate: Value(validated.dueDate),
         priority: Value(validated.priority.wireName),
-        status: Value(validated.status.wireName),
+        columnId: Value(validated.columnId),
         projectId: Value(validated.projectId),
         completedAt: Value(
-          validated.status == TaskStatus.done
+          column.countsAsDone
               ? (existing?.completedAt ?? DateTime.now())
               : null,
         ),
@@ -237,20 +254,262 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
-  Future<Task> setTaskStatus(String id, TaskStatus status) async {
+  Future<Task> moveTask(String id, String columnId) async {
+    final target = await (_db.select(
+      _db.boardColumns,
+    )..where((c) => c.id.equals(columnId))).getSingleOrNull();
+    if (target == null) {
+      throw ArgumentError.value(columnId, 'columnId', 'No such board column');
+    }
+
+    final existing = await (_db.select(
+      _db.todoTasks,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    if (existing == null) throw StateError('Task $id was not found');
+
+    // The board on screen belongs to the selected project, and with
+    // subprojects included it carries tasks that answer to another board. A
+    // task always lands on its own.
+    final own = Board(await boardColumns(existing.projectId));
+    final column = own.byId(columnId) ?? own.equivalentOf(_toColumn(target));
+    if (column == null) {
+      throw StateError('Project ${existing.projectId} has no board to move to');
+    }
+
     await (_db.update(
       _db.todoTasks,
     )..where((t) => t.id.equals(id))).writeTouched(
       TodoTasksCompanion(
-        status: Value(status.wireName),
-        // Stamped on the way into DONE and cleared on the way out, so
-        // reopening a task takes it back off the chart it was counted on.
-        completedAt: Value(status == TaskStatus.done ? DateTime.now() : null),
+        columnId: Value(column.id),
+        // Stamped on the way into a finishing column and cleared on the way
+        // out, so reopening a task takes it back off the chart it was
+        // counted on. A move between two finishing columns keeps the moment
+        // it was first finished: it was not finished twice.
+        completedAt: Value(
+          column.countsAsDone ? (existing.completedAt ?? DateTime.now()) : null,
+        ),
       ),
     );
 
     return (await _taskById(id))!;
   }
+
+  @override
+  Future<List<BoardColumn>> boardColumns(String projectId) async {
+    final rows =
+        await (_db.select(_db.boardColumns)
+              ..where((c) => c.projectId.equals(projectId))
+              ..orderBy([(c) => OrderingTerm.asc(c.position)]))
+            .get();
+
+    return [for (final row in rows) _toColumn(row)];
+  }
+
+  @override
+  Future<BoardColumn> createColumn(
+    String projectId,
+    String name, {
+    bool countsAsDone = false,
+  }) async {
+    final existing = await boardColumns(projectId);
+    // Appended rather than inserted: a new column goes where the user can
+    // see it, and renumbering the board to squeeze one in would move columns
+    // nobody asked to move.
+    final validated = BoardColumn(
+      id: newUuid(),
+      projectId: projectId,
+      name: name,
+      position: existing.isEmpty ? 0 : existing.last.position + 1,
+      countsAsDone: countsAsDone,
+    );
+
+    await _db
+        .into(_db.boardColumns)
+        .insert(
+          BoardColumnsCompanion.insert(
+            id: Value(validated.id),
+            projectId: validated.projectId,
+            name: validated.name,
+            position: validated.position,
+            countsAsDone: Value(validated.countsAsDone),
+          ),
+        );
+
+    return validated;
+  }
+
+  @override
+  Future<BoardColumn> updateColumn(
+    String id, {
+    required String name,
+    required bool countsAsDone,
+  }) async {
+    final row = await (_db.select(
+      _db.boardColumns,
+    )..where((c) => c.id.equals(id))).getSingleOrNull();
+    if (row == null) {
+      throw StateError('Board column $id was not found');
+    }
+    final existing = _toColumn(row);
+
+    // A rename hands the column to the user, key and all. Keeping the name
+    // it already had leaves it built in: switching the app's language must
+    // still translate a column nobody has touched.
+    final validated = existing.name == name.trim()
+        ? existing.copyWith(countsAsDone: countsAsDone)
+        : existing.renamedTo(name).copyWith(countsAsDone: countsAsDone);
+
+    await (_db.update(
+      _db.boardColumns,
+    )..where((c) => c.id.equals(id))).writeTouched(
+      BoardColumnsCompanion(
+        name: Value(validated.name),
+        builtInKey: Value(validated.builtInKey),
+        countsAsDone: Value(validated.countsAsDone),
+      ),
+    );
+
+    // Leaving a finishing column stamps every task now sitting in it, and
+    // leaving one clears them: `completedAt` is what the charts read, and a
+    // column that changed meaning would otherwise leave the tasks inside it
+    // counted the old way forever.
+    await (_db.update(
+      _db.todoTasks,
+    )..where((t) => t.columnId.equals(id))).writeTouched(
+      TodoTasksCompanion(
+        completedAt: Value(validated.countsAsDone ? DateTime.now() : null),
+      ),
+    );
+
+    return validated;
+  }
+
+  @override
+  Future<void> deleteColumn(String id) async {
+    final row = await (_db.select(
+      _db.boardColumns,
+    )..where((c) => c.id.equals(id))).getSingleOrNull();
+    if (row == null) return;
+
+    final board = Board(await boardColumns(row.projectId));
+    if (!board.canDelete(id)) {
+      throw StateError('The last column cannot be deleted');
+    }
+
+    final counts = await columnTaskCounts();
+    if ((counts[id] ?? 0) > 0) {
+      // The foreign key would refuse this anyway; saying it here is what
+      // lets the UI explain it instead of showing a constraint error.
+      throw StateError('The column still holds tasks');
+    }
+
+    await (_db.delete(_db.boardColumns)..where((c) => c.id.equals(id))).go();
+  }
+
+  @override
+  Future<void> reorderColumns(List<String> ids) => _db.transaction(() async {
+    // Written by position rather than by swapping rows: the caller hands over
+    // the whole order it wants, so the board cannot end up half-rearranged.
+    for (final (index, id) in ids.indexed) {
+      await (_db.update(_db.boardColumns)..where((c) => c.id.equals(id)))
+          .writeTouched(BoardColumnsCompanion(position: Value(index)));
+    }
+  });
+
+  @override
+  Future<Map<String, int>> columnTaskCounts() async {
+    final counter = _db.todoTasks.id.count();
+    final query = _db.selectOnly(_db.todoTasks)
+      ..addColumns([_db.todoTasks.columnId, counter])
+      ..groupBy([_db.todoTasks.columnId]);
+
+    return {
+      for (final row in await query.get())
+        row.read(_db.todoTasks.columnId)!: row.read(counter) ?? 0,
+    };
+  }
+
+  @override
+  Future<List<ChecklistItem>> checklist(String taskId) async {
+    final rows =
+        await (_db.select(_db.taskChecklistItems)
+              ..where((i) => i.taskId.equals(taskId))
+              ..orderBy([(i) => OrderingTerm.asc(i.position)]))
+            .get();
+
+    return [for (final row in rows) _toChecklistItem(row)];
+  }
+
+  @override
+  Future<ChecklistItem> addChecklistItem(String taskId, String content) async {
+    final existing = await checklist(taskId);
+    final validated = ChecklistItem(
+      id: newUuid(),
+      taskId: taskId,
+      content: content,
+      position: existing.isEmpty ? 0 : existing.last.position + 1,
+    );
+
+    await _db
+        .into(_db.taskChecklistItems)
+        .insert(
+          TaskChecklistItemsCompanion.insert(
+            id: Value(validated.id),
+            taskId: validated.taskId,
+            content: validated.content,
+            position: validated.position,
+          ),
+        );
+
+    return validated;
+  }
+
+  @override
+  Future<ChecklistItem> updateChecklistItem(
+    String id, {
+    String? content,
+    bool? done,
+  }) async {
+    final row = await (_db.select(
+      _db.taskChecklistItems,
+    )..where((i) => i.id.equals(id))).getSingleOrNull();
+    if (row == null) throw StateError('Checklist item $id was not found');
+
+    // Built first so a blank line is refused before anything is written.
+    final validated = ChecklistItem(
+      id: row.id,
+      taskId: row.taskId,
+      content: content ?? row.content,
+      done: done ?? row.done,
+      position: row.position,
+    );
+
+    await (_db.update(
+      _db.taskChecklistItems,
+    )..where((i) => i.id.equals(id))).writeTouched(
+      TaskChecklistItemsCompanion(
+        content: Value(validated.content),
+        done: Value(validated.done),
+      ),
+    );
+
+    return validated;
+  }
+
+  @override
+  Future<void> deleteChecklistItem(String id) async {
+    await (_db.delete(
+      _db.taskChecklistItems,
+    )..where((i) => i.id.equals(id))).go();
+  }
+
+  ChecklistItem _toChecklistItem(TaskChecklistItemRow row) => ChecklistItem(
+    id: row.id,
+    taskId: row.taskId,
+    content: row.content,
+    done: row.done,
+    position: row.position,
+  );
 
   @override
   Future<List<TaskComment>> comments(String taskId) async {
@@ -279,17 +538,17 @@ class DriftTodoRepository implements TodoRepository {
     }
 
     final now = DateTime.now();
-    final id =
-        (await _db
-                .into(_db.taskComments)
-                .insertReturning(
-                  TaskCommentsCompanion.insert(
-                    taskId: taskId,
-                    content: text,
-                    createdAt: now,
-                  ),
-                ))
-            .id;
+    final id = newUuid();
+    await _db
+        .into(_db.taskComments)
+        .insert(
+          TaskCommentsCompanion.insert(
+            id: Value(id),
+            taskId: taskId,
+            content: text,
+            createdAt: now,
+          ),
+        );
 
     return TaskComment(id: id, taskId: taskId, content: text, createdAt: now);
   }
@@ -316,10 +575,17 @@ class DriftTodoRepository implements TodoRepository {
       _db.todoTasks,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
 
-    return row == null ? null : _toTask(row);
+    return row == null
+        ? null
+        : _toTask(row, finishing: await _finishingColumns());
   }
 
-  Task _fromDraft(TaskDraft draft, {required String id}) => Task(
+  Task _fromDraft(
+    TaskDraft draft, {
+    required String id,
+    required String columnId,
+    required bool countsAsDone,
+  }) => Task(
     id: id,
     title: draft.title,
     description: draft.description,
@@ -327,9 +593,33 @@ class DriftTodoRepository implements TodoRepository {
     startDate: draft.startDate,
     dueDate: draft.dueDate,
     priority: draft.priority,
-    status: draft.status,
+    columnId: columnId,
+    countsAsDone: countsAsDone,
     projectId: draft.projectId,
   );
+
+  /// Where a draft goes: the column it named, or the board's default.
+  ///
+  /// A draft naming a column that is not there is refused rather than moved
+  /// somewhere plausible — it means the caller is working from a board that
+  /// has changed underneath it, and guessing would file the task somewhere
+  /// nobody chose.
+  Future<BoardColumn> _columnFor(TaskDraft draft) async {
+    final board = Board(await boardColumns(draft.projectId));
+    if (draft.columnId case final id?) {
+      final column = board.byId(id);
+      if (column == null) {
+        throw ArgumentError.value(id, 'columnId', 'No such board column');
+      }
+      return column;
+    }
+
+    final fallback = board.defaultColumn;
+    if (fallback == null) {
+      throw StateError('The board has no columns to put a task in');
+    }
+    return fallback;
+  }
 
   Project _toProject(ProjectRow row) => Project(
     id: row.id,
@@ -338,7 +628,11 @@ class DriftTodoRepository implements TodoRepository {
     parentId: row.parentId,
   );
 
-  Task _toTask(TodoTaskRow row, {String? projectName}) => Task(
+  Task _toTask(
+    TodoTaskRow row, {
+    required Set<String> finishing,
+    String? projectName,
+  }) => Task(
     id: row.id,
     title: row.title,
     description: row.description,
@@ -346,9 +640,32 @@ class DriftTodoRepository implements TodoRepository {
     startDate: row.startDate,
     dueDate: row.dueDate,
     priority: TaskPriority.parse(row.priority),
-    status: TaskStatus.parse(row.status),
+    columnId: row.columnId,
+    countsAsDone: finishing.contains(row.columnId),
     projectId: row.projectId,
     completedAt: row.completedAt,
     projectName: projectName,
+  );
+
+  /// The ids of the columns that mean the work is finished.
+  ///
+  /// Read once per query rather than joined onto every row: the board is
+  /// three or four rows, and a join would put the column's name and order on
+  /// a task that has no use for either.
+  Future<Set<String>> _finishingColumns() async {
+    final rows = await (_db.select(
+      _db.boardColumns,
+    )..where((c) => c.countsAsDone.equals(true))).get();
+
+    return {for (final row in rows) row.id};
+  }
+
+  BoardColumn _toColumn(BoardColumnRow row) => BoardColumn(
+    id: row.id,
+    projectId: row.projectId,
+    name: row.name,
+    builtInKey: row.builtInKey,
+    position: row.position,
+    countsAsDone: row.countsAsDone,
   );
 }

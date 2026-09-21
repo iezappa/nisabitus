@@ -743,7 +743,19 @@ Future<void> seed(AppDatabase db, DateTime today) async {
               .into(db.projects)
               .insertReturning(ProjectsCompanion.insert(name: 'Nisabitus')))
           .id;
-  for (final (title, status, priority) in const [
+  // Written straight to the tables rather than through the repository, so
+  // the project's board has to be seeded by hand.
+  await db.seedBoardColumnsFor(project);
+  final columns = {
+    for (final column in await (db.select(
+      db.boardColumns,
+    )..where((c) => c.projectId.equals(project))).get())
+      column.builtInKey: column.id,
+  };
+
+  // One task per column, so the screenshots show a board with something in
+  // every column rather than one busy column.
+  for (final (title, column, priority) in [
     ('Escribir los tests de migración', 'DONE', 'HIGH'),
     ('Mirar la UI de una vez', 'IN_PROGRESS', 'HIGH'),
     ('Vigilar las dependencias EOL', 'TODO', 'LOW'),
@@ -753,7 +765,7 @@ Future<void> seed(AppDatabase db, DateTime today) async {
         .insert(
           TodoTasksCompanion.insert(
             title: title,
-            status: status,
+            columnId: columns[column]!,
             priority: priority,
             projectId: project,
             dueDate: Value(dayBefore(-2)),

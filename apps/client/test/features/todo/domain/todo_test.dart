@@ -27,22 +27,16 @@ void main() {
     });
   });
 
-  group('TaskStatus.parse', () {
-    test('accepts the canonical names and defaults to todo', () {
-      expect(TaskStatus.parse('IN_PROGRESS'), TaskStatus.inProgress);
-      expect(TaskStatus.parse(null), TaskStatus.todo);
-    });
-  });
-
   group('Task.dueState', () {
     final today = DateTime(2026, 3, 11);
 
-    Task task({DateTime? due, TaskStatus status = TaskStatus.todo}) => Task(
+    Task task({DateTime? due, bool done = false}) => Task(
       id: '1',
       title: 'Escribir',
       projectId: '1',
       priority: TaskPriority.medium,
-      status: status,
+      columnId: done ? 'done' : 'todo',
+      countsAsDone: done,
       dueDate: due,
     );
 
@@ -71,10 +65,7 @@ void main() {
     test('is none once the task is done, however late it was', () {
       // A finished task cannot be overdue; nagging about it helps nobody.
       expect(
-        task(
-          due: DateTime(2026, 1, 1),
-          status: TaskStatus.done,
-        ).dueState(today),
+        task(due: DateTime(2026, 1, 1), done: true).dueState(today),
         DueState.none,
       );
     });
@@ -86,7 +77,7 @@ void main() {
           title: '   ',
           projectId: '1',
           priority: TaskPriority.medium,
-          status: TaskStatus.todo,
+          columnId: 'todo',
         ),
         throwsArgumentError,
       );

@@ -4,6 +4,7 @@ import '../../../core/database/database_provider.dart';
 import '../../../core/time/progress_range.dart';
 import '../../../core/time/selected_day_provider.dart';
 import '../data/drift_todo_repository.dart';
+import '../domain/board_column.dart';
 import '../domain/project.dart';
 import '../domain/task.dart';
 import '../domain/todo_repository.dart';
@@ -14,22 +15,25 @@ enum TodoViewMode { kanban, list }
 
 /// The filters the board is showing through.
 class TaskFilters {
-  const TaskFilters({this.category = '', this.status, this.due});
+  const TaskFilters({this.category = '', this.columnId, this.due});
 
   /// Matched as "contains", case-insensitively.
   final String category;
-  final TaskStatus? status;
+
+  /// The id of a board column, or null for every column.
+  final String? columnId;
   final DueState? due;
 
-  bool get isEmpty => category.trim().isEmpty && status == null && due == null;
+  bool get isEmpty =>
+      category.trim().isEmpty && columnId == null && due == null;
 
   TaskFilters copyWith({
     String? category,
-    Object? status = _unset,
+    Object? columnId = _unset,
     Object? due = _unset,
   }) => TaskFilters(
     category: category ?? this.category,
-    status: status == _unset ? this.status : status as TaskStatus?,
+    columnId: columnId == _unset ? this.columnId : columnId as String?,
     due: due == _unset ? this.due : due as DueState?,
   );
 
@@ -71,21 +75,78 @@ final taskFiltersProvider = StateProvider<TaskFilters>(
   (ref) => const TaskFilters(),
 );
 
+/// The selected project's board, left to right.
+///
+/// Empty while no project is selected: a board belongs to a project as of
+/// v16, so there is no board to show until one is picked.
+final boardProvider = FutureProvider<Board>((ref) async {
+  ref.watch(todoRevisionProvider);
+
+  final projectId = ref.watch(selectedProjectIdProvider);
+  if (projectId == null) return Board(const []);
+
+  return Board(await ref.watch(todoRepositoryProvider).boardColumns(projectId));
+});
+
+/// One task's checklist, top to bottom.
+final checklistProvider = FutureProvider.family<List<ChecklistItem>, String>((
+  ref,
+  taskId,
+) {
+  ref.watch(todoRevisionProvider);
+
+  return ref.watch(todoRepositoryProvider).checklist(taskId);
+});
+
+/// How many tasks sit in each column, for the column editor.
+final columnTaskCountsProvider = FutureProvider<Map<String, int>>((ref) {
+  ref.watch(todoRevisionProvider);
+
+  return ref.watch(todoRepositoryProvider).columnTaskCounts();
+});
+
 /// The project tree plus the task counts the sidebar shows.
 final projectTreeProvider =
-    FutureProvider<({ProjectTree tree, Map<String, TaskCount> counts})>((
-      ref,
-    ) async {
+    FutureProvider<
+      ({
+        ProjectTree tree,
+        Map<String, TaskCount> counts,
+        Map<String, ProjectTally> tallies,
+      })
+    >((ref) async {
       ref.watch(todoRevisionProvider);
 
+      final today = ref.watch(todayProvider);
       final repository = ref.watch(todoRepositoryProvider);
-      final (projects, direct) = await (
+      final (projects, direct, tasks) = await (
         repository.projects(),
         repository.directTaskCounts(),
+        // Read whole rather than counted in SQL: the dot needs finished,
+        // overdue and due-today per project, and `dueState` is a domain rule
+        // about today rather than a column the database could group by.
+        repository.allTasks(),
       ).wait;
 
+      final perProject = <String, ProjectTally>{};
+      for (final task in tasks) {
+        final running =
+            perProject[task.projectId] ??
+            (total: 0, done: 0, overdue: 0, dueToday: 0);
+        final due = task.dueState(today);
+        perProject[task.projectId] = (
+          total: running.total + 1,
+          done: running.done + (task.countsAsDone ? 1 : 0),
+          overdue: running.overdue + (due == DueState.overdue ? 1 : 0),
+          dueToday: running.dueToday + (due == DueState.today ? 1 : 0),
+        );
+      }
+
       final tree = ProjectTree(projects);
-      return (tree: tree, counts: tree.taskCounts(direct));
+      return (
+        tree: tree,
+        counts: tree.taskCounts(direct),
+        tallies: tree.tallies(perProject),
+      );
     });
 
 /// The tasks of the selected project, already filtered.
@@ -113,7 +174,9 @@ final tasksProvider = FutureProvider<List<Task>>((ref) async {
         !(task.category ?? '').toLowerCase().contains(needle)) {
       return false;
     }
-    if (filters.status != null && task.status != filters.status) return false;
+    if (filters.columnId != null && task.columnId != filters.columnId) {
+      return false;
+    }
     if (filters.due != null && task.dueState(today) != filters.due) {
       return false;
     }
@@ -181,8 +244,64 @@ class TodoActions {
     _invalidate();
   }
 
-  Future<void> setStatus(String id, TaskStatus status) async {
-    await _repository.setTaskStatus(id, status);
+  Future<void> moveTask(String id, String columnId) async {
+    await _repository.moveTask(id, columnId);
+    _invalidate();
+  }
+
+  Future<void> createColumn(
+    String projectId,
+    String name, {
+    bool countsAsDone = false,
+  }) async {
+    await _repository.createColumn(projectId, name, countsAsDone: countsAsDone);
+    _invalidate();
+  }
+
+  Future<void> addChecklistItem(String taskId, String content) async {
+    await _repository.addChecklistItem(taskId, content);
+    _invalidate();
+  }
+
+  Future<void> updateChecklistItem(
+    String id, {
+    String? content,
+    bool? done,
+  }) async {
+    await _repository.updateChecklistItem(id, content: content, done: done);
+    _invalidate();
+  }
+
+  Future<void> deleteChecklistItem(String id) async {
+    await _repository.deleteChecklistItem(id);
+    _invalidate();
+  }
+
+  Future<void> updateColumn(
+    String id, {
+    required String name,
+    required bool countsAsDone,
+  }) async {
+    await _repository.updateColumn(id, name: name, countsAsDone: countsAsDone);
+    _invalidate();
+  }
+
+  /// Drops a column, and clears a filter that was pointing at it.
+  ///
+  /// Throws [StateError] when the column still holds tasks or is the last
+  /// one; the caller shows the reason.
+  Future<void> deleteColumn(String id) async {
+    await _repository.deleteColumn(id);
+    if (_ref.read(taskFiltersProvider).columnId == id) {
+      _ref
+          .read(taskFiltersProvider.notifier)
+          .update((filters) => filters.copyWith(columnId: null));
+    }
+    _invalidate();
+  }
+
+  Future<void> reorderColumns(List<String> ids) async {
+    await _repository.reorderColumns(ids);
     _invalidate();
   }
 

@@ -38,7 +38,7 @@ class TaskCard extends StatelessWidget {
                 task.title,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  decoration: task.status == TaskStatus.done
+                  decoration: task.countsAsDone
                       ? TextDecoration.lineThrough
                       : null,
                 ),

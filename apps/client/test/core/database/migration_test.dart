@@ -62,7 +62,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final stored = await db.select(db.medications).getSingle();
     expect(stored.name, 'Vitamina D');
@@ -78,7 +78,7 @@ void main() {
     final schema = await verifier.schemaAt(1);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final id =
         (await db
@@ -128,7 +128,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final stored = await db.select(db.foodEntries).getSingle();
     expect(stored.name, 'Avena');
@@ -149,7 +149,7 @@ void main() {
       final schema = await verifier.schemaAt(1);
       final db = AppDatabase.forTesting(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 14);
+      await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
       await db
           .into(db.foods)
@@ -181,7 +181,7 @@ void main() {
     final schema = await verifier.schemaAt(1);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final indices = await db
         .customSelect(
@@ -218,7 +218,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final exercise = await db.select(db.exercises).getSingle();
     expect(exercise.name, 'Sentadilla');
@@ -269,7 +269,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final leftovers = await db
         .customSelect(
@@ -297,7 +297,7 @@ void main() {
     final schema = await verifier.schemaAt(9);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final leftovers = await db
         .customSelect(
@@ -317,7 +317,7 @@ void main() {
       final schema = await verifier.schemaAt(1);
       final db = AppDatabase.forTesting(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 14);
+      await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
       final exerciseId =
           (await db
@@ -354,7 +354,7 @@ void main() {
       final schema = await verifier.schemaAt(1);
       final db = AppDatabase.forTesting(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 14);
+      await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
       final indices = await db
           .customSelect(
@@ -374,7 +374,7 @@ void main() {
     final schema = await verifier.schemaAt(1);
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     expect(
       db
@@ -412,7 +412,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final foods = await db.select(db.foods).get();
 
@@ -453,7 +453,7 @@ void main() {
 
     final db = AppDatabase.forTesting(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 14);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
 
     final entry = await db.select(db.foodEntries).getSingle();
     expect(entry.name, 'Milanesa');

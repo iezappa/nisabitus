@@ -10,15 +10,39 @@ class FoodDraft {
     this.portion,
     this.macros = Macros.empty,
     this.meal,
+    this.parts = const [],
   });
 
   final String name;
   final String? portion;
+
+  /// What the entry is worth.
+  ///
+  /// Still given explicitly even when [parts] is set, because the form shows
+  /// these four numbers and the user may correct them: what is on screen is
+  /// what gets saved. The parts are the record of where the figures came
+  /// from, not a second source of truth.
   final Macros macros;
+
+  /// What the plate was made of, or empty for one typed whole.
+  final List<FoodPartDraft> parts;
 
   /// Which meal it belongs to. Null is allowed and means the same as
   /// everywhere else: nobody said.
   final Meal? meal;
+}
+
+/// One food going into a composed entry.
+class FoodPartDraft {
+  const FoodPartDraft({
+    required this.name,
+    required this.grams,
+    required this.per100g,
+  });
+
+  final String name;
+  final double grams;
+  final Macros per100g;
 }
 
 /// The port the nutrition module talks to.

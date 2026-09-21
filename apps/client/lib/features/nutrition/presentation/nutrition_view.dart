@@ -55,14 +55,15 @@ class NutritionView extends ConsumerWidget {
               icon: const Icon(Icons.add, size: 20),
               tooltip: l10n.nutritionAdd,
               onPressed: () async {
-                final draft = await showFoodForm(
+                final result = await showFoodForm(
                   context,
                   // The clock is read here rather than inside the dialog:
                   // a dialog that reads the clock is a dialog that cannot be
                   // photographed the same way twice.
                   initialMeal: Meal.forHour(DateTime.now().hour),
                 );
-                if (draft != null) await actions.add(draft);
+                if (result == null) return;
+                await actions.add(result.draft, keepAsDish: result.saveAsDish);
               },
             ),
           ),
@@ -148,12 +149,17 @@ class _EntryCard extends StatelessWidget {
             ].join(' · '),
           ),
           onTap: () async {
-            final draft = await showFoodForm(
+            final result = await showFoodForm(
               context,
               existing: entry,
               onDelete: () => actions.delete(entry.id),
             );
-            if (draft != null) await actions.update(entry.id, draft);
+            if (result == null) return;
+            await actions.update(
+              entry.id,
+              result.draft,
+              keepAsDish: result.saveAsDish,
+            );
           },
         ),
       ),

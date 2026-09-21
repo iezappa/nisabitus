@@ -34,14 +34,19 @@ part 'app_database.g.dart';
     MoodEntries,
     PomodoroSessions,
     Projects,
+    BoardColumns,
     TodoTasks,
     TaskComments,
+    TaskChecklistItems,
     NutritionGoals,
     FoodEntries,
+    FoodEntryItems,
     Foods,
     Exercises,
     ScheduledExercises,
     Disciplines,
+    StepLogs,
+    StepGoals,
     Medications,
     MedicationIntakes,
     HydrationGoals,
@@ -87,7 +92,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 14;
+  static const currentSchemaVersion = 18;
 
   /// The id of the only row in a single-row table, such as the daily goals.
   static const singletonId = 'singleton';
@@ -128,6 +133,51 @@ class AppDatabase extends _$AppDatabase {
   /// launch and lose the `user_version` that marked it done. The next launch
   /// creates the store again, the first index throws, drift remembers the
   /// failed migration, and every screen fails with it.
+  /// The board every project starts with.
+  ///
+  /// Three columns, keyed rather than named, so the words come from the
+  /// translations until the user renames one — see [BoardColumns]. `DONE` is
+  /// the only one that counts as finished, which is what makes a task stop
+  /// being overdue and what the dashboard reads.
+  static const seededBoardColumns = [
+    (key: 'TODO', name: 'Pendiente', countsAsDone: false),
+    (key: 'IN_PROGRESS', name: 'En curso', countsAsDone: false),
+    (key: 'DONE', name: 'Hecho', countsAsDone: true),
+  ];
+
+  /// Gives one project the board the app ships.
+  ///
+  /// Only when that project has none: a user who deleted a column they did
+  /// not want must not find it back after an update.
+  Future<void> seedBoardColumnsFor(String projectId) async {
+    final existing = await customSelect(
+      'SELECT EXISTS('
+      'SELECT 1 FROM "board_columns" WHERE "project_id" = ?) AS present',
+      variables: [Variable<String>(projectId)],
+    ).getSingle();
+    if (existing.read<int>('present') == 1) return;
+
+    await batch(
+      (b) => b.insertAll(boardColumns, [
+        for (final (index, column) in seededBoardColumns.indexed)
+          BoardColumnsCompanion.insert(
+            projectId: projectId,
+            name: column.name,
+            builtInKey: Value(column.key),
+            position: index,
+            countsAsDone: Value(column.countsAsDone),
+          ),
+      ], mode: InsertMode.insertOrIgnore),
+    );
+  }
+
+  /// Gives a board to every project that has none.
+  Future<void> seedMissingBoards() async {
+    for (final project in await select(projects).get()) {
+      await seedBoardColumnsFor(project.id);
+    }
+  }
+
   Future<void> _createAllIdempotently(Migrator m) async {
     for (final entity in allSchemaEntities) {
       if (entity is Index) {
@@ -284,11 +334,34 @@ class AppDatabase extends _$AppDatabase {
       final byName = table.columnsByName;
       final lastWritten = _lastWrittenColumn[name];
 
+      // Every column of today's definition that the old table does not have.
+      //
+      // `alterTable` builds the new table from the definition in the code,
+      // which is today's and not this version's: a column added by any later
+      // step would be selected out of a table that has never had it, and the
+      // upgrade would die on a store older than that step. Naming them as new
+      // columns is what keeps this step readable by the versions that come
+      // after it — and something has to be put in the ones that cannot be
+      // null, which a later step then fills in properly.
+      final present = {
+        for (final column in await customSelect(
+          'PRAGMA table_info("$name")',
+        ).get())
+          column.read<String>('name'),
+      };
+      final added = [
+        for (final column in table.$columns)
+          if (!present.contains(column.name)) column,
+      ];
+
       await m.alterTable(
         TableMigration(
           table,
-          newColumns: [byName['updated_at']!],
+          newColumns: [byName['updated_at']!, ...added],
           columnTransformer: {
+            for (final column in added)
+              if (!column.$nullable && column.defaultValue == null)
+                column: _blankFor(column),
             byName['id']!: mapped(name, 'id', name),
             byName['updated_at']!: lastWritten == null
                 ? Variable<DateTime>(now)
@@ -303,6 +376,154 @@ class AppDatabase extends _$AppDatabase {
 
     await customStatement('DROP TABLE uuid_id_map');
   }
+
+  /// A stand-in for a column that cannot be null and has no default.
+  ///
+  /// Only ever written by [_giveEveryRecordAUuid], and only into a column a
+  /// later step of the same upgrade is about to fill: foreign keys are off
+  /// while migrations run, so a reference that points nowhere for three
+  /// statements costs nothing and a `NOT NULL` that is left empty costs the
+  /// whole upgrade.
+  Expression<Object> _blankFor(GeneratedColumn<Object> column) =>
+      switch (column) {
+        GeneratedColumn<int>() => const Constant<int>(0),
+        GeneratedColumn<double>() => const Constant<double>(0),
+        GeneratedColumn<bool>() => const Constant<bool>(false),
+        _ => const Constant<String>(''),
+      };
+
+  /// Replaces `todo_tasks.status` with a reference to a row of
+  /// [BoardColumns], one board per project (v15).
+  ///
+  /// The status was the wire name of an enum, so the board could not be
+  /// rearranged without a release. Every project gets the three seeded
+  /// columns and every task is pointed at its own project's copy of the one
+  /// its status named. Nothing moves on screen; the board just stops being a
+  /// decision the code had made.
+  ///
+  /// A status the enum never had — nothing writes one, but a hand-edited
+  /// store or a backup from a fork could carry one — lands in that project's
+  /// first column rather than stopping the upgrade. It loses nothing: the
+  /// task keeps every field it had and sits where the user can see it.
+  Future<void> _rebuildBoardAsColumns(Migrator m) async {
+    await m.createTable(boardColumns);
+    await _createIndexIdempotently(boardColumnOrder);
+    await seedMissingBoards();
+
+    // A store that came through v14 in this same upgrade has no `status` to
+    // read: that step rebuilds the table from today's definition, and today's
+    // has no such column. `completed_at` survives it, and it answers the half
+    // of the question that matters — a finished task goes to the column that
+    // finishes work, everything else to the first one. The distinction
+    // between "pending" and "in progress" is what is lost, on stores older
+    // than v14 only, and it is a distinction the user can see and put back.
+    //
+    // A store that was already at v14 — which is every released one — still
+    // has `status`, and maps exactly.
+    final hasStatus = await _hasColumn('todo_tasks', 'status');
+
+    // Nothing to move when the table is already shaped for this version — a
+    // store built by `onCreate`, or one where this ran and lost the version
+    // that marked it done.
+    if (!hasStatus && await _hasColumn('todo_tasks', 'column_id')) {
+      final placed = await customSelect(
+        'SELECT EXISTS(SELECT 1 FROM "todo_tasks" '
+        'WHERE "column_id" != \'\') AS present',
+      ).getSingle();
+      if (placed.read<int>('present') == 1) return;
+    }
+
+    // Per project, because each has its own board: a single key-to-id map
+    // would send a task to whichever project's column was read last.
+    final byProject = <String, Map<String?, String>>{};
+    for (final row in await select(boardColumns).get()) {
+      (byProject[row.projectId] ??= {})[row.builtInKey] = row.id;
+    }
+
+    final tasks = [
+      for (final row in await customSelect(
+        'SELECT "id", "project_id", '
+        '${hasStatus ? '"status"' : 'NULL AS "status"'}, '
+        '"completed_at" FROM "todo_tasks"',
+      ).get())
+        (
+          id: row.read<String>('id'),
+          projectId: row.read<String>('project_id'),
+          status:
+              row.read<String?>('status') ??
+              (row.data['completed_at'] == null ? 'TODO' : 'DONE'),
+        ),
+    ];
+
+    // `status` is dropped and `column_id` added in one rebuild: SQLite can
+    // drop a column, but the table has to come back anyway to carry the new
+    // foreign key, which `ALTER TABLE` cannot add. Skipped when v14 already
+    // left the table in today's shape — then only the second pass below is
+    // needed, to fill the placeholder it wrote.
+    //
+    // `legacy_alter_table` for the rename, which is the documented recipe:
+    // modern SQLite rewrites every foreign key that names the table being
+    // renamed, so without it `task_comments` would come out of the upgrade
+    // pointing at a scratch table this method drops two statements later.
+    if (hasStatus) {
+      await customStatement('PRAGMA legacy_alter_table = ON');
+      await customStatement(
+        'ALTER TABLE "todo_tasks" RENAME TO "todo_tasks_pre_board"',
+      );
+      await customStatement('PRAGMA legacy_alter_table = OFF');
+      await customStatement('DROP INDEX IF EXISTS "task_project_lookup"');
+      await m.createTable(todoTasks);
+      await _createIndexIdempotently(taskProjectLookup);
+      await customStatement(
+        'INSERT INTO "todo_tasks" '
+        '("id", "updated_at", "title", "description", "category", '
+        '"start_date", "due_date", "priority", "column_id", "project_id", '
+        '"completed_at") '
+        'SELECT "id", "updated_at", "title", "description", "category", '
+        '"start_date", "due_date", "priority", \'\', "project_id", '
+        '"completed_at" FROM "todo_tasks_pre_board"',
+      );
+      await customStatement('DROP TABLE "todo_tasks_pre_board"');
+    }
+
+    // Outside the branch above: the index was dropped before v14 ran
+    // whether or not the table needed rebuilding here, so it goes back
+    // either way.
+    await _createIndexIdempotently(taskProjectLookup);
+
+    // Filled in a second pass, with foreign keys still off: the column each
+    // task belongs in is a fact about its project, and the insert above can
+    // only carry one value for the whole table.
+    for (final task in tasks) {
+      final board = byProject[task.projectId] ?? const {};
+      if (board.isEmpty) continue;
+      final column =
+          board[task.status.trim().toUpperCase()] ??
+          board['TODO'] ??
+          board.values.first;
+      await customStatement(
+        'UPDATE "todo_tasks" SET "column_id" = ? WHERE "id" = ?',
+        [column, task.id],
+      );
+    }
+  }
+
+  /// Whether a table still has a column by that name.
+  Future<bool> _hasColumn(String table, String column) async {
+    for (final row in await customSelect('PRAGMA table_info("$table")').get()) {
+      if (row.read<String>('name') == column) return true;
+    }
+    return false;
+  }
+
+  /// `CREATE INDEX IF NOT EXISTS`, for the reason given on
+  /// [_createAllIdempotently].
+  Future<void> _createIndexIdempotently(Index index) => customStatement(
+    index.createStatementsByDialect[SqlDialect.sqlite]!.replaceFirstMapped(
+      RegExp(r'^CREATE (UNIQUE )?INDEX (?!IF NOT EXISTS)'),
+      (match) => 'CREATE ${match[1] ?? ''}INDEX IF NOT EXISTS ',
+    ),
+  );
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -498,8 +719,38 @@ class AppDatabase extends _$AppDatabase {
         // v14 gives every record a UUID and an `updatedAt`
         // (STACK-APPS-DINAMICAS.md 1.1). Last, so it sees every table in the
         // shape the steps above left it in.
+        // Before v14 touches `todo_tasks`: rebuilding a table restores the
+        // indices it already had, and this one was written against `status`
+        // — the column v14 is about to drop. v15 puts it back in today's
+        // shape a few statements later.
+        if (from < 15) {
+          await customStatement('DROP INDEX IF EXISTS "task_project_lookup"');
+        }
         if (from < 14) {
           await _giveEveryRecordAUuid(m);
+        }
+        // v15 turns the board's three columns from an enum into rows the
+        // user owns, one board per project. Every task is pointed at its own
+        // project's copy of the column its `status` named.
+        if (from < 15) {
+          await _rebuildBoardAsColumns(m);
+        }
+        // v16 gives a task a checklist, v17 lets a food entry be made of
+        // several foods, and v18 records the steps walked in a day. None of
+        // them changes anything already stored: a task with no checklist, an
+        // entry with no parts and a day with no step count are what every
+        // row written before this looks like.
+        if (from < 16) {
+          await m.createTable(taskChecklistItems);
+          await _createIndexIdempotently(checklistByTask);
+        }
+        if (from < 17) {
+          await m.createTable(foodEntryItems);
+          await _createIndexIdempotently(entryItemByEntry);
+        }
+        if (from < 18) {
+          await m.createTable(stepLogs);
+          await m.createTable(stepGoals);
         }
       });
     },

@@ -24,7 +24,7 @@ class TodoStats {
     var overdue = 0;
 
     for (final task in tasks) {
-      if (task.status != TaskStatus.done) {
+      if (!task.countsAsDone) {
         open++;
         if (task.dueState(today) == DueState.overdue) overdue++;
       }

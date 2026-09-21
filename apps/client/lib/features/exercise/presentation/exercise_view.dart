@@ -8,6 +8,9 @@ import '../../../core/widgets/confirm_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../steps/presentation/widgets/steps_card.dart';
+import '../domain/video_link.dart';
+import 'widgets/video_dialog.dart';
 import '../../discipline/presentation/discipline_section.dart';
 import '../domain/exercise.dart';
 import '../domain/scheduled_exercise.dart';
@@ -102,9 +105,9 @@ class _PlanSection extends ConsumerWidget {
           context,
           existing: exercise,
           onDelete: () async {
-            await actions.deleteExercise(exercise.id);
             // Only once it is gone: a delete that throws leaves it in place.
             deleted = true;
+            await actions.deleteExercise(exercise.id);
           },
         );
         if (deleted) return const ExerciseRemoved();
@@ -148,10 +151,14 @@ class _ScheduledRow extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final catalogue = ref.watch(exerciseCatalogueProvider).valueOrNull;
-    final name = catalogue
-        ?.where((exercise) => exercise.id == scheduled.exerciseId)
-        .firstOrNull
-        ?.name;
+    final exercise = catalogue
+        ?.where((each) => each.id == scheduled.exerciseId)
+        .firstOrNull;
+    final name = exercise?.name;
+    // Read here so a link that is not usable never becomes a button: the
+    // field is free text, and an icon that opens nothing is worse than no
+    // icon. See [VideoLink].
+    final video = VideoLink.parse(exercise?.videoUrl);
 
     final summary = [
       l10n.planSetsReps(scheduled.sets, scheduled.reps),
@@ -200,6 +207,14 @@ class _ScheduledRow extends ConsumerWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // The movement's video belongs on the day it is being done,
+              // not only in the form where it was written down.
+              if (video != null)
+                IconButton(
+                  icon: const Icon(Icons.play_circle_outline, size: 20),
+                  tooltip: l10n.planVideo,
+                  onPressed: () => showExerciseVideo(context, video.original),
+                ),
               if (scheduled.isRecurring)
                 IconButton(
                   icon: const Icon(Icons.event_busy_outlined, size: 20),
@@ -254,6 +269,9 @@ class ExerciseView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => ListView(
     padding: const EdgeInsets.only(bottom: 96),
-    children: const [_PlanSection(), DisciplineSection()],
+    // Steps first: walking is the exercise that happens without being
+    // planned, so it sits above the routine rather than inside it — there is
+    // no set to tick and nothing scheduled, only a number that grows.
+    children: const [StepsCard(), _PlanSection(), DisciplineSection()],
   );
 }

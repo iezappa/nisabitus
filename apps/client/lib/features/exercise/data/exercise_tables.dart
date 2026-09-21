@@ -70,3 +70,28 @@ class ScheduledExercises extends Table with RecordColumns {
   BoolColumn get repeatForever =>
       boolean().withDefault(const Constant(false))();
 }
+
+/// How many steps were walked on one day.
+///
+/// One row per day, like a night's sleep: the number grows through the day
+/// and saving the same day again replaces it. Nobody walks a day twice.
+///
+/// Typed in by hand. Reading it off a phone's sensors would mean asking for
+/// activity permissions and talking to Google Fit or Health Connect, which is
+/// exactly the kind of thing this app does not do — and a figure the user
+/// copies from the watch they already look at is the same figure.
+@DataClassName('StepLogRow')
+class StepLogs extends Table with RecordColumns {
+  /// Steps walked. Whole: half a step is not a thing.
+  IntColumn get steps => integer()();
+  DateTimeColumn get date => dateTime().unique()();
+}
+
+/// The daily step target.
+@DataClassName('StepGoalRow')
+class StepGoals extends Table with SingletonColumns {
+  /// Eight thousand rather than the famous ten: the ten came from a 1960s
+  /// pedometer's brand name, and what evidence there is puts the benefit
+  /// levelling off well below it. A starting point the user changes.
+  IntColumn get steps => integer().withDefault(const Constant(8000))();
+}
