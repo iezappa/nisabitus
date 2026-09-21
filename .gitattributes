@@ -1,0 +1,29 @@
+# Line endings are stored as LF and checked out as LF everywhere.
+#
+# Without this, working on Windows turned every file in the tree into a
+# modification the moment it was touched: `git status` listed four hundred
+# files whose only difference was the line ending, and a real change was
+# impossible to find among them.
+* text=auto eol=lf
+
+# Windows' own build files are the exception. Visual Studio and the batch
+# scripts want CRLF, and some tooling refuses them otherwise.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+
+# Binaries, so nothing goes near their bytes. The goldens especially: a
+# screenshot with its line endings "fixed" is a corrupt PNG.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.wasm binary
+*.jar binary
+*.keystore binary
