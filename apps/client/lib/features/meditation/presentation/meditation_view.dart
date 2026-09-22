@@ -6,6 +6,8 @@ import '../../../core/widgets/async_section.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../audio/domain/audio_track.dart';
+import '../../audio/presentation/widgets/audio_track_section.dart';
 import 'meditation_providers.dart';
 import 'widgets/meditation_form_dialog.dart';
 
@@ -19,6 +21,10 @@ import 'widgets/meditation_form_dialog.dart';
 /// does in every other view under this tab: the button would float over
 /// whichever sub-tab happened to be open and offer to write down a sitting
 /// while the user was reading about sleep.
+///
+/// The audio library sits under the day rather than over it. The record is
+/// what the tab is for; the bell or the guided track is what the user
+/// reaches for once, at the start, and then stops looking at.
 class MeditationView extends ConsumerWidget {
   const MeditationView({super.key});
 
@@ -82,6 +88,11 @@ class MeditationView extends ConsumerWidget {
                   ),
                 ),
               ),
+          const SizedBox(height: Gap.lg),
+          AudioTrackSection(
+            usage: TrackUsage.meditation,
+            title: l10n.meditationSound,
+          ),
         ],
       ),
     );

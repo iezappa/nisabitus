@@ -8,14 +8,13 @@ import '../../../core/widgets/module_scaffold.dart';
 import '../../../core/widgets/save_failure.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
-import '../domain/focus_sound.dart';
 import '../domain/pomodoro_repository.dart';
 import '../domain/pomodoro_session.dart';
 import 'pomodoro_progress_view.dart';
 import 'pomodoro_providers.dart';
+import '../../audio/domain/audio_track.dart';
+import '../../audio/presentation/widgets/audio_track_section.dart';
 import 'widgets/focus_ring.dart';
-import 'widgets/focus_sound_dialog.dart';
-import 'widgets/focus_sound_player.dart';
 import 'widgets/pomodoro_form_dialog.dart';
 
 /// The Pomodoro tab: the clock on one side, what has been run on the other.
@@ -95,7 +94,6 @@ class _ClockPane extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
     final session = ref.watch(selectedSessionProvider).valueOrNull;
 
     return Padding(
@@ -112,9 +110,7 @@ class _ClockPane extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: Gap.lg),
-          SectionHeader(label: l10n.pomodoroSound),
-          const _SoundBar(),
-          const _Player(),
+          const AudioTrackSection(usage: TrackUsage.focus),
         ],
       ),
     );
@@ -255,109 +251,6 @@ class _Controls extends StatelessWidget {
           tooltip: l10n.pomodoroSkip,
         ),
       ],
-    );
-  }
-}
-
-/// Which sound is playing, and the way to add one.
-class _SoundBar extends ConsumerWidget {
-  const _SoundBar();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final actions = ref.read(focusSoundActionsProvider);
-    final sounds = ref.watch(focusSoundsProvider).valueOrNull ?? const [];
-    final chosen = ref.watch(chosenSoundProvider);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-      child: Row(
-        children: [
-          Expanded(
-            child: DropdownButtonFormField<String>(
-              initialValue: chosen?.id ?? '',
-              decoration: InputDecoration(labelText: l10n.pomodoroSound),
-              items: [
-                DropdownMenuItem(
-                  value: '',
-                  child: Text(l10n.pomodoroSoundNone),
-                ),
-                for (final sound in sounds)
-                  DropdownMenuItem(value: sound.id, child: Text(sound.name)),
-              ],
-              onChanged: (value) => actions.choose(value ?? ''),
-            ),
-          ),
-          const SizedBox(width: Gap.sm),
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: l10n.pomodoroSoundAdd,
-            onPressed: () async {
-              final draft = await showFocusSoundForm(context);
-              if (draft == null || !context.mounted) return;
-              await reportSaveFailure(context, () => actions.add(draft));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.edit_outlined),
-            tooltip: l10n.pomodoroSoundEdit,
-            // Only what is playing can be edited: a library of three rain
-            // recordings does not need a screen of its own, and the one in
-            // the dropdown is the one the user is thinking about.
-            onPressed: chosen == null
-                ? null
-                : () => _edit(context, ref, chosen),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _edit(
-    BuildContext context,
-    WidgetRef ref,
-    FocusSound sound,
-  ) async {
-    final actions = ref.read(focusSoundActionsProvider);
-    final draft = await showFocusSoundForm(
-      context,
-      existing: sound,
-      onDelete: () => actions.delete(sound.id),
-    );
-    if (draft == null || !context.mounted) return;
-    await reportSaveFailure(context, () => actions.update(sound.id, draft));
-  }
-}
-
-/// The player, watching only the choice — never the countdown.
-class _Player extends ConsumerWidget {
-  const _Player();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
-    final chosen = ref.watch(chosenSoundProvider);
-    final library = ref.watch(focusSoundsProvider).valueOrNull ?? const [];
-
-    if (chosen == null) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.sm, Gap.lg, 0),
-        child: Text(
-          library.isEmpty
-              ? l10n.pomodoroSoundLibraryEmpty
-              : l10n.pomodoroSoundNone,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-        ),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.md, Gap.lg, 0),
-      child: FocusSoundPlayer(sound: chosen),
     );
   }
 }

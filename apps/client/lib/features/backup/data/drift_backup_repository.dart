@@ -67,7 +67,7 @@ class DriftBackupRepository implements BackupRepository {
     _codec(_db.waterEntries, WaterEntryRow.fromJson),
     _codec(_db.meditationSessions, MeditationSessionRow.fromJson),
     _codec(_db.vacationPeriods, VacationPeriodRow.fromJson),
-    _codec(_db.focusSounds, FocusSoundRow.fromJson),
+    _codec(_db.audioTracks, AudioTrackRow.fromJson),
   ];
 
   @override
@@ -111,7 +111,7 @@ class DriftBackupRepository implements BackupRepository {
       // all, and its tasks name a `status` instead. Seeded rather than
       // refused: the columns are the app's own, and a backup taken before
       // they existed is not a damaged backup.
-      var tables = document.tables;
+      var tables = _underTodaysNames(document.tables);
       final needsBoards = (tables['board_columns'] ?? const []).isEmpty;
 
       var rows = 0;
@@ -178,6 +178,30 @@ class DriftBackupRepository implements BackupRepository {
     }
     await _db.seedBuiltInFoods();
   });
+
+  /// Renames the tables a file calls by a name this build has changed.
+  ///
+  /// `focus_sounds` became `audio_tracks` when meditation was given the same
+  /// library. A file written in between holds rows under the old name, and
+  /// they are the user's: dropping them and reporting the table as ignored
+  /// would be accurate and useless.
+  static Map<String, List<Map<String, Object?>>> _underTodaysNames(
+    Map<String, List<Map<String, Object?>>> tables,
+  ) {
+    final renamed = tables['focus_sounds'];
+    if (renamed == null) return tables;
+
+    return {
+      for (final entry in tables.entries)
+        if (entry.key != 'focus_sounds') entry.key: entry.value,
+      // Everything in that file was added beside the focus timer, which is
+      // what the column's own default says too.
+      'audio_tracks': [
+        ...?tables['audio_tracks'],
+        for (final row in renamed) {...row, 'usage': 'FOCUS'},
+      ],
+    };
+  }
 
   /// Points the tasks of a pre-board document at a column.
   ///

@@ -19,18 +19,3 @@ class PomodoroSessions extends Table with RecordColumns {
   TextColumn get status => text().withLength(max: 16)();
   DateTimeColumn get startedAt => dateTime()();
 }
-
-/// A sound the user plays while focusing: rain, white noise, a long track.
-///
-/// A library of its own rather than a field on the session, because what you
-/// listen to and what you are working on are not the same choice: the same
-/// rain recording serves every session, and a session repeated tomorrow
-/// should not drag last week's soundtrack along with it.
-///
-/// The link is stored exactly as pasted and read at the point of use, so a
-/// row can never be a URL this build would not have accepted.
-@DataClassName('FocusSoundRow')
-class FocusSounds extends Table with RecordColumns {
-  TextColumn get name => text().withLength(min: 1, max: 80)();
-  TextColumn get url => text().withLength(min: 1, max: 2000)();
-}

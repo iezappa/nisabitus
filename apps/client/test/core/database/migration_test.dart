@@ -23,6 +23,7 @@ import 'generated/schema_v5.dart' as v5;
 import 'generated/schema_v11.dart' as v11;
 import 'generated/schema_v12.dart' as v12;
 import 'generated/schema_v8.dart' as v8;
+import 'generated/schema_v20.dart' as v20;
 
 void main() {
   late SchemaVerifier verifier;
@@ -489,5 +490,50 @@ void main() {
 
     expect(mine.caloriesPer100g, 111);
     expect(mine.isBuiltIn, isFalse);
+  });
+
+  test(
+    'keeps the sounds written down while the library was the timer\'s',
+    () async {
+      // `focus_sounds` became `audio_tracks` when meditation was given the
+      // same library. A store from the hours in between holds rows under the
+      // old name, and they are the user's.
+      final schema = await verifier.schemaAt(20);
+
+      final before = v20.DatabaseAtV20(schema.newConnection());
+      await before
+          .into(before.focusSounds)
+          .insert(
+            v20.FocusSoundsCompanion.insert(
+              id: 'a-sound',
+              // Seconds since the epoch: what the column held at v20.
+              updatedAt: DateTime(2026, 9, 22).millisecondsSinceEpoch ~/ 1000,
+              name: 'Lluvia',
+              url: 'https://youtu.be/abcdefghijk',
+            ),
+          );
+      await before.close();
+
+      final db = AppDatabase.forTesting(schema.newConnection());
+      addTearDown(db.close);
+      await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
+
+      final stored = await db.select(db.audioTracks).getSingle();
+      expect(stored.name, 'Lluvia');
+      expect(stored.url, 'https://youtu.be/abcdefghijk');
+      expect(stored.usage, 'FOCUS', reason: 'added beside the focus timer');
+    },
+  );
+
+  test('gives a store that never saw v20 the library outright', () async {
+    // Nothing to rename: the table only ever existed on stores updated in
+    // the hours v20 was the current version.
+    final schema = await verifier.schemaAt(19);
+    final db = AppDatabase.forTesting(schema.newConnection());
+    addTearDown(db.close);
+
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
+
+    expect(await db.select(db.audioTracks).get(), isEmpty);
   });
 }

@@ -59,7 +59,7 @@ class ActivityCounts {
     // Catalogues and settings: describing a thing is not doing it.
     'habits', 'streaks', 'projects', 'board_columns', 'exercises',
     'medications', 'foods', 'nutrition_goals', 'hydration_goals', 'step_goals',
-    'focus_sounds',
+    'audio_tracks',
     // Parts of something already counted once, through its parent.
     'task_comments', 'task_checklist_items', 'food_entry_items',
     // Days the user said they were away. Writing one down is not an

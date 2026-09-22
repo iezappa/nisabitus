@@ -7,6 +7,8 @@ import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/core/time/selected_day_provider.dart';
+import 'package:nisabitus/features/audio/domain/audio_track.dart';
+import 'package:nisabitus/features/audio/presentation/audio_providers.dart';
 import 'package:nisabitus/features/meditation/domain/meditation_repository.dart';
 import 'package:nisabitus/features/meditation/presentation/meditation_providers.dart';
 import 'package:nisabitus/features/meditation/presentation/meditation_view.dart';
@@ -117,5 +119,54 @@ void main() {
     await pumpView(tester);
 
     expect(find.text('Ese día no anotaste nada'), findsOneWidget);
+  });
+
+  group('the audio library', () {
+    Future<List<AudioTrack>> stored(TrackUsage usage) =>
+        container.read(audioTrackRepositoryProvider).list(usage);
+
+    testWidgets('starts empty, and says so', (tester) async {
+      await pumpView(tester);
+
+      expect(find.text('AUDIO PARA MEDITAR'), findsOneWidget);
+      expect(find.text('Todavía no agregaste ningún sonido.'), findsOneWidget);
+    });
+
+    testWidgets('takes a youtube link and plays it here', (tester) async {
+      await pumpView(tester);
+
+      await tester.tap(find.byTooltip('Agregar sonido'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextFormField).first, 'Campana');
+      await tester.enterText(
+        find.byType(TextFormField).last,
+        'https://youtu.be/abcdefghijk',
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+      await tester.pumpAndSettle();
+
+      final tracks = await stored(TrackUsage.meditation);
+      expect(tracks.single.name, 'Campana');
+      expect(
+        container.read(chosenTrackProvider(TrackUsage.meditation))?.name,
+        'Campana',
+      );
+    });
+
+    testWidgets('keeps its list out of the focus timer\'s', (tester) async {
+      // A guided sitting is not background for a work sprint.
+      await pumpView(tester);
+      await tester.tap(find.byTooltip('Agregar sonido'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextFormField).first, 'Campana');
+      await tester.enterText(
+        find.byType(TextFormField).last,
+        'https://youtu.be/abcdefghijk',
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+      await tester.pumpAndSettle();
+
+      expect(await stored(TrackUsage.focus), isEmpty);
+    });
   });
 }

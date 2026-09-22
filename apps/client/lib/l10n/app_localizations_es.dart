@@ -2127,42 +2127,44 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pomodoroIdleHint => 'Elegí uno del historial o creá uno nuevo.';
 
   @override
-  String get pomodoroSound => 'Sonido';
+  String get audioTrack => 'Sonido';
 
   @override
-  String get pomodoroSoundNone => 'Sin sonido';
+  String get audioTrackNone => 'Sin sonido';
 
   @override
-  String get pomodoroSoundAdd => 'Agregar sonido';
+  String get audioTrackAdd => 'Agregar sonido';
 
   @override
-  String get pomodoroSoundEdit => 'Editar sonido';
+  String get audioTrackEdit => 'Editar sonido';
 
   @override
-  String get pomodoroSoundName => 'Nombre';
+  String get audioTrackName => 'Nombre';
 
   @override
-  String get pomodoroSoundNameHint => 'Lluvia, ruido blanco, lo-fi…';
+  String get audioTrackNameHint => 'Lluvia, ruido blanco, lo-fi…';
 
   @override
-  String get pomodoroSoundUrl => 'Link de YouTube';
+  String get audioTrackUrl => 'Link de YouTube';
 
   @override
-  String get pomodoroSoundUrlHint =>
-      'Pegá el link del video que querés escuchar.';
+  String get audioTrackUrlHint => 'Pegá el link del video que querés escuchar.';
 
   @override
-  String get pomodoroSoundInvalid =>
+  String get audioTrackInvalid =>
       'Ese link no se puede reproducir acá adentro.';
 
   @override
-  String get pomodoroSoundLibraryEmpty => 'Todavía no agregaste ningún sonido.';
+  String get audioTrackLibraryEmpty => 'Todavía no agregaste ningún sonido.';
 
   @override
-  String get pomodoroSoundNotice =>
+  String get audioTrackNotice =>
       'El video se carga desde YouTube; eso es lo único que sale del dispositivo.';
 
   @override
-  String get pomodoroSoundPlayHint =>
+  String get audioTrackPlayHint =>
       'Dale play cuando arranques: el navegador no deja que empiece solo.';
+
+  @override
+  String get meditationSound => 'Audio para meditar';
 }

@@ -3884,77 +3884,83 @@ abstract class AppLocalizations {
   /// **'Elegí uno del historial o creá uno nuevo.'**
   String get pomodoroIdleHint;
 
-  /// No description provided for @pomodoroSound.
+  /// No description provided for @audioTrack.
   ///
   /// In es, this message translates to:
   /// **'Sonido'**
-  String get pomodoroSound;
+  String get audioTrack;
 
-  /// No description provided for @pomodoroSoundNone.
+  /// No description provided for @audioTrackNone.
   ///
   /// In es, this message translates to:
   /// **'Sin sonido'**
-  String get pomodoroSoundNone;
+  String get audioTrackNone;
 
-  /// No description provided for @pomodoroSoundAdd.
+  /// No description provided for @audioTrackAdd.
   ///
   /// In es, this message translates to:
   /// **'Agregar sonido'**
-  String get pomodoroSoundAdd;
+  String get audioTrackAdd;
 
-  /// No description provided for @pomodoroSoundEdit.
+  /// No description provided for @audioTrackEdit.
   ///
   /// In es, this message translates to:
   /// **'Editar sonido'**
-  String get pomodoroSoundEdit;
+  String get audioTrackEdit;
 
-  /// No description provided for @pomodoroSoundName.
+  /// No description provided for @audioTrackName.
   ///
   /// In es, this message translates to:
   /// **'Nombre'**
-  String get pomodoroSoundName;
+  String get audioTrackName;
 
-  /// No description provided for @pomodoroSoundNameHint.
+  /// No description provided for @audioTrackNameHint.
   ///
   /// In es, this message translates to:
   /// **'Lluvia, ruido blanco, lo-fi…'**
-  String get pomodoroSoundNameHint;
+  String get audioTrackNameHint;
 
-  /// No description provided for @pomodoroSoundUrl.
+  /// No description provided for @audioTrackUrl.
   ///
   /// In es, this message translates to:
   /// **'Link de YouTube'**
-  String get pomodoroSoundUrl;
+  String get audioTrackUrl;
 
-  /// No description provided for @pomodoroSoundUrlHint.
+  /// No description provided for @audioTrackUrlHint.
   ///
   /// In es, this message translates to:
   /// **'Pegá el link del video que querés escuchar.'**
-  String get pomodoroSoundUrlHint;
+  String get audioTrackUrlHint;
 
-  /// No description provided for @pomodoroSoundInvalid.
+  /// No description provided for @audioTrackInvalid.
   ///
   /// In es, this message translates to:
   /// **'Ese link no se puede reproducir acá adentro.'**
-  String get pomodoroSoundInvalid;
+  String get audioTrackInvalid;
 
-  /// No description provided for @pomodoroSoundLibraryEmpty.
+  /// No description provided for @audioTrackLibraryEmpty.
   ///
   /// In es, this message translates to:
   /// **'Todavía no agregaste ningún sonido.'**
-  String get pomodoroSoundLibraryEmpty;
+  String get audioTrackLibraryEmpty;
 
-  /// No description provided for @pomodoroSoundNotice.
+  /// No description provided for @audioTrackNotice.
   ///
   /// In es, this message translates to:
   /// **'El video se carga desde YouTube; eso es lo único que sale del dispositivo.'**
-  String get pomodoroSoundNotice;
+  String get audioTrackNotice;
 
-  /// No description provided for @pomodoroSoundPlayHint.
+  /// No description provided for @audioTrackPlayHint.
   ///
   /// In es, this message translates to:
   /// **'Dale play cuando arranques: el navegador no deja que empiece solo.'**
-  String get pomodoroSoundPlayHint;
+  String get audioTrackPlayHint;
+
+  /// No description provided for @meditationSound.
+  ///
+  /// In es, this message translates to:
+  /// **'Audio para meditar'**
+  String get meditationSound;
 }
 
 class _AppLocalizationsDelegate

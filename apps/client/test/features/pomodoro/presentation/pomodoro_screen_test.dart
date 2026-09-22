@@ -6,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
-import 'package:nisabitus/features/pomodoro/domain/focus_sound.dart';
+import 'package:nisabitus/features/audio/domain/audio_track.dart';
+import 'package:nisabitus/features/audio/presentation/audio_providers.dart';
 import 'package:nisabitus/features/pomodoro/domain/pomodoro_draft.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_providers.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_screen.dart';
@@ -200,9 +201,14 @@ void main() {
       await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
       await tester.pumpAndSettle();
 
-      final sounds = await container.read(focusSoundRepositoryProvider).list();
+      final sounds = await container
+          .read(audioTrackRepositoryProvider)
+          .list(TrackUsage.focus);
       expect(sounds.single.name, 'Lluvia');
-      expect(container.read(chosenSoundProvider)?.name, 'Lluvia');
+      expect(
+        container.read(chosenTrackProvider(TrackUsage.focus))?.name,
+        'Lluvia',
+      );
     });
 
     testWidgets('refuses a link it could not play', (tester) async {
@@ -220,7 +226,9 @@ void main() {
         findsOneWidget,
       );
       expect(
-        await container.read(focusSoundRepositoryProvider).list(),
+        await container
+            .read(audioTrackRepositoryProvider)
+            .list(TrackUsage.focus),
         isEmpty,
       );
     });
@@ -230,14 +238,17 @@ void main() {
       // a video whose channel forbids embedding — so the escape is on
       // screen from the start rather than after it would have helped.
       final sound = await container
-          .read(focusSoundRepositoryProvider)
+          .read(audioTrackRepositoryProvider)
           .add(
-            FocusSoundDraft(
+            AudioTrackDraft(
               name: 'Lluvia',
               url: 'https://youtu.be/abcdefghijk',
+              usage: TrackUsage.focus,
             ),
           );
-      container.read(focusSoundActionsProvider).choose(sound.id);
+      container
+          .read(audioTrackActionsProvider)
+          .choose(TrackUsage.focus, sound.id);
       await pumpScreen(tester);
 
       expect(find.widgetWithText(TextButton, 'Abrir afuera'), findsOneWidget);
@@ -245,20 +256,23 @@ void main() {
 
     testWidgets('forgets a sound that is deleted', (tester) async {
       final sound = await container
-          .read(focusSoundRepositoryProvider)
+          .read(audioTrackRepositoryProvider)
           .add(
-            FocusSoundDraft(
+            AudioTrackDraft(
               name: 'Lluvia',
               url: 'https://youtu.be/abcdefghijk',
+              usage: TrackUsage.focus,
             ),
           );
-      container.read(focusSoundActionsProvider).choose(sound.id);
+      container
+          .read(audioTrackActionsProvider)
+          .choose(TrackUsage.focus, sound.id);
       await pumpScreen(tester);
 
-      await container.read(focusSoundActionsProvider).delete(sound.id);
+      await container.read(audioTrackActionsProvider).delete(sound);
       await tester.pumpAndSettle();
 
-      expect(container.read(chosenSoundProvider), isNull);
+      expect(container.read(chosenTrackProvider(TrackUsage.focus)), isNull);
       expect(find.text('Todavía no agregaste ningún sonido.'), findsOneWidget);
     });
   });

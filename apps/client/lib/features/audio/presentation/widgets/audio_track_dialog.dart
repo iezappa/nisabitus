@@ -3,30 +3,35 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/dialog_title.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/focus_sound.dart';
+import '../../domain/audio_track.dart';
 
-/// Collects one sound for the library. Returns null when dismissed.
-Future<FocusSoundDraft?> showFocusSoundForm(
+/// Collects one track for a library. Returns null when dismissed.
+Future<AudioTrackDraft?> showAudioTrackForm(
   BuildContext context, {
-  FocusSound? existing,
+  required TrackUsage usage,
+  AudioTrack? existing,
   Future<void> Function()? onDelete,
-}) => showDialog<FocusSoundDraft>(
+}) => showDialog<AudioTrackDraft>(
   context: context,
   builder: (context) =>
-      _FocusSoundDialog(existing: existing, onDelete: onDelete),
+      _AudioTrackDialog(usage: usage, existing: existing, onDelete: onDelete),
 );
 
-class _FocusSoundDialog extends StatefulWidget {
-  const _FocusSoundDialog({this.existing, this.onDelete});
+class _AudioTrackDialog extends StatefulWidget {
+  const _AudioTrackDialog({required this.usage, this.existing, this.onDelete});
 
-  final FocusSound? existing;
+  /// Which library the track lands in. Not asked of the user: they are
+  /// standing in the module it belongs to.
+  final TrackUsage usage;
+
+  final AudioTrack? existing;
   final Future<void> Function()? onDelete;
 
   @override
-  State<_FocusSoundDialog> createState() => _FocusSoundDialogState();
+  State<_AudioTrackDialog> createState() => _AudioTrackDialogState();
 }
 
-class _FocusSoundDialogState extends State<_FocusSoundDialog> {
+class _AudioTrackDialogState extends State<_AudioTrackDialog> {
   final _formKey = GlobalKey<FormState>();
   late final _name = TextEditingController(text: widget.existing?.name ?? '');
   late final _url = TextEditingController(text: widget.existing?.url ?? '');
@@ -41,8 +46,9 @@ class _FocusSoundDialogState extends State<_FocusSoundDialog> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
 
-    Navigator.of(context)
-        .pop(FocusSoundDraft(name: _name.text, url: _url.text));
+    Navigator.of(context).pop(
+      AudioTrackDraft(name: _name.text, url: _url.text, usage: widget.usage),
+    );
   }
 
   @override
@@ -53,8 +59,8 @@ class _FocusSoundDialogState extends State<_FocusSoundDialog> {
     return AlertDialog(
       title: DialogTitle(
         text: widget.existing == null
-            ? l10n.pomodoroSoundAdd
-            : l10n.pomodoroSoundEdit,
+            ? l10n.audioTrackAdd
+            : l10n.audioTrackEdit,
         deleteLabel: widget.existing?.name,
         onDelete: widget.onDelete,
       ),
@@ -69,10 +75,10 @@ class _FocusSoundDialogState extends State<_FocusSoundDialog> {
               TextFormField(
                 controller: _name,
                 autofocus: true,
-                maxLength: FocusSoundDraft.maxNameLength,
+                maxLength: AudioTrackDraft.maxNameLength,
                 decoration: InputDecoration(
-                  labelText: l10n.pomodoroSoundName,
-                  helperText: l10n.pomodoroSoundNameHint,
+                  labelText: l10n.audioTrackName,
+                  helperText: l10n.audioTrackNameHint,
                 ),
                 validator: (value) => (value ?? '').trim().isEmpty
                     ? l10n.validationNameRequired
@@ -83,18 +89,18 @@ class _FocusSoundDialogState extends State<_FocusSoundDialog> {
                 controller: _url,
                 keyboardType: TextInputType.url,
                 decoration: InputDecoration(
-                  labelText: l10n.pomodoroSoundUrl,
-                  helperText: l10n.pomodoroSoundUrlHint,
+                  labelText: l10n.audioTrackUrl,
+                  helperText: l10n.audioTrackUrlHint,
                 ),
                 // Checked here rather than when it is played: finding out
                 // the link is unusable in the middle of a focus session is
                 // a worse moment than the one where it was pasted.
                 validator: (value) =>
-                    _playable(value) ? null : l10n.pomodoroSoundInvalid,
+                    _playable(value) ? null : l10n.audioTrackInvalid,
               ),
               const SizedBox(height: Gap.sm),
               Text(
-                l10n.pomodoroSoundNotice,
+                l10n.audioTrackNotice,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -116,7 +122,7 @@ class _FocusSoundDialogState extends State<_FocusSoundDialog> {
   /// Whether the draft would accept this link, asked without throwing.
   static bool _playable(String? value) {
     try {
-      FocusSoundDraft(name: 'x', url: value ?? '');
+      AudioTrackDraft(name: 'x', url: value ?? '', usage: TrackUsage.focus);
       return true;
     } on ArgumentError {
       return false;

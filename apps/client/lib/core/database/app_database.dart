@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
+import '../../features/audio/data/audio_tables.dart';
 import '../../features/discipline/data/discipline_tables.dart';
 import '../../features/exercise/data/exercise_tables.dart';
 import '../../features/habits/data/habit_tables.dart';
@@ -54,7 +55,7 @@ part 'app_database.g.dart';
     WaterEntries,
     MeditationSessions,
     VacationPeriods,
-    FocusSounds,
+    AudioTracks,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -95,7 +96,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 20;
+  static const currentSchemaVersion = 21;
 
   /// The id of the only row in a single-row table, such as the daily goals.
   static const singletonId = 'singleton';
@@ -511,6 +512,17 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 
+  /// Whether the store holds a table by that name.
+  Future<bool> _hasTable(String name) async {
+    final row = await customSelect(
+      "SELECT EXISTS(SELECT 1 FROM sqlite_master "
+      "WHERE type = 'table' AND name = ?) AS present",
+      variables: [Variable<String>(name)],
+    ).getSingle();
+
+    return row.read<int>('present') == 1;
+  }
+
   /// Whether a table still has a column by that name.
   Future<bool> _hasColumn(String table, String column) async {
     for (final row in await customSelect('PRAGMA table_info("$table")').get()) {
@@ -763,10 +775,25 @@ class AppDatabase extends _$AppDatabase {
           await m.createTable(vacationPeriods);
           await _createIndexIdempotently(vacationByStart);
         }
-        // v20 gives the focus timer a library of sounds to play. An empty
-        // library is silence, which is what every session had until now.
-        if (from < 20) {
-          await m.createTable(focusSounds);
+        // v20 gave the focus timer a library of sounds to play, as
+        // `focus_sounds`. v21 hands the same library to meditation, so the
+        // table is named for what it holds and a row says which of the two
+        // lists it belongs to.
+        //
+        // Which of the two happened is asked of the store rather than of
+        // the version it claims: the only stores with a `focus_sounds` in
+        // them are the ones that ran v20 in the hours it existed, and every
+        // other store has no library at all yet.
+        if (from < 21) {
+          if (await _hasTable('focus_sounds')) {
+            await m.renameTable(audioTracks, 'focus_sounds');
+            // Everything already in it was added beside the focus timer,
+            // which is what the column's default says too.
+            await m.addColumn(audioTracks, audioTracks.usage);
+          } else {
+            await m.createTable(audioTracks);
+          }
+          await _createIndexIdempotently(audioTrackByUsage);
         }
       });
     },

@@ -2123,41 +2123,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pick one from the history, or create a new one.';
 
   @override
-  String get pomodoroSound => 'Sound';
+  String get audioTrack => 'Sound';
 
   @override
-  String get pomodoroSoundNone => 'No sound';
+  String get audioTrackNone => 'No sound';
 
   @override
-  String get pomodoroSoundAdd => 'Add a sound';
+  String get audioTrackAdd => 'Add a sound';
 
   @override
-  String get pomodoroSoundEdit => 'Edit sound';
+  String get audioTrackEdit => 'Edit sound';
 
   @override
-  String get pomodoroSoundName => 'Name';
+  String get audioTrackName => 'Name';
 
   @override
-  String get pomodoroSoundNameHint => 'Rain, white noise, lo-fi…';
+  String get audioTrackNameHint => 'Rain, white noise, lo-fi…';
 
   @override
-  String get pomodoroSoundUrl => 'YouTube link';
+  String get audioTrackUrl => 'YouTube link';
 
   @override
-  String get pomodoroSoundUrlHint =>
+  String get audioTrackUrlHint =>
       'Paste the link of the video you want to hear.';
 
   @override
-  String get pomodoroSoundInvalid => 'That link cannot be played in here.';
+  String get audioTrackInvalid => 'That link cannot be played in here.';
 
   @override
-  String get pomodoroSoundLibraryEmpty => 'No sounds added yet.';
+  String get audioTrackLibraryEmpty => 'No sounds added yet.';
 
   @override
-  String get pomodoroSoundNotice =>
+  String get audioTrackNotice =>
       'The video loads from YouTube; that is the only thing that leaves the device.';
 
   @override
-  String get pomodoroSoundPlayHint =>
+  String get audioTrackPlayHint =>
       'Press play when you start: the browser will not start it on its own.';
+
+  @override
+  String get meditationSound => 'Meditation audio';
 }

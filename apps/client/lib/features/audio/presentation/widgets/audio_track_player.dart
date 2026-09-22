@@ -4,35 +4,35 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/media/video_frame.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/focus_sound.dart';
+import '../../domain/audio_track.dart';
 
-/// The chosen sound, playing next to the clock.
+/// The chosen track, playing beside whatever it is playing beside.
 ///
-/// Deliberately its own widget, watching nothing that ticks: the countdown
-/// rebuilds once a second, and a player rebuilt that often would be a video
-/// that restarts every second.
+/// Deliberately its own widget, watching nothing that ticks: the focus
+/// countdown rebuilds once a second, and a player rebuilt that often would
+/// be a video that restarts every second.
 ///
 /// It does not start on its own. A browser refuses to play sound until the
 /// listener has asked for it, and pretending otherwise would leave the user
 /// staring at a player that looks broken; so the frame is offered with its
 /// own play button and the copy says as much.
-class FocusSoundPlayer extends StatelessWidget {
-  const FocusSoundPlayer({required this.sound, super.key});
+class AudioTrackPlayer extends StatelessWidget {
+  const AudioTrackPlayer({required this.track, super.key});
 
-  final FocusSound sound;
+  final AudioTrack track;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final link = sound.link;
+    final link = track.link;
 
     // Null off the web, where there is no frame to put a page in.
     final frame = link != null && link.canPlayInline
         ? buildVideoFrame(link.playable)
         : null;
 
-    final outside = _OpenOutside(url: link?.original ?? sound.url);
+    final outside = _OpenOutside(url: link?.original ?? track.url);
 
     if (frame == null) return _OutsideOnly(outside: outside);
 
@@ -45,7 +45,7 @@ class FocusSoundPlayer extends StatelessWidget {
           // it instead of sitting in a letterboxed grey band.
           child: AspectRatio(
             aspectRatio: 16 / 9,
-            // Keyed by the link: choosing another sound replaces the
+            // Keyed by the link: choosing another track replaces the
             // player rather than pointing the old one somewhere new.
             child: KeyedSubtree(key: ValueKey(link!.playable), child: frame),
           ),
@@ -55,7 +55,7 @@ class FocusSoundPlayer extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                l10n.pomodoroSoundPlayHint,
+                l10n.audioTrackPlayHint,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

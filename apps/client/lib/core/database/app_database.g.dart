@@ -12498,12 +12498,12 @@ class VacationPeriodsCompanion extends UpdateCompanion<VacationPeriodRow> {
   }
 }
 
-class $FocusSoundsTable extends FocusSounds
-    with TableInfo<$FocusSoundsTable, FocusSoundRow> {
+class $AudioTracksTable extends AudioTracks
+    with TableInfo<$AudioTracksTable, AudioTrackRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FocusSoundsTable(this.attachedDatabase, [this._alias]);
+  $AudioTracksTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -12552,16 +12552,27 @@ class $FocusSoundsTable extends FocusSounds
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _usageMeta = const VerificationMeta('usage');
   @override
-  List<GeneratedColumn> get $columns => [id, updatedAt, name, url];
+  late final GeneratedColumn<String> usage = GeneratedColumn<String>(
+    'usage',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 16),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('FOCUS'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, updatedAt, name, url, usage];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'focus_sounds';
+  static const String $name = 'audio_tracks';
   @override
   VerificationContext validateIntegrity(
-    Insertable<FocusSoundRow> instance, {
+    Insertable<AudioTrackRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -12591,15 +12602,21 @@ class $FocusSoundsTable extends FocusSounds
     } else if (isInserting) {
       context.missing(_urlMeta);
     }
+    if (data.containsKey('usage')) {
+      context.handle(
+        _usageMeta,
+        usage.isAcceptableOrUnknown(data['usage']!, _usageMeta),
+      );
+    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FocusSoundRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+  AudioTrackRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return FocusSoundRow(
+    return AudioTrackRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -12616,25 +12633,33 @@ class $FocusSoundsTable extends FocusSounds
         DriftSqlType.string,
         data['${effectivePrefix}url'],
       )!,
+      usage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}usage'],
+      )!,
     );
   }
 
   @override
-  $FocusSoundsTable createAlias(String alias) {
-    return $FocusSoundsTable(attachedDatabase, alias);
+  $AudioTracksTable createAlias(String alias) {
+    return $AudioTracksTable(attachedDatabase, alias);
   }
 }
 
-class FocusSoundRow extends DataClass implements Insertable<FocusSoundRow> {
+class AudioTrackRow extends DataClass implements Insertable<AudioTrackRow> {
   final String id;
   final DateTime updatedAt;
   final String name;
   final String url;
-  const FocusSoundRow({
+
+  /// Stored as the canonical wire name of TrackUsage.
+  final String usage;
+  const AudioTrackRow({
     required this.id,
     required this.updatedAt,
     required this.name,
     required this.url,
+    required this.usage,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -12643,28 +12668,31 @@ class FocusSoundRow extends DataClass implements Insertable<FocusSoundRow> {
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['name'] = Variable<String>(name);
     map['url'] = Variable<String>(url);
+    map['usage'] = Variable<String>(usage);
     return map;
   }
 
-  FocusSoundsCompanion toCompanion(bool nullToAbsent) {
-    return FocusSoundsCompanion(
+  AudioTracksCompanion toCompanion(bool nullToAbsent) {
+    return AudioTracksCompanion(
       id: Value(id),
       updatedAt: Value(updatedAt),
       name: Value(name),
       url: Value(url),
+      usage: Value(usage),
     );
   }
 
-  factory FocusSoundRow.fromJson(
+  factory AudioTrackRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return FocusSoundRow(
+    return AudioTrackRow(
       id: serializer.fromJson<String>(json['id']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       name: serializer.fromJson<String>(json['name']),
       url: serializer.fromJson<String>(json['url']),
+      usage: serializer.fromJson<String>(json['usage']),
     );
   }
   @override
@@ -12675,78 +12703,88 @@ class FocusSoundRow extends DataClass implements Insertable<FocusSoundRow> {
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'name': serializer.toJson<String>(name),
       'url': serializer.toJson<String>(url),
+      'usage': serializer.toJson<String>(usage),
     };
   }
 
-  FocusSoundRow copyWith({
+  AudioTrackRow copyWith({
     String? id,
     DateTime? updatedAt,
     String? name,
     String? url,
-  }) => FocusSoundRow(
+    String? usage,
+  }) => AudioTrackRow(
     id: id ?? this.id,
     updatedAt: updatedAt ?? this.updatedAt,
     name: name ?? this.name,
     url: url ?? this.url,
+    usage: usage ?? this.usage,
   );
-  FocusSoundRow copyWithCompanion(FocusSoundsCompanion data) {
-    return FocusSoundRow(
+  AudioTrackRow copyWithCompanion(AudioTracksCompanion data) {
+    return AudioTrackRow(
       id: data.id.present ? data.id.value : this.id,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       name: data.name.present ? data.name.value : this.name,
       url: data.url.present ? data.url.value : this.url,
+      usage: data.usage.present ? data.usage.value : this.usage,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('FocusSoundRow(')
+    return (StringBuffer('AudioTrackRow(')
           ..write('id: $id, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('name: $name, ')
-          ..write('url: $url')
+          ..write('url: $url, ')
+          ..write('usage: $usage')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, updatedAt, name, url);
+  int get hashCode => Object.hash(id, updatedAt, name, url, usage);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is FocusSoundRow &&
+      (other is AudioTrackRow &&
           other.id == this.id &&
           other.updatedAt == this.updatedAt &&
           other.name == this.name &&
-          other.url == this.url);
+          other.url == this.url &&
+          other.usage == this.usage);
 }
 
-class FocusSoundsCompanion extends UpdateCompanion<FocusSoundRow> {
+class AudioTracksCompanion extends UpdateCompanion<AudioTrackRow> {
   final Value<String> id;
   final Value<DateTime> updatedAt;
   final Value<String> name;
   final Value<String> url;
+  final Value<String> usage;
   final Value<int> rowid;
-  const FocusSoundsCompanion({
+  const AudioTracksCompanion({
     this.id = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.name = const Value.absent(),
     this.url = const Value.absent(),
+    this.usage = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  FocusSoundsCompanion.insert({
+  AudioTracksCompanion.insert({
     this.id = const Value.absent(),
     this.updatedAt = const Value.absent(),
     required String name,
     required String url,
+    this.usage = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name),
        url = Value(url);
-  static Insertable<FocusSoundRow> custom({
+  static Insertable<AudioTrackRow> custom({
     Expression<String>? id,
     Expression<DateTime>? updatedAt,
     Expression<String>? name,
     Expression<String>? url,
+    Expression<String>? usage,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -12754,22 +12792,25 @@ class FocusSoundsCompanion extends UpdateCompanion<FocusSoundRow> {
       if (updatedAt != null) 'updated_at': updatedAt,
       if (name != null) 'name': name,
       if (url != null) 'url': url,
+      if (usage != null) 'usage': usage,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  FocusSoundsCompanion copyWith({
+  AudioTracksCompanion copyWith({
     Value<String>? id,
     Value<DateTime>? updatedAt,
     Value<String>? name,
     Value<String>? url,
+    Value<String>? usage,
     Value<int>? rowid,
   }) {
-    return FocusSoundsCompanion(
+    return AudioTracksCompanion(
       id: id ?? this.id,
       updatedAt: updatedAt ?? this.updatedAt,
       name: name ?? this.name,
       url: url ?? this.url,
+      usage: usage ?? this.usage,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -12789,6 +12830,9 @@ class FocusSoundsCompanion extends UpdateCompanion<FocusSoundRow> {
     if (url.present) {
       map['url'] = Variable<String>(url.value);
     }
+    if (usage.present) {
+      map['usage'] = Variable<String>(usage.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -12797,11 +12841,12 @@ class FocusSoundsCompanion extends UpdateCompanion<FocusSoundRow> {
 
   @override
   String toString() {
-    return (StringBuffer('FocusSoundsCompanion(')
+    return (StringBuffer('AudioTracksCompanion(')
           ..write('id: $id, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('name: $name, ')
           ..write('url: $url, ')
+          ..write('usage: $usage, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -12849,7 +12894,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $VacationPeriodsTable vacationPeriods = $VacationPeriodsTable(
     this,
   );
-  late final $FocusSoundsTable focusSounds = $FocusSoundsTable(this);
+  late final $AudioTracksTable audioTracks = $AudioTracksTable(this);
   late final Index habitCompletionLookup = Index(
     'habit_completion_lookup',
     'CREATE INDEX habit_completion_lookup ON habit_completions (habit_id, completion_date)',
@@ -12918,6 +12963,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'vacation_by_start',
     'CREATE INDEX vacation_by_start ON vacation_periods (start_date)',
   );
+  late final Index audioTrackByUsage = Index(
+    'audio_track_by_usage',
+    'CREATE INDEX audio_track_by_usage ON audio_tracks (usage)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -12950,7 +12999,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     waterEntries,
     meditationSessions,
     vacationPeriods,
-    focusSounds,
+    audioTracks,
     habitCompletionLookup,
     streakHistoryLookup,
     boardColumnOrder,
@@ -12968,6 +13017,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     waterByDay,
     meditationByDay,
     vacationByStart,
+    audioTrackByUsage,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -21833,26 +21883,28 @@ typedef $$VacationPeriodsTableProcessedTableManager =
       VacationPeriodRow,
       PrefetchHooks Function()
     >;
-typedef $$FocusSoundsTableCreateCompanionBuilder =
-    FocusSoundsCompanion Function({
+typedef $$AudioTracksTableCreateCompanionBuilder =
+    AudioTracksCompanion Function({
       Value<String> id,
       Value<DateTime> updatedAt,
       required String name,
       required String url,
+      Value<String> usage,
       Value<int> rowid,
     });
-typedef $$FocusSoundsTableUpdateCompanionBuilder =
-    FocusSoundsCompanion Function({
+typedef $$AudioTracksTableUpdateCompanionBuilder =
+    AudioTracksCompanion Function({
       Value<String> id,
       Value<DateTime> updatedAt,
       Value<String> name,
       Value<String> url,
+      Value<String> usage,
       Value<int> rowid,
     });
 
-class $$FocusSoundsTableFilterComposer
-    extends Composer<_$AppDatabase, $FocusSoundsTable> {
-  $$FocusSoundsTableFilterComposer({
+class $$AudioTracksTableFilterComposer
+    extends Composer<_$AppDatabase, $AudioTracksTable> {
+  $$AudioTracksTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -21878,11 +21930,16 @@ class $$FocusSoundsTableFilterComposer
     column: $table.url,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<String> get usage => $composableBuilder(
+    column: $table.usage,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
-class $$FocusSoundsTableOrderingComposer
-    extends Composer<_$AppDatabase, $FocusSoundsTable> {
-  $$FocusSoundsTableOrderingComposer({
+class $$AudioTracksTableOrderingComposer
+    extends Composer<_$AppDatabase, $AudioTracksTable> {
+  $$AudioTracksTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -21908,11 +21965,16 @@ class $$FocusSoundsTableOrderingComposer
     column: $table.url,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get usage => $composableBuilder(
+    column: $table.usage,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
-class $$FocusSoundsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $FocusSoundsTable> {
-  $$FocusSoundsTableAnnotationComposer({
+class $$AudioTracksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AudioTracksTable> {
+  $$AudioTracksTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -21930,49 +21992,54 @@ class $$FocusSoundsTableAnnotationComposer
 
   GeneratedColumn<String> get url =>
       $composableBuilder(column: $table.url, builder: (column) => column);
+
+  GeneratedColumn<String> get usage =>
+      $composableBuilder(column: $table.usage, builder: (column) => column);
 }
 
-class $$FocusSoundsTableTableManager
+class $$AudioTracksTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $FocusSoundsTable,
-          FocusSoundRow,
-          $$FocusSoundsTableFilterComposer,
-          $$FocusSoundsTableOrderingComposer,
-          $$FocusSoundsTableAnnotationComposer,
-          $$FocusSoundsTableCreateCompanionBuilder,
-          $$FocusSoundsTableUpdateCompanionBuilder,
+          $AudioTracksTable,
+          AudioTrackRow,
+          $$AudioTracksTableFilterComposer,
+          $$AudioTracksTableOrderingComposer,
+          $$AudioTracksTableAnnotationComposer,
+          $$AudioTracksTableCreateCompanionBuilder,
+          $$AudioTracksTableUpdateCompanionBuilder,
           (
-            FocusSoundRow,
-            BaseReferences<_$AppDatabase, $FocusSoundsTable, FocusSoundRow>,
+            AudioTrackRow,
+            BaseReferences<_$AppDatabase, $AudioTracksTable, AudioTrackRow>,
           ),
-          FocusSoundRow,
+          AudioTrackRow,
           PrefetchHooks Function()
         > {
-  $$FocusSoundsTableTableManager(_$AppDatabase db, $FocusSoundsTable table)
+  $$AudioTracksTableTableManager(_$AppDatabase db, $AudioTracksTable table)
     : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$FocusSoundsTableFilterComposer($db: db, $table: table),
+              $$AudioTracksTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$FocusSoundsTableOrderingComposer($db: db, $table: table),
+              $$AudioTracksTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$FocusSoundsTableAnnotationComposer($db: db, $table: table),
+              $$AudioTracksTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> url = const Value.absent(),
+                Value<String> usage = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => FocusSoundsCompanion(
+              }) => AudioTracksCompanion(
                 id: id,
                 updatedAt: updatedAt,
                 name: name,
                 url: url,
+                usage: usage,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -21981,12 +22048,14 @@ class $$FocusSoundsTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 required String name,
                 required String url,
+                Value<String> usage = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => FocusSoundsCompanion.insert(
+              }) => AudioTracksCompanion.insert(
                 id: id,
                 updatedAt: updatedAt,
                 name: name,
                 url: url,
+                usage: usage,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -21997,21 +22066,21 @@ class $$FocusSoundsTableTableManager
       );
 }
 
-typedef $$FocusSoundsTableProcessedTableManager =
+typedef $$AudioTracksTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $FocusSoundsTable,
-      FocusSoundRow,
-      $$FocusSoundsTableFilterComposer,
-      $$FocusSoundsTableOrderingComposer,
-      $$FocusSoundsTableAnnotationComposer,
-      $$FocusSoundsTableCreateCompanionBuilder,
-      $$FocusSoundsTableUpdateCompanionBuilder,
+      $AudioTracksTable,
+      AudioTrackRow,
+      $$AudioTracksTableFilterComposer,
+      $$AudioTracksTableOrderingComposer,
+      $$AudioTracksTableAnnotationComposer,
+      $$AudioTracksTableCreateCompanionBuilder,
+      $$AudioTracksTableUpdateCompanionBuilder,
       (
-        FocusSoundRow,
-        BaseReferences<_$AppDatabase, $FocusSoundsTable, FocusSoundRow>,
+        AudioTrackRow,
+        BaseReferences<_$AppDatabase, $AudioTracksTable, AudioTrackRow>,
       ),
-      FocusSoundRow,
+      AudioTrackRow,
       PrefetchHooks Function()
     >;
 
@@ -22072,6 +22141,6 @@ class $AppDatabaseManager {
       $$MeditationSessionsTableTableManager(_db, _db.meditationSessions);
   $$VacationPeriodsTableTableManager get vacationPeriods =>
       $$VacationPeriodsTableTableManager(_db, _db.vacationPeriods);
-  $$FocusSoundsTableTableManager get focusSounds =>
-      $$FocusSoundsTableTableManager(_db, _db.focusSounds);
+  $$AudioTracksTableTableManager get audioTracks =>
+      $$AudioTracksTableTableManager(_db, _db.audioTracks);
 }
