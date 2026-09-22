@@ -56,6 +56,23 @@ final chosenTrackProvider = Provider.family<AudioTrack?, TrackUsage>((
   return null;
 });
 
+/// Whether a library's section is unfolded, remembered between launches.
+///
+/// Open to begin with, which is how it behaved before it could fold: the
+/// player is the point of the section, and one that arrived rolled up would
+/// look like a feature that had been switched off.
+final audioSectionOpenProvider =
+    StateNotifierProvider.family<BoolPreference, bool, TrackUsage>((
+      ref,
+      usage,
+    ) {
+      return BoolPreference(
+        ref.watch(sharedPreferencesProvider),
+        '${usage.preferenceKey}.sound.expanded',
+        fallback: true,
+      );
+    });
+
 /// Write operations on the libraries.
 class AudioTrackActions {
   AudioTrackActions(this._ref);

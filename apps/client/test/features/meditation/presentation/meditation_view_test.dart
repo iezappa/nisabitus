@@ -153,6 +153,21 @@ void main() {
       );
     });
 
+    testWidgets('folds away on its own, apart from the timer\'s', (
+      tester,
+    ) async {
+      await pumpView(tester);
+
+      await tester.tap(find.text('AUDIO PARA MEDITAR'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Todavía no agregaste ningún sonido.'), findsNothing);
+      // The focus timer's section is a different fold, under its own key.
+      final prefs = container.read(sharedPreferencesProvider);
+      expect(prefs.getBool('meditation.sound.expanded'), isFalse);
+      expect(prefs.getBool('pomodoro.sound.expanded'), isNull);
+    });
+
     testWidgets('keeps its list out of the focus timer\'s', (tester) async {
       // A guided sitting is not background for a work sprint.
       await pumpView(tester);

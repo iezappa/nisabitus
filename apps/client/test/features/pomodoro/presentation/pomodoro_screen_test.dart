@@ -8,6 +8,7 @@ import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/features/audio/domain/audio_track.dart';
 import 'package:nisabitus/features/audio/presentation/audio_providers.dart';
+import 'package:nisabitus/features/audio/presentation/widgets/audio_track_player.dart';
 import 'package:nisabitus/features/pomodoro/domain/pomodoro_draft.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_providers.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_screen.dart';
@@ -274,6 +275,65 @@ void main() {
 
       expect(container.read(chosenTrackProvider(TrackUsage.focus)), isNull);
       expect(find.text('Todavía no agregaste ningún sonido.'), findsOneWidget);
+    });
+  });
+
+  group('the sound section', () {
+    testWidgets('arrives open', (tester) async {
+      await pumpScreen(tester);
+
+      expect(find.byIcon(Icons.expand_less), findsOneWidget);
+      expect(find.text('Todavía no agregaste ningún sonido.'), findsOneWidget);
+    });
+
+    testWidgets('folds away when the header is tapped', (tester) async {
+      await pumpScreen(tester);
+
+      await tester.tap(find.text('SONIDO'));
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.expand_more), findsOneWidget);
+      expect(find.text('Todavía no agregaste ningún sonido.'), findsNothing);
+    });
+
+    testWidgets('keeps what is playing mounted while folded', (tester) async {
+      // Not wanting to look at a video is not wanting the rain to stop, and
+      // a player taken out of the tree is a player that has stopped.
+      final track = await container
+          .read(audioTrackRepositoryProvider)
+          .add(
+            AudioTrackDraft(
+              name: 'Lluvia',
+              url: 'https://youtu.be/abcdefghijk',
+              usage: TrackUsage.focus,
+            ),
+          );
+      container
+          .read(audioTrackActionsProvider)
+          .choose(TrackUsage.focus, track.id);
+      await pumpScreen(tester);
+
+      await tester.tap(find.text('SONIDO'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byType(AudioTrackPlayer, skipOffstage: false),
+        findsOneWidget,
+      );
+      expect(find.byType(AudioTrackPlayer), findsNothing, reason: 'not drawn');
+    });
+
+    testWidgets('remembers the fold', (tester) async {
+      await pumpScreen(tester);
+      await tester.tap(find.text('SONIDO'));
+      await tester.pumpAndSettle();
+
+      expect(
+        container
+            .read(sharedPreferencesProvider)
+            .getBool('pomodoro.sound.expanded'),
+        isFalse,
+      );
     });
   });
 }

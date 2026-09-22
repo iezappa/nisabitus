@@ -27,13 +27,41 @@ class AudioTrackSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final open = ref.watch(audioSectionOpenProvider(usage));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SectionHeader(label: title ?? l10n.audioTrack),
-        _Picker(usage: usage),
-        _Player(usage: usage),
+        // The whole header opens it, not just the chevron: a strip of text
+        // with one tappable glyph at the end is a target nobody finds.
+        InkWell(
+          onTap: () =>
+              ref.read(audioSectionOpenProvider(usage).notifier).toggle(),
+          child: SectionHeader(
+            label: title ?? l10n.audioTrack,
+            trailing: Padding(
+              padding: const EdgeInsets.only(right: Gap.sm),
+              child: Icon(
+                open ? Icons.expand_less : Icons.expand_more,
+                size: 20,
+              ),
+            ),
+          ),
+        ),
+        // Folded away rather than taken down. Not wanting to look at a
+        // video is not wanting the rain to stop, and a player removed from
+        // the tree is a player that has stopped: the frame stays where it
+        // is and is simply not drawn.
+        Offstage(
+          offstage: !open,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Picker(usage: usage),
+              _Player(usage: usage),
+            ],
+          ),
+        ),
       ],
     );
   }
