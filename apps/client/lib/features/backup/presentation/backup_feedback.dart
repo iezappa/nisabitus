@@ -26,7 +26,11 @@ String? backupOutcomeMessage(
     BackupProblem.newerVersion => l10n.backupNewerVersion,
     BackupProblem.corrupt => l10n.backupCorrupt,
   },
-  BackupFailed() => l10n.backupFailed,
+  // The cause goes on the end. "It could not be completed" on its own
+  // leaves the user with nothing to do and nothing to report: whatever the
+  // disk or the database said is the only thing that can tell them whether
+  // to free space, pick another file, or write it down and ask.
+  BackupFailed(:final error) => '${l10n.backupFailed}: $error',
 };
 
 /// Shows [backupOutcomeMessage] in a snack bar, replacing any older one.

@@ -22,7 +22,7 @@ const _lastWritten = {
   'streaks': 'lastUpdated',
 };
 
-const _singletonTables = {'nutrition_goals', 'hydration_goals'};
+const _singletonTables = {'nutrition_goals', 'hydration_goals', 'step_goals'};
 
 /// Rewrites a format 1 backup — integer ids — into the format 2 shape.
 ///

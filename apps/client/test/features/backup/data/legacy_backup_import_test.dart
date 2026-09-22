@@ -216,4 +216,26 @@ void main() {
       expect(reparsed.tables['habits']!.map((row) => row['id']).toSet(), ids);
     });
   });
+  test('a legacy step target keeps the id the app looks it up by', () {
+    // `step_goals` holds one row and the app finds it by a fixed id. Given a
+    // random UUID like every other row, the target the user set would never
+    // be read again and the figure would silently fall back to the default.
+    final upgraded = upgradeLegacyIds(
+      BackupDocument(
+        format: 1,
+        schemaVersion: 13,
+        exportedAt: DateTime(2026, 1, 2),
+        tables: {
+          'step_goals': [
+            {'id': 1, 'steps': 12000},
+          ],
+        },
+      ),
+    );
+
+    expect(
+      upgraded.tables['step_goals']!.single['id'],
+      AppDatabase.singletonId,
+    );
+  });
 }
