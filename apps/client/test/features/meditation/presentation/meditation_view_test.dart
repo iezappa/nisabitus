@@ -9,7 +9,7 @@ import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/core/time/selected_day_provider.dart';
 import 'package:nisabitus/features/meditation/domain/meditation_repository.dart';
 import 'package:nisabitus/features/meditation/presentation/meditation_providers.dart';
-import 'package:nisabitus/features/meditation/presentation/meditation_screen.dart';
+import 'package:nisabitus/features/meditation/presentation/meditation_view.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,7 +38,7 @@ void main() {
   MeditationRepository repository() =>
       container.read(meditationRepositoryProvider);
 
-  Future<void> pumpScreen(WidgetTester tester) async {
+  Future<void> pumpView(WidgetTester tester) async {
     tester.view.physicalSize = const Size(1000, 2000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -56,7 +56,7 @@ void main() {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale('es'),
-          home: MeditationScreen(),
+          home: Scaffold(body: MeditationView()),
         ),
       ),
     );
@@ -64,9 +64,9 @@ void main() {
   }
 
   testWidgets('writes a sitting down through the form', (tester) async {
-    await pumpScreen(tester);
+    await pumpView(tester);
 
-    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.byTooltip('Anotar sesión'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('20 min'));
@@ -80,7 +80,7 @@ void main() {
   testWidgets('adds the sittings of a day up in the heading', (tester) async {
     await repository().add(day, const MeditationDraft(minutes: 10));
     await repository().add(day, const MeditationDraft(minutes: 15));
-    await pumpScreen(tester);
+    await pumpView(tester);
 
     expect(find.text('25 min ese día'), findsOneWidget);
   });
@@ -92,15 +92,15 @@ void main() {
       day,
       const MeditationDraft(minutes: 20, note: 'Costó arrancar'),
     );
-    await pumpScreen(tester);
+    await pumpView(tester);
 
     expect(find.text('Costó arrancar'), findsOneWidget);
   });
 
   testWidgets('refuses a sitting of no time at the form', (tester) async {
-    await pumpScreen(tester);
+    await pumpView(tester);
 
-    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.byTooltip('Anotar sesión'));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byType(TextFormField).first, '0');
@@ -114,7 +114,7 @@ void main() {
   testWidgets('says nothing was sat rather than showing an empty list', (
     tester,
   ) async {
-    await pumpScreen(tester);
+    await pumpView(tester);
 
     expect(find.text('Ese día no anotaste nada'), findsOneWidget);
   });

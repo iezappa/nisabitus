@@ -36,7 +36,7 @@ void main() {
   });
 
   Future<void> pumpScreen(WidgetTester tester) async {
-    // Wide enough for all five scrollable tabs to be on screen: a tab
+    // Wide enough for the scrollable tab strip to be on screen: a tab
     // scrolled out of view cannot be tapped.
     //
     // Through `tester.view`, not `setSurfaceSize`: that one resizes the
@@ -87,6 +87,27 @@ void main() {
     await tester.tap(find.text(label));
     await tester.pumpAndSettle();
   }
+
+  group('meditation', () {
+    testWidgets('sits with the rest of the section', (tester) async {
+      // It was a first-level tab of its own until it moved in here, where
+      // it answers the same question about the same day as sleep and food.
+      await pumpScreen(tester);
+      await openTab(tester, 'Meditación');
+
+      expect(find.text('LO QUE SENTASTE'), findsOneWidget);
+      expect(find.text('Ese día no anotaste nada'), findsOneWidget);
+    });
+
+    testWidgets('keeps its own figures behind the toggle', (tester) async {
+      await pumpScreen(tester);
+      await openTab(tester, 'Meditación');
+      await toggleProgress(tester);
+
+      expect(find.text('PROMEDIO DIARIO'), findsOneWidget);
+      expect(find.text('DÍAS QUE SENTASTE'), findsOneWidget);
+    });
+  });
 
   group('the progress toggle', () {
     testWidgets('starts on the doing side', (tester) async {

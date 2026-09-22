@@ -33,7 +33,10 @@ void main() {
       ],
     });
 
-    expect(container.read(visibleTabsProvider), contains(AppTab.meditation));
+    // Asserted against the whole list rather than against one named tab:
+    // the stored era is frozen, so the day a module is added this is what
+    // says it arrives switched on for people who chose before it existed.
+    expect(container.read(visibleTabsProvider), AppTab.values);
   });
 
   test('keeps hiding what the user actually hid', () async {
@@ -49,7 +52,7 @@ void main() {
 
     final visible = container.read(visibleTabsProvider);
     expect(visible, isNot(contains(AppTab.pomodoro)));
-    expect(visible, contains(AppTab.meditation));
+    expect(visible, contains(AppTab.health));
   });
 
   test('prefers the hidden set once it has been written', () async {

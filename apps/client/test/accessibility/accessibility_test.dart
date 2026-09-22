@@ -18,7 +18,7 @@ import 'package:nisabitus/features/dashboard/presentation/dashboard_screen.dart'
 import 'package:nisabitus/features/habits/presentation/habits_screen.dart';
 import 'package:nisabitus/features/health/presentation/health_screen.dart';
 import 'package:nisabitus/features/journal/presentation/journal_screen.dart';
-import 'package:nisabitus/features/meditation/presentation/meditation_screen.dart';
+import 'package:nisabitus/features/meditation/presentation/meditation_view.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_screen.dart';
 import 'package:nisabitus/features/settings/domain/accent_color.dart';
 import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
@@ -37,7 +37,9 @@ void main() {
     'journal': const JournalScreen(),
     'pomodoro': const PomodoroScreen(),
     'todo': const TodoScreen(),
-    'meditation': const MeditationScreen(),
+    // A sub-tab of Salud, checked on its own: a TabBarView builds the tab
+    // it is showing, so the health entry above never reaches this one.
+    'meditation': const Scaffold(body: MeditationView()),
   };
 
   for (final brightness in Brightness.values) {

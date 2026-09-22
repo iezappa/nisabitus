@@ -8,7 +8,6 @@ import '../../features/backup/presentation/widgets/storage_warning_banner.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/habits/presentation/habits_screen.dart';
 import '../../features/journal/presentation/journal_screen.dart';
-import '../../features/meditation/presentation/meditation_screen.dart';
 import '../../features/pomodoro/presentation/pomodoro_screen.dart';
 import '../../features/settings/presentation/settings_providers.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -18,6 +17,9 @@ import '../../l10n/app_localizations.dart';
 import '../widgets/brand_logo.dart';
 import '../widgets/settings_button.dart';
 import 'app_tab.dart';
+
+/// Where meditation used to live.
+const _meditationWas = '/meditacion';
 
 GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) => GoRouter(
   navigatorKey: navigatorKey,
@@ -38,12 +40,16 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) => GoRouter(
               AppTab.health => const HealthScreen(),
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
-              AppTab.meditation => const MeditationScreen(),
               AppTab.todo => const TodoScreen(),
             },
           ),
       ],
     ),
+    // Meditation was a tab of its own until it moved in with the rest of
+    // Salud. The old path stays as a redirect rather than being dropped: a
+    // bookmark or a pinned link is the user's, and letting it 404 would be
+    // a change they never made.
+    GoRoute(path: _meditationWas, redirect: (_, _) => AppTab.health.path),
     // Outside the shell on purpose: it is pushed over whatever tab is open,
     // gets a real back arrow, and never depends on a navigation destination
     // that the user may have hidden.

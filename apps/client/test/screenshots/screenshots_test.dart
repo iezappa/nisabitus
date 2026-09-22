@@ -47,7 +47,7 @@ import 'package:nisabitus/features/hydration/presentation/hydration_view.dart';
 import 'package:nisabitus/features/journal/presentation/journal_screen.dart';
 import 'package:nisabitus/features/meditation/data/drift_meditation_repository.dart';
 import 'package:nisabitus/features/meditation/domain/meditation_repository.dart';
-import 'package:nisabitus/features/meditation/presentation/meditation_screen.dart';
+import 'package:nisabitus/features/meditation/presentation/meditation_view.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_screen.dart';
 import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
 import 'package:nisabitus/features/todo/presentation/todo_screen.dart';
@@ -301,7 +301,7 @@ void main() {
 
   testWidgets('meditation', (tester) async {
     await seed(db, wednesday);
-    await shoot(tester, 'meditation', const MeditationScreen());
+    await shoot(tester, 'meditation', const Scaffold(body: MeditationView()));
   });
 
   testWidgets('hydration', (tester) async {

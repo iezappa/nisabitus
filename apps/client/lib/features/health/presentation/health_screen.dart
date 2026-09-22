@@ -15,17 +15,19 @@ import '../../hydration/presentation/hydration_progress_view.dart';
 import '../../hydration/presentation/hydration_view.dart';
 import '../../medication/presentation/medication_progress_view.dart';
 import '../../medication/presentation/medication_view.dart';
+import '../../meditation/presentation/meditation_progress_view.dart';
+import '../../meditation/presentation/meditation_view.dart';
 import '../../nutrition/presentation/nutrition_progress_view.dart';
 import '../../nutrition/presentation/nutrition_view.dart';
 import '../../sleep/presentation/sleep_progress_view.dart';
 import '../../sleep/presentation/sleep_view.dart';
 
-/// The Salud tab: sleep, eating, water, training and medication for one
-/// chosen day.
+/// The Salud tab: sleep, eating, water, training, medication and meditation
+/// for one chosen day.
 ///
-/// The week strip lives here rather than inside each view, because all four
-/// answer the same question about the same day and moving it once should
-/// move all of them. The notice sits in the app bar for the same reason: it
+/// The week strip lives here rather than inside each view, because every one
+/// of them answers the same question about the same day and moving it once
+/// should move all of them. The notice sits in the app bar for the same reason: it
 /// applies to everything under this tab.
 ///
 /// The progress toggle does not: each sub-tab has its own list and its own
@@ -46,6 +48,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
     (list: HydrationView(), progress: HydrationProgressView()),
     (list: ExerciseView(), progress: ExerciseProgressView()),
     (list: MedicationView(), progress: MedicationProgressView()),
+    (list: MeditationView(), progress: MeditationProgressView()),
   ];
 
   late final TabController _tabs = TabController(
@@ -101,6 +104,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen>
                 Tab(text: l10n.hydration),
                 Tab(text: l10n.healthExercise),
                 Tab(text: l10n.healthMeds),
+                Tab(text: l10n.meditationTitle),
               ],
             ),
             Expanded(

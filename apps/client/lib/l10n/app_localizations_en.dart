@@ -956,9 +956,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutritionPortionHint => '150 g, 1 plate, 2 units';
 
   @override
-  String get tabMeditation => 'Meditation';
-
-  @override
   String get meditationTitle => 'Meditation';
 
   @override

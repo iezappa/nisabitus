@@ -1862,12 +1862,6 @@ abstract class AppLocalizations {
   /// **'150 g, 1 plato, 2 unidades'**
   String get nutritionPortionHint;
 
-  /// No description provided for @tabMeditation.
-  ///
-  /// In es, this message translates to:
-  /// **'Meditación'**
-  String get tabMeditation;
-
   /// No description provided for @meditationTitle.
   ///
   /// In es, this message translates to:
