@@ -1998,4 +1998,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String stepsAveragedOverLogged(int days) {
     return 'Averaged over the days you wrote down, not over the $days in the window.';
   }
+
+  @override
+  String get dashboardActivity => 'Activity';
+
+  @override
+  String dashboardActivityCaption(int weeks) {
+    return 'Last $weeks weeks';
+  }
+
+  @override
+  String get dashboardActivityEmpty =>
+      'Nothing written down yet. Everything you record fills in a square.';
+
+  @override
+  String get dashboardActivityLess => 'Less';
+
+  @override
+  String get dashboardActivityMore => 'More';
+
+  @override
+  String dashboardActivityDays(int days) {
+    return '$days days with activity';
+  }
+
+  @override
+  String dashboardActivityRun(int days) {
+    return 'Longest run: $days days';
+  }
+
+  @override
+  String dashboardActivityTotal(int count) {
+    return '$count records';
+  }
+
+  @override
+  String dashboardActivityCell(String date, int count) {
+    return '$date: $count records';
+  }
+
+  @override
+  String dashboardActivityCellEmpty(String date) {
+    return '$date: nothing written down';
+  }
 }

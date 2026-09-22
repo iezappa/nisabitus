@@ -735,5 +735,60 @@
         "type": "int"
       }
     }
+  },
+  "dashboardActivity": "Activity",
+  "dashboardActivityCaption": "Last {weeks} weeks",
+  "@dashboardActivityCaption": {
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardActivityEmpty": "Nothing written down yet. Everything you record fills in a square.",
+  "dashboardActivityLess": "Less",
+  "dashboardActivityMore": "More",
+  "dashboardActivityDays": "{days} days with activity",
+  "@dashboardActivityDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardActivityRun": "Longest run: {days} days",
+  "@dashboardActivityRun": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardActivityTotal": "{count} records",
+  "@dashboardActivityTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardActivityCell": "{date}: {count} records",
+  "@dashboardActivityCell": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardActivityCellEmpty": "{date}: nothing written down",
+  "@dashboardActivityCellEmpty": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
   }
 }

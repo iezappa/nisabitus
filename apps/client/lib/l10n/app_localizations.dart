@@ -3685,6 +3685,66 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Promediado sobre los días que anotaste, no sobre los {days} de la ventana.'**
   String stepsAveragedOverLogged(int days);
+
+  /// No description provided for @dashboardActivity.
+  ///
+  /// In es, this message translates to:
+  /// **'Actividad'**
+  String get dashboardActivity;
+
+  /// No description provided for @dashboardActivityCaption.
+  ///
+  /// In es, this message translates to:
+  /// **'Últimas {weeks} semanas'**
+  String dashboardActivityCaption(int weeks);
+
+  /// No description provided for @dashboardActivityEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay nada anotado. Cada cosa que registres pinta un cuadradito.'**
+  String get dashboardActivityEmpty;
+
+  /// No description provided for @dashboardActivityLess.
+  ///
+  /// In es, this message translates to:
+  /// **'Menos'**
+  String get dashboardActivityLess;
+
+  /// No description provided for @dashboardActivityMore.
+  ///
+  /// In es, this message translates to:
+  /// **'Más'**
+  String get dashboardActivityMore;
+
+  /// No description provided for @dashboardActivityDays.
+  ///
+  /// In es, this message translates to:
+  /// **'{days} días con actividad'**
+  String dashboardActivityDays(int days);
+
+  /// No description provided for @dashboardActivityRun.
+  ///
+  /// In es, this message translates to:
+  /// **'Racha más larga: {days} días'**
+  String dashboardActivityRun(int days);
+
+  /// No description provided for @dashboardActivityTotal.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} registros'**
+  String dashboardActivityTotal(int count);
+
+  /// No description provided for @dashboardActivityCell.
+  ///
+  /// In es, this message translates to:
+  /// **'{date}: {count} registros'**
+  String dashboardActivityCell(String date, int count);
+
+  /// No description provided for @dashboardActivityCellEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'{date}: nada anotado'**
+  String dashboardActivityCellEmpty(String date);
 }
 
 class _AppLocalizationsDelegate

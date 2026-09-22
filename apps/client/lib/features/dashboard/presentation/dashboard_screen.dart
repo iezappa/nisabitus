@@ -18,6 +18,7 @@ import '../../sleep/presentation/sleep_labels.dart';
 import '../../todo/domain/task.dart';
 import '../../todo/presentation/todo_labels.dart';
 import 'dashboard_providers.dart';
+import 'widgets/activity_grid_card.dart';
 
 /// The Panel tab: what today looks like across every module.
 class DashboardScreen extends ConsumerWidget {
@@ -126,6 +127,8 @@ class DashboardScreen extends ConsumerWidget {
                   ),
                 ),
               ),
+              SectionHeader(label: l10n.dashboardActivity),
+              const ActivityGridCard(),
               const _QuickActions(),
               SectionHeader(label: l10n.dashboardFocus),
               _Focus(tasks: data.focus),
