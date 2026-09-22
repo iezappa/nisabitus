@@ -13,6 +13,8 @@ import 'package:go_router/go_router.dart';
 import 'package:nisabitus/core/router/app_tab.dart';
 import 'package:nisabitus/features/dashboard/presentation/dashboard_screen.dart';
 import 'package:nisabitus/features/settings/presentation/settings_providers.dart';
+import 'package:nisabitus/features/vacation/domain/vacation.dart';
+import 'package:nisabitus/features/vacation/presentation/vacation_providers.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -194,6 +196,26 @@ void main() {
       await pumpScreen(tester, surface: const Size(420, 1400));
 
       expect(tester.getSize(find.byType(ListView)).width, 420);
+    });
+  });
+
+  group('holiday mode', () {
+    testWidgets('counts the habits of an ordinary day', (tester) async {
+      await pumpScreen(tester);
+
+      expect(find.text('0 de 0'), findsOneWidget);
+    });
+
+    testWidgets('says the day is paused instead of scoring it', (tester) async {
+      // A ratio here would read as a score being lost, which is the one
+      // thing holiday mode promises it is not.
+      await container
+          .read(vacationRepositoryProvider)
+          .add(VacationDraft(start: wednesday));
+      await pumpScreen(tester);
+
+      expect(find.text('En pausa'), findsOneWidget);
+      expect(find.text('0 de 0'), findsNothing);
     });
   });
 }

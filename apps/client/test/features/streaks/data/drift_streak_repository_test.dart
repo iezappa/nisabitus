@@ -5,6 +5,8 @@ import 'package:nisabitus/core/time/date_range.dart';
 import 'package:nisabitus/features/streaks/data/drift_streak_repository.dart';
 import 'package:nisabitus/features/streaks/domain/streak.dart';
 import 'package:nisabitus/features/streaks/domain/streak_repository.dart';
+import 'package:nisabitus/features/vacation/data/drift_vacation_repository.dart';
+import 'package:nisabitus/features/vacation/domain/vacation.dart';
 
 void main() {
   late AppDatabase db;
@@ -173,6 +175,38 @@ void main() {
       final series = await repository.chartSeries(DateRange(monday, tuesday));
 
       expect(series.map((s) => s.name), ['Meditar']);
+    });
+  });
+
+  group('a break the user wrote down', () {
+    // The repository is what puts the two together: the streak asks whether
+    // the gap was a holiday, and the answer comes out of the store.
+    test('carries a run across the days it covers', () async {
+      final vacations = DriftVacationRepository(db);
+      repository = DriftStreakRepository(db, vacations: vacations);
+      final streak = await create();
+
+      await repository.increment(streak.id, on: monday);
+      await vacations.add(
+        VacationDraft(start: tuesday, end: DateTime(2026, 3, 13)),
+      );
+      final resumed = await repository.increment(
+        streak.id,
+        on: DateTime(2026, 3, 14),
+      );
+
+      expect(resumed.count, 2);
+    });
+
+    test('is not consulted at all when the repository has none', () async {
+      // The default: a streak repository built without breaks behaves the
+      // way it did before they existed.
+      final streak = await create();
+
+      await repository.increment(streak.id, on: monday);
+      final resumed = await repository.increment(streak.id, on: wednesday);
+
+      expect(resumed.count, 1);
     });
   });
 }

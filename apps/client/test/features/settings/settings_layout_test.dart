@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/core/widgets/section_label.dart';
 import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
@@ -21,8 +24,14 @@ void main() {
   Future<void> pumpSettings(WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
     container = ProviderContainer(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        // The screen reads the store now that holiday mode lives on it.
+        databaseProvider.overrideWithValue(db),
+      ],
     );
     addTearDown(container.dispose);
 
@@ -69,6 +78,7 @@ void main() {
       'PERFIL',
       'IDIOMA',
       'PESTAÑAS VISIBLES',
+      'MODO VACACIONES',
       'TUS DATOS',
       'SOPORTE',
       'ACERCA DE',

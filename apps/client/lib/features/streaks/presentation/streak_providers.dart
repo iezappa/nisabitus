@@ -2,12 +2,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/database_provider.dart';
 import '../../../core/time/progress_range.dart';
+import '../../vacation/presentation/vacation_providers.dart';
 import '../data/drift_streak_repository.dart';
 import '../domain/streak.dart';
 import '../domain/streak_repository.dart';
 
 final streakRepositoryProvider = Provider<StreakRepository>(
-  (ref) => DriftStreakRepository(ref.watch(databaseProvider)),
+  // Given the breaks, so a run the user was away for survives the gap.
+  (ref) => DriftStreakRepository(
+    ref.watch(databaseProvider),
+    vacations: ref.watch(vacationRepositoryProvider),
+  ),
 );
 
 /// Incremented after every write so dependent queries refetch.

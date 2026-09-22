@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nisabitus/core/database/app_database.dart';
+import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
 import 'package:nisabitus/features/release_notes/presentation/release_notes_providers.dart';
 import 'package:nisabitus/features/release_notes/presentation/widgets/release_notes_tile.dart';
@@ -35,9 +38,13 @@ void main() {
       'releaseNotes.lastSeenVersion': ?lastSeen,
     });
     final prefs = await SharedPreferences.getInstance();
+    final db = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(db.close);
     container = ProviderContainer(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
+        // The screen reads the store now that holiday mode lives on it.
+        databaseProvider.overrideWithValue(db),
         assetBundleProvider.overrideWithValue(_FakeBundle(changelog())),
       ],
     );
@@ -95,6 +102,10 @@ void main() {
     await boot(lastSeen: '1.0.0');
     await pump(tester);
 
+    // Scrolled to first: the row sits near the bottom of a page that grows
+    // every time the app gains a section.
+    await tester.ensureVisible(find.text('Novedades'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Novedades'));
     await tester.pumpAndSettle();
     expect(find.text('Lo del principio'), findsOneWidget);

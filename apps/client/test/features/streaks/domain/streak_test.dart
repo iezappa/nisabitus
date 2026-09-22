@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/features/streaks/domain/streak.dart';
+import 'package:nisabitus/features/vacation/domain/vacation.dart';
 
 void main() {
   final today = DateTime(2026, 3, 11);
@@ -88,6 +89,69 @@ void main() {
 
       expect(streak.count, 2);
       expect(streak.lastUpdated, DateTime(2026, 3, 12));
+    });
+  });
+
+  group('a break in the middle', () {
+    // Holiday mode's whole promise: the days the user said they were away
+    // are not days they let the run drop.
+    VacationCalendar away(DateTime start, DateTime end) =>
+        VacationCalendar([VacationPeriod(id: 'v', start: start, end: end)]);
+
+    test('carries the run across the days that were paused', () {
+      final holiday = away(DateTime(2026, 3, 12), DateTime(2026, 3, 15));
+
+      final streak = newStreak()
+          .increment(today)
+          .increment(DateTime(2026, 3, 16), paused: holiday);
+
+      expect(streak.count, 2);
+      expect(streak.lastUpdated, DateTime(2026, 3, 16));
+    });
+
+    test('breaks the run anyway when one day of the gap was not paused', () {
+      // Back on the 15th and nothing recorded that day: that is a day the
+      // user was home and let it drop.
+      final holiday = away(DateTime(2026, 3, 12), DateTime(2026, 3, 14));
+
+      final streak = newStreak()
+          .increment(today)
+          .increment(DateTime(2026, 3, 16), paused: holiday);
+
+      expect(streak.count, 1);
+      expect(streak.maxStreak, 1);
+    });
+
+    test('does not forgive a gap that the break only touches', () {
+      final holiday = away(DateTime(2026, 3, 20), DateTime(2026, 3, 25));
+
+      final streak = newStreak()
+          .increment(today)
+          .increment(DateTime(2026, 3, 16), paused: holiday);
+
+      expect(streak.count, 1);
+    });
+
+    test('is not needed for consecutive days, and changes nothing', () {
+      final holiday = away(today, DateTime(2026, 3, 30));
+
+      final streak = newStreak()
+          .increment(today, paused: holiday)
+          .increment(DateTime(2026, 3, 12), paused: holiday);
+
+      expect(streak.count, 2, reason: 'a paused day still counts when ticked');
+    });
+
+    test('leaves the record standing across the break', () {
+      final holiday = away(DateTime(2026, 3, 13), DateTime(2026, 3, 20));
+
+      final streak = newStreak()
+          .increment(today)
+          .increment(DateTime(2026, 3, 12))
+          .increment(DateTime(2026, 3, 21), paused: holiday);
+
+      expect(streak.count, 3);
+      expect(streak.maxStreak, 3);
     });
   });
 

@@ -1,4 +1,5 @@
 import '../../../core/time/date_range.dart';
+import '../../vacation/domain/vacation.dart';
 
 /// A counter of consecutive repetitions, with its historical record.
 ///
@@ -56,11 +57,21 @@ class Streak {
   /// the date backwards would turn the days already recorded after it into a
   /// gap, and break the very run the correction was meant to rescue.
   ///
+  /// [paused] is the days the user said they were away on. A gap made
+  /// entirely of those days does not break the run: that is the whole
+  /// promise of the mode, and it is kept here rather than by writing
+  /// completions the user never did — the history would then claim they sat,
+  /// walked or read on a beach, and every figure drawn from it would be a
+  /// small lie.
+  ///
   /// The caller is responsible for appending the matching history entry.
-  Streak increment(DateTime on) {
+  Streak increment(
+    DateTime on, {
+    VacationCalendar paused = VacationCalendar.none,
+  }) {
     final day = dateOnly(on);
     final record = count > maxStreak ? count : maxStreak;
-    final next = _brokenBy(day) ? 1 : count + 1;
+    final next = _brokenBy(day, paused) ? 1 : count + 1;
 
     return _copyWith(
       count: next,
@@ -69,12 +80,18 @@ class Streak {
     );
   }
 
-  /// Whether at least one full day passed between [day] and the last update.
+  /// Whether at least one unpaused day passed between [day] and the last
+  /// update.
   ///
   /// A date earlier than the last update cannot break a run: it is a
   /// correction of the past, not a gap.
-  bool _brokenBy(DateTime day) =>
-      lastUpdated.isBefore(DateTime(day.year, day.month, day.day - 1));
+  bool _brokenBy(DateTime day, VacationCalendar paused) {
+    if (!lastUpdated.isBefore(DateTime(day.year, day.month, day.day - 1))) {
+      return false;
+    }
+
+    return !paused.everyDayPausedBetween(lastUpdated, day);
+  }
 
   /// Sends the count back to zero, keeping the record earned so far.
   ///

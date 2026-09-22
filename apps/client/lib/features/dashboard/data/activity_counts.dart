@@ -48,11 +48,7 @@ class ActivityCounts {
       column: 'scheduled_date',
       filter: '"completed" = 1',
     ),
-    (
-      table: 'disciplines',
-      column: 'scheduled_date',
-      filter: '"completed" = 1',
-    ),
+    (table: 'disciplines', column: 'scheduled_date', filter: '"completed" = 1'),
   ];
 
   /// The tables the grid deliberately leaves out, and why.
@@ -65,6 +61,11 @@ class ActivityCounts {
     'medications', 'foods', 'nutrition_goals', 'hydration_goals', 'step_goals',
     // Parts of something already counted once, through its parent.
     'task_comments', 'task_checklist_items', 'food_entry_items',
+    // Days the user said they were away. Writing one down is not an
+    // activity, and a holiday is the opposite of a filled-in square: the
+    // grid shows the days honestly empty, and the streak is what forgives
+    // them.
+    'vacation_periods',
   };
 
   /// How many things were recorded on each day of [range].
@@ -113,6 +114,7 @@ class ActivityCounts {
   }
 
   /// The table names the grid reads, for the test that guards the list.
-  static Set<String> get countedTables =>
-      {for (final source in _sources) source.table};
+  static Set<String> get countedTables => {
+    for (final source in _sources) source.table,
+  };
 }

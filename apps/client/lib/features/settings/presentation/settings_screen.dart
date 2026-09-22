@@ -10,6 +10,7 @@ import '../../backup/presentation/widgets/erase_all_data_tile.dart';
 import '../../legal/presentation/about_links.dart';
 import '../../release_notes/presentation/widgets/release_notes_tile.dart';
 import '../../shared/support_actions.dart';
+import '../../vacation/presentation/widgets/vacation_card.dart';
 import '../domain/accent_color.dart';
 import '../domain/language_preference.dart';
 import '../domain/theme_preference.dart';
@@ -26,8 +27,9 @@ import 'widgets/tutorial_dialog.dart';
 ///
 /// The order of the sections is fixed by the same document, so someone who
 /// uses two of these apps finds the same thing in the same place. Security is
-/// absent because this app has no PIN; the visible tabs are its own section
-/// and sit before support, where a domain section belongs.
+/// absent because this app has no PIN; the visible tabs and holiday mode are
+/// this app's own sections and sit before support, where a domain section
+/// belongs.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -51,6 +53,8 @@ class SettingsScreen extends ConsumerWidget {
               _LanguageSection(),
               Gap.vSection,
               _TabsSection(),
+              Gap.vSection,
+              _VacationSection(),
               Gap.vSection,
               _DataSection(),
               Gap.vSection,
@@ -138,6 +142,17 @@ class _TabsSection extends StatelessWidget {
       ],
     );
   }
+}
+
+/// This app's other domain section: pausing what the app keeps score of.
+class _VacationSection extends StatelessWidget {
+  const _VacationSection();
+
+  @override
+  Widget build(BuildContext context) => _Section(
+    title: AppLocalizations.of(context).settingsVacation,
+    children: const [VacationCard()],
+  );
 }
 
 class _DataSection extends StatelessWidget {

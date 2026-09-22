@@ -17,6 +17,7 @@ import '../../settings/presentation/settings_providers.dart';
 import '../../sleep/presentation/sleep_labels.dart';
 import '../../todo/domain/task.dart';
 import '../../todo/presentation/todo_labels.dart';
+import '../../vacation/presentation/vacation_providers.dart';
 import 'dashboard_providers.dart';
 import 'widgets/activity_grid_card.dart';
 
@@ -30,6 +31,7 @@ class DashboardScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final summary = ref.watch(dashboardProvider);
     final name = ref.watch(profileNameProvider);
+    final paused = ref.watch(pausedTodayProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -114,11 +116,18 @@ class DashboardScreen extends ConsumerWidget {
                             onTap: () => context.go(AppTab.habits.path),
                             child: StatTile(
                               label: l10n.dashboardHabitsToday,
-                              value: l10n.dashboardHabitsRatio(
-                                data.habitsDone,
-                                data.habitsTotal,
-                              ),
-                              icon: Icons.checklist_outlined,
+                              // A ratio on a paused day would read as a
+                              // score the user is losing, which is the one
+                              // thing holiday mode promises it is not.
+                              value: paused
+                                  ? l10n.dashboardHabitsPaused
+                                  : l10n.dashboardHabitsRatio(
+                                      data.habitsDone,
+                                      data.habitsTotal,
+                                    ),
+                              icon: paused
+                                  ? Icons.beach_access_outlined
+                                  : Icons.checklist_outlined,
                             ),
                           ),
                         ),

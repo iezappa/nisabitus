@@ -12138,6 +12138,366 @@ class MeditationSessionsCompanion
   }
 }
 
+class $VacationPeriodsTable extends VacationPeriods
+    with TableInfo<$VacationPeriodsTable, VacationPeriodRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VacationPeriodsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: newUuid,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'end_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 255),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    updatedAt,
+    startDate,
+    endDate,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'vacation_periods';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<VacationPeriodRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  VacationPeriodRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VacationPeriodRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_date'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $VacationPeriodsTable createAlias(String alias) {
+    return $VacationPeriodsTable(attachedDatabase, alias);
+  }
+}
+
+class VacationPeriodRow extends DataClass
+    implements Insertable<VacationPeriodRow> {
+  final String id;
+  final DateTime updatedAt;
+  final DateTime startDate;
+  final DateTime? endDate;
+
+  /// What the break was, in the user's own words: "Viaje", "Gripe".
+  final String? note;
+  const VacationPeriodRow({
+    required this.id,
+    required this.updatedAt,
+    required this.startDate,
+    this.endDate,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['start_date'] = Variable<DateTime>(startDate);
+    if (!nullToAbsent || endDate != null) {
+      map['end_date'] = Variable<DateTime>(endDate);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  VacationPeriodsCompanion toCompanion(bool nullToAbsent) {
+    return VacationPeriodsCompanion(
+      id: Value(id),
+      updatedAt: Value(updatedAt),
+      startDate: Value(startDate),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory VacationPeriodRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VacationPeriodRow(
+      id: serializer.fromJson<String>(json['id']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime?>(endDate),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  VacationPeriodRow copyWith({
+    String? id,
+    DateTime? updatedAt,
+    DateTime? startDate,
+    Value<DateTime?> endDate = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+  }) => VacationPeriodRow(
+    id: id ?? this.id,
+    updatedAt: updatedAt ?? this.updatedAt,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate.present ? endDate.value : this.endDate,
+    note: note.present ? note.value : this.note,
+  );
+  VacationPeriodRow copyWithCompanion(VacationPeriodsCompanion data) {
+    return VacationPeriodRow(
+      id: data.id.present ? data.id.value : this.id,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VacationPeriodRow(')
+          ..write('id: $id, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, updatedAt, startDate, endDate, note);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VacationPeriodRow &&
+          other.id == this.id &&
+          other.updatedAt == this.updatedAt &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.note == this.note);
+}
+
+class VacationPeriodsCompanion extends UpdateCompanion<VacationPeriodRow> {
+  final Value<String> id;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> startDate;
+  final Value<DateTime?> endDate;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const VacationPeriodsCompanion({
+    this.id = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  VacationPeriodsCompanion.insert({
+    this.id = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    required DateTime startDate,
+    this.endDate = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : startDate = Value(startDate);
+  static Insertable<VacationPeriodRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  VacationPeriodsCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? updatedAt,
+    Value<DateTime>? startDate,
+    Value<DateTime?>? endDate,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return VacationPeriodsCompanion(
+      id: id ?? this.id,
+      updatedAt: updatedAt ?? this.updatedAt,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VacationPeriodsCompanion(')
+          ..write('id: $id, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -12176,6 +12536,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $WaterEntriesTable waterEntries = $WaterEntriesTable(this);
   late final $MeditationSessionsTable meditationSessions =
       $MeditationSessionsTable(this);
+  late final $VacationPeriodsTable vacationPeriods = $VacationPeriodsTable(
+    this,
+  );
   late final Index habitCompletionLookup = Index(
     'habit_completion_lookup',
     'CREATE INDEX habit_completion_lookup ON habit_completions (habit_id, completion_date)',
@@ -12240,6 +12603,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'meditation_by_day',
     'CREATE INDEX meditation_by_day ON meditation_sessions (date)',
   );
+  late final Index vacationByStart = Index(
+    'vacation_by_start',
+    'CREATE INDEX vacation_by_start ON vacation_periods (start_date)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -12271,6 +12638,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     hydrationGoals,
     waterEntries,
     meditationSessions,
+    vacationPeriods,
     habitCompletionLookup,
     streakHistoryLookup,
     boardColumnOrder,
@@ -12287,6 +12655,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     intakeByDay,
     waterByDay,
     meditationByDay,
+    vacationByStart,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -20946,6 +21315,212 @@ typedef $$MeditationSessionsTableProcessedTableManager =
       MeditationSessionRow,
       PrefetchHooks Function()
     >;
+typedef $$VacationPeriodsTableCreateCompanionBuilder =
+    VacationPeriodsCompanion Function({
+      Value<String> id,
+      Value<DateTime> updatedAt,
+      required DateTime startDate,
+      Value<DateTime?> endDate,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$VacationPeriodsTableUpdateCompanionBuilder =
+    VacationPeriodsCompanion Function({
+      Value<String> id,
+      Value<DateTime> updatedAt,
+      Value<DateTime> startDate,
+      Value<DateTime?> endDate,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$VacationPeriodsTableFilterComposer
+    extends Composer<_$AppDatabase, $VacationPeriodsTable> {
+  $$VacationPeriodsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$VacationPeriodsTableOrderingComposer
+    extends Composer<_$AppDatabase, $VacationPeriodsTable> {
+  $$VacationPeriodsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$VacationPeriodsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VacationPeriodsTable> {
+  $$VacationPeriodsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$VacationPeriodsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $VacationPeriodsTable,
+          VacationPeriodRow,
+          $$VacationPeriodsTableFilterComposer,
+          $$VacationPeriodsTableOrderingComposer,
+          $$VacationPeriodsTableAnnotationComposer,
+          $$VacationPeriodsTableCreateCompanionBuilder,
+          $$VacationPeriodsTableUpdateCompanionBuilder,
+          (
+            VacationPeriodRow,
+            BaseReferences<
+              _$AppDatabase,
+              $VacationPeriodsTable,
+              VacationPeriodRow
+            >,
+          ),
+          VacationPeriodRow,
+          PrefetchHooks Function()
+        > {
+  $$VacationPeriodsTableTableManager(
+    _$AppDatabase db,
+    $VacationPeriodsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VacationPeriodsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VacationPeriodsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VacationPeriodsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VacationPeriodsCompanion(
+                id: id,
+                updatedAt: updatedAt,
+                startDate: startDate,
+                endDate: endDate,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                required DateTime startDate,
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VacationPeriodsCompanion.insert(
+                id: id,
+                updatedAt: updatedAt,
+                startDate: startDate,
+                endDate: endDate,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$VacationPeriodsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $VacationPeriodsTable,
+      VacationPeriodRow,
+      $$VacationPeriodsTableFilterComposer,
+      $$VacationPeriodsTableOrderingComposer,
+      $$VacationPeriodsTableAnnotationComposer,
+      $$VacationPeriodsTableCreateCompanionBuilder,
+      $$VacationPeriodsTableUpdateCompanionBuilder,
+      (
+        VacationPeriodRow,
+        BaseReferences<_$AppDatabase, $VacationPeriodsTable, VacationPeriodRow>,
+      ),
+      VacationPeriodRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -21002,4 +21577,6 @@ class $AppDatabaseManager {
       $$WaterEntriesTableTableManager(_db, _db.waterEntries);
   $$MeditationSessionsTableTableManager get meditationSessions =>
       $$MeditationSessionsTableTableManager(_db, _db.meditationSessions);
+  $$VacationPeriodsTableTableManager get vacationPeriods =>
+      $$VacationPeriodsTableTableManager(_db, _db.vacationPeriods);
 }

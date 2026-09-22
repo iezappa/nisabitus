@@ -3,14 +3,22 @@ import 'package:drift/drift.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/database/record_columns.dart';
 import '../../../core/time/date_range.dart';
+import '../../vacation/domain/vacation.dart';
+import '../../vacation/domain/vacation_repository.dart';
 import '../domain/streak.dart';
 import '../domain/streak_repository.dart';
 
 /// Drift-backed implementation of [StreakRepository].
 class DriftStreakRepository implements StreakRepository {
-  DriftStreakRepository(this._db);
+  DriftStreakRepository(this._db, {this.vacations});
 
   final AppDatabase _db;
+
+  /// Where the days the user was away come from.
+  ///
+  /// Optional so a caller that has no opinion about breaks — a test, a
+  /// one-off script — gets the behaviour the app had before them.
+  final VacationRepository? vacations;
 
   @override
   Future<List<Streak>> list() async {
@@ -60,7 +68,8 @@ class DriftStreakRepository implements StreakRepository {
   @override
   Future<Streak> increment(String id, {DateTime? on}) async {
     final today = dateOnly(on ?? DateTime.now());
-    final incremented = (await _require(id)).increment(today);
+    final paused = await vacations?.calendar() ?? VacationCalendar.none;
+    final incremented = (await _require(id)).increment(today, paused: paused);
 
     // The counter and its history point are one fact, so they are written
     // together or not at all.

@@ -1095,5 +1095,57 @@
         "type": "String"
       }
     }
-  }
+  },
+  "settingsVacation": "Modo vacaciones",
+  "settingsVacationHint": "Pausá los hábitos y las rachas mientras estés afuera. Un día en pausa no corta una racha ni te cuenta como incumplido.",
+  "vacationSwitch": "Estoy de vacaciones",
+  "vacationSwitchHint": "Se pausa desde hoy hasta que lo apagues.",
+  "vacationActiveSince": "En pausa desde el {date}",
+  "@vacationActiveSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "vacationEnd": "Terminar",
+  "vacationAdd": "Agregar período",
+  "vacationEditTitle": "Período de pausa",
+  "vacationEmpty": "Todavía no anotaste ningún período.",
+  "vacationRange": "Del {start} al {end}",
+  "@vacationRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "vacationOpenRange": "Desde el {date}, sin cerrar",
+  "@vacationOpenRange": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "vacationLength": "{days} días",
+  "@vacationLength": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "vacationFrom": "Desde",
+  "vacationUntil": "Hasta",
+  "vacationUntilOpen": "Sin definir",
+  "vacationNote": "Nota (opcional)",
+  "vacationNoteHint": "Viaje, gripe, mudanza…",
+  "vacationDelete": "Eliminar período",
+  "vacationBackwards": "El final no puede ser anterior al inicio.",
+  "vacationPausedToday": "Hoy está en pausa: los hábitos y las rachas no se cortan.",
+  "dashboardHabitsPaused": "En pausa"
 }

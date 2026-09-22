@@ -11,6 +11,8 @@ import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
 import 'package:nisabitus/features/habits/presentation/habit_providers.dart';
 import 'package:nisabitus/features/habits/presentation/habits_screen.dart';
 import 'package:nisabitus/features/streaks/presentation/streak_providers.dart';
+import 'package:nisabitus/features/vacation/domain/vacation.dart';
+import 'package:nisabitus/features/vacation/presentation/vacation_providers.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 
 import '../../../support/refuse_writes.dart';
@@ -276,5 +278,59 @@ void main() {
 
     expect(find.text('No se pudo borrar. Intentá de nuevo.'), findsOneWidget);
     expect(find.text('Meditar'), findsOneWidget);
+  });
+
+  group('holiday mode', () {
+    Future<void> away() => container
+        .read(vacationActionsProvider)
+        .add(VacationDraft(start: DateTime(2020), note: 'Viaje'));
+
+    testWidgets('says nothing while the user is not away', (tester) async {
+      await pumpScreen(tester);
+
+      expect(find.byIcon(Icons.beach_access_outlined), findsNothing);
+    });
+
+    testWidgets('says today does not count while it is on', (tester) async {
+      await away();
+      await pumpScreen(tester);
+
+      expect(
+        find.text('Hoy está en pausa: los hábitos y las rachas no se cortan.'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('offers the way out of an open break', (tester) async {
+      await away();
+      await pumpScreen(tester);
+
+      await tester.tap(find.text('Terminar'));
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(vacationCalendarProvider).valueOrNull?.openPeriod,
+        isNull,
+      );
+      expect(find.text('Terminar'), findsNothing);
+    });
+
+    testWidgets('leaves the habit tickable on a paused day', (tester) async {
+      // Being away is not a reason to refuse to record something the user
+      // did anyway.
+      await container
+          .read(habitActionsProvider)
+          .create(
+            const HabitDraft(name: 'Meditar', frequency: HabitFrequency.daily),
+          );
+      await away();
+      await pumpScreen(tester);
+
+      expect(find.text('Meditar'), findsOneWidget);
+      await tester.tap(find.byTooltip('Hecho'));
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Completado'), findsOneWidget);
+    });
   });
 }

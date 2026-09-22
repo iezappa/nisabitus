@@ -14,6 +14,7 @@ import '../../features/pomodoro/data/pomodoro_tables.dart';
 import '../../features/sleep/data/sleep_tables.dart';
 import '../../features/streaks/data/streak_tables.dart';
 import '../../features/todo/data/todo_tables.dart';
+import '../../features/vacation/data/vacation_tables.dart';
 import 'record_columns.dart';
 import 'storage_durability.dart';
 import 'uuid.dart';
@@ -52,6 +53,7 @@ part 'app_database.g.dart';
     HydrationGoals,
     WaterEntries,
     MeditationSessions,
+    VacationPeriods,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -92,7 +94,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 18;
+  static const currentSchemaVersion = 19;
 
   /// The id of the only row in a single-row table, such as the daily goals.
   static const singletonId = 'singleton';
@@ -736,10 +738,11 @@ class AppDatabase extends _$AppDatabase {
           await _rebuildBoardAsColumns(m);
         }
         // v16 gives a task a checklist, v17 lets a food entry be made of
-        // several foods, and v18 records the steps walked in a day. None of
-        // them changes anything already stored: a task with no checklist, an
-        // entry with no parts and a day with no step count are what every
-        // row written before this looks like.
+        // several foods, v18 records the steps walked in a day and v19 the
+        // days the user was away. None of them changes anything already
+        // stored: a task with no checklist, an entry with no parts, a day
+        // with no step count and a record with no holidays in it are what
+        // every row written before this looks like.
         if (from < 16) {
           await m.createTable(taskChecklistItems);
           await _createIndexIdempotently(checklistByTask);
@@ -751,6 +754,13 @@ class AppDatabase extends _$AppDatabase {
         if (from < 18) {
           await m.createTable(stepLogs);
           await m.createTable(stepGoals);
+        }
+        // v19 lets the user say they are away. Nothing already stored is a
+        // break, and nothing stored means nothing is paused, which is what
+        // every row written before this assumed.
+        if (from < 19) {
+          await m.createTable(vacationPeriods);
+          await _createIndexIdempotently(vacationByStart);
         }
       });
     },

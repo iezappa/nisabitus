@@ -2038,4 +2038,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String dashboardActivityCellEmpty(String date) {
     return '$date: nothing written down';
   }
+
+  @override
+  String get settingsVacation => 'Holiday mode';
+
+  @override
+  String get settingsVacationHint =>
+      'Pause habits and streaks while you are away. A paused day neither breaks a streak nor counts against you.';
+
+  @override
+  String get vacationSwitch => 'I am on holiday';
+
+  @override
+  String get vacationSwitchHint => 'Paused from today until you switch it off.';
+
+  @override
+  String vacationActiveSince(String date) {
+    return 'Paused since $date';
+  }
+
+  @override
+  String get vacationEnd => 'End';
+
+  @override
+  String get vacationAdd => 'Add a period';
+
+  @override
+  String get vacationEditTitle => 'Paused period';
+
+  @override
+  String get vacationEmpty => 'No periods written down yet.';
+
+  @override
+  String vacationRange(String start, String end) {
+    return '$start to $end';
+  }
+
+  @override
+  String vacationOpenRange(String date) {
+    return 'From $date, still open';
+  }
+
+  @override
+  String vacationLength(int days) {
+    return '$days days';
+  }
+
+  @override
+  String get vacationFrom => 'From';
+
+  @override
+  String get vacationUntil => 'Until';
+
+  @override
+  String get vacationUntilOpen => 'Open';
+
+  @override
+  String get vacationNote => 'Note (optional)';
+
+  @override
+  String get vacationNoteHint => 'Trip, flu, moving house…';
+
+  @override
+  String get vacationDelete => 'Delete period';
+
+  @override
+  String get vacationBackwards => 'The end cannot come before the start.';
+
+  @override
+  String get vacationPausedToday =>
+      'Today is paused: habits and streaks will not break.';
+
+  @override
+  String get dashboardHabitsPaused => 'Paused';
 }

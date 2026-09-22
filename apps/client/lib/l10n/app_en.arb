@@ -789,5 +789,57 @@
         "type": "String"
       }
     }
-  }
+  },
+  "settingsVacation": "Holiday mode",
+  "settingsVacationHint": "Pause habits and streaks while you are away. A paused day neither breaks a streak nor counts against you.",
+  "vacationSwitch": "I am on holiday",
+  "vacationSwitchHint": "Paused from today until you switch it off.",
+  "vacationActiveSince": "Paused since {date}",
+  "@vacationActiveSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "vacationEnd": "End",
+  "vacationAdd": "Add a period",
+  "vacationEditTitle": "Paused period",
+  "vacationEmpty": "No periods written down yet.",
+  "vacationRange": "{start} to {end}",
+  "@vacationRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "vacationOpenRange": "From {date}, still open",
+  "@vacationOpenRange": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "vacationLength": "{days} days",
+  "@vacationLength": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "vacationFrom": "From",
+  "vacationUntil": "Until",
+  "vacationUntilOpen": "Open",
+  "vacationNote": "Note (optional)",
+  "vacationNoteHint": "Trip, flu, moving house…",
+  "vacationDelete": "Delete period",
+  "vacationBackwards": "The end cannot come before the start.",
+  "vacationPausedToday": "Today is paused: habits and streaks will not break.",
+  "dashboardHabitsPaused": "Paused"
 }

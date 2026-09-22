@@ -2043,4 +2043,77 @@ class AppLocalizationsEs extends AppLocalizations {
   String dashboardActivityCellEmpty(String date) {
     return '$date: nada anotado';
   }
+
+  @override
+  String get settingsVacation => 'Modo vacaciones';
+
+  @override
+  String get settingsVacationHint =>
+      'Pausá los hábitos y las rachas mientras estés afuera. Un día en pausa no corta una racha ni te cuenta como incumplido.';
+
+  @override
+  String get vacationSwitch => 'Estoy de vacaciones';
+
+  @override
+  String get vacationSwitchHint => 'Se pausa desde hoy hasta que lo apagues.';
+
+  @override
+  String vacationActiveSince(String date) {
+    return 'En pausa desde el $date';
+  }
+
+  @override
+  String get vacationEnd => 'Terminar';
+
+  @override
+  String get vacationAdd => 'Agregar período';
+
+  @override
+  String get vacationEditTitle => 'Período de pausa';
+
+  @override
+  String get vacationEmpty => 'Todavía no anotaste ningún período.';
+
+  @override
+  String vacationRange(String start, String end) {
+    return 'Del $start al $end';
+  }
+
+  @override
+  String vacationOpenRange(String date) {
+    return 'Desde el $date, sin cerrar';
+  }
+
+  @override
+  String vacationLength(int days) {
+    return '$days días';
+  }
+
+  @override
+  String get vacationFrom => 'Desde';
+
+  @override
+  String get vacationUntil => 'Hasta';
+
+  @override
+  String get vacationUntilOpen => 'Sin definir';
+
+  @override
+  String get vacationNote => 'Nota (opcional)';
+
+  @override
+  String get vacationNoteHint => 'Viaje, gripe, mudanza…';
+
+  @override
+  String get vacationDelete => 'Eliminar período';
+
+  @override
+  String get vacationBackwards => 'El final no puede ser anterior al inicio.';
+
+  @override
+  String get vacationPausedToday =>
+      'Hoy está en pausa: los hábitos y las rachas no se cortan.';
+
+  @override
+  String get dashboardHabitsPaused => 'En pausa';
 }

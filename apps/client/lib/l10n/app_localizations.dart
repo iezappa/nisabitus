@@ -3739,6 +3739,132 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{date}: nada anotado'**
   String dashboardActivityCellEmpty(String date);
+
+  /// No description provided for @settingsVacation.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo vacaciones'**
+  String get settingsVacation;
+
+  /// No description provided for @settingsVacationHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Pausá los hábitos y las rachas mientras estés afuera. Un día en pausa no corta una racha ni te cuenta como incumplido.'**
+  String get settingsVacationHint;
+
+  /// No description provided for @vacationSwitch.
+  ///
+  /// In es, this message translates to:
+  /// **'Estoy de vacaciones'**
+  String get vacationSwitch;
+
+  /// No description provided for @vacationSwitchHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Se pausa desde hoy hasta que lo apagues.'**
+  String get vacationSwitchHint;
+
+  /// No description provided for @vacationActiveSince.
+  ///
+  /// In es, this message translates to:
+  /// **'En pausa desde el {date}'**
+  String vacationActiveSince(String date);
+
+  /// No description provided for @vacationEnd.
+  ///
+  /// In es, this message translates to:
+  /// **'Terminar'**
+  String get vacationEnd;
+
+  /// No description provided for @vacationAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar período'**
+  String get vacationAdd;
+
+  /// No description provided for @vacationEditTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Período de pausa'**
+  String get vacationEditTitle;
+
+  /// No description provided for @vacationEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no anotaste ningún período.'**
+  String get vacationEmpty;
+
+  /// No description provided for @vacationRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Del {start} al {end}'**
+  String vacationRange(String start, String end);
+
+  /// No description provided for @vacationOpenRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Desde el {date}, sin cerrar'**
+  String vacationOpenRange(String date);
+
+  /// No description provided for @vacationLength.
+  ///
+  /// In es, this message translates to:
+  /// **'{days} días'**
+  String vacationLength(int days);
+
+  /// No description provided for @vacationFrom.
+  ///
+  /// In es, this message translates to:
+  /// **'Desde'**
+  String get vacationFrom;
+
+  /// No description provided for @vacationUntil.
+  ///
+  /// In es, this message translates to:
+  /// **'Hasta'**
+  String get vacationUntil;
+
+  /// No description provided for @vacationUntilOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin definir'**
+  String get vacationUntilOpen;
+
+  /// No description provided for @vacationNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Nota (opcional)'**
+  String get vacationNote;
+
+  /// No description provided for @vacationNoteHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Viaje, gripe, mudanza…'**
+  String get vacationNoteHint;
+
+  /// No description provided for @vacationDelete.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar período'**
+  String get vacationDelete;
+
+  /// No description provided for @vacationBackwards.
+  ///
+  /// In es, this message translates to:
+  /// **'El final no puede ser anterior al inicio.'**
+  String get vacationBackwards;
+
+  /// No description provided for @vacationPausedToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Hoy está en pausa: los hábitos y las rachas no se cortan.'**
+  String get vacationPausedToday;
+
+  /// No description provided for @dashboardHabitsPaused.
+  ///
+  /// In es, this message translates to:
+  /// **'En pausa'**
+  String get dashboardHabitsPaused;
 }
 
 class _AppLocalizationsDelegate

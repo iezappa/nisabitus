@@ -22,11 +22,20 @@ class HabitRow extends StatelessWidget {
     required this.onRevert,
     required this.onEdit,
     required this.onDelete,
+    this.paused = false,
     super.key,
   });
 
   final Habit habit;
   final DateTime day;
+
+  /// Whether the user said they were away on [day].
+  ///
+  /// Read exactly like a day the habit is not expected on: the row stays
+  /// visible and recedes, and the target badge goes quiet. It is still
+  /// tickable — being on holiday is not a reason the app should refuse to
+  /// record something the user did anyway.
+  final bool paused;
   final VoidCallback onToggle;
   final VoidCallback onCancel;
   final VoidCallback onRevert;
@@ -37,7 +46,8 @@ class HabitRow extends StatelessWidget {
   String _subtitle(AppLocalizations l10n) => [
     if (habit.category case final category? when category.isNotEmpty) category,
     l10n.frequencyName(habit.frequency),
-    if (habit.showsTargetBadge(day)) l10n.habitTargetBadge(habit.targetCount),
+    if (!paused && habit.showsTargetBadge(day))
+      l10n.habitTargetBadge(habit.targetCount),
     if (habit.frequency.supportsRepeatDays && habit.repeatDays.isNotEmpty)
       l10n.weekdayList(habit.repeatDays),
     if (habit.isFinishedOn(day) && habit.endDate != null)
@@ -92,7 +102,7 @@ class HabitRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final scheduled = habit.isScheduledOn(day);
+    final scheduled = habit.isScheduledOn(day) && !paused;
     final cancelled = habit.status == HabitStatus.cancelled;
 
     return Opacity(
