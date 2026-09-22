@@ -32,9 +32,9 @@ class FocusSoundPlayer extends StatelessWidget {
         ? buildVideoFrame(link.playable)
         : null;
 
-    if (frame == null) {
-      return _OutsideOnly(url: link?.original ?? sound.url);
-    }
+    final outside = _OpenOutside(url: link?.original ?? sound.url);
+
+    if (frame == null) return _OutsideOnly(outside: outside);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,22 +51,53 @@ class FocusSoundPlayer extends StatelessWidget {
           ),
         ),
         const SizedBox(height: Gap.sm),
-        Text(
-          l10n.pomodoroSoundPlayHint,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.pomodoroSoundPlayHint,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            // Offered even when the frame is there. A browser can refuse to
+            // show it — an old one that has never heard of a credentialless
+            // frame, a video whose channel forbids embedding — and there is
+            // no event that says so, so the way out is always on screen
+            // rather than appearing once it is too late to help.
+            outside,
+          ],
         ),
       ],
     );
   }
 }
 
-/// What is offered where there is no frame: the link itself.
-class _OutsideOnly extends StatelessWidget {
-  const _OutsideOnly({required this.url});
+/// The button that hands the link to the browser.
+class _OpenOutside extends StatelessWidget {
+  const _OpenOutside({required this.url});
 
   final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return TextButton.icon(
+      icon: const Icon(Icons.open_in_new, size: 18),
+      label: Text(l10n.planVideoOpen),
+      onPressed: () =>
+          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+    );
+  }
+}
+
+/// What is offered where there is no frame: the link itself.
+class _OutsideOnly extends StatelessWidget {
+  const _OutsideOnly({required this.outside});
+
+  final Widget outside;
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +113,7 @@ class _OutsideOnly extends StatelessWidget {
           ),
         ),
         const SizedBox(width: Gap.sm),
-        TextButton.icon(
-          icon: const Icon(Icons.open_in_new, size: 18),
-          label: Text(l10n.planVideoOpen),
-          onPressed: () =>
-              launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
-        ),
+        outside,
       ],
     );
   }

@@ -225,6 +225,24 @@ void main() {
       );
     });
 
+    testWidgets('always offers the way out to the browser', (tester) async {
+      // There is no event that says a frame was refused — an old browser,
+      // a video whose channel forbids embedding — so the escape is on
+      // screen from the start rather than after it would have helped.
+      final sound = await container
+          .read(focusSoundRepositoryProvider)
+          .add(
+            FocusSoundDraft(
+              name: 'Lluvia',
+              url: 'https://youtu.be/abcdefghijk',
+            ),
+          );
+      container.read(focusSoundActionsProvider).choose(sound.id);
+      await pumpScreen(tester);
+
+      expect(find.widgetWithText(TextButton, 'Abrir afuera'), findsOneWidget);
+    });
+
     testWidgets('forgets a sound that is deleted', (tester) async {
       final sound = await container
           .read(focusSoundRepositoryProvider)
