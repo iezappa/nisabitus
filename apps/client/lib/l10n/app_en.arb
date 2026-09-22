@@ -841,5 +841,20 @@
   "vacationDelete": "Delete period",
   "vacationBackwards": "The end cannot come before the start.",
   "vacationPausedToday": "Today is paused: habits and streaks will not break.",
-  "dashboardHabitsPaused": "Paused"
+  "dashboardHabitsPaused": "Paused",
+  "pomodoroHistory": "History",
+  "pomodoroIdle": "No session running",
+  "pomodoroIdleHint": "Pick one from the history, or create a new one.",
+  "pomodoroSound": "Sound",
+  "pomodoroSoundNone": "No sound",
+  "pomodoroSoundAdd": "Add a sound",
+  "pomodoroSoundEdit": "Edit sound",
+  "pomodoroSoundName": "Name",
+  "pomodoroSoundNameHint": "Rain, white noise, lo-fi…",
+  "pomodoroSoundUrl": "YouTube link",
+  "pomodoroSoundUrlHint": "Paste the link of the video you want to hear.",
+  "pomodoroSoundInvalid": "That link cannot be played in here.",
+  "pomodoroSoundLibraryEmpty": "No sounds added yet.",
+  "pomodoroSoundNotice": "The video loads from YouTube; that is the only thing that leaves the device.",
+  "pomodoroSoundPlayHint": "Press play when you start: the browser will not start it on its own."
 }

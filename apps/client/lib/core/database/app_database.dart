@@ -54,6 +54,7 @@ part 'app_database.g.dart';
     WaterEntries,
     MeditationSessions,
     VacationPeriods,
+    FocusSounds,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -94,7 +95,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 19;
+  static const currentSchemaVersion = 20;
 
   /// The id of the only row in a single-row table, such as the daily goals.
   static const singletonId = 'singleton';
@@ -761,6 +762,11 @@ class AppDatabase extends _$AppDatabase {
         if (from < 19) {
           await m.createTable(vacationPeriods);
           await _createIndexIdempotently(vacationByStart);
+        }
+        // v20 gives the focus timer a library of sounds to play. An empty
+        // library is silence, which is what every session had until now.
+        if (from < 20) {
+          await m.createTable(focusSounds);
         }
       });
     },

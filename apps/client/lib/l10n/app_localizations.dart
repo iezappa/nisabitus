@@ -3865,6 +3865,96 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'En pausa'**
   String get dashboardHabitsPaused;
+
+  /// No description provided for @pomodoroHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial'**
+  String get pomodoroHistory;
+
+  /// No description provided for @pomodoroIdle.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin pomodoro en curso'**
+  String get pomodoroIdle;
+
+  /// No description provided for @pomodoroIdleHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí uno del historial o creá uno nuevo.'**
+  String get pomodoroIdleHint;
+
+  /// No description provided for @pomodoroSound.
+  ///
+  /// In es, this message translates to:
+  /// **'Sonido'**
+  String get pomodoroSound;
+
+  /// No description provided for @pomodoroSoundNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin sonido'**
+  String get pomodoroSoundNone;
+
+  /// No description provided for @pomodoroSoundAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar sonido'**
+  String get pomodoroSoundAdd;
+
+  /// No description provided for @pomodoroSoundEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar sonido'**
+  String get pomodoroSoundEdit;
+
+  /// No description provided for @pomodoroSoundName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get pomodoroSoundName;
+
+  /// No description provided for @pomodoroSoundNameHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Lluvia, ruido blanco, lo-fi…'**
+  String get pomodoroSoundNameHint;
+
+  /// No description provided for @pomodoroSoundUrl.
+  ///
+  /// In es, this message translates to:
+  /// **'Link de YouTube'**
+  String get pomodoroSoundUrl;
+
+  /// No description provided for @pomodoroSoundUrlHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Pegá el link del video que querés escuchar.'**
+  String get pomodoroSoundUrlHint;
+
+  /// No description provided for @pomodoroSoundInvalid.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese link no se puede reproducir acá adentro.'**
+  String get pomodoroSoundInvalid;
+
+  /// No description provided for @pomodoroSoundLibraryEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no agregaste ningún sonido.'**
+  String get pomodoroSoundLibraryEmpty;
+
+  /// No description provided for @pomodoroSoundNotice.
+  ///
+  /// In es, this message translates to:
+  /// **'El video se carga desde YouTube; eso es lo único que sale del dispositivo.'**
+  String get pomodoroSoundNotice;
+
+  /// No description provided for @pomodoroSoundPlayHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Dale play cuando arranques: el navegador no deja que empiece solo.'**
+  String get pomodoroSoundPlayHint;
 }
 
 class _AppLocalizationsDelegate

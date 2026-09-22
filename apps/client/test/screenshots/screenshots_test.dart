@@ -48,6 +48,7 @@ import 'package:nisabitus/features/journal/presentation/journal_screen.dart';
 import 'package:nisabitus/features/meditation/data/drift_meditation_repository.dart';
 import 'package:nisabitus/features/meditation/domain/meditation_repository.dart';
 import 'package:nisabitus/features/meditation/presentation/meditation_view.dart';
+import 'package:nisabitus/features/pomodoro/presentation/pomodoro_providers.dart';
 import 'package:nisabitus/features/pomodoro/presentation/pomodoro_screen.dart';
 import 'package:nisabitus/features/settings/presentation/settings_screen.dart';
 import 'package:nisabitus/features/todo/presentation/todo_screen.dart';
@@ -257,6 +258,17 @@ void main() {
   testWidgets('pomodoro', (tester) async {
     await seed(db, wednesday);
     await shoot(tester, 'pomodoro', const PomodoroScreen());
+  });
+
+  testWidgets('pomodoro running', (tester) async {
+    // The other half of the tab, and the one the layout is about: the same
+    // clock with a session on it, in the accent instead of grey.
+    await seed(db, wednesday);
+    final sessions = await container.read(pomodoroRepositoryProvider).list();
+    container.read(selectedSessionIdProvider.notifier).state =
+        sessions.sessions.first.id;
+
+    await shoot(tester, 'pomodoro_running', const PomodoroScreen());
   });
 
   testWidgets('todo', (tester) async {

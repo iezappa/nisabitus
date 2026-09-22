@@ -9,7 +9,7 @@ import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../steps/presentation/widgets/steps_card.dart';
-import '../domain/video_link.dart';
+import '../../../core/media/video_link.dart';
 import 'widgets/video_dialog.dart';
 import '../../discipline/presentation/discipline_section.dart';
 import '../domain/exercise.dart';

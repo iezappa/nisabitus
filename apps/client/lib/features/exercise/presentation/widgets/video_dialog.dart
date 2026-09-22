@@ -3,8 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/video_link.dart';
-import 'video_frame.dart';
+import '../../../../core/media/video_link.dart';
+import '../../../../core/media/video_frame.dart';
 
 /// Shows the video saved on an exercise, without leaving the app where it
 /// can be helped.

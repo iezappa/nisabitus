@@ -16,7 +16,7 @@ final _registered = <String>{};
 /// away from the app, and no same-origin, so it cannot reach this app's
 /// storage.
 Widget? buildVideoFrame(String url) {
-  final viewType = 'exercise-video-${url.hashCode}';
+  final viewType = 'video-frame-${url.hashCode}';
 
   if (_registered.add(viewType)) {
     ui_web.platformViewRegistry.registerViewFactory(viewType, (int _) {

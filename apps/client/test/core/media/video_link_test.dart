@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nisabitus/features/exercise/domain/video_link.dart';
+import 'package:nisabitus/core/media/video_link.dart';
 
 void main() {
   group('YouTube, in whichever shape the browser gave it', () {

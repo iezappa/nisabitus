@@ -1,9 +1,13 @@
-/// What can be done with the video link saved on an exercise.
+/// What can be done with a video link the user saved.
 ///
 /// The link is whatever the user pasted, so it is read here rather than
 /// trusted: a YouTube watch page cannot be put in a frame, but the same video
 /// can. Anything this cannot recognise is still openable — it just opens
 /// where links open, outside the app.
+///
+/// In core because two modules paste links now: an exercise showing how a
+/// movement is done, and a focus session playing rain while it runs. Neither
+/// owns the other, and the rules for reading a URL are the same either way.
 enum VideoKind {
   /// A page that can be shown inside the app.
   embeddable,
@@ -21,7 +25,7 @@ class VideoLink {
 
   /// Reads [url], or returns null when there is no usable link in it.
   ///
-  /// Null is not an error to report: an exercise with no video is the normal
+  /// Null is not an error to report: a record with no video is the normal
   /// case, and so is one whose field holds something that is not a link.
   static VideoLink? parse(String? url) {
     final raw = url?.trim();

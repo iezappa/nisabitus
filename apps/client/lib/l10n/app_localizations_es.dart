@@ -2116,4 +2116,53 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dashboardHabitsPaused => 'En pausa';
+
+  @override
+  String get pomodoroHistory => 'Historial';
+
+  @override
+  String get pomodoroIdle => 'Sin pomodoro en curso';
+
+  @override
+  String get pomodoroIdleHint => 'Elegí uno del historial o creá uno nuevo.';
+
+  @override
+  String get pomodoroSound => 'Sonido';
+
+  @override
+  String get pomodoroSoundNone => 'Sin sonido';
+
+  @override
+  String get pomodoroSoundAdd => 'Agregar sonido';
+
+  @override
+  String get pomodoroSoundEdit => 'Editar sonido';
+
+  @override
+  String get pomodoroSoundName => 'Nombre';
+
+  @override
+  String get pomodoroSoundNameHint => 'Lluvia, ruido blanco, lo-fi…';
+
+  @override
+  String get pomodoroSoundUrl => 'Link de YouTube';
+
+  @override
+  String get pomodoroSoundUrlHint =>
+      'Pegá el link del video que querés escuchar.';
+
+  @override
+  String get pomodoroSoundInvalid =>
+      'Ese link no se puede reproducir acá adentro.';
+
+  @override
+  String get pomodoroSoundLibraryEmpty => 'Todavía no agregaste ningún sonido.';
+
+  @override
+  String get pomodoroSoundNotice =>
+      'El video se carga desde YouTube; eso es lo único que sale del dispositivo.';
+
+  @override
+  String get pomodoroSoundPlayHint =>
+      'Dale play cuando arranques: el navegador no deja que empiece solo.';
 }

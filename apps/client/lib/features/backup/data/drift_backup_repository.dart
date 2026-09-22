@@ -67,6 +67,7 @@ class DriftBackupRepository implements BackupRepository {
     _codec(_db.waterEntries, WaterEntryRow.fromJson),
     _codec(_db.meditationSessions, MeditationSessionRow.fromJson),
     _codec(_db.vacationPeriods, VacationPeriodRow.fromJson),
+    _codec(_db.focusSounds, FocusSoundRow.fromJson),
   ];
 
   @override
