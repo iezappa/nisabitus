@@ -95,35 +95,43 @@ void main() {
   });
 
   group('the filter bar', () {
-    testWidgets('starts at the left edge of the board', (tester) async {
-      // It used to be pushed to the far edge by a spacer, which left the box
-      // the user types in as far from the board's first column as the window
-      // allowed.
+    testWidgets('opens at the board edge and ends at the far one', (
+      tester,
+    ) async {
+      // Two questions, two sides: what the board is about on the left,
+      // what to look at right now on the right. The bar used to float in
+      // the middle of the window, and the filters stopped halfway across
+      // it because a flexible label was taking half the free space.
       await repository.createTask(
         TaskDraft(title: 'Tarea', projectId: root.id),
       );
       await pumpBoard(tester);
 
-      final filter = tester.getTopLeft(
+      final edge = tester.getTopRight(find.byType(VerticalDivider)).dx;
+      final scope = tester.getTopLeft(find.byType(Switch));
+      final filter = tester.getRect(
         find.ancestor(
-          of: find.text('Categoría contiene'),
+          of: find.text('Propietario'),
           matching: find.byType(TextField),
         ),
       );
-      // The board's own left edge: where the sidebar stops.
-      final edge = tester.getTopRight(find.byType(VerticalDivider)).dx;
-      final card = tester.getTopLeft(find.text('Tarea'));
+      final bar = tester.getRect(
+        find
+            .ancestor(of: find.byType(Switch), matching: find.byType(Row))
+            .first,
+      );
 
       expect(
-        filter.dx - edge,
+        scope.dx - edge,
         lessThan(Gap.lg),
-        reason: 'the filter opens the board rather than floating in it',
+        reason: 'the scope opens the board',
       );
       expect(
-        filter.dx,
-        lessThanOrEqualTo(card.dx),
-        reason: 'no further right than the first column',
+        bar.right - filter.right,
+        lessThan(1.0),
+        reason: 'the filters end where the bar does',
       );
+      expect(filter.left, greaterThan(scope.dx + 200));
     });
 
     testWidgets('narrows the board to one owner', (tester) async {

@@ -68,6 +68,7 @@ import 'package:nisabitus/features/release_notes/presentation/release_notes_prov
 import 'package:nisabitus/features/release_notes/presentation/widgets/release_notes_dialog.dart';
 import 'package:nisabitus/features/streaks/domain/streak.dart';
 import 'package:nisabitus/features/streaks/presentation/widgets/streak_editor_dialog.dart';
+import 'package:nisabitus/features/todo/presentation/todo_providers.dart';
 import 'package:nisabitus/features/todo/presentation/widgets/task_dialog.dart';
 import 'package:nisabitus/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -274,6 +275,35 @@ void main() {
   testWidgets('todo', (tester) async {
     await seed(db, wednesday);
     await shoot(tester, 'todo', const TodoScreen());
+  });
+
+  testWidgets('todo board, with the filters written in', (tester) async {
+    // The board itself, which neither of the other two shows: they open on
+    // "pick a project". Text is typed into both filters on purpose — how
+    // they look while being written is what was reported broken.
+    await seed(db, wednesday);
+    final projects = await container.read(todoRepositoryProvider).projects();
+    container.read(selectedProjectIdProvider.notifier).state =
+        projects.first.id;
+
+    await mount(
+      tester,
+      const TodoScreen(),
+      surface: const Size(1400, 900),
+      locale: spanish,
+      brightness: Brightness.light,
+    );
+    for (final label in ['Categoría contiene', 'Propietario']) {
+      await tester.enterText(
+        find.ancestor(of: find.text(label), matching: find.byType(TextField)),
+        'Ana',
+      );
+    }
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('goldens/todo_board.png'),
+    );
   });
 
   testWidgets('todo on a wide window', (tester) async {

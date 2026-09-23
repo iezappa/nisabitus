@@ -222,66 +222,83 @@ class _FilterBar extends ConsumerWidget {
     final filters = ref.watch(taskFiltersProvider);
     final notifier = ref.read(taskFiltersProvider.notifier);
 
-    // Everything flush left, in one group. The filter used to be pushed to
-    // the far edge by a spacer, which left the bar reading as two unrelated
-    // controls with a gulf between them — and put the box the user types in
-    // as far from the board's first column as the window allowed.
+    // The scope on the left, the filters on the right, because they are two
+    // different questions: one is which tasks the board is about, the other
+    // is which of those to look at right now. They used to sit in one Wrap
+    // reading left to right, which put the box the user types in between
+    // the switch and the board it filters.
     return Padding(
       padding: const EdgeInsets.all(Gap.md),
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: Gap.md,
-        runSpacing: Gap.sm,
+      child: Row(
         children: [
-          SizedBox(
-            width: 220,
-            child: TextField(
-              decoration: InputDecoration(
-                isDense: true,
-                hintText: l10n.todoFilterCategory,
-                prefixIcon: const Icon(Icons.filter_alt_outlined, size: 18),
-              ),
+          SwitchScope(
+            child: Switch(
+              value: ref.watch(includeDescendantsProvider),
               onChanged: (value) =>
-                  notifier.state = filters.copyWith(category: value),
+                  ref.read(includeDescendantsProvider.notifier).state = value,
             ),
           ),
-          SizedBox(
-            width: 220,
-            child: TextField(
-              decoration: InputDecoration(
-                isDense: true,
-                hintText: l10n.todoFilterOwner,
-                prefixIcon: const Icon(Icons.person_outline, size: 18),
-              ),
-              onChanged: (value) =>
-                  notifier.state = filters.copyWith(owner: value),
+          const SizedBox(width: Gap.sm),
+          // Capped rather than flexible: a Flexible label and an Expanded
+          // row of filters both claim a share of the free space, so the
+          // filters were given half of it and stopped halfway across the
+          // board instead of reaching its right edge.
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 220),
+            child: Text(
+              l10n.todoIncludeSubprojects,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
-          // The scope of the board rather than a filter on it, so it sits
-          // after the two boxes rather than among them.
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SwitchScope(
-                child: Switch(
-                  value: ref.watch(includeDescendantsProvider),
-                  onChanged: (value) =>
-                      ref.read(includeDescendantsProvider.notifier).state =
-                          value,
+          Expanded(
+            // Wrapped rather than in a row of its own: on a narrow window
+            // the two boxes drop onto a second line instead of squeezing
+            // each other down to nothing.
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: Gap.md,
+              runSpacing: Gap.sm,
+              children: [
+                if (!filters.isEmpty)
+                  TextButton(
+                    onPressed: () => notifier.state = const TaskFilters(),
+                    child: Text(l10n.todoFilterClear),
+                  ),
+                // Labels, not hints. A hint is painted where the user types,
+                // and with a dense field and an icon beside it there was
+                // barely room for either — the text landed on top of the
+                // placeholder as it was being written. A label moves out to
+                // the border as soon as there is anything to move for.
+                SizedBox(
+                  width: 210,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: l10n.todoFilterCategory,
+                      prefixIcon: const Icon(
+                        Icons.filter_alt_outlined,
+                        size: 18,
+                      ),
+                    ),
+                    onChanged: (value) =>
+                        notifier.state = filters.copyWith(category: value),
+                  ),
                 ),
-              ),
-              const SizedBox(width: Gap.sm),
-              Text(
-                l10n.todoIncludeSubprojects,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
-          if (!filters.isEmpty)
-            TextButton(
-              onPressed: () => notifier.state = const TaskFilters(),
-              child: Text(l10n.todoFilterClear),
+                SizedBox(
+                  width: 210,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: l10n.todoFilterOwner,
+                      prefixIcon: const Icon(Icons.person_outline, size: 18),
+                    ),
+                    onChanged: (value) =>
+                        notifier.state = filters.copyWith(owner: value),
+                  ),
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
