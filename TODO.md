@@ -462,7 +462,7 @@ the other repository. Walk it when §2.2 changes or before a release; the date
 is half the indicator, because "conformant" with no date only says somebody
 looked once.
 
-**§2.2 Settings** — Conformant: yes · Last walked: 2026-09-17 ·
+**§2.2 Settings** — Conformant: yes · Last walked: 2026-09-23 ·
 Asserted by: `test/features/settings/settings_layout_test.dart`
 
 - [x] Body inside the shared page widget, with a capped measure
@@ -478,8 +478,14 @@ Asserted by: `test/features/settings/settings_layout_test.dart`
 - [x] `ACERCA DE` with privacy, terms, contact and licences (2.3)
 - [x] `meetsGuideline` for tap targets and contrast, light and dark
       (`test/accessibility/accessibility_test.dart`)
-- [x] Backup notice first in TUS DATOS, then export JSON, export CSV, import,
-      and "Borrar todos mis datos" last, with confirmation
+- [x] Backup notice first in TUS DATOS, then export JSON, export CSV, the
+      weekly automatic copy, import, and "Borrar todos mis datos" last, with
+      confirmation
+- [x] Weekly automatic copy between the exports and the import (5.A), with
+      its own tests — **the browser half is unverified**: written against the
+      File System Access spec and never run in a browser, because this
+      environment has none. Walk it per `VERIFICACION-WEB.md` before the next
+      release.
 - [x] Layout test present and green
 
 Declared deviations, carried back to the canonical repository:
