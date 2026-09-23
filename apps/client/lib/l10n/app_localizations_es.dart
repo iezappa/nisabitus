@@ -2179,4 +2179,55 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get todoOwnerMine => 'Mía';
+
+  @override
+  String get autoBackupTitle => 'Copia semanal automática';
+
+  @override
+  String get autoBackupHint =>
+      'Una vez por semana, al abrir la app, se guarda una copia en la carpeta que elijas. Nada sale del dispositivo.';
+
+  @override
+  String get autoBackupChoose => 'Elegir carpeta';
+
+  @override
+  String get autoBackupChange => 'Cambiar carpeta';
+
+  @override
+  String autoBackupFolder(String folder) {
+    return 'Carpeta: $folder';
+  }
+
+  @override
+  String get autoBackupNever => 'Todavía no se guardó ninguna.';
+
+  @override
+  String autoBackupLastRun(String date) {
+    return 'Última copia: $date';
+  }
+
+  @override
+  String get autoBackupRunNow => 'Guardar una ahora';
+
+  @override
+  String get autoBackupSaved => 'Copia guardada en la carpeta.';
+
+  @override
+  String get autoBackupFolderGone =>
+      'No se encuentra la carpeta. Elegí una de nuevo.';
+
+  @override
+  String get autoBackupNeedsPermission =>
+      'El navegador pide permiso otra vez para escribir en esa carpeta.';
+
+  @override
+  String get autoBackupFailed => 'No se pudo guardar la copia.';
+
+  @override
+  String get autoBackupUnsupported =>
+      'Este navegador no permite escribir en una carpeta. Usá la app de escritorio, o exportá a mano cuando quieras.';
+
+  @override
+  String get autoBackupWhileOpen =>
+      'Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.';
 }

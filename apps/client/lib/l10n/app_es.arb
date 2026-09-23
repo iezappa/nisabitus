@@ -1167,5 +1167,33 @@
   "todoFilterOwner": "Propietario",
   "todoFieldOwner": "Propietario",
   "todoOwnerHint": "De quién es la tarea. Vacío significa tuya.",
-  "todoOwnerMine": "Mía"
+  "todoOwnerMine": "Mía",
+  "autoBackupTitle": "Copia semanal automática",
+  "autoBackupHint": "Una vez por semana, al abrir la app, se guarda una copia en la carpeta que elijas. Nada sale del dispositivo.",
+  "autoBackupChoose": "Elegir carpeta",
+  "autoBackupChange": "Cambiar carpeta",
+  "autoBackupFolder": "Carpeta: {folder}",
+  "@autoBackupFolder": {
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
+  "autoBackupNever": "Todavía no se guardó ninguna.",
+  "autoBackupLastRun": "Última copia: {date}",
+  "@autoBackupLastRun": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "autoBackupRunNow": "Guardar una ahora",
+  "autoBackupSaved": "Copia guardada en la carpeta.",
+  "autoBackupFolderGone": "No se encuentra la carpeta. Elegí una de nuevo.",
+  "autoBackupNeedsPermission": "El navegador pide permiso otra vez para escribir en esa carpeta.",
+  "autoBackupFailed": "No se pudo guardar la copia.",
+  "autoBackupUnsupported": "Este navegador no permite escribir en una carpeta. Usá la app de escritorio, o exportá a mano cuando quieras.",
+  "autoBackupWhileOpen": "Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada."
 }

@@ -2175,4 +2175,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todoOwnerMine => 'Mine';
+
+  @override
+  String get autoBackupTitle => 'Weekly automatic copy';
+
+  @override
+  String get autoBackupHint =>
+      'Once a week, when you open the app, a copy is written to the folder you choose. Nothing leaves the device.';
+
+  @override
+  String get autoBackupChoose => 'Choose a folder';
+
+  @override
+  String get autoBackupChange => 'Change folder';
+
+  @override
+  String autoBackupFolder(String folder) {
+    return 'Folder: $folder';
+  }
+
+  @override
+  String get autoBackupNever => 'None written yet.';
+
+  @override
+  String autoBackupLastRun(String date) {
+    return 'Last copy: $date';
+  }
+
+  @override
+  String get autoBackupRunNow => 'Write one now';
+
+  @override
+  String get autoBackupSaved => 'Copy written to the folder.';
+
+  @override
+  String get autoBackupFolderGone =>
+      'The folder cannot be found. Choose one again.';
+
+  @override
+  String get autoBackupNeedsPermission =>
+      'The browser is asking for permission to write to that folder again.';
+
+  @override
+  String get autoBackupFailed => 'The copy could not be written.';
+
+  @override
+  String get autoBackupUnsupported =>
+      'This browser cannot write to a folder. Use the desktop app, or export by hand whenever you like.';
+
+  @override
+  String get autoBackupWhileOpen =>
+      'Only while the app is open: nothing runs behind it when it is closed.';
 }

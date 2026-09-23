@@ -30,7 +30,10 @@ void main() {
   });
 
   Future<void> pump(WidgetTester tester, Widget home) async {
-    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    // Tall enough for the whole page to be built in one pass: a ListView
+    // only builds what fits, and this is an assertion about a notice that
+    // sits near the bottom of it.
+    await tester.binding.setSurfaceSize(const Size(800, 2400));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(

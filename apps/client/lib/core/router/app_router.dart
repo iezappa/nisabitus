@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/backup/presentation/widgets/auto_backup_banner.dart';
 import '../../features/backup/presentation/widgets/backup_reminder_banner.dart';
 import '../../features/update/presentation/update_banner.dart';
 import '../../features/backup/presentation/widgets/storage_warning_banner.dart';
@@ -161,6 +162,9 @@ class _WithNotices extends StatelessWidget {
     children: [
       Expanded(child: child),
       const StorageWarningBanner(),
+      // Before the nudge to export by hand: a copy the app was meant to be
+      // taking and is not is the more urgent of the two.
+      const AutoBackupBanner(),
       const BackupReminderBanner(),
       const UpdateBanner(),
     ],

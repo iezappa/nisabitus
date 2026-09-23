@@ -861,5 +861,33 @@
   "todoFilterOwner": "Owner",
   "todoFieldOwner": "Owner",
   "todoOwnerHint": "Whose task this is. Empty means yours.",
-  "todoOwnerMine": "Mine"
+  "todoOwnerMine": "Mine",
+  "autoBackupTitle": "Weekly automatic copy",
+  "autoBackupHint": "Once a week, when you open the app, a copy is written to the folder you choose. Nothing leaves the device.",
+  "autoBackupChoose": "Choose a folder",
+  "autoBackupChange": "Change folder",
+  "autoBackupFolder": "Folder: {folder}",
+  "@autoBackupFolder": {
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
+  "autoBackupNever": "None written yet.",
+  "autoBackupLastRun": "Last copy: {date}",
+  "@autoBackupLastRun": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "autoBackupRunNow": "Write one now",
+  "autoBackupSaved": "Copy written to the folder.",
+  "autoBackupFolderGone": "The folder cannot be found. Choose one again.",
+  "autoBackupNeedsPermission": "The browser is asking for permission to write to that folder again.",
+  "autoBackupFailed": "The copy could not be written.",
+  "autoBackupUnsupported": "This browser cannot write to a folder. Use the desktop app, or export by hand whenever you like.",
+  "autoBackupWhileOpen": "Only while the app is open: nothing runs behind it when it is closed."
 }

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../backup_feedback.dart';
 import '../backup_providers.dart';
+import 'auto_backup_card.dart';
 
 /// Export and import, in the one place the user goes looking for them.
 ///
@@ -151,7 +152,11 @@ class _BackupCardState extends ConsumerState<BackupCard> {
         const SizedBox(height: Gap.sm),
         // A reading copy: the JSON export above is the file that restores.
         Text(l10n.backupCsvHint, style: theme.textTheme.bodySmall),
-        const SizedBox(height: Gap.md),
+        const SizedBox(height: Gap.lg),
+        // Above Import, because it is the half of this section that keeps
+        // data rather than the half that replaces it.
+        const AutoBackupCard(),
+        const SizedBox(height: Gap.lg),
         SizedBox(
           width: double.infinity,
           child: OutlinedButton.icon(

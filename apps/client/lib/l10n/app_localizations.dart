@@ -3985,6 +3985,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Mía'**
   String get todoOwnerMine;
+
+  /// No description provided for @autoBackupTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia semanal automática'**
+  String get autoBackupTitle;
+
+  /// No description provided for @autoBackupHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Una vez por semana, al abrir la app, se guarda una copia en la carpeta que elijas. Nada sale del dispositivo.'**
+  String get autoBackupHint;
+
+  /// No description provided for @autoBackupChoose.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir carpeta'**
+  String get autoBackupChoose;
+
+  /// No description provided for @autoBackupChange.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar carpeta'**
+  String get autoBackupChange;
+
+  /// No description provided for @autoBackupFolder.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta: {folder}'**
+  String autoBackupFolder(String folder);
+
+  /// No description provided for @autoBackupNever.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no se guardó ninguna.'**
+  String get autoBackupNever;
+
+  /// No description provided for @autoBackupLastRun.
+  ///
+  /// In es, this message translates to:
+  /// **'Última copia: {date}'**
+  String autoBackupLastRun(String date);
+
+  /// No description provided for @autoBackupRunNow.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar una ahora'**
+  String get autoBackupRunNow;
+
+  /// No description provided for @autoBackupSaved.
+  ///
+  /// In es, this message translates to:
+  /// **'Copia guardada en la carpeta.'**
+  String get autoBackupSaved;
+
+  /// No description provided for @autoBackupFolderGone.
+  ///
+  /// In es, this message translates to:
+  /// **'No se encuentra la carpeta. Elegí una de nuevo.'**
+  String get autoBackupFolderGone;
+
+  /// No description provided for @autoBackupNeedsPermission.
+  ///
+  /// In es, this message translates to:
+  /// **'El navegador pide permiso otra vez para escribir en esa carpeta.'**
+  String get autoBackupNeedsPermission;
+
+  /// No description provided for @autoBackupFailed.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar la copia.'**
+  String get autoBackupFailed;
+
+  /// No description provided for @autoBackupUnsupported.
+  ///
+  /// In es, this message translates to:
+  /// **'Este navegador no permite escribir en una carpeta. Usá la app de escritorio, o exportá a mano cuando quieras.'**
+  String get autoBackupUnsupported;
+
+  /// No description provided for @autoBackupWhileOpen.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.'**
+  String get autoBackupWhileOpen;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/backup/presentation/auto_backup_providers.dart';
 import '../../features/backup/presentation/widgets/backup_notice_dialog.dart';
 import '../../features/release_notes/domain/release_notes.dart';
 import '../../features/release_notes/presentation/release_notes_providers.dart';
@@ -8,7 +9,8 @@ import '../../features/release_notes/presentation/widgets/release_notes_dialog.d
 import '../../features/settings/presentation/settings_providers.dart';
 import '../../features/settings/presentation/widgets/tutorial_dialog.dart';
 
-/// Decides what, if anything, greets the user once the app has a navigator.
+/// Decides what, if anything, greets the user once the app has a navigator —
+/// and takes the week's backup while nobody is looking.
 ///
 /// Two things can want the first moment of a launch, and they must not both
 /// take it: the first-run wizard, and the announcement of what changed since
@@ -37,8 +39,20 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _greet());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _greet();
+      _keepACopy();
+    });
   }
+
+  /// The weekly copy, if one is owed and the user asked for them.
+  ///
+  /// Here because a launch is the only moment this app is ever guaranteed to
+  /// have: nothing runs behind it on any platform it ships to. It does not
+  /// wait for the greeting and cannot interrupt it — a copy is written in
+  /// the background of a dialog nobody has answered yet, which is exactly
+  /// where it belongs.
+  Future<void> _keepACopy() => ref.read(autoBackupActionsProvider).runIfDue();
 
   Future<void> _greet() async {
     if (_asked || !mounted) return;
