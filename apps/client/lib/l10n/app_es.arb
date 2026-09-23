@@ -1163,5 +1163,9 @@
   "audioTrackLibraryEmpty": "Todavía no agregaste ningún sonido.",
   "audioTrackNotice": "El video se carga desde YouTube; eso es lo único que sale del dispositivo.",
   "audioTrackPlayHint": "Dale play cuando arranques: el navegador no deja que empiece solo.",
-  "meditationSound": "Audio para meditar"
+  "meditationSound": "Audio para meditar",
+  "todoFilterOwner": "Propietario",
+  "todoFieldOwner": "Propietario",
+  "todoOwnerHint": "De quién es la tarea. Vacío significa tuya.",
+  "todoOwnerMine": "Mía"
 }

@@ -159,4 +159,71 @@ void main() {
       expect(field.controller!.text, isEmpty);
     });
   });
+
+  group('the owner', () {
+    Future<void> edit(WidgetTester tester) async {
+      await tester.tap(find.byTooltip('Editar'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('is assigned from the form and kept', (tester) async {
+      // There are no accounts here: the point is tracking what you are
+      // waiting on from a person who will never open this app.
+      await openTask(tester);
+      await edit(tester);
+
+      await tester.enterText(
+        find.ancestor(
+          of: find.text('Propietario'),
+          matching: find.byType(TextField),
+        ),
+        'Ana',
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+      await tester.pumpAndSettle();
+
+      expect((await repository.tasks(projectId)).single.owner, 'Ana');
+    });
+
+    testWidgets('is shown on the reading side when there is one', (
+      tester,
+    ) async {
+      await repository.updateTask(
+        taskId,
+        TaskDraft(
+          title: 'Escribir el test',
+          projectId: projectId,
+          owner: 'Ana',
+        ),
+      );
+      await openTask(tester);
+
+      expect(find.widgetWithText(Chip, 'Ana'), findsOne);
+    });
+
+    testWidgets('says nothing for the user\'s own tasks', (tester) async {
+      // A board where every card says "mine" says nothing.
+      await openTask(tester);
+
+      expect(find.byType(Chip), findsOne, reason: 'the priority, alone');
+    });
+
+    testWidgets('offers the names already used, one tap each', (tester) async {
+      // Filed in another project on purpose: the names offered are every
+      // name on any task, not the ones this board happens to show.
+      final other = await repository.createProject('Otro');
+      await repository.createTask(
+        TaskDraft(title: 'Otra', projectId: other.id, owner: 'Bruno'),
+      );
+      await openTask(tester);
+      await edit(tester);
+
+      await tester.tap(find.widgetWithText(ActionChip, 'Bruno'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+      await tester.pumpAndSettle();
+
+      expect((await repository.tasks(projectId)).single.owner, 'Bruno');
+    });
+  });
 }

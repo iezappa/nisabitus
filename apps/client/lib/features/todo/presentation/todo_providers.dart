@@ -15,24 +15,37 @@ enum TodoViewMode { kanban, list }
 
 /// The filters the board is showing through.
 class TaskFilters {
-  const TaskFilters({this.category = '', this.columnId, this.due});
+  const TaskFilters({
+    this.category = '',
+    this.owner = '',
+    this.columnId,
+    this.due,
+  });
 
   /// Matched as "contains", case-insensitively.
   final String category;
+
+  /// Matched the same way, so typing "ana" finds Ana and Mariana.
+  final String owner;
 
   /// The id of a board column, or null for every column.
   final String? columnId;
   final DueState? due;
 
   bool get isEmpty =>
-      category.trim().isEmpty && columnId == null && due == null;
+      category.trim().isEmpty &&
+      owner.trim().isEmpty &&
+      columnId == null &&
+      due == null;
 
   TaskFilters copyWith({
     String? category,
+    String? owner,
     Object? columnId = _unset,
     Object? due = _unset,
   }) => TaskFilters(
     category: category ?? this.category,
+    owner: owner ?? this.owner,
     columnId: columnId == _unset ? this.columnId : columnId as String?,
     due: due == _unset ? this.due : due as DueState?,
   );
@@ -168,10 +181,14 @@ final tasksProvider = FutureProvider<List<Task>>((ref) async {
 
   final today = ref.watch(todayProvider);
   final needle = filters.category.trim().toLowerCase();
+  final who = filters.owner.trim().toLowerCase();
 
   return tasks.where((task) {
     if (needle.isNotEmpty &&
         !(task.category ?? '').toLowerCase().contains(needle)) {
+      return false;
+    }
+    if (who.isNotEmpty && !(task.owner ?? '').toLowerCase().contains(who)) {
       return false;
     }
     if (filters.columnId != null && task.columnId != filters.columnId) {
@@ -182,6 +199,13 @@ final tasksProvider = FutureProvider<List<Task>>((ref) async {
     }
     return true;
   }).toList();
+});
+
+/// Every name a task has been assigned to, for the picker to offer.
+final taskOwnersProvider = FutureProvider<List<String>>((ref) {
+  ref.watch(todoRevisionProvider);
+
+  return ref.watch(todoRepositoryProvider).owners();
 });
 
 final commentsProvider = FutureProvider.family<List<TaskComment>, String>((

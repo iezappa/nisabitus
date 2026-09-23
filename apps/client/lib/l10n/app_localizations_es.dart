@@ -2167,4 +2167,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get meditationSound => 'Audio para meditar';
+
+  @override
+  String get todoFilterOwner => 'Propietario';
+
+  @override
+  String get todoFieldOwner => 'Propietario';
+
+  @override
+  String get todoOwnerHint => 'De quién es la tarea. Vacío significa tuya.';
+
+  @override
+  String get todoOwnerMine => 'Mía';
 }

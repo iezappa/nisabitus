@@ -89,6 +89,14 @@ class TodoTasks extends Table with RecordColumns {
   TextColumn get projectId =>
       text().references(Projects, #id, onDelete: KeyAction.cascade)();
 
+  /// Who the task belongs to, when that is somebody else.
+  ///
+  /// Free text and nullable, which is the whole design: this app has no
+  /// accounts, and the point is to be able to track what you are waiting on
+  /// from a person who will never open it. Null means it is the user's own,
+  /// which is what every task written before this was.
+  TextColumn get owner => text().withLength(max: 80).nullable()();
+
   /// When the task reached DONE.
   ///
   /// Status alone cannot answer "what did I finish last week": it says where

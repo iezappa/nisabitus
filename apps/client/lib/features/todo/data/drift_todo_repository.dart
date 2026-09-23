@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/database/record_columns.dart';
 import '../../../core/database/uuid.dart';
+import '../../../core/l10n/sort_key.dart';
 import '../../../core/time/date_range.dart';
 import '../domain/board_column.dart';
 import '../domain/project.dart';
@@ -123,6 +124,24 @@ class DriftTodoRepository implements TodoRepository {
   }
 
   @override
+  Future<List<String>> owners() async {
+    final rows = await _db
+        .customSelect(
+          'SELECT DISTINCT "owner" AS owner FROM "todo_tasks" '
+          'WHERE "owner" IS NOT NULL AND TRIM("owner") != \'\'',
+          readsFrom: {_db.todoTasks},
+        )
+        .get();
+
+    // Sorted the way Spanish reads, not the way bytes do: Ángela belongs
+    // with the A's.
+    final names = [for (final row in rows) row.read<String>('owner')]
+      ..sort((a, b) => sortKey(a).compareTo(sortKey(b)));
+
+    return names;
+  }
+
+  @override
   Future<void> deleteProject(String id) async {
     // The cascade in the schema takes the subprojects and their tasks.
     await (_db.delete(_db.projects)..where((p) => p.id.equals(id))).go();
@@ -150,6 +169,7 @@ class DriftTodoRepository implements TodoRepository {
             .get();
 
     final finishing = await _finishingColumns();
+    final shown = await _columnsOnTheBoardOf(projectId, rows);
 
     return [
       for (final row in rows)
@@ -159,8 +179,46 @@ class DriftTodoRepository implements TodoRepository {
           // Only a task pulled in from elsewhere needs to say where it came
           // from; on its own board the label would be noise.
           projectName: row.projectId == projectId ? null : names[row.projectId],
+          boardColumnId: shown[row.columnId],
         ),
     ];
+  }
+
+  /// Which column of [projectId]'s board each task's column is drawn under.
+  ///
+  /// A task pulled in from a subproject sits in a column of its own
+  /// project's board, and those are different rows: grouped by the id they
+  /// carry, such a task belongs to no column on screen and is drawn nowhere
+  /// — which is exactly what "include subprojects" used to do. Mapped to
+  /// the column that means the same, it lands where a reader expects it.
+  ///
+  /// Keyed by the foreign column rather than by the task, because a board
+  /// is three or four rows and the answer is the same for every task in one
+  /// of them.
+  Future<Map<String, String>> _columnsOnTheBoardOf(
+    String projectId,
+    List<TodoTaskRow> rows,
+  ) async {
+    final foreign = {
+      for (final row in rows)
+        if (row.projectId != projectId) row.columnId,
+    };
+    if (foreign.isEmpty) return const {};
+
+    final board = Board(await boardColumns(projectId));
+    final columns = await (_db.select(
+      _db.boardColumns,
+    )..where((c) => c.id.isIn(foreign))).get();
+
+    final shown = <String, String>{};
+    for (final column in columns) {
+      final here = board.equivalentOf(_toColumn(column));
+      // Null only when this project has no board at all, and then there is
+      // nowhere to draw the task either way.
+      if (here != null) shown[column.id] = here.id;
+    }
+
+    return shown;
   }
 
   @override
@@ -203,6 +261,7 @@ class DriftTodoRepository implements TodoRepository {
             priority: validated.priority.wireName,
             columnId: validated.columnId,
             projectId: validated.projectId,
+            owner: Value(validated.owner),
             completedAt: Value(column.countsAsDone ? DateTime.now() : null),
           ),
         );
@@ -237,6 +296,7 @@ class DriftTodoRepository implements TodoRepository {
         priority: Value(validated.priority.wireName),
         columnId: Value(validated.columnId),
         projectId: Value(validated.projectId),
+        owner: Value(validated.owner),
         completedAt: Value(
           column.countsAsDone
               ? (existing?.completedAt ?? DateTime.now())
@@ -596,6 +656,7 @@ class DriftTodoRepository implements TodoRepository {
     columnId: columnId,
     countsAsDone: countsAsDone,
     projectId: draft.projectId,
+    owner: draft.owner,
   );
 
   /// Where a draft goes: the column it named, or the board's default.
@@ -632,6 +693,7 @@ class DriftTodoRepository implements TodoRepository {
     TodoTaskRow row, {
     required Set<String> finishing,
     String? projectName,
+    String? boardColumnId,
   }) => Task(
     id: row.id,
     title: row.title,
@@ -641,10 +703,12 @@ class DriftTodoRepository implements TodoRepository {
     dueDate: row.dueDate,
     priority: TaskPriority.parse(row.priority),
     columnId: row.columnId,
+    boardColumnId: boardColumnId,
     countsAsDone: finishing.contains(row.columnId),
     projectId: row.projectId,
     completedAt: row.completedAt,
     projectName: projectName,
+    owner: row.owner,
   );
 
   /// The ids of the columns that mean the work is finished.

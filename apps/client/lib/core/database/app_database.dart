@@ -96,7 +96,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 21;
+  static const currentSchemaVersion = 22;
 
   /// The id of the only row in a single-row table, such as the daily goals.
   static const singletonId = 'singleton';
@@ -787,13 +787,21 @@ class AppDatabase extends _$AppDatabase {
         if (from < 21) {
           if (await _hasTable('focus_sounds')) {
             await m.renameTable(audioTracks, 'focus_sounds');
-            // Everything already in it was added beside the focus timer,
-            // which is what the column's default says too.
-            await m.addColumn(audioTracks, audioTracks.usage);
           } else {
-            await m.createTable(audioTracks);
+            // Already renamed by a run that was interrupted after it, or
+            // never there at all: either way the table this build wants is
+            // the one to end up with.
+            await m.create(audioTracks);
           }
+          // Everything already in it was added beside the focus timer,
+          // which is what the column's default says too.
+          await _addColumnIfMissing(m, audioTracks, audioTracks.usage);
           await _createIndexIdempotently(audioTrackByUsage);
+        }
+        // v22 lets a task name whose it is. Null is the answer for every
+        // task written before there was anyone to name: the user's own.
+        if (from < 22) {
+          await _addColumnIfMissing(m, todoTasks, todoTasks.owner);
         }
       });
     },

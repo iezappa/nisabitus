@@ -87,6 +87,22 @@ class TaskCard extends StatelessWidget {
                   // subproject, so the board says where it actually lives.
                   if (task.projectName case final name?)
                     _Pill(label: name, colour: theme.colorScheme.outline),
+                  // Whose it is, when it is not the user's. Nothing is drawn
+                  // for their own tasks: a board where every card says
+                  // "mine" says nothing.
+                  if (task.owner case final owner? when owner.isNotEmpty)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.person_outline,
+                          size: 14,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(owner, style: theme.textTheme.bodySmall),
+                      ],
+                    ),
                 ],
               ),
             ],

@@ -184,6 +184,10 @@ class _Board extends ConsumerWidget {
     }
 
     return Column(
+      // Stretched, so the filter bar starts at the board's own left edge.
+      // A column centres its children by default, which left a bar that
+      // sizes to its content floating in the middle of the window.
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const _FilterBar(),
         const Divider(height: 1),
@@ -218,32 +222,19 @@ class _FilterBar extends ConsumerWidget {
     final filters = ref.watch(taskFiltersProvider);
     final notifier = ref.read(taskFiltersProvider.notifier);
 
+    // Everything flush left, in one group. The filter used to be pushed to
+    // the far edge by a spacer, which left the bar reading as two unrelated
+    // controls with a gulf between them — and put the box the user types in
+    // as far from the board's first column as the window allowed.
     return Padding(
       padding: const EdgeInsets.all(Gap.md),
-      child: Row(
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: Gap.md,
+        runSpacing: Gap.sm,
         children: [
-          SwitchScope(
-            child: Switch(
-              value: ref.watch(includeDescendantsProvider),
-              onChanged: (value) =>
-                  ref.read(includeDescendantsProvider.notifier).state = value,
-            ),
-          ),
-          const SizedBox(width: Gap.sm),
-          Flexible(
-            child: Text(
-              l10n.todoIncludeSubprojects,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-          const Spacer(),
-          if (!filters.isEmpty)
-            TextButton(
-              onPressed: () => notifier.state = const TaskFilters(),
-              child: Text(l10n.todoFilterClear),
-            ),
           SizedBox(
-            width: 200,
+            width: 220,
             child: TextField(
               decoration: InputDecoration(
                 isDense: true,
@@ -254,6 +245,43 @@ class _FilterBar extends ConsumerWidget {
                   notifier.state = filters.copyWith(category: value),
             ),
           ),
+          SizedBox(
+            width: 220,
+            child: TextField(
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: l10n.todoFilterOwner,
+                prefixIcon: const Icon(Icons.person_outline, size: 18),
+              ),
+              onChanged: (value) =>
+                  notifier.state = filters.copyWith(owner: value),
+            ),
+          ),
+          // The scope of the board rather than a filter on it, so it sits
+          // after the two boxes rather than among them.
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchScope(
+                child: Switch(
+                  value: ref.watch(includeDescendantsProvider),
+                  onChanged: (value) =>
+                      ref.read(includeDescendantsProvider.notifier).state =
+                          value,
+                ),
+              ),
+              const SizedBox(width: Gap.sm),
+              Text(
+                l10n.todoIncludeSubprojects,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+          if (!filters.isEmpty)
+            TextButton(
+              onPressed: () => notifier.state = const TaskFilters(),
+              child: Text(l10n.todoFilterClear),
+            ),
         ],
       ),
     );
@@ -321,8 +349,12 @@ class _Kanban extends ConsumerWidget {
                         child: _Column(
                           column: column,
                           width: width,
+                          // By the column it is drawn under, not the one it
+                          // sits in: a task pulled in from a subproject
+                          // answers to its own project's board, and those
+                          // are other rows entirely.
                           tasks: tasks
-                              .where((task) => task.columnId == column.id)
+                              .where((task) => task.boardColumnId == column.id)
                               .toList(),
                           projectId: projectId,
                         ),

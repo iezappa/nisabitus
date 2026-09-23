@@ -857,5 +857,9 @@
   "audioTrackLibraryEmpty": "No sounds added yet.",
   "audioTrackNotice": "The video loads from YouTube; that is the only thing that leaves the device.",
   "audioTrackPlayHint": "Press play when you start: the browser will not start it on its own.",
-  "meditationSound": "Meditation audio"
+  "meditationSound": "Meditation audio",
+  "todoFilterOwner": "Owner",
+  "todoFieldOwner": "Owner",
+  "todoOwnerHint": "Whose task this is. Empty means yours.",
+  "todoOwnerMine": "Mine"
 }

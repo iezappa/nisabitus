@@ -125,6 +125,77 @@ void main() {
       expect(all.map((t) => t.title), containsAll(['Directa', 'Anidada']));
     });
 
+    test('are drawn under a column of the board on screen', () async {
+      // The bug this exists for: a task pulled in from a subproject sits in
+      // a column of its OWN board, and those are different rows. Grouped by
+      // the id it carries, it belonged to no column on screen and the board
+      // simply did not draw it — the switch looked broken.
+      await repository.createTask(
+        TaskDraft(title: 'Anidada', projectId: child.id),
+      );
+
+      final pulled = (await repository.tasks(
+        root.id,
+        includeDescendants: true,
+      )).single;
+      final board = Board(await repository.boardColumns(root.id));
+
+      expect(board.byId(pulled.columnId), isNull, reason: 'not this board');
+      expect(board.byId(pulled.boardColumnId), isNotNull);
+      expect(
+        board.byId(pulled.boardColumnId)!.builtInKey,
+        BoardColumn.todoKey,
+        reason: 'the column that means the same',
+      );
+    });
+
+    test('are drawn under the column that means the same, renamed', () async {
+      // Matched on the folded name once the user has renamed both, which is
+      // the only thing two boards can still have in common.
+      final board = Board(await repository.boardColumns(child.id));
+      await repository.updateColumn(
+        board.columns.last.id,
+        name: 'Listo',
+        countsAsDone: true,
+      );
+      final rootBoard = Board(await repository.boardColumns(root.id));
+      await repository.updateColumn(
+        rootBoard.columns.last.id,
+        name: 'listo',
+        countsAsDone: true,
+      );
+
+      final moved = await repository.createTask(
+        TaskDraft(title: 'Anidada', projectId: child.id),
+      );
+      await repository.moveTask(moved.id, board.columns.last.id);
+
+      final pulled = (await repository.tasks(
+        root.id,
+        includeDescendants: true,
+      )).single;
+
+      expect(
+        pulled.boardColumnId,
+        (await repository.boardColumns(root.id)).last.id,
+      );
+    });
+
+    test('stay where they really are, whatever the board shows', () async {
+      // `boardColumnId` is for drawing; a move has to read the real one.
+      await repository.createTask(
+        TaskDraft(title: 'Anidada', projectId: child.id),
+      );
+
+      final pulled = (await repository.tasks(
+        root.id,
+        includeDescendants: true,
+      )).single;
+      final own = Board(await repository.boardColumns(child.id));
+
+      expect(own.byId(pulled.columnId), isNotNull);
+    });
+
     test('carry the name of the subproject they came from', () async {
       await repository.createTask(
         TaskDraft(title: 'Anidada', projectId: child.id),
@@ -309,6 +380,76 @@ void main() {
       expect(stats.completed, 1);
       expect(stats.open, 0);
       expect(stats.perDay.last.value, 1);
+    });
+  });
+
+  group('owners', () {
+    late Project project;
+
+    setUp(() async {
+      project = await repository.createProject('Casa');
+    });
+
+    test('are nobody until one is named', () async {
+      final task = await repository.createTask(
+        TaskDraft(title: 'Tarea', projectId: project.id),
+      );
+
+      expect(task.owner, isNull, reason: 'the user\'s own');
+      expect(await repository.owners(), isEmpty);
+    });
+
+    test('are written down and read back', () async {
+      final task = await repository.createTask(
+        TaskDraft(title: 'Firmar', projectId: project.id, owner: 'Ana'),
+      );
+
+      expect(task.owner, 'Ana');
+      expect((await repository.tasks(project.id)).single.owner, 'Ana');
+    });
+
+    test('are offered once, however many tasks carry them', () async {
+      for (final owner in ['Ana', 'Ana', 'Bruno']) {
+        await repository.createTask(
+          TaskDraft(title: 'Tarea', projectId: project.id, owner: owner),
+        );
+      }
+
+      expect(await repository.owners(), ['Ana', 'Bruno']);
+    });
+
+    test('are sorted the way Spanish reads', () async {
+      for (final owner in ['Zoe', 'Ángela', 'Bruno']) {
+        await repository.createTask(
+          TaskDraft(title: 'Tarea', projectId: project.id, owner: owner),
+        );
+      }
+
+      expect(await repository.owners(), ['Ángela', 'Bruno', 'Zoe']);
+    });
+
+    test('stop being offered once nothing is assigned to them', () async {
+      // There is no list of people in this app, only the names on tasks.
+      final task = await repository.createTask(
+        TaskDraft(title: 'Firmar', projectId: project.id, owner: 'Ana'),
+      );
+
+      await repository.deleteTask(task.id);
+
+      expect(await repository.owners(), isEmpty);
+    });
+
+    test('are cleared by saving the task without one', () async {
+      final task = await repository.createTask(
+        TaskDraft(title: 'Firmar', projectId: project.id, owner: 'Ana'),
+      );
+
+      await repository.updateTask(
+        task.id,
+        TaskDraft(title: 'Firmar', projectId: project.id),
+      );
+
+      expect((await repository.tasks(project.id)).single.owner, isNull);
     });
   });
 }

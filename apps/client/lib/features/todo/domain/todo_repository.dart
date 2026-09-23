@@ -15,6 +15,7 @@ class TaskDraft {
     this.dueDate,
     this.priority = TaskPriority.medium,
     this.columnId,
+    this.owner,
   });
 
   final String title;
@@ -28,11 +29,21 @@ class TaskDraft {
   /// Where on the board it goes. Null lets the repository choose — the
   /// leftmost column that does not already mean finished.
   final String? columnId;
+
+  /// Whose task it is. Null means the user's own.
+  final String? owner;
 }
 
 /// The port the to-do module talks to.
 abstract interface class TodoRepository {
   Future<List<Project>> projects();
+
+  /// Every name a task has been assigned to, for the picker to offer.
+  ///
+  /// Read off the tasks rather than kept as a list of people: there is no
+  /// list of people in this app, only the names the user has typed, and a
+  /// name stops being offered once nothing is assigned to it.
+  Future<List<String>> owners();
 
   /// How many tasks sit directly on each project, keyed by project id.
   Future<Map<String, int>> directTaskCounts();

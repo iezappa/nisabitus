@@ -332,6 +332,12 @@ class _TaskFacts extends StatelessWidget {
                   label: Text(category),
                   visualDensity: VisualDensity.compact,
                 ),
+              if (task.owner case final owner? when owner.isNotEmpty)
+                Chip(
+                  label: Text(owner),
+                  avatar: const Icon(Icons.person_outline, size: 16),
+                  visualDensity: VisualDensity.compact,
+                ),
             ],
           ),
           const SizedBox(height: Gap.sm),
@@ -699,6 +705,7 @@ class _TaskFormState extends ConsumerState<_TaskForm> {
   late final _category = TextEditingController(
     text: widget.existing?.category ?? '',
   );
+  late final _owner = TextEditingController(text: widget.existing?.owner ?? '');
 
   late TaskPriority _priority =
       widget.existing?.priority ?? TaskPriority.medium;
@@ -707,7 +714,7 @@ class _TaskFormState extends ConsumerState<_TaskForm> {
 
   @override
   void dispose() {
-    for (final c in [_title, _description, _category]) {
+    for (final c in [_title, _description, _category, _owner]) {
       c.dispose();
     }
     super.dispose();
@@ -724,6 +731,7 @@ class _TaskFormState extends ConsumerState<_TaskForm> {
       projectId: widget.existing?.projectId ?? widget.projectId,
       description: _text(_description),
       category: _text(_category),
+      owner: _text(_owner),
       dueDate: _due,
       priority: _priority,
       columnId: _columnId,
@@ -792,7 +800,8 @@ class _TaskFormState extends ConsumerState<_TaskForm> {
                   maxLength: 255,
                   decoration: InputDecoration(labelText: l10n.fieldCategory),
                 ),
-                const SizedBox(height: Gap.sm),
+                _OwnerField(controller: _owner),
+                const SizedBox(height: Gap.md),
                 DropdownButtonFormField<TaskPriority>(
                   initialValue: _priority,
                   decoration: InputDecoration(
@@ -845,6 +854,57 @@ class _TaskFormState extends ConsumerState<_TaskForm> {
       actions: [
         TextButton(onPressed: widget.onDone, child: Text(l10n.actionCancel)),
         FilledButton(onPressed: _save, child: Text(l10n.actionSave)),
+      ],
+    );
+  }
+}
+
+/// Whose task it is, with the names already used offered underneath.
+///
+/// Typed rather than picked from a list of people, because there is no list
+/// of people: this app has no accounts. The suggestions are simply the names
+/// the user has assigned before, so the second task for the same person does
+/// not have to be spelled the same way twice by hand.
+class _OwnerField extends ConsumerWidget {
+  const _OwnerField({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final known = ref.watch(taskOwnersProvider).valueOrNull ?? const [];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: controller,
+          maxLength: 80,
+          decoration: InputDecoration(
+            labelText: l10n.todoFieldOwner,
+            // Helper, not hint: a hint is painted where the user types and
+            // overlaps what they write.
+            helperText: l10n.todoOwnerHint,
+            prefixIcon: const Icon(Icons.person_outline, size: 18),
+          ),
+        ),
+        if (known.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: Gap.sm),
+            child: Wrap(
+              spacing: Gap.sm,
+              runSpacing: Gap.xs,
+              children: [
+                for (final owner in known)
+                  ActionChip(
+                    label: Text(owner),
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () => controller.text = owner,
+                  ),
+              ],
+            ),
+          ),
       ],
     );
   }

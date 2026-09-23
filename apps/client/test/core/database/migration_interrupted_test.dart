@@ -124,6 +124,54 @@ void main() {
 
     expect((await db.select(db.medications).getSingle()).name, 'Vitamina D');
   });
+  test('finishes an upgrade that was killed after the v21 rename', () async {
+    // The rename went through and the column that follows it did not. The
+    // replay finds no `focus_sounds` to rename and must not fall over the
+    // table it already made.
+    final schema = await verifier.schemaAt(20);
+
+    await interrupt(schema, 20, [
+      'ALTER TABLE focus_sounds RENAME TO audio_tracks',
+    ]);
+
+    final db = AppDatabase.forTesting(schema.newConnection());
+    addTearDown(db.close);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
+
+    expect(await db.select(db.audioTracks).get(), isEmpty);
+  });
+
+  test('finishes an upgrade that was killed after the v22 column', () async {
+    final schema = await verifier.schemaAt(21);
+
+    final before = _RawDatabase(schema.newConnection(), 21);
+    await before.customStatement(
+      "INSERT INTO projects (id, updated_at, name) "
+      "VALUES ('p', 0, 'Casa')",
+    );
+    await before.customStatement(
+      "INSERT INTO board_columns (id, updated_at, project_id, name, position) "
+      "VALUES ('c', 0, 'p', 'Pendiente', 0)",
+    );
+    await before.customStatement(
+      "INSERT INTO todo_tasks "
+      "(id, updated_at, title, priority, column_id, project_id) "
+      "VALUES ('t', 0, 'Sobrevivir', 'HIGH', 'c', 'p')",
+    );
+    await before.close();
+
+    await interrupt(schema, 21, [
+      'ALTER TABLE todo_tasks ADD COLUMN owner TEXT NULL',
+    ]);
+
+    final db = AppDatabase.forTesting(schema.newConnection());
+    addTearDown(db.close);
+    await verifier.migrateAndValidate(db, AppDatabase.currentSchemaVersion);
+
+    final task = await db.select(db.todoTasks).getSingle();
+    expect(task.title, 'Sobrevivir');
+    expect(task.owner, null);
+  });
 }
 
 class _RawDatabase extends GeneratedDatabase {

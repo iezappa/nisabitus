@@ -2163,4 +2163,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get meditationSound => 'Meditation audio';
+
+  @override
+  String get todoFilterOwner => 'Owner';
+
+  @override
+  String get todoFieldOwner => 'Owner';
+
+  @override
+  String get todoOwnerHint => 'Whose task this is. Empty means yours.';
+
+  @override
+  String get todoOwnerMine => 'Mine';
 }

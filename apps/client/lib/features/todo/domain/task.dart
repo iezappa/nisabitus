@@ -43,7 +43,10 @@ class Task {
     DateTime? dueDate,
     this.completedAt,
     this.projectName,
+    this.owner,
+    String? boardColumnId,
   }) : title = _validateTitle(title),
+       boardColumnId = boardColumnId ?? columnId,
        startDate = startDate == null ? null : dateOnly(startDate),
        dueDate = dueDate == null ? null : dateOnly(dueDate);
 
@@ -78,6 +81,25 @@ class Task {
   /// Set when the task was pulled in from a subproject, so the card can say
   /// where it came from.
   final String? projectName;
+
+  /// Who the task belongs to, when it belongs to someone other than the
+  /// person holding the phone.
+  ///
+  /// A name typed by hand, not an account: this app has no accounts and is
+  /// not going to grow them. It is here so a board can carry what the user
+  /// is waiting on from somebody else without pretending that somebody else
+  /// is ever going to open this copy of the app.
+  final String? owner;
+
+  /// Which column of the board on screen the task is drawn under.
+  ///
+  /// The same as [columnId] for a task on its own board. With subprojects
+  /// included the board carries tasks that answer to another project's
+  /// board, and their columns are other rows entirely — so grouping by
+  /// [columnId] drew them nowhere and they simply vanished, which is the
+  /// bug this field exists to fix. Where the task really is stays in
+  /// [columnId]: that is what a move has to read.
+  final String boardColumnId;
 
   static String _validateTitle(String value) {
     final trimmed = value.trim();

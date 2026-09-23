@@ -3961,6 +3961,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Audio para meditar'**
   String get meditationSound;
+
+  /// No description provided for @todoFilterOwner.
+  ///
+  /// In es, this message translates to:
+  /// **'Propietario'**
+  String get todoFilterOwner;
+
+  /// No description provided for @todoFieldOwner.
+  ///
+  /// In es, this message translates to:
+  /// **'Propietario'**
+  String get todoFieldOwner;
+
+  /// No description provided for @todoOwnerHint.
+  ///
+  /// In es, this message translates to:
+  /// **'De quién es la tarea. Vacío significa tuya.'**
+  String get todoOwnerHint;
+
+  /// No description provided for @todoOwnerMine.
+  ///
+  /// In es, this message translates to:
+  /// **'Mía'**
+  String get todoOwnerMine;
 }
 
 class _AppLocalizationsDelegate
