@@ -38,6 +38,93 @@ void main() {
 
     expect(response.statusCode, 200);
     expect(body['username'], 'zeke');
+    expect(body['isAdmin'], isTrue);
+  });
+
+  test('admin creates a family user that can log in', () async {
+    final adminToken = await login(handler);
+
+    final createResponse = await handler(
+      Request(
+        'POST',
+        Uri.parse('http://localhost/api/admin/users'),
+        headers: {'content-type': 'application/json', ...auth(adminToken)},
+        body: jsonEncode({'username': 'maria', 'password': 'family pass'}),
+      ),
+    );
+    final createBody =
+        jsonDecode(await createResponse.readAsString()) as Map<String, Object?>;
+
+    expect(createResponse.statusCode, 201);
+    expect(createBody['username'], 'maria');
+    expect(createBody['isAdmin'], isFalse);
+
+    final mariaToken = await login(
+      handler,
+      username: 'maria',
+      password: 'family pass',
+    );
+    final meResponse = await handler(
+      Request(
+        'GET',
+        Uri.parse('http://localhost/api/me'),
+        headers: auth(mariaToken),
+      ),
+    );
+    final meBody =
+        jsonDecode(await meResponse.readAsString()) as Map<String, Object?>;
+
+    expect(meResponse.statusCode, 200);
+    expect(meBody['username'], 'maria');
+    expect(meBody['isAdmin'], isFalse);
+  });
+
+  test('non-admin users cannot create family users', () async {
+    final adminToken = await login(handler);
+    await createFamilyUser(handler, adminToken, 'maria');
+    final mariaToken = await login(
+      handler,
+      username: 'maria',
+      password: 'family pass',
+    );
+
+    final response = await handler(
+      Request(
+        'POST',
+        Uri.parse('http://localhost/api/admin/users'),
+        headers: {'content-type': 'application/json', ...auth(mariaToken)},
+        body: jsonEncode({'username': 'leo', 'password': 'family pass'}),
+      ),
+    );
+
+    expect(response.statusCode, 403);
+  });
+
+  test('family users have separate backup storage', () async {
+    final adminToken = await login(handler);
+    await createFamilyUser(handler, adminToken, 'maria');
+    final mariaToken = await login(
+      handler,
+      username: 'maria',
+      password: 'family pass',
+    );
+
+    await importBackup(handler, adminToken, 'admin-habit');
+    await importBackup(handler, mariaToken, 'maria-habit');
+
+    final adminBackup = await exportBackup(handler, adminToken);
+    final mariaBackup = await exportBackup(handler, mariaToken);
+
+    expect(
+      ((adminBackup['tables'] as Map<String, Object?>)['habits'] as List)
+          .single,
+      containsPair('id', 'admin-habit'),
+    );
+    expect(
+      ((mariaBackup['tables'] as Map<String, Object?>)['habits'] as List)
+          .single,
+      containsPair('id', 'maria-habit'),
+    );
   });
 
   test('rejects backup export without a token', () async {
@@ -100,13 +187,67 @@ void main() {
   );
 }
 
-Future<String> login(Handler handler) async {
+Future<void> createFamilyUser(
+  Handler handler,
+  String adminToken,
+  String username,
+) async {
+  final response = await handler(
+    Request(
+      'POST',
+      Uri.parse('http://localhost/api/admin/users'),
+      headers: {'content-type': 'application/json', ...auth(adminToken)},
+      body: jsonEncode({'username': username, 'password': 'family pass'}),
+    ),
+  );
+  expect(response.statusCode, 201);
+}
+
+Future<Map<String, Object?>> exportBackup(Handler handler, String token) async {
+  final response = await handler(
+    Request(
+      'GET',
+      Uri.parse('http://localhost/api/backup/export'),
+      headers: auth(token),
+    ),
+  );
+  expect(response.statusCode, 200);
+  return jsonDecode(await response.readAsString()) as Map<String, Object?>;
+}
+
+Future<void> importBackup(Handler handler, String token, String habitId) async {
+  final response = await handler(
+    Request(
+      'POST',
+      Uri.parse('http://localhost/api/backup/import'),
+      headers: {'content-type': 'application/json', ...auth(token)},
+      body: jsonEncode({
+        'app': 'nisabitus',
+        'format': 2,
+        'schemaVersion': 14,
+        'exportedAt': 1790819502408,
+        'tables': {
+          'habits': [
+            {'id': habitId, 'name': habitId},
+          ],
+        },
+      }),
+    ),
+  );
+  expect(response.statusCode, 200);
+}
+
+Future<String> login(
+  Handler handler, {
+  String username = 'zeke',
+  String password = 'correct horse',
+}) async {
   final response = await handler(
     Request(
       'POST',
       Uri.parse('http://localhost/api/auth/login'),
       headers: {'content-type': 'application/json'},
-      body: jsonEncode({'username': 'zeke', 'password': 'correct horse'}),
+      body: jsonEncode({'username': username, 'password': password}),
     ),
   );
   final body =

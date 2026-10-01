@@ -19,14 +19,48 @@ void main() {
           'username': 'admin',
           'password': 'secret123',
         });
-        return http.Response(jsonEncode({'token': 'abc'}), 200);
+        return http.Response(
+          jsonEncode({
+            'token': 'abc',
+            'user': {'id': 'u1', 'username': 'admin', 'isAdmin': true},
+          }),
+          200,
+        );
       }),
     );
 
     final result = await client.login(username: 'admin', password: 'secret123');
 
     expect(result.token, 'abc');
-    expect(result.username, 'admin');
+    expect(result.user.username, 'admin');
+    expect(result.user.isAdmin, isTrue);
+  });
+
+  test('creates a family user with admin bearer auth', () async {
+    final client = NisabitusServerClient(
+      baseUrl: 'http://server.local:5051',
+      client: MockClient((request) async {
+        expect(request.headers['authorization'], 'Bearer admin-token');
+        expect(request.url.path, '/api/admin/users');
+        expect(jsonDecode(request.body), {
+          'username': 'maria',
+          'password': 'family pass',
+        });
+        return http.Response(
+          jsonEncode({'id': 'u2', 'username': 'maria', 'isAdmin': false}),
+          201,
+        );
+      }),
+    );
+
+    final user = await client.createUser(
+      token: 'admin-token',
+      username: 'maria',
+      password: 'family pass',
+    );
+
+    expect(user.username, 'maria');
+    expect(user.isAdmin, isFalse);
   });
 
   test('adds http when the server URL has no scheme', () async {

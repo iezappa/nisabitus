@@ -13,11 +13,37 @@ class ServerAccountException implements Exception {
   String toString() => message;
 }
 
+class ServerUser {
+  const ServerUser({
+    required this.id,
+    required this.username,
+    required this.isAdmin,
+  });
+
+  final String id;
+  final String username;
+  final bool isAdmin;
+
+  static ServerUser fromJson(Object? value) {
+    if (value is! Map<String, dynamic> ||
+        value['id'] is! String ||
+        value['username'] is! String ||
+        value['isAdmin'] is! bool) {
+      throw const ServerAccountException('User response is not valid');
+    }
+    return ServerUser(
+      id: value['id'] as String,
+      username: value['username'] as String,
+      isAdmin: value['isAdmin'] as bool,
+    );
+  }
+}
+
 class LoginResult {
-  const LoginResult({required this.token, required this.username});
+  const LoginResult({required this.token, required this.user});
 
   final String token;
-  final String username;
+  final ServerUser user;
 }
 
 class ServerImportResult {
@@ -79,7 +105,30 @@ class NisabitusServerClient {
     if (decoded is! Map<String, dynamic> || decoded['token'] is! String) {
       throw const ServerAccountException('Login response is not valid');
     }
-    return LoginResult(token: decoded['token'] as String, username: username);
+    return LoginResult(
+      token: decoded['token'] as String,
+      user: ServerUser.fromJson(decoded['user']),
+    );
+  }
+
+  Future<ServerUser> createUser({
+    required String token,
+    required String username,
+    required String password,
+  }) async {
+    final response = await _client
+        .post(
+          _resolve('api/admin/users'),
+          headers: {..._authHeaders(token), 'content-type': 'application/json'},
+          body: jsonEncode({'username': username, 'password': password}),
+        )
+        .timeout(const Duration(seconds: 8));
+    if (response.statusCode != 201) {
+      throw ServerAccountException(
+        'Create user failed (${response.statusCode})',
+      );
+    }
+    return ServerUser.fromJson(jsonDecode(response.body));
   }
 
   Future<void> logout(String token) async {

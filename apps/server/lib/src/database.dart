@@ -7,10 +7,15 @@ import 'passwords.dart';
 import 'tokens.dart';
 
 class UserRecord {
-  const UserRecord({required this.id, required this.username});
+  const UserRecord({
+    required this.id,
+    required this.username,
+    required this.isAdmin,
+  });
 
   final String id;
   final String username;
+  final bool isAdmin;
 }
 
 class ImportResult {
@@ -38,9 +43,15 @@ class ServerDatabase {
         username TEXT NOT NULL UNIQUE,
         password_hash TEXT NOT NULL,
         salt TEXT NOT NULL,
-        created_at INTEGER NOT NULL
+        created_at INTEGER NOT NULL,
+        is_admin INTEGER NOT NULL DEFAULT 0
       )
     ''');
+    _addColumnIfMissing(
+      'users',
+      'is_admin',
+      'is_admin INTEGER NOT NULL DEFAULT 0',
+    );
     _db.execute('''
       CREATE TABLE IF NOT EXISTS sessions (
         token TEXT PRIMARY KEY,
@@ -63,7 +74,11 @@ class ServerDatabase {
     return (result.first['count'] as int) > 0;
   }
 
-  UserRecord createUser({required String username, required String password}) {
+  UserRecord createUser({
+    required String username,
+    required String password,
+    bool isAdmin = false,
+  }) {
     final trimmed = username.trim();
     if (trimmed.isEmpty) throw ArgumentError.value(username, 'username');
     if (password.length < 8) {
@@ -78,10 +93,10 @@ class ServerDatabase {
     final salt = newSalt();
     final hash = hashPassword(password, salt);
     _db.execute(
-      'INSERT INTO users (id, username, password_hash, salt, created_at) VALUES (?, ?, ?, ?, ?)',
-      [id, trimmed, hash, salt, _nowMillis()],
+      'INSERT INTO users (id, username, password_hash, salt, created_at, is_admin) VALUES (?, ?, ?, ?, ?, ?)',
+      [id, trimmed, hash, salt, _nowMillis(), isAdmin ? 1 : 0],
     );
-    return UserRecord(id: id, username: trimmed);
+    return UserRecord(id: id, username: trimmed, isAdmin: isAdmin);
   }
 
   void ensureBootstrapUser({
@@ -89,7 +104,7 @@ class ServerDatabase {
     required String password,
   }) {
     if (hasUsers) return;
-    createUser(username: username, password: password);
+    createUser(username: username, password: password, isAdmin: true);
   }
 
   String? login({required String username, required String password}) {
@@ -126,7 +141,7 @@ class ServerDatabase {
     _db.execute('DELETE FROM sessions WHERE expires_at <= ?', [now]);
     final rows = _db.select(
       '''
-      SELECT users.id, users.username
+      SELECT users.id, users.username, users.is_admin
       FROM sessions
       JOIN users ON users.id = sessions.user_id
       WHERE sessions.token = ? AND sessions.expires_at > ?
@@ -138,6 +153,7 @@ class ServerDatabase {
     return UserRecord(
       id: row['id'] as String,
       username: row['username'] as String,
+      isAdmin: (row['is_admin'] as int) == 1,
     );
   }
 
@@ -176,6 +192,12 @@ class ServerDatabase {
       rowCount: rowCount,
       updatedAt: DateTime.fromMillisecondsSinceEpoch(now),
     );
+  }
+
+  void _addColumnIfMissing(String table, String column, String definition) {
+    final columns = _db.select('PRAGMA table_info("$table")');
+    if (columns.any((row) => row['name'] == column)) return;
+    _db.execute('ALTER TABLE "$table" ADD COLUMN $definition');
   }
 
   int _rowCount(Map<String, Object?> tables) {

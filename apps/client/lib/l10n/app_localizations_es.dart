@@ -2303,4 +2303,24 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get serverDownloadConfirmBody =>
       'Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.';
+
+  @override
+  String get serverFamilyAccounts => 'Cuentas familiares';
+
+  @override
+  String get serverFamilyAccountsHint =>
+      'Solo admin: creá cuentas para familiares. Van a entrar con su propio usuario y contraseña.';
+
+  @override
+  String get serverNewUsername => 'Nuevo usuario';
+
+  @override
+  String get serverNewPassword => 'Nueva contraseña';
+
+  @override
+  String get serverCreateUser => 'Crear cuenta';
+
+  @override
+  String get serverUserCreated =>
+      'Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona.';
 }

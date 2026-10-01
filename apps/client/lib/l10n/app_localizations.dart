@@ -4171,6 +4171,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.'**
   String get serverDownloadConfirmBody;
+
+  /// No description provided for @serverFamilyAccounts.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuentas familiares'**
+  String get serverFamilyAccounts;
+
+  /// No description provided for @serverFamilyAccountsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo admin: creá cuentas para familiares. Van a entrar con su propio usuario y contraseña.'**
+  String get serverFamilyAccountsHint;
+
+  /// No description provided for @serverNewUsername.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo usuario'**
+  String get serverNewUsername;
+
+  /// No description provided for @serverNewPassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva contraseña'**
+  String get serverNewPassword;
+
+  /// No description provided for @serverCreateUser.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear cuenta'**
+  String get serverCreateUser;
+
+  /// No description provided for @serverUserCreated.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona.'**
+  String get serverUserCreated;
 }
 
 class _AppLocalizationsDelegate

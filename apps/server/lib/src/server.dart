@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 import 'database.dart';
 
@@ -19,6 +20,7 @@ class NisabitusServer {
       ..post('/api/auth/login', _login)
       ..post('/api/auth/logout', _logout)
       ..get('/api/me', _me)
+      ..post('/api/admin/users', _createUser)
       ..get('/api/backup/export', _exportBackup)
       ..post('/api/backup/import', _importBackup);
 
@@ -51,7 +53,8 @@ class NisabitusServer {
         'error': 'invalid credentials',
       }, status: HttpStatus.unauthorized);
     }
-    return _json({'token': token});
+    final user = database.userForToken(token)!;
+    return _json({'token': token, 'user': _userJson(user)});
   }
 
   Response _logout(Request request) {
@@ -63,7 +66,41 @@ class NisabitusServer {
   Response _me(Request request) {
     final user = _requireUser(request);
     if (user == null) return _unauthorized();
-    return _json({'id': user.id, 'username': user.username});
+    return _json(_userJson(user));
+  }
+
+  Future<Response> _createUser(Request request) async {
+    final user = _requireUser(request);
+    if (user == null) return _unauthorized();
+    if (!user.isAdmin) {
+      return _json({'error': 'admin required'}, status: HttpStatus.forbidden);
+    }
+
+    final body = await _readJson(request);
+    final username = body['username'];
+    final password = body['password'];
+    if (username is! String || password is! String) {
+      return _json({
+        'error': 'username and password are required',
+      }, status: HttpStatus.badRequest);
+    }
+
+    try {
+      final created = database.createUser(
+        username: username,
+        password: password,
+      );
+      return _json(_userJson(created), status: HttpStatus.created);
+    } on SqliteException catch (error) {
+      if (error.extendedResultCode == 2067 || error.resultCode == 19) {
+        return _json({
+          'error': 'username already exists',
+        }, status: HttpStatus.conflict);
+      }
+      rethrow;
+    } on ArgumentError catch (error) {
+      return _json({'error': error.message}, status: HttpStatus.badRequest);
+    }
   }
 
   Response _exportBackup(Request request) {
@@ -113,6 +150,12 @@ class NisabitusServer {
     if (decoded is Map<String, Object?>) return decoded;
     throw const FormatException('JSON object expected');
   }
+
+  Map<String, Object?> _userJson(UserRecord user) => {
+    'id': user.id,
+    'username': user.username,
+    'isAdmin': user.isAdmin,
+  };
 
   Response _unauthorized() => _json({
     'error': 'authentication required',

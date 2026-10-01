@@ -1236,5 +1236,11 @@
       }
     }
   },
-  "serverDownloadConfirmBody": "Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro."
+  "serverDownloadConfirmBody": "Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.",
+  "serverFamilyAccounts": "Cuentas familiares",
+  "serverFamilyAccountsHint": "Solo admin: creá cuentas para familiares. Van a entrar con su propio usuario y contraseña.",
+  "serverNewUsername": "Nuevo usuario",
+  "serverNewPassword": "Nueva contraseña",
+  "serverCreateUser": "Crear cuenta",
+  "serverUserCreated": "Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona."
 }

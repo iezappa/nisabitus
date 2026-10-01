@@ -2299,4 +2299,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get serverDownloadConfirmBody =>
       'The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure.';
+
+  @override
+  String get serverFamilyAccounts => 'Family accounts';
+
+  @override
+  String get serverFamilyAccountsHint =>
+      'Admin only: create accounts for family members. They will log in with their own username and password.';
+
+  @override
+  String get serverNewUsername => 'New username';
+
+  @override
+  String get serverNewPassword => 'New password';
+
+  @override
+  String get serverCreateUser => 'Create account';
+
+  @override
+  String get serverUserCreated =>
+      'Account created. Share the server URL, username, and password with that person.';
 }

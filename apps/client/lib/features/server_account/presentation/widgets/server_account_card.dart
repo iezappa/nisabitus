@@ -18,6 +18,8 @@ class _ServerAccountCardState extends ConsumerState<ServerAccountCard> {
   late final TextEditingController _urlController;
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
+  late final TextEditingController _newUsernameController;
+  late final TextEditingController _newPasswordController;
   bool _busy = false;
   String? _message;
 
@@ -28,6 +30,8 @@ class _ServerAccountCardState extends ConsumerState<ServerAccountCard> {
     _urlController = TextEditingController(text: account.baseUrl);
     _usernameController = TextEditingController(text: account.username);
     _passwordController = TextEditingController();
+    _newUsernameController = TextEditingController();
+    _newPasswordController = TextEditingController();
   }
 
   @override
@@ -35,6 +39,8 @@ class _ServerAccountCardState extends ConsumerState<ServerAccountCard> {
     _urlController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _newUsernameController.dispose();
+    _newPasswordController.dispose();
     super.dispose();
   }
 
@@ -72,6 +78,20 @@ class _ServerAccountCardState extends ConsumerState<ServerAccountCard> {
       setState(
         () => _message = AppLocalizations.of(context).serverDisconnected,
       );
+    }
+  });
+
+  Future<void> _createUser() => _run(() async {
+    await ref
+        .read(serverAccountActionsProvider)
+        .createUser(
+          username: _newUsernameController.text,
+          password: _newPasswordController.text,
+        );
+    _newUsernameController.clear();
+    _newPasswordController.clear();
+    if (mounted) {
+      setState(() => _message = AppLocalizations.of(context).serverUserCreated);
     }
   });
 
@@ -232,6 +252,48 @@ class _ServerAccountCardState extends ConsumerState<ServerAccountCard> {
               ),
             ],
           ),
+          if (account.isAdmin) ...[
+            const SizedBox(height: Gap.lg),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                l10n.serverFamilyAccounts,
+                style: theme.textTheme.titleSmall,
+              ),
+            ),
+            const SizedBox(height: Gap.sm),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                l10n.serverFamilyAccountsHint,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            const SizedBox(height: Gap.sm),
+            TextField(
+              controller: _newUsernameController,
+              enabled: !_busy,
+              decoration: InputDecoration(labelText: l10n.serverNewUsername),
+            ),
+            const SizedBox(height: Gap.sm),
+            TextField(
+              controller: _newPasswordController,
+              enabled: !_busy,
+              obscureText: true,
+              decoration: InputDecoration(labelText: l10n.serverNewPassword),
+            ),
+            const SizedBox(height: Gap.sm),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _busy ? null : _createUser,
+                icon: const Icon(Icons.person_add_alt_outlined),
+                label: Text(l10n.serverCreateUser),
+              ),
+            ),
+          ],
         ],
       ],
     );

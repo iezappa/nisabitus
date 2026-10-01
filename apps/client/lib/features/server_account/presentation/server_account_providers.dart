@@ -41,11 +41,20 @@ final serverTokenProvider = StateNotifierProvider<StringPreference, String>(
   ),
 );
 
+final serverIsAdminProvider = StateNotifierProvider<BoolPreference, bool>(
+  (ref) => BoolPreference(
+    ref.watch(sharedPreferencesProvider),
+    'serverAccount.isAdmin',
+    fallback: false,
+  ),
+);
+
 final serverAccountProvider = Provider<ServerAccount>(
   (ref) => ServerAccount(
     baseUrl: ref.watch(serverBaseUrlProvider),
     username: ref.watch(serverUsernameProvider),
     token: ref.watch(serverTokenProvider),
+    isAdmin: ref.watch(serverIsAdminProvider),
   ),
 );
 
@@ -67,8 +76,9 @@ class ServerAccountActions {
     await client.healthCheck();
     final login = await client.login(username: username, password: password);
     _ref.read(serverBaseUrlProvider.notifier).set(baseUrl.trim());
-    _ref.read(serverUsernameProvider.notifier).set(login.username.trim());
+    _ref.read(serverUsernameProvider.notifier).set(login.user.username.trim());
     _ref.read(serverTokenProvider.notifier).set(login.token);
+    _ref.read(serverIsAdminProvider.notifier).set(login.user.isAdmin);
   }
 
   Future<void> disconnect() async {
@@ -84,6 +94,20 @@ class ServerAccountActions {
     }
     _ref.read(serverTokenProvider.notifier).set('');
     _ref.read(serverUsernameProvider.notifier).set('');
+    _ref.read(serverIsAdminProvider.notifier).set(false);
+  }
+
+  Future<void> createUser({
+    required String username,
+    required String password,
+  }) async {
+    final account = _ref.read(serverAccountProvider);
+    if (!account.isConnected || !account.isAdmin) {
+      throw const ServerAccountException('Admin account required');
+    }
+    await NisabitusServerClient(
+      baseUrl: account.baseUrl,
+    ).createUser(token: account.token, username: username, password: password);
   }
 
   Future<BackupOutcome> uploadLocalBackup() async {

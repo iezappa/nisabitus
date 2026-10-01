@@ -930,5 +930,11 @@
       }
     }
   },
-  "serverDownloadConfirmBody": "The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure."
+  "serverDownloadConfirmBody": "The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure.",
+  "serverFamilyAccounts": "Family accounts",
+  "serverFamilyAccountsHint": "Admin only: create accounts for family members. They will log in with their own username and password.",
+  "serverNewUsername": "New username",
+  "serverNewPassword": "New password",
+  "serverCreateUser": "Create account",
+  "serverUserCreated": "Account created. Share the server URL, username, and password with that person."
 }
