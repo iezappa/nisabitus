@@ -55,6 +55,7 @@ void main() {
     final name = 'Meditar ${DateTime.now().millisecondsSinceEpoch}';
     await tester.enterText(find.widgetWithText(TextFormField, 'Nombre'), name);
     await tester.tap(find.widgetWithText(FilledButton, 'Guardar'));
+    await tester.pumpAndSettle();
     await revealInList(tester, find.text(name));
 
     expect(find.text(name), findsOneWidget);
