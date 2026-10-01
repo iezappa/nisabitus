@@ -41,12 +41,12 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    // The app opens on the panel, which is where a launch that broke — a
-    // database that will not open, a route that no longer resolves — shows
-    // up first.
-    expect(find.text('Panel'), findsWidgets);
+    // The shell opens with the top-level navigation available. Wide layouts use
+    // an icons-only rail, so the labels may live in tooltips rather than visible
+    // text.
+    expect(navDestination('Panel'), findsWidgets);
 
-    await tester.tap(find.text('Hábitos').first);
+    await tester.tap(navDestination('Hábitos').first);
     await tester.pumpAndSettle();
 
     await tester.tap(find.byType(FloatingActionButton));
@@ -61,13 +61,18 @@ void main() {
 
     // Leave and come back: the row on the way back was read from the
     // database, not from the state the form left behind.
-    await tester.tap(find.text('Panel').last);
+    await tester.tap(navDestination('Panel').last);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Hábitos').first);
+    await tester.tap(navDestination('Hábitos').first);
     await revealInList(tester, find.text(name));
 
     expect(find.text(name), findsOneWidget);
   });
+}
+
+Finder navDestination(String label) {
+  final text = find.text(label);
+  return text.evaluate().isNotEmpty ? text : find.byTooltip(label);
 }
 
 /// Brings [finder] into view, whether it is waiting on the database or just
