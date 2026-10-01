@@ -56,6 +56,39 @@ jobs:
           path: apps/client/test/screenshots/failures/
           if-no-files-found: ignore
 
+  server-check:
+    name: Server format, analyse, test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/server
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install SQLite runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sqlite3 libsqlite3-dev
+        working-directory: .
+
+      - name: Resolve dependencies
+        run: dart pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyse
+        run: dart analyze .
+
+      - name: Test
+        run: dart test
+
   integration:
     name: Integration test (Linux desktop)
     runs-on: ubuntu-latest

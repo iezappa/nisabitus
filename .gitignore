@@ -21,6 +21,8 @@ About Nísabit.txt
 # Local tooling caches
 .atl/
 .codegraph/
+.dart_tool/
+build/
 
 # Golden diffs, written by the test runner when a screenshot does not match.
 apps/client/test/screenshots/failures/

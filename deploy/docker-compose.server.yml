@@ -1,0 +1,55 @@
+# ZimaOS / CasaOS server-backed Nisabitus edition.
+# This version stores data on the server, per logged-in user, in SQLite.
+# First start: set NISABITUS_ADMIN_USER and NISABITUS_ADMIN_PASSWORD.
+
+name: nisabitus-server
+services:
+  nisabitus-server:
+    image: ghcr.io/iezappa/nisabitus-server:latest
+    container_name: nisabitus-server
+    restart: unless-stopped
+    network_mode: bridge
+    environment:
+      NISABITUS_ADMIN_USER: "admin"
+      NISABITUS_ADMIN_PASSWORD: "change-this-password"
+    volumes:
+      - ./data:/app/data
+    ports:
+      - target: 8080
+        published: "5051"
+        protocol: tcp
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    x-casaos:
+      ports:
+        - container: "8080"
+          description:
+            en_US: Status page and API port
+            es_ES: Puerto de estado y API
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: nisabitus-server
+  author: Zeke Zappa Developments (iezappa)
+  developer: Zeke Zappa Developments (iezappa)
+  category: Productivity
+  icon: https://raw.githubusercontent.com/iezappa/nisabitus/main/apps/client/assets/branding/logo_paper.png
+  tagline:
+    en_US: Habits, health and journal with server-side user persistence
+    es_ES: Hábitos, salud y diario con persistencia de usuarios en servidor
+  description:
+    en_US: |
+      Runs the Nisabitus Dart API with SQLite storage. Each logged-in user
+      has their own persisted backup document under the server data volume.
+    es_ES: |
+      Ejecuta la API Dart de Nisabitus con almacenamiento SQLite. Cada usuario
+      logueado tiene su propio documento persistido bajo el volumen de datos.
+  title:
+    en_US: Nisabitus Server
+  index: /
+  port_map: "5051"
+  scheme: http
