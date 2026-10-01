@@ -3,11 +3,15 @@
 // is rewritten in the same step, so these tests seed a v13 store whose ids
 // deliberately collide across tables and run out of order, then check that
 // each child still points at the parent it pointed at before.
+import 'dart:io';
+
 import 'package:drift/drift.dart' hide isNull, isNotNull;
+import 'package:drift/native.dart';
 import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/uuid.dart';
+import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 import 'generated/schema.dart';
 
@@ -209,6 +213,57 @@ void main() {
     )..where((h) => h.name.equals('Meditar'))).getSingle();
     await (db.delete(db.habits)..where((h) => h.id.equals(meditar.id))).go();
     expect(await db.select(db.habitCompletions).get(), hasLength(1));
+  });
+
+  test('repairs a legacy id table even when user_version says current', () async {
+    final dir = Directory.systemTemp.createTempSync('nisabitus_legacy_id_');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final file = File('${dir.path}/store.sqlite');
+    final raw = sqlite.sqlite3.open(file.path);
+    raw
+      ..execute('''
+        CREATE TABLE habits (
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          description TEXT NULL,
+          category TEXT NULL,
+          frequency TEXT NOT NULL,
+          target_count INTEGER NOT NULL DEFAULT 1,
+          end_date INTEGER NULL,
+          repeat_forever INTEGER NOT NULL DEFAULT 0,
+          repeat_days TEXT NOT NULL DEFAULT '',
+          type TEXT NULL,
+          status TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          scheduled_date INTEGER NOT NULL
+        )
+      ''')
+      ..execute(
+        "INSERT INTO habits (id, name, frequency, target_count, repeat_forever, "
+        "repeat_days, status, created_at, scheduled_date) VALUES "
+        "(5, 'Leer', 'DAILY', 1, 0, '', 'ACTIVE', ${_s(created)}, ${_s(day)})",
+      )
+      ..execute('PRAGMA user_version = ${AppDatabase.currentSchemaVersion}');
+    raw.close();
+
+    final db = AppDatabase.forTesting(NativeDatabase(file));
+    addTearDown(db.close);
+    await db.customSelect('SELECT 1').get();
+    await db
+        .into(db.habits)
+        .insert(
+          HabitsCompanion.insert(
+            name: 'Meditar',
+            frequency: 'DAILY',
+            status: 'ACTIVE',
+            createdAt: created,
+            scheduledDate: day,
+          ),
+        );
+
+    final rows = await db.select(db.habits).get();
+    expect(rows, hasLength(2));
+    expect(rows.map((row) => row.id), everyElement(isUuid));
   });
 
   test('drops the scratch id map it used', () async {

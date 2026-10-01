@@ -231,6 +231,29 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 
+  Future<void> _repairLegacyRecordIds() async {
+    final legacy = <TableInfo<Table, dynamic>>[];
+    for (final table in allTables) {
+      if (!await _hasTable(table.actualTableName)) continue;
+      final columns = await customSelect(
+        'PRAGMA table_info("${table.actualTableName}")',
+      ).get();
+      final id = columns.where((c) => c.read<String>('name') == 'id');
+      if (id.isNotEmpty &&
+          id.single.read<String>('type').toUpperCase() == 'INTEGER') {
+        legacy.add(table);
+      }
+    }
+    if (legacy.isEmpty) return;
+
+    final migrator = Migrator(this);
+    await _createAllIdempotently(migrator);
+    await customStatement('DROP INDEX IF EXISTS "task_project_lookup"');
+    await _giveEveryRecordAUuid(migrator);
+    await _rebuildBoardAsColumns(migrator);
+    await seedBuiltInFoods();
+  }
+
   /// [Migrator.addColumn], skipped when the column is already there.
   ///
   /// A migration that is interrupted leaves the store partly upgraded and
@@ -837,6 +860,7 @@ class AppDatabase extends _$AppDatabase {
       });
     },
     beforeOpen: (details) async {
+      await _repairLegacyRecordIds();
       await _repairMissingRecordColumns();
       // SQLite disables foreign keys per connection by default, which would
       // make every ON DELETE CASCADE above silently do nothing.
