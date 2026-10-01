@@ -10,6 +10,7 @@ import 'core/app/launch_gate.dart';
 import 'core/database/persistent_storage.dart';
 import 'core/preferences/preferences.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/accent_backdrop.dart';
 import 'core/theme/app_theme.dart';
 import 'features/backup/presentation/database_gate.dart';
 import 'features/settings/presentation/settings_providers.dart';
@@ -70,10 +71,12 @@ class _NisabitAppState extends ConsumerState<NisabitApp> {
       debugShowCheckedModeBanner: false,
       // The database gate goes first: there is no point greeting someone
       // into an app whose store would not open.
-      builder: (context, child) => DatabaseGate(
-        child: LaunchGate(
-          navigatorKey: _navigatorKey,
-          child: child ?? const SizedBox(),
+      builder: (context, child) => AccentBackdrop(
+        child: DatabaseGate(
+          child: LaunchGate(
+            navigatorKey: _navigatorKey,
+            child: child ?? const SizedBox(),
+          ),
         ),
       ),
     );

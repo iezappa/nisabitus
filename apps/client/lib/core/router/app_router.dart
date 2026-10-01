@@ -15,9 +15,9 @@ import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/health/presentation/health_screen.dart';
 import '../../features/todo/presentation/todo_screen.dart';
 import '../../l10n/app_localizations.dart';
-import '../widgets/brand_logo.dart';
 import '../widgets/settings_button.dart';
 import 'app_tab.dart';
+import 'nav_rail.dart';
 
 /// Where meditation used to live.
 const _meditationWas = '/meditacion';
@@ -122,24 +122,14 @@ class AppShell extends ConsumerWidget {
     return Scaffold(
       body: Row(
         children: [
-          NavigationRail(
+          NavRail(
             selectedIndex: selected,
-            onDestinationSelected: go,
-            labelType: NavigationRailLabelType.all,
-            leading: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: const BrandLogo(color: Colors.white),
-            ),
+            onSelected: go,
             destinations: [
               for (final tab in visible)
-                NavigationRailDestination(
-                  icon: Icon(tab.icon),
-                  selectedIcon: Icon(tab.selectedIcon),
-                  label: Text(tab.label(l10n)),
-                ),
+                (tab.icon, tab.selectedIcon, tab.label(l10n)),
             ],
           ),
-          const VerticalDivider(width: 1),
           Expanded(child: _WithNotices(child: child)),
         ],
       ),

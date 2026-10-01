@@ -68,13 +68,14 @@ abstract final class AppTheme {
     final base = ThemeData(colorScheme: scheme, useMaterial3: true);
 
     return base.copyWith(
-      scaffoldBackgroundColor: paper,
+      scaffoldBackgroundColor: Colors.transparent,
       textTheme: _textTheme(base.textTheme, ink, inkMuted),
       appBarTheme: AppBarTheme(
-        backgroundColor: paper,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         foregroundColor: ink,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         titleTextStyle: base.textTheme.titleMedium?.copyWith(
           color: ink,
@@ -94,7 +95,7 @@ abstract final class AppTheme {
       ),
       dividerTheme: DividerThemeData(color: line, thickness: 1, space: 1),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: card,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         indicatorColor: tint.withValues(alpha: 0.14),
         elevation: 0,
@@ -104,7 +105,7 @@ abstract final class AppTheme {
         ),
       ),
       navigationRailTheme: NavigationRailThemeData(
-        backgroundColor: card,
+        backgroundColor: Colors.transparent,
         indicatorColor: tint.withValues(alpha: 0.14),
         selectedLabelTextStyle: base.textTheme.labelSmall?.copyWith(
           color: tint,

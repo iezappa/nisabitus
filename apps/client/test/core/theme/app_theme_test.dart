@@ -28,13 +28,23 @@ void main() {
     'dark': [for (final a in AccentColor.values) AppTheme.dark(a)],
   };
 
+  test('screens let the accent backdrop show through', () {
+    for (final accent in AccentColor.values) {
+      expect(
+        AppTheme.light(accent).scaffoldBackgroundColor,
+        Colors.transparent,
+      );
+      expect(AppTheme.dark(accent).scaffoldBackgroundColor, Colors.transparent);
+    }
+  });
+
   group('body text stays readable', () {
     test('on the page background, in both schemes', () {
       schemes.forEach((name, themes) {
         for (final theme in themes) {
           final ratio = _contrast(
             theme.colorScheme.onSurface,
-            theme.scaffoldBackgroundColor,
+            theme.colorScheme.surface,
           );
           expect(
             ratio,
@@ -126,7 +136,7 @@ void main() {
         final theme = AppTheme.dark(accent);
         expect(
           theme.cardTheme.color,
-          isNot(theme.scaffoldBackgroundColor),
+          isNot(theme.colorScheme.surface),
           reason: 'a card that matches the page has no edge',
         );
       }
@@ -135,7 +145,7 @@ void main() {
     test('the ground is off black, not pure black', () {
       // Pure black under warm paper reads as a different product; the dark
       // scheme is meant to be the same paper at night.
-      final ground = AppTheme.dark(AccentColor.forest).scaffoldBackgroundColor;
+      final ground = AppTheme.dark(AccentColor.forest).colorScheme.surface;
 
       expect(ground, isNot(const Color(0xFF000000)));
       expect(_luminance(ground), lessThan(0.02));
@@ -148,7 +158,7 @@ void main() {
         AppTheme.dark(AccentColor.forest),
         AppTheme.light(AccentColor.forest),
       ]) {
-        final ground = theme.scaffoldBackgroundColor;
+        final ground = theme.colorScheme.surface;
         final channels = [ground.r, ground.g, ground.b];
         final spread = channels.reduce(math.max) - channels.reduce(math.min);
 
