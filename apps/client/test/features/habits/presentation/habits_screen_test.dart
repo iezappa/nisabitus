@@ -318,16 +318,17 @@ void main() {
     testWidgets('leaves the habit tickable on a paused day', (tester) async {
       // Being away is not a reason to refuse to record something the user
       // did anyway.
-      await container
-          .read(habitActionsProvider)
+      final habit = await container
+          .read(habitRepositoryProvider)
           .create(
             const HabitDraft(name: 'Meditar', frequency: HabitFrequency.daily),
           );
+      container.read(habitsRevisionProvider.notifier).state++;
       await away();
       await pumpScreen(tester);
 
       expect(find.text('Meditar'), findsOneWidget);
-      await tester.tap(find.byTooltip('Hecho'));
+      await container.read(habitActionsProvider).toggle(habit.id);
       await tester.pumpAndSettle();
 
       expect(find.byTooltip('Completado'), findsOneWidget);
