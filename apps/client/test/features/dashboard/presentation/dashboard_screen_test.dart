@@ -181,14 +181,14 @@ void main() {
     });
   });
 
-  group('reading measure', () {
-    testWidgets('keeps its content narrow on a wide window', (tester) async {
+  group('content measure', () {
+    testWidgets('lets its content use a wide window', (tester) async {
       await pumpScreen(tester, surface: const Size(1600, 1400));
 
       expect(tester.getSize(find.byType(CenteredContent)).width, 1600);
       expect(
         tester.getSize(find.byType(ListView)).width,
-        CenteredContent.readingMeasure,
+        CenteredContent.contentMeasure,
       );
     });
 

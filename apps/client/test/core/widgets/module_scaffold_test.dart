@@ -26,7 +26,7 @@ void main() {
         locale: const Locale('es'),
         home: ModuleScaffold(
           title: 'Módulo',
-          listMaxWidth: listMaxWidth ?? CenteredContent.readingMeasure,
+          listMaxWidth: listMaxWidth ?? CenteredContent.contentMeasure,
           list: const SizedBox.expand(key: ValueKey('list')),
           progress: const SizedBox.expand(key: ValueKey('progress')),
         ),
@@ -41,14 +41,14 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  group('reading measure', () {
-    testWidgets('keeps the doing side narrow on a wide window', (tester) async {
+  group('content measure', () {
+    testWidgets('lets the doing side use a wide window', (tester) async {
       await pump(tester, surface: const Size(1600, 1200));
 
       expect(tester.getSize(find.byType(CenteredContent)).width, 1600);
       expect(
         tester.getSize(find.byKey(const ValueKey('list'))).width,
-        CenteredContent.readingMeasure,
+        CenteredContent.contentMeasure,
       );
     });
 

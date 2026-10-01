@@ -15,12 +15,21 @@ class NavRail extends StatelessWidget {
     required this.destinations,
     required this.selectedIndex,
     required this.onSelected,
+    this.footer,
+    this.footerSelected = false,
+    this.onFooterSelected,
     super.key,
   });
 
   final List<NavDestination> destinations;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
+
+  /// Pinned after the app sections: settings is always reachable but is not one
+  /// of the hideable tabs.
+  final NavDestination? footer;
+  final bool footerSelected;
+  final VoidCallback? onFooterSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +55,20 @@ class NavRail extends StatelessWidget {
                     selected: index == selectedIndex,
                     onTap: () => onSelected(index),
                   ),
+                if (footer case final settings?) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Gap.md,
+                      vertical: Gap.xs,
+                    ),
+                    child: Divider(height: 1, color: scheme.outlineVariant),
+                  ),
+                  _RailButton(
+                    destination: settings,
+                    selected: footerSelected,
+                    onTap: onFooterSelected ?? () {},
+                  ),
+                ],
               ],
             ),
           ),

@@ -36,6 +36,32 @@ void main() {
     expect(find.byIcon(Icons.checklist_outlined), findsOneWidget);
   });
 
+  testWidgets('pins an optional settings footer after a divider', (
+    tester,
+  ) async {
+    var opened = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(AccentColor.forest),
+        home: Scaffold(
+          body: NavRail(
+            destinations: destinations,
+            selectedIndex: 0,
+            onSelected: (_) {},
+            footer: (Icons.settings_outlined, Icons.settings, 'Settings'),
+            onFooterSelected: () => opened = true,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(Divider), findsOneWidget);
+    await tester.tap(find.byTooltip('Settings'));
+
+    expect(opened, isTrue);
+  });
+
   testWidgets('selects destinations by index', (tester) async {
     final selected = <int>[];
 

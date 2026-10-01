@@ -9,13 +9,17 @@ import 'package:flutter/material.dart';
 class CenteredContent extends StatelessWidget {
   const CenteredContent({
     required this.child,
-    this.maxWidth = readingMeasure,
+    this.maxWidth = contentMeasure,
     super.key,
   });
 
-  /// How wide a column of text or cards may grow before it stops being
-  /// comfortable to read.
-  static const readingMeasure = 640.0;
+  /// Widest the app interior ever gets. It fills a laptop-width shell and only
+  /// leaves margins on very wide monitors.
+  static const contentMeasure = 1600.0;
+
+  /// How wide prose or review columns may grow before the eye starts losing the
+  /// line it was reading.
+  static const readingMeasure = 720.0;
 
   final Widget child;
   final double maxWidth;

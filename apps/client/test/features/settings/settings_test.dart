@@ -331,8 +331,8 @@ void main() {
       expect(width, 1600, reason: 'the wrapper spans the window');
       expect(
         inner.width,
-        lessThanOrEqualTo(640),
-        reason: 'the content itself stays narrow',
+        CenteredContent.contentMeasure,
+        reason: 'settings uses the wide app interior',
       );
     });
 

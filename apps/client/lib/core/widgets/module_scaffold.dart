@@ -21,7 +21,7 @@ class ModuleScaffold extends StatefulWidget {
     this.listOnly,
     this.floatingActionButton,
     this.healthDisclaimer = false,
-    this.listMaxWidth = CenteredContent.readingMeasure,
+    this.listMaxWidth = CenteredContent.contentMeasure,
     super.key,
   });
 
@@ -50,10 +50,9 @@ class ModuleScaffold extends StatefulWidget {
 
   /// How wide the doing side may grow.
   ///
-  /// The reading measure by default, like everywhere else. A module whose
-  /// layout is panes rather than a column of cards — To-Do's project tree
-  /// beside its board — passes [double.infinity] and keeps the window.
-  /// Reviewing is always a column of figures, so it is capped regardless.
+  /// The app interior by default, like Memini: lists and dashboards should use
+  /// the monitor instead of forming a narrow ribbon. Reviewing is prose and
+  /// figures, so it is capped regardless.
   final double listMaxWidth;
 
   @override

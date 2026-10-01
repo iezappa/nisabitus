@@ -73,6 +73,11 @@ void main() {
             );
             expect(labels.length, greaterThanOrEqualTo(AppTab.values.length));
             for (final label in labels) {
+              final text = label.text.toPlainText();
+              // Settings is icon-only once the bar has too many destinations;
+              // its hidden label can still be laid out internally.
+              if (text == 'Settings') continue;
+
               // One line of this text, unconstrained, is the yardstick: a
               // paragraph any taller than that has broken onto a second line.
               final oneLine = TextPainter(
@@ -84,7 +89,7 @@ void main() {
               expect(
                 label.size.height,
                 lessThan(oneLine.height * 1.5),
-                reason: '"${label.text.toPlainText()}" wrapped',
+                reason: '"$text" wrapped',
               );
             }
           },
