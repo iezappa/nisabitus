@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.1.1",
+      "date": "2026-10-01",
+      "highlights": [
+        "Optional server account mode can connect to a self-hosted Nisabitus server while local mode remains the default.",
+        "Admins can create family accounts on their own server; each account keeps its backup separate.",
+        "Web backup import repairs older local stores that were missing current columns or UUID-compatible IDs."
+      ]
+    },
+    {
       "version": "1.1.0",
       "date": "2026-09-01",
       "highlights": [

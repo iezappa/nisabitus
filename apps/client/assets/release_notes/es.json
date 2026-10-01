@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.1.1",
+      "date": "2026-10-01",
+      "highlights": [
+        "El modo cuenta de servidor opcional puede conectarse a un servidor Nisabitus propio, sin dejar de usar el modo local por defecto.",
+        "Los administradores pueden crear cuentas familiares en su servidor; cada cuenta mantiene su backup separado.",
+        "La importación web repara bases locales viejas que no tenían columnas actuales o IDs compatibles con UUID."
+      ]
+    },
+    {
       "version": "1.1.0",
       "date": "2026-09-01",
       "highlights": [
