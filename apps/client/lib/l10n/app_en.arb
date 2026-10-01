@@ -889,5 +889,46 @@
   "autoBackupNeedsPermission": "The browser is asking for permission to write to that folder again.",
   "autoBackupFailed": "The copy could not be written.",
   "autoBackupUnsupported": "This browser cannot write to a folder. Use the desktop app, or export by hand whenever you like.",
-  "autoBackupWhileOpen": "Only while the app is open: nothing runs behind it when it is closed."
+  "autoBackupWhileOpen": "Only while the app is open: nothing runs behind it when it is closed.",
+  "serverAccountTitle": "Server account",
+  "serverAccountHint": "Optional: connect to your own Nisabitus server for account backup. Local mode stays available without login.",
+  "serverUrl": "Server URL",
+  "serverUsername": "Username",
+  "serverPassword": "Password",
+  "serverConnect": "Connect",
+  "serverReconnect": "Reconnect",
+  "serverDisconnect": "Disconnect",
+  "serverConnected": "Connected to server.",
+  "serverDisconnected": "Disconnected from server. Local data stays on this device.",
+  "serverConnectedAs": "Connected as {username} on {server}",
+  "@serverConnectedAs": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      },
+      "server": {
+        "type": "String"
+      }
+    }
+  },
+  "serverManualSyncHint": "Manual server backup. Upload copies this device to the account; Download replaces this device with the account backup.",
+  "serverUpload": "Upload to account",
+  "serverDownload": "Download from account",
+  "serverUploaded": "{count, plural, =1{Uploaded 1 record to the account} other{Uploaded {count} records to the account}}",
+  "@serverUploaded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "serverDownloaded": "{count, plural, =1{Downloaded 1 record from the account} other{Downloaded {count} records from the account}}",
+  "@serverDownloaded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "serverDownloadConfirmBody": "The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure."
 }

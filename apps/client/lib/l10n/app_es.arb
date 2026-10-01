@@ -1195,5 +1195,46 @@
   "autoBackupNeedsPermission": "El navegador pide permiso otra vez para escribir en esa carpeta.",
   "autoBackupFailed": "No se pudo guardar la copia.",
   "autoBackupUnsupported": "Este navegador no permite escribir en una carpeta. Usá la app de escritorio, o exportá a mano cuando quieras.",
-  "autoBackupWhileOpen": "Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada."
+  "autoBackupWhileOpen": "Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.",
+  "serverAccountTitle": "Cuenta en servidor",
+  "serverAccountHint": "Opcional: conectá tu propio servidor Nisabitus para backup con cuenta. El modo local sigue disponible sin login.",
+  "serverUrl": "URL del servidor",
+  "serverUsername": "Usuario",
+  "serverPassword": "Contraseña",
+  "serverConnect": "Conectar",
+  "serverReconnect": "Reconectar",
+  "serverDisconnect": "Desconectar",
+  "serverConnected": "Conectado al servidor.",
+  "serverDisconnected": "Desconectado del servidor. Los datos locales quedan en este dispositivo.",
+  "serverConnectedAs": "Conectado como {username} en {server}",
+  "@serverConnectedAs": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      },
+      "server": {
+        "type": "String"
+      }
+    }
+  },
+  "serverManualSyncHint": "Backup manual del servidor. Subir copia este dispositivo a la cuenta; Descargar reemplaza este dispositivo con el backup de la cuenta.",
+  "serverUpload": "Subir a la cuenta",
+  "serverDownload": "Descargar de la cuenta",
+  "serverUploaded": "{count, plural, =1{Se subió 1 registro a la cuenta} other{Se subieron {count} registros a la cuenta}}",
+  "@serverUploaded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "serverDownloaded": "{count, plural, =1{Se descargó 1 registro de la cuenta} other{Se descargaron {count} registros de la cuenta}}",
+  "@serverDownloaded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "serverDownloadConfirmBody": "Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro."
 }

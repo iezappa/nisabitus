@@ -2230,4 +2230,77 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get autoBackupWhileOpen =>
       'Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.';
+
+  @override
+  String get serverAccountTitle => 'Cuenta en servidor';
+
+  @override
+  String get serverAccountHint =>
+      'Opcional: conectá tu propio servidor Nisabitus para backup con cuenta. El modo local sigue disponible sin login.';
+
+  @override
+  String get serverUrl => 'URL del servidor';
+
+  @override
+  String get serverUsername => 'Usuario';
+
+  @override
+  String get serverPassword => 'Contraseña';
+
+  @override
+  String get serverConnect => 'Conectar';
+
+  @override
+  String get serverReconnect => 'Reconectar';
+
+  @override
+  String get serverDisconnect => 'Desconectar';
+
+  @override
+  String get serverConnected => 'Conectado al servidor.';
+
+  @override
+  String get serverDisconnected =>
+      'Desconectado del servidor. Los datos locales quedan en este dispositivo.';
+
+  @override
+  String serverConnectedAs(String username, String server) {
+    return 'Conectado como $username en $server';
+  }
+
+  @override
+  String get serverManualSyncHint =>
+      'Backup manual del servidor. Subir copia este dispositivo a la cuenta; Descargar reemplaza este dispositivo con el backup de la cuenta.';
+
+  @override
+  String get serverUpload => 'Subir a la cuenta';
+
+  @override
+  String get serverDownload => 'Descargar de la cuenta';
+
+  @override
+  String serverUploaded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Se subieron $count registros a la cuenta',
+      one: 'Se subió 1 registro a la cuenta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String serverDownloaded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Se descargaron $count registros de la cuenta',
+      one: 'Se descargó 1 registro de la cuenta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get serverDownloadConfirmBody =>
+      'Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.';
 }

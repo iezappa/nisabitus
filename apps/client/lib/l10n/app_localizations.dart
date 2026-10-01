@@ -4069,6 +4069,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.'**
   String get autoBackupWhileOpen;
+
+  /// No description provided for @serverAccountTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuenta en servidor'**
+  String get serverAccountTitle;
+
+  /// No description provided for @serverAccountHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Opcional: conectá tu propio servidor Nisabitus para backup con cuenta. El modo local sigue disponible sin login.'**
+  String get serverAccountHint;
+
+  /// No description provided for @serverUrl.
+  ///
+  /// In es, this message translates to:
+  /// **'URL del servidor'**
+  String get serverUrl;
+
+  /// No description provided for @serverUsername.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuario'**
+  String get serverUsername;
+
+  /// No description provided for @serverPassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña'**
+  String get serverPassword;
+
+  /// No description provided for @serverConnect.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectar'**
+  String get serverConnect;
+
+  /// No description provided for @serverReconnect.
+  ///
+  /// In es, this message translates to:
+  /// **'Reconectar'**
+  String get serverReconnect;
+
+  /// No description provided for @serverDisconnect.
+  ///
+  /// In es, this message translates to:
+  /// **'Desconectar'**
+  String get serverDisconnect;
+
+  /// No description provided for @serverConnected.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectado al servidor.'**
+  String get serverConnected;
+
+  /// No description provided for @serverDisconnected.
+  ///
+  /// In es, this message translates to:
+  /// **'Desconectado del servidor. Los datos locales quedan en este dispositivo.'**
+  String get serverDisconnected;
+
+  /// No description provided for @serverConnectedAs.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectado como {username} en {server}'**
+  String serverConnectedAs(String username, String server);
+
+  /// No description provided for @serverManualSyncHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Backup manual del servidor. Subir copia este dispositivo a la cuenta; Descargar reemplaza este dispositivo con el backup de la cuenta.'**
+  String get serverManualSyncHint;
+
+  /// No description provided for @serverUpload.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir a la cuenta'**
+  String get serverUpload;
+
+  /// No description provided for @serverDownload.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar de la cuenta'**
+  String get serverDownload;
+
+  /// No description provided for @serverUploaded.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Se subió 1 registro a la cuenta} other{Se subieron {count} registros a la cuenta}}'**
+  String serverUploaded(int count);
+
+  /// No description provided for @serverDownloaded.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =1{Se descargó 1 registro de la cuenta} other{Se descargaron {count} registros de la cuenta}}'**
+  String serverDownloaded(int count);
+
+  /// No description provided for @serverDownloadConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.'**
+  String get serverDownloadConfirmBody;
 }
 
 class _AppLocalizationsDelegate

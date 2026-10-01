@@ -9,6 +9,7 @@ import '../../backup/presentation/widgets/backup_card.dart';
 import '../../backup/presentation/widgets/erase_all_data_tile.dart';
 import '../../legal/presentation/about_links.dart';
 import '../../release_notes/presentation/widgets/release_notes_tile.dart';
+import '../../server_account/presentation/widgets/server_account_card.dart';
 import '../../shared/support_actions.dart';
 import '../../vacation/presentation/widgets/vacation_card.dart';
 import '../domain/accent_color.dart';
@@ -165,6 +166,8 @@ class _DataSection extends StatelessWidget {
     // export that should come before it.
     children: const [
       BackupCard(),
+      SizedBox(height: Gap.lg),
+      ServerAccountCard(),
       SizedBox(height: Gap.md),
       EraseAllDataTile(),
     ],

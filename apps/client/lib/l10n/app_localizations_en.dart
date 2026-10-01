@@ -2226,4 +2226,77 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get autoBackupWhileOpen =>
       'Only while the app is open: nothing runs behind it when it is closed.';
+
+  @override
+  String get serverAccountTitle => 'Server account';
+
+  @override
+  String get serverAccountHint =>
+      'Optional: connect to your own Nisabitus server for account backup. Local mode stays available without login.';
+
+  @override
+  String get serverUrl => 'Server URL';
+
+  @override
+  String get serverUsername => 'Username';
+
+  @override
+  String get serverPassword => 'Password';
+
+  @override
+  String get serverConnect => 'Connect';
+
+  @override
+  String get serverReconnect => 'Reconnect';
+
+  @override
+  String get serverDisconnect => 'Disconnect';
+
+  @override
+  String get serverConnected => 'Connected to server.';
+
+  @override
+  String get serverDisconnected =>
+      'Disconnected from server. Local data stays on this device.';
+
+  @override
+  String serverConnectedAs(String username, String server) {
+    return 'Connected as $username on $server';
+  }
+
+  @override
+  String get serverManualSyncHint =>
+      'Manual server backup. Upload copies this device to the account; Download replaces this device with the account backup.';
+
+  @override
+  String get serverUpload => 'Upload to account';
+
+  @override
+  String get serverDownload => 'Download from account';
+
+  @override
+  String serverUploaded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Uploaded $count records to the account',
+      one: 'Uploaded 1 record to the account',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String serverDownloaded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Downloaded $count records from the account',
+      one: 'Downloaded 1 record from the account',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get serverDownloadConfirmBody =>
+      'The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure.';
 }
