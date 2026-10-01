@@ -1,7 +1,7 @@
 {
   "releases": [
     {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "date": "2026-10-01",
       "highlights": [
         "El modo cuenta de servidor opcional puede conectarse a un servidor Nisabitus propio, sin dejar de usar el modo local por defecto.",
