@@ -200,6 +200,37 @@ class AppDatabase extends _$AppDatabase {
     ),
   );
 
+  /// Adds a SQL column when the table exists but the column does not.
+  ///
+  /// Used outside Drift's versioned migration path for stores that already claim
+  /// the current `user_version` but were opened by a broken web upgrade with a
+  /// table still missing a record column. A restore writes rows through today's
+  /// generated code, so letting that shape mismatch reach SQLite produces the
+  /// raw `table has no column named updated_at` error the user can do nothing
+  /// with.
+  Future<void> _addSqlColumnIfMissing(
+    String table,
+    String column,
+    String definition,
+  ) async {
+    if (!await _hasTable(table)) return;
+    if (await _hasColumn(table, column)) return;
+    await customStatement('ALTER TABLE "$table" ADD COLUMN $definition');
+  }
+
+  Future<void> _repairMissingRecordColumns() async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    for (final table in allTables) {
+      if (table.columnsByName.containsKey('updated_at')) {
+        await _addSqlColumnIfMissing(
+          table.actualTableName,
+          'updated_at',
+          '"updated_at" INTEGER NOT NULL DEFAULT $now',
+        );
+      }
+    }
+  }
+
   /// [Migrator.addColumn], skipped when the column is already there.
   ///
   /// A migration that is interrupted leaves the store partly upgraded and
@@ -806,6 +837,7 @@ class AppDatabase extends _$AppDatabase {
       });
     },
     beforeOpen: (details) async {
+      await _repairMissingRecordColumns();
       // SQLite disables foreign keys per connection by default, which would
       // make every ON DELETE CASCADE above silently do nothing.
       await customStatement('PRAGMA foreign_keys = ON');

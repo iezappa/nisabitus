@@ -6,6 +6,7 @@ import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_health.dart';
+import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 import 'generated/schema.dart';
 
@@ -40,6 +41,36 @@ void main() {
     await first.close();
   }
 
+  Future<void> leaveCurrentStoreMissingUpdatedAt() async {
+    final raw = sqlite.sqlite3.open(file.path);
+    raw
+      ..execute('''
+        CREATE TABLE habits (
+          id TEXT NOT NULL PRIMARY KEY,
+          name TEXT NOT NULL,
+          description TEXT NULL,
+          category TEXT NULL,
+          frequency TEXT NOT NULL,
+          target_count INTEGER NOT NULL DEFAULT 1,
+          end_date INTEGER NULL,
+          repeat_forever INTEGER NOT NULL DEFAULT 0,
+          repeat_days TEXT NOT NULL DEFAULT '',
+          type TEXT NULL,
+          status TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          scheduled_date INTEGER NOT NULL
+        )
+      ''')
+      ..execute(
+        'INSERT INTO habits '
+        '(id, name, frequency, status, created_at, scheduled_date) '
+        'VALUES (?, ?, ?, ?, ?, ?)',
+        ['habit-1', 'Meditar', 'DAILY', 'PENDING', 0, 0],
+      )
+      ..execute('PRAGMA user_version = ${AppDatabase.currentSchemaVersion}');
+    raw.close();
+  }
+
   group('a half-created store', () {
     test('opens, instead of failing to create what already exists', () async {
       await leaveHalfCreated();
@@ -57,6 +88,30 @@ void main() {
       addTearDown(db.close);
 
       expect(await db.select(db.habits).get(), hasLength(1));
+    });
+  });
+
+  group('a current-version store missing updatedAt', () {
+    test('repairs the column before generated writes reach SQLite', () async {
+      await leaveCurrentStoreMissingUpdatedAt();
+
+      final db = AppDatabase.forTesting(NativeDatabase(file));
+      addTearDown(db.close);
+
+      expect(await probeDatabase(db), isA<DatabaseHealthy>());
+      await db
+          .into(db.habits)
+          .insert(
+            HabitsCompanion.insert(
+              name: 'Leer',
+              frequency: 'DAILY',
+              status: 'PENDING',
+              createdAt: DateTime(2026, 3, 12),
+              scheduledDate: DateTime(2026, 3, 12),
+            ),
+          );
+
+      expect(await db.select(db.habits).get(), hasLength(2));
     });
   });
 
