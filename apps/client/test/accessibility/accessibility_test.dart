@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/core/database/database_provider.dart';
 import 'package:nisabitus/core/preferences/preferences.dart';
+import 'package:nisabitus/core/theme/accent_backdrop.dart';
 import 'package:nisabitus/core/theme/app_theme.dart';
 import 'package:nisabitus/core/time/selected_day_provider.dart';
 import 'package:nisabitus/features/dashboard/presentation/dashboard_screen.dart';
@@ -77,7 +78,7 @@ void main() {
               theme: brightness == Brightness.dark
                   ? AppTheme.dark(AccentColor.forest)
                   : AppTheme.light(AccentColor.forest),
-              home: screen,
+              home: AccentBackdrop(child: screen),
             ),
           ),
         );

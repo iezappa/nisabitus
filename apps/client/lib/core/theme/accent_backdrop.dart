@@ -19,24 +19,27 @@ class AccentBackdrop extends StatelessWidget {
       dark: theme.brightness == Brightness.dark,
     );
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: const [0, 0.75],
-          colors: [tint, page],
-        ),
-      ),
+    return Material(
+      color: page,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: const Alignment(1.1, 1.0),
-            radius: 1.2,
-            colors: [tint.withValues(alpha: 0.85), tint.withValues(alpha: 0)],
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: const [0, 0.75],
+            colors: [tint, page],
           ),
         ),
-        child: child,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: const Alignment(1.1, 1.0),
+              radius: 1.2,
+              colors: [tint.withValues(alpha: 0.85), tint.withValues(alpha: 0)],
+            ),
+          ),
+          child: child,
+        ),
       ),
     );
   }
