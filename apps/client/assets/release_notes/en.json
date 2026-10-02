@@ -1,6 +1,13 @@
 {
   "releases": [
     {
+      "version": "1.1.5",
+      "date": "2026-10-02",
+      "highlights": [
+        "The ZimaOS web container now allows connecting to a Nisabitus Server running on another HTTP(S) port."
+      ]
+    },
+    {
       "version": "1.1.4",
       "date": "2026-10-02",
       "highlights": [
