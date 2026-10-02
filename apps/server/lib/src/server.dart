@@ -26,6 +26,7 @@ class NisabitusServer {
 
     final api = const Pipeline()
         .addMiddleware(logRequests())
+        .addMiddleware(_cors())
         .addMiddleware(_jsonErrors())
         .addHandler(router.call);
     final static = publicDir == null
@@ -166,6 +167,30 @@ class NisabitusServer {
     body: jsonEncode(body),
     headers: {'content-type': 'application/json; charset=utf-8'},
   );
+}
+
+Middleware _cors() => (inner) {
+  return (request) async {
+    if (request.method == 'OPTIONS') {
+      return Response.ok('', headers: _corsHeaders(request));
+    }
+
+    final response = await inner(request);
+    return response.change(headers: _corsHeaders(request));
+  };
+};
+
+Map<String, String> _corsHeaders(Request request) {
+  final origin = request.headers['origin'];
+  return {
+    'access-control-allow-origin': origin == null || origin.isEmpty
+        ? '*'
+        : origin,
+    'access-control-allow-methods': 'GET, POST, OPTIONS',
+    'access-control-allow-headers': 'authorization, content-type',
+    'access-control-max-age': '86400',
+    'vary': 'Origin',
+  };
 }
 
 Middleware _jsonErrors() => (inner) {

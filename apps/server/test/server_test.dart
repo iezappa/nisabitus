@@ -127,6 +127,47 @@ void main() {
     );
   });
 
+  test('answers API preflight requests with CORS headers', () async {
+    final response = await handler(
+      Request(
+        'OPTIONS',
+        Uri.parse('http://localhost/api/auth/login'),
+        headers: {
+          'origin': 'http://100.66.250.24:8081',
+          'access-control-request-method': 'POST',
+          'access-control-request-headers': 'content-type',
+        },
+      ),
+    );
+
+    expect(response.statusCode, 200);
+    expect(
+      response.headers['access-control-allow-origin'],
+      'http://100.66.250.24:8081',
+    );
+    expect(response.headers['access-control-allow-methods'], contains('POST'));
+    expect(
+      response.headers['access-control-allow-headers'],
+      contains('content-type'),
+    );
+  });
+
+  test('adds CORS headers to API responses', () async {
+    final response = await handler(
+      Request(
+        'GET',
+        Uri.parse('http://localhost/healthz'),
+        headers: {'origin': 'http://100.66.250.24:8081'},
+      ),
+    );
+
+    expect(response.statusCode, 200);
+    expect(
+      response.headers['access-control-allow-origin'],
+      'http://100.66.250.24:8081',
+    );
+  });
+
   test('rejects backup export without a token', () async {
     final response = await handler(
       Request('GET', Uri.parse('http://localhost/api/backup/export')),
