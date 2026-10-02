@@ -188,8 +188,9 @@ Map<String, String> _corsHeaders(Request request) {
         : origin,
     'access-control-allow-methods': 'GET, POST, OPTIONS',
     'access-control-allow-headers': 'authorization, content-type',
+    'access-control-allow-private-network': 'true',
     'access-control-max-age': '86400',
-    'vary': 'Origin',
+    'vary': 'Origin, Access-Control-Request-Private-Network',
   };
 }
 

@@ -136,6 +136,7 @@ void main() {
           'origin': 'http://100.66.250.24:8081',
           'access-control-request-method': 'POST',
           'access-control-request-headers': 'content-type',
+          'access-control-request-private-network': 'true',
         },
       ),
     );
@@ -150,6 +151,7 @@ void main() {
       response.headers['access-control-allow-headers'],
       contains('content-type'),
     );
+    expect(response.headers['access-control-allow-private-network'], 'true');
   });
 
   test('adds CORS headers to API responses', () async {
