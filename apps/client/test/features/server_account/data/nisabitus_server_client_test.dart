@@ -63,6 +63,33 @@ void main() {
     expect(user.isAdmin, isFalse);
   });
 
+  test('surfaces server validation errors when creating a user', () async {
+    final client = NisabitusServerClient(
+      baseUrl: 'http://server.local:5051',
+      client: MockClient((request) async {
+        return http.Response(
+          jsonEncode({'error': 'password must be at least 8 characters'}),
+          400,
+        );
+      }),
+    );
+
+    await expectLater(
+      client.createUser(
+        token: 'admin-token',
+        username: 'maria',
+        password: 'short',
+      ),
+      throwsA(
+        isA<ServerAccountException>().having(
+          (error) => error.message,
+          'message',
+          'password must be at least 8 characters',
+        ),
+      ),
+    );
+  });
+
   test('adds http when the server URL has no scheme', () async {
     final client = NisabitusServerClient(
       baseUrl: 'zima.local:5051',

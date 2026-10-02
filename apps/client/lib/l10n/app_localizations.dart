@@ -4207,6 +4207,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona.'**
   String get serverUserCreated;
+
+  /// No description provided for @serverUsernameRequired.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingresá un usuario.'**
+  String get serverUsernameRequired;
+
+  /// No description provided for @serverPasswordTooShort.
+  ///
+  /// In es, this message translates to:
+  /// **'Usá al menos 8 caracteres para la contraseña.'**
+  String get serverPasswordTooShort;
 }
 
 class _AppLocalizationsDelegate

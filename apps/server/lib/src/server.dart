@@ -85,10 +85,20 @@ class NisabitusServer {
         'error': 'username and password are required',
       }, status: HttpStatus.badRequest);
     }
+    if (username.trim().isEmpty) {
+      return _json({
+        'error': 'username is required',
+      }, status: HttpStatus.badRequest);
+    }
+    if (password.length < 8) {
+      return _json({
+        'error': 'password must be at least 8 characters',
+      }, status: HttpStatus.badRequest);
+    }
 
     try {
       final created = database.createUser(
-        username: username,
+        username: username.trim(),
         password: password,
       );
       return _json(_userJson(created), status: HttpStatus.created);

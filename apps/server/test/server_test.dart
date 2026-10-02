@@ -170,6 +170,24 @@ void main() {
     );
   });
 
+  test('rejects invalid family user payloads with readable errors', () async {
+    final adminToken = await login(handler);
+
+    final response = await handler(
+      Request(
+        'POST',
+        Uri.parse('http://localhost/api/admin/users'),
+        headers: {'content-type': 'application/json', ...auth(adminToken)},
+        body: jsonEncode({'username': 'maria', 'password': 'short'}),
+      ),
+    );
+    final body =
+        jsonDecode(await response.readAsString()) as Map<String, Object?>;
+
+    expect(response.statusCode, 400);
+    expect(body['error'], 'password must be at least 8 characters');
+  });
+
   test('rejects backup export without a token', () async {
     final response = await handler(
       Request('GET', Uri.parse('http://localhost/api/backup/export')),

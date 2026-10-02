@@ -82,12 +82,21 @@ class _ServerAccountCardState extends ConsumerState<ServerAccountCard> {
   });
 
   Future<void> _createUser() => _run(() async {
+    final l10n = AppLocalizations.of(context);
+    final username = _newUsernameController.text.trim();
+    final password = _newPasswordController.text;
+    if (username.isEmpty) {
+      setState(() => _message = l10n.serverUsernameRequired);
+      return;
+    }
+    if (password.length < 8) {
+      setState(() => _message = l10n.serverPasswordTooShort);
+      return;
+    }
+
     await ref
         .read(serverAccountActionsProvider)
-        .createUser(
-          username: _newUsernameController.text,
-          password: _newPasswordController.text,
-        );
+        .createUser(username: username, password: password);
     _newUsernameController.clear();
     _newPasswordController.clear();
     if (mounted) {

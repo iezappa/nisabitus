@@ -2319,4 +2319,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get serverUserCreated =>
       'Account created. Share the server URL, username, and password with that person.';
+
+  @override
+  String get serverUsernameRequired => 'Enter a username.';
+
+  @override
+  String get serverPasswordTooShort =>
+      'Use at least 8 characters for the password.';
 }

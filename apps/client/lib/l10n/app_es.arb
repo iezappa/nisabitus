@@ -1242,5 +1242,7 @@
   "serverNewUsername": "Nuevo usuario",
   "serverNewPassword": "Nueva contraseña",
   "serverCreateUser": "Crear cuenta",
-  "serverUserCreated": "Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona."
+  "serverUserCreated": "Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona.",
+  "serverUsernameRequired": "Ingresá un usuario.",
+  "serverPasswordTooShort": "Usá al menos 8 caracteres para la contraseña."
 }

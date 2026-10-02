@@ -1,6 +1,13 @@
 {
   "releases": [
     {
+      "version": "1.1.6",
+      "date": "2026-10-02",
+      "highlights": [
+        "Family account creation now validates username and password before sending, and shows the server validation message when a request is rejected."
+      ]
+    },
+    {
       "version": "1.1.5",
       "date": "2026-10-02",
       "highlights": [

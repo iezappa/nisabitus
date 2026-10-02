@@ -125,7 +125,7 @@ class NisabitusServerClient {
         .timeout(const Duration(seconds: 8));
     if (response.statusCode != 201) {
       throw ServerAccountException(
-        'Create user failed (${response.statusCode})',
+        _errorMessage(response, fallback: 'Create user failed'),
       );
     }
     return ServerUser.fromJson(jsonDecode(response.body));
@@ -173,6 +173,18 @@ class NisabitusServerClient {
       throw const ServerAccountException('Upload response is not valid');
     }
     return ServerImportResult(rowCount: decoded['rowCount'] as int);
+  }
+
+  String _errorMessage(http.Response response, {required String fallback}) {
+    try {
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic> && decoded['error'] is String) {
+        return decoded['error'] as String;
+      }
+    } on Object {
+      // Keep the status-code fallback when the server did not return JSON.
+    }
+    return '$fallback (${response.statusCode})';
   }
 
   Map<String, String> _authHeaders(String token) => {
