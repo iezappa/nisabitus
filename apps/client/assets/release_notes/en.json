@@ -1,6 +1,14 @@
 {
   "releases": [
     {
+      "version": "1.1.7",
+      "date": "2026-10-07",
+      "highlights": [
+        "Study adds local-first Markdown and text notes with app-managed folders, search, editing, deleting, backup support, and optional read-aloud playback.",
+        "Study notes are included in manual exports and server backup uploads, so they can be restored on another device."
+      ]
+    },
+    {
       "version": "1.1.6",
       "date": "2026-10-02",
       "highlights": [

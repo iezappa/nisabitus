@@ -1,6 +1,14 @@
 {
   "releases": [
     {
+      "version": "1.1.7",
+      "date": "2026-10-07",
+      "highlights": [
+        "Estudio suma notas locales Markdown y texto con carpetas administradas por la app, búsqueda, edición, borrado, backup y lectura en voz alta opcional.",
+        "Las notas de Estudio se incluyen en exportaciones manuales y subidas de backup al servidor, para restaurarlas en otro dispositivo."
+      ]
+    },
+    {
       "version": "1.1.6",
       "date": "2026-10-02",
       "highlights": [
