@@ -12908,6 +12908,512 @@ class AudioTracksCompanion extends UpdateCompanion<AudioTrackRow> {
   }
 }
 
+class $CheatsheetNotesTable extends CheatsheetNotes
+    with TableInfo<$CheatsheetNotesTable, CheatsheetNoteRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CheatsheetNotesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: newUuid,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _folderMeta = const VerificationMeta('folder');
+  @override
+  late final GeneratedColumn<String> folder = GeneratedColumn<String>(
+    'folder',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('Imported'),
+  );
+  static const VerificationMeta _sourceNameMeta = const VerificationMeta(
+    'sourceName',
+  );
+  @override
+  late final GeneratedColumn<String> sourceName = GeneratedColumn<String>(
+    'source_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _formatMeta = const VerificationMeta('format');
+  @override
+  late final GeneratedColumn<String> format = GeneratedColumn<String>(
+    'format',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _importedAtMeta = const VerificationMeta(
+    'importedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> importedAt = GeneratedColumn<DateTime>(
+    'imported_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    updatedAt,
+    title,
+    content,
+    folder,
+    sourceName,
+    format,
+    importedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cheatsheet_notes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CheatsheetNoteRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('folder')) {
+      context.handle(
+        _folderMeta,
+        folder.isAcceptableOrUnknown(data['folder']!, _folderMeta),
+      );
+    }
+    if (data.containsKey('source_name')) {
+      context.handle(
+        _sourceNameMeta,
+        sourceName.isAcceptableOrUnknown(data['source_name']!, _sourceNameMeta),
+      );
+    }
+    if (data.containsKey('format')) {
+      context.handle(
+        _formatMeta,
+        format.isAcceptableOrUnknown(data['format']!, _formatMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_formatMeta);
+    }
+    if (data.containsKey('imported_at')) {
+      context.handle(
+        _importedAtMeta,
+        importedAt.isAcceptableOrUnknown(data['imported_at']!, _importedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_importedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CheatsheetNoteRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CheatsheetNoteRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      folder: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}folder'],
+      )!,
+      sourceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_name'],
+      ),
+      format: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}format'],
+      )!,
+      importedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}imported_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CheatsheetNotesTable createAlias(String alias) {
+    return $CheatsheetNotesTable(attachedDatabase, alias);
+  }
+}
+
+class CheatsheetNoteRow extends DataClass
+    implements Insertable<CheatsheetNoteRow> {
+  final String id;
+  final DateTime updatedAt;
+  final String title;
+  final String content;
+  final String folder;
+  final String? sourceName;
+  final String format;
+  final DateTime importedAt;
+  const CheatsheetNoteRow({
+    required this.id,
+    required this.updatedAt,
+    required this.title,
+    required this.content,
+    required this.folder,
+    this.sourceName,
+    required this.format,
+    required this.importedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['title'] = Variable<String>(title);
+    map['content'] = Variable<String>(content);
+    map['folder'] = Variable<String>(folder);
+    if (!nullToAbsent || sourceName != null) {
+      map['source_name'] = Variable<String>(sourceName);
+    }
+    map['format'] = Variable<String>(format);
+    map['imported_at'] = Variable<DateTime>(importedAt);
+    return map;
+  }
+
+  CheatsheetNotesCompanion toCompanion(bool nullToAbsent) {
+    return CheatsheetNotesCompanion(
+      id: Value(id),
+      updatedAt: Value(updatedAt),
+      title: Value(title),
+      content: Value(content),
+      folder: Value(folder),
+      sourceName: sourceName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceName),
+      format: Value(format),
+      importedAt: Value(importedAt),
+    );
+  }
+
+  factory CheatsheetNoteRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CheatsheetNoteRow(
+      id: serializer.fromJson<String>(json['id']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      title: serializer.fromJson<String>(json['title']),
+      content: serializer.fromJson<String>(json['content']),
+      folder: serializer.fromJson<String>(json['folder']),
+      sourceName: serializer.fromJson<String?>(json['sourceName']),
+      format: serializer.fromJson<String>(json['format']),
+      importedAt: serializer.fromJson<DateTime>(json['importedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'title': serializer.toJson<String>(title),
+      'content': serializer.toJson<String>(content),
+      'folder': serializer.toJson<String>(folder),
+      'sourceName': serializer.toJson<String?>(sourceName),
+      'format': serializer.toJson<String>(format),
+      'importedAt': serializer.toJson<DateTime>(importedAt),
+    };
+  }
+
+  CheatsheetNoteRow copyWith({
+    String? id,
+    DateTime? updatedAt,
+    String? title,
+    String? content,
+    String? folder,
+    Value<String?> sourceName = const Value.absent(),
+    String? format,
+    DateTime? importedAt,
+  }) => CheatsheetNoteRow(
+    id: id ?? this.id,
+    updatedAt: updatedAt ?? this.updatedAt,
+    title: title ?? this.title,
+    content: content ?? this.content,
+    folder: folder ?? this.folder,
+    sourceName: sourceName.present ? sourceName.value : this.sourceName,
+    format: format ?? this.format,
+    importedAt: importedAt ?? this.importedAt,
+  );
+  CheatsheetNoteRow copyWithCompanion(CheatsheetNotesCompanion data) {
+    return CheatsheetNoteRow(
+      id: data.id.present ? data.id.value : this.id,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      title: data.title.present ? data.title.value : this.title,
+      content: data.content.present ? data.content.value : this.content,
+      folder: data.folder.present ? data.folder.value : this.folder,
+      sourceName: data.sourceName.present
+          ? data.sourceName.value
+          : this.sourceName,
+      format: data.format.present ? data.format.value : this.format,
+      importedAt: data.importedAt.present
+          ? data.importedAt.value
+          : this.importedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CheatsheetNoteRow(')
+          ..write('id: $id, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('title: $title, ')
+          ..write('content: $content, ')
+          ..write('folder: $folder, ')
+          ..write('sourceName: $sourceName, ')
+          ..write('format: $format, ')
+          ..write('importedAt: $importedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    updatedAt,
+    title,
+    content,
+    folder,
+    sourceName,
+    format,
+    importedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CheatsheetNoteRow &&
+          other.id == this.id &&
+          other.updatedAt == this.updatedAt &&
+          other.title == this.title &&
+          other.content == this.content &&
+          other.folder == this.folder &&
+          other.sourceName == this.sourceName &&
+          other.format == this.format &&
+          other.importedAt == this.importedAt);
+}
+
+class CheatsheetNotesCompanion extends UpdateCompanion<CheatsheetNoteRow> {
+  final Value<String> id;
+  final Value<DateTime> updatedAt;
+  final Value<String> title;
+  final Value<String> content;
+  final Value<String> folder;
+  final Value<String?> sourceName;
+  final Value<String> format;
+  final Value<DateTime> importedAt;
+  final Value<int> rowid;
+  const CheatsheetNotesCompanion({
+    this.id = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.title = const Value.absent(),
+    this.content = const Value.absent(),
+    this.folder = const Value.absent(),
+    this.sourceName = const Value.absent(),
+    this.format = const Value.absent(),
+    this.importedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CheatsheetNotesCompanion.insert({
+    this.id = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    required String title,
+    required String content,
+    this.folder = const Value.absent(),
+    this.sourceName = const Value.absent(),
+    required String format,
+    required DateTime importedAt,
+    this.rowid = const Value.absent(),
+  }) : title = Value(title),
+       content = Value(content),
+       format = Value(format),
+       importedAt = Value(importedAt);
+  static Insertable<CheatsheetNoteRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? updatedAt,
+    Expression<String>? title,
+    Expression<String>? content,
+    Expression<String>? folder,
+    Expression<String>? sourceName,
+    Expression<String>? format,
+    Expression<DateTime>? importedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (title != null) 'title': title,
+      if (content != null) 'content': content,
+      if (folder != null) 'folder': folder,
+      if (sourceName != null) 'source_name': sourceName,
+      if (format != null) 'format': format,
+      if (importedAt != null) 'imported_at': importedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CheatsheetNotesCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? updatedAt,
+    Value<String>? title,
+    Value<String>? content,
+    Value<String>? folder,
+    Value<String?>? sourceName,
+    Value<String>? format,
+    Value<DateTime>? importedAt,
+    Value<int>? rowid,
+  }) {
+    return CheatsheetNotesCompanion(
+      id: id ?? this.id,
+      updatedAt: updatedAt ?? this.updatedAt,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      folder: folder ?? this.folder,
+      sourceName: sourceName ?? this.sourceName,
+      format: format ?? this.format,
+      importedAt: importedAt ?? this.importedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (folder.present) {
+      map['folder'] = Variable<String>(folder.value);
+    }
+    if (sourceName.present) {
+      map['source_name'] = Variable<String>(sourceName.value);
+    }
+    if (format.present) {
+      map['format'] = Variable<String>(format.value);
+    }
+    if (importedAt.present) {
+      map['imported_at'] = Variable<DateTime>(importedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CheatsheetNotesCompanion(')
+          ..write('id: $id, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('title: $title, ')
+          ..write('content: $content, ')
+          ..write('folder: $folder, ')
+          ..write('sourceName: $sourceName, ')
+          ..write('format: $format, ')
+          ..write('importedAt: $importedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -12950,6 +13456,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $AudioTracksTable audioTracks = $AudioTracksTable(this);
+  late final $CheatsheetNotesTable cheatsheetNotes = $CheatsheetNotesTable(
+    this,
+  );
   late final Index habitCompletionLookup = Index(
     'habit_completion_lookup',
     'CREATE INDEX habit_completion_lookup ON habit_completions (habit_id, completion_date)',
@@ -13055,6 +13564,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     meditationSessions,
     vacationPeriods,
     audioTracks,
+    cheatsheetNotes,
     habitCompletionLookup,
     streakHistoryLookup,
     boardColumnOrder,
@@ -22157,6 +22667,273 @@ typedef $$AudioTracksTableProcessedTableManager =
       AudioTrackRow,
       PrefetchHooks Function()
     >;
+typedef $$CheatsheetNotesTableCreateCompanionBuilder =
+    CheatsheetNotesCompanion Function({
+      Value<String> id,
+      Value<DateTime> updatedAt,
+      required String title,
+      required String content,
+      Value<String> folder,
+      Value<String?> sourceName,
+      required String format,
+      required DateTime importedAt,
+      Value<int> rowid,
+    });
+typedef $$CheatsheetNotesTableUpdateCompanionBuilder =
+    CheatsheetNotesCompanion Function({
+      Value<String> id,
+      Value<DateTime> updatedAt,
+      Value<String> title,
+      Value<String> content,
+      Value<String> folder,
+      Value<String?> sourceName,
+      Value<String> format,
+      Value<DateTime> importedAt,
+      Value<int> rowid,
+    });
+
+class $$CheatsheetNotesTableFilterComposer
+    extends Composer<_$AppDatabase, $CheatsheetNotesTable> {
+  $$CheatsheetNotesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get folder => $composableBuilder(
+    column: $table.folder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get format => $composableBuilder(
+    column: $table.format,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get importedAt => $composableBuilder(
+    column: $table.importedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CheatsheetNotesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CheatsheetNotesTable> {
+  $$CheatsheetNotesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get folder => $composableBuilder(
+    column: $table.folder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get format => $composableBuilder(
+    column: $table.format,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get importedAt => $composableBuilder(
+    column: $table.importedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CheatsheetNotesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CheatsheetNotesTable> {
+  $$CheatsheetNotesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<String> get folder =>
+      $composableBuilder(column: $table.folder, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get format =>
+      $composableBuilder(column: $table.format, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get importedAt => $composableBuilder(
+    column: $table.importedAt,
+    builder: (column) => column,
+  );
+}
+
+class $$CheatsheetNotesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CheatsheetNotesTable,
+          CheatsheetNoteRow,
+          $$CheatsheetNotesTableFilterComposer,
+          $$CheatsheetNotesTableOrderingComposer,
+          $$CheatsheetNotesTableAnnotationComposer,
+          $$CheatsheetNotesTableCreateCompanionBuilder,
+          $$CheatsheetNotesTableUpdateCompanionBuilder,
+          (
+            CheatsheetNoteRow,
+            BaseReferences<
+              _$AppDatabase,
+              $CheatsheetNotesTable,
+              CheatsheetNoteRow
+            >,
+          ),
+          CheatsheetNoteRow,
+          PrefetchHooks Function()
+        > {
+  $$CheatsheetNotesTableTableManager(
+    _$AppDatabase db,
+    $CheatsheetNotesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CheatsheetNotesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CheatsheetNotesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CheatsheetNotesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<String> folder = const Value.absent(),
+                Value<String?> sourceName = const Value.absent(),
+                Value<String> format = const Value.absent(),
+                Value<DateTime> importedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CheatsheetNotesCompanion(
+                id: id,
+                updatedAt: updatedAt,
+                title: title,
+                content: content,
+                folder: folder,
+                sourceName: sourceName,
+                format: format,
+                importedAt: importedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                required String title,
+                required String content,
+                Value<String> folder = const Value.absent(),
+                Value<String?> sourceName = const Value.absent(),
+                required String format,
+                required DateTime importedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CheatsheetNotesCompanion.insert(
+                id: id,
+                updatedAt: updatedAt,
+                title: title,
+                content: content,
+                folder: folder,
+                sourceName: sourceName,
+                format: format,
+                importedAt: importedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CheatsheetNotesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CheatsheetNotesTable,
+      CheatsheetNoteRow,
+      $$CheatsheetNotesTableFilterComposer,
+      $$CheatsheetNotesTableOrderingComposer,
+      $$CheatsheetNotesTableAnnotationComposer,
+      $$CheatsheetNotesTableCreateCompanionBuilder,
+      $$CheatsheetNotesTableUpdateCompanionBuilder,
+      (
+        CheatsheetNoteRow,
+        BaseReferences<_$AppDatabase, $CheatsheetNotesTable, CheatsheetNoteRow>,
+      ),
+      CheatsheetNoteRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -22217,4 +22994,6 @@ class $AppDatabaseManager {
       $$VacationPeriodsTableTableManager(_db, _db.vacationPeriods);
   $$AudioTracksTableTableManager get audioTracks =>
       $$AudioTracksTableTableManager(_db, _db.audioTracks);
+  $$CheatsheetNotesTableTableManager get cheatsheetNotes =>
+      $$CheatsheetNotesTableTableManager(_db, _db.cheatsheetNotes);
 }

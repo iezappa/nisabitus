@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
 import '../../features/audio/data/audio_tables.dart';
+import '../../features/cheatsheets/data/cheatsheet_tables.dart';
 import '../../features/discipline/data/discipline_tables.dart';
 import '../../features/exercise/data/exercise_tables.dart';
 import '../../features/habits/data/habit_tables.dart';
@@ -56,6 +57,7 @@ part 'app_database.g.dart';
     MeditationSessions,
     VacationPeriods,
     AudioTracks,
+    CheatsheetNotes,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -96,7 +98,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// The schema this build writes, readable without opening a store — which
   /// is exactly when recovery needs it.
-  static const currentSchemaVersion = 22;
+  static const currentSchemaVersion = 23;
 
   /// The id of the only row in a single-row table, such as the daily goals.
   static const singletonId = 'singleton';
@@ -229,6 +231,17 @@ class AppDatabase extends _$AppDatabase {
         );
       }
     }
+
+    // The Cheatsheets MVP changed while still uncommitted in this development
+    // build: early local test stores already claimed v23 with `cheatsheet_notes`
+    // present, but without the app-managed folder column. Repairing that shape
+    // before queries run keeps local preview data readable instead of throwing
+    // `no such column: folder`.
+    await _addSqlColumnIfMissing(
+      cheatsheetNotes.actualTableName,
+      'folder',
+      '"folder" TEXT NOT NULL DEFAULT \'Imported\'',
+    );
   }
 
   Future<void> _repairLegacyRecordIds() async {
@@ -856,6 +869,11 @@ class AppDatabase extends _$AppDatabase {
         // task written before there was anyone to name: the user's own.
         if (from < 22) {
           await _addColumnIfMissing(m, todoTasks, todoTasks.owner);
+        }
+        // v23 adds imported cheatsheet notes. Nothing existing changes:
+        // these are local files the user explicitly imports from now on.
+        if (from < 23) {
+          await m.createTable(cheatsheetNotes);
         }
       });
     },

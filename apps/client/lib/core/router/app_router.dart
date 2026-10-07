@@ -6,6 +6,7 @@ import '../../features/backup/presentation/widgets/auto_backup_banner.dart';
 import '../../features/backup/presentation/widgets/backup_reminder_banner.dart';
 import '../../features/update/presentation/update_banner.dart';
 import '../../features/backup/presentation/widgets/storage_warning_banner.dart';
+import '../../features/cheatsheets/presentation/cheatsheets_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/habits/presentation/habits_screen.dart';
 import '../../features/journal/presentation/journal_screen.dart';
@@ -21,6 +22,9 @@ import 'nav_rail.dart';
 
 /// Where meditation used to live.
 const _meditationWas = '/meditacion';
+
+/// Where Study lived during the first Cheatsheets iteration.
+const _cheatsheetsWas = '/cheatsheets';
 
 GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) => GoRouter(
   navigatorKey: navigatorKey,
@@ -42,6 +46,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) => GoRouter(
               AppTab.journal => const JournalScreen(),
               AppTab.pomodoro => const PomodoroScreen(),
               AppTab.todo => const TodoScreen(),
+              AppTab.cheatsheets => const CheatsheetsScreen(),
             },
           ),
         // Settings stays in the shell so the navbar remains visible, but it is
@@ -57,6 +62,7 @@ GoRouter buildRouter({GlobalKey<NavigatorState>? navigatorKey}) => GoRouter(
     // bookmark or a pinned link is the user's, and letting it 404 would be
     // a change they never made.
     GoRoute(path: _meditationWas, redirect: (_, _) => AppTab.health.path),
+    GoRoute(path: _cheatsheetsWas, redirect: (_, _) => AppTab.cheatsheets.path),
   ],
 );
 
@@ -91,6 +97,8 @@ class AppShell extends ConsumerWidget {
     void goSettings() => context.go(SettingsButton.route);
 
     if (MediaQuery.sizeOf(context).width < 720) {
+      final compactPhoneDestinations = visible.length + 1 > 5;
+
       return Scaffold(
         body: _WithNotices(child: child),
         // Up to seven tabs share a phone's width, and a label broken mid-word
@@ -101,7 +109,7 @@ class AppShell extends ConsumerWidget {
           selectedIndex: settingsSelected ? visible.length : selected,
           onDestinationSelected: (target) =>
               target == visible.length ? goSettings() : go(target),
-          labelBehavior: visible.length + 1 > 5
+          labelBehavior: compactPhoneDestinations
               ? NavigationDestinationLabelBehavior.alwaysHide
               : null,
           destinations: [
@@ -121,7 +129,8 @@ class AppShell extends ConsumerWidget {
             NavigationDestination(
               icon: const Icon(Icons.settings_outlined),
               selectedIcon: const Icon(Icons.settings),
-              label: l10n.tabSettings,
+              label: compactPhoneDestinations ? '' : l10n.tabSettings,
+              tooltip: l10n.tabSettings,
             ),
           ],
         ),

@@ -34,6 +34,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tabTodo => 'To-Do';
 
   @override
+  String get tabCheatsheets => 'Estudio';
+
+  @override
   String get habitsTitle => 'Hábitos';
 
   @override
@@ -424,6 +427,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get journalNoPreview => 'Sin contenido';
+
+  @override
+  String get cheatsheetsTitle => 'Estudio';
+
+  @override
+  String get cheatsheetsImport => 'Importar notas';
+
+  @override
+  String get cheatsheetsSearch => 'Buscar notas';
+
+  @override
+  String get cheatsheetsEmpty => 'Todavía no hay apuntes';
+
+  @override
+  String get cheatsheetsEmptyHint =>
+      'Importá notas Markdown o de texto para tenerlas cerca';
+
+  @override
+  String get cheatsheetsNoResults => 'No hay notas que coincidan';
+
+  @override
+  String get cheatsheetsNoResultsHint => 'Buscá por título o contenido';
+
+  @override
+  String get cheatsheetsDetailEmpty => 'Elegí una nota';
+
+  @override
+  String get cheatsheetsDetailEmptyHint =>
+      'Abrí una nota importada para leerla acá';
+
+  @override
+  String get cheatsheetsNewNote => 'Nueva nota';
+
+  @override
+  String get cheatsheetsCreatedInApp => 'Creada en la app';
+
+  @override
+  String get cheatsheetsEdit => 'Editar nota';
+
+  @override
+  String get cheatsheetsEditNote => 'Editar nota';
+
+  @override
+  String get cheatsheetsDeleteTitle => '¿Borrar nota?';
+
+  @override
+  String cheatsheetsDeleteMessage(String title) {
+    return '¿Borrar \"$title\"? Esto no se puede deshacer.';
+  }
+
+  @override
+  String get cheatsheetsTitleField => 'Título';
+
+  @override
+  String get cheatsheetsFolderField => 'Carpeta';
+
+  @override
+  String get cheatsheetsContentField => 'Contenido';
 
   @override
   String journalPage(int page, int total) {
@@ -2330,4 +2391,22 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get serverPasswordTooShort =>
       'Usá al menos 8 caracteres para la contraseña.';
+
+  @override
+  String get actionClear => 'Limpiar';
+
+  @override
+  String get cheatsheetsShowPlainText => 'Ver texto plano';
+
+  @override
+  String get cheatsheetsShowFormatted => 'Ver Markdown con formato';
+
+  @override
+  String get cheatsheetsReadAloud => 'Leer en voz alta';
+
+  @override
+  String get cheatsheetsStopReading => 'Detener lectura';
+
+  @override
+  String get cheatsheetsSpeechSpeed => 'Velocidad de lectura';
 }

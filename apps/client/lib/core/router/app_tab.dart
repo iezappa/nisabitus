@@ -18,7 +18,8 @@ enum AppTab {
   journal('/journal', Icons.menu_book_outlined, Icons.menu_book),
   health('/salud', Icons.favorite_outline, Icons.favorite),
   pomodoro('/pomodoro', Icons.timer_outlined, Icons.timer),
-  todo('/todo', Icons.task_alt_outlined, Icons.task_alt);
+  todo('/todo', Icons.task_alt_outlined, Icons.task_alt),
+  cheatsheets('/estudio', Icons.school_outlined, Icons.school);
 
   const AppTab(this.path, this.icon, this.selectedIcon);
 
@@ -33,5 +34,6 @@ enum AppTab {
     AppTab.health => l10n.tabHealth,
     AppTab.pomodoro => l10n.tabPomodoro,
     AppTab.todo => l10n.tabTodo,
+    AppTab.cheatsheets => l10n.tabCheatsheets,
   };
 }

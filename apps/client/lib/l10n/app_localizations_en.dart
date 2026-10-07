@@ -34,6 +34,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabTodo => 'To-Do';
 
   @override
+  String get tabCheatsheets => 'Study';
+
+  @override
   String get habitsTitle => 'Habits';
 
   @override
@@ -424,6 +427,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalNoPreview => 'No content';
+
+  @override
+  String get cheatsheetsTitle => 'Study';
+
+  @override
+  String get cheatsheetsImport => 'Import notes';
+
+  @override
+  String get cheatsheetsSearch => 'Search notes';
+
+  @override
+  String get cheatsheetsEmpty => 'No cheatsheets yet';
+
+  @override
+  String get cheatsheetsEmptyHint =>
+      'Import Markdown or text notes to keep them nearby';
+
+  @override
+  String get cheatsheetsNoResults => 'No matching notes';
+
+  @override
+  String get cheatsheetsNoResultsHint => 'Search by title or content';
+
+  @override
+  String get cheatsheetsDetailEmpty => 'Choose a note';
+
+  @override
+  String get cheatsheetsDetailEmptyHint =>
+      'Open an imported note to read it here';
+
+  @override
+  String get cheatsheetsNewNote => 'New note';
+
+  @override
+  String get cheatsheetsCreatedInApp => 'Created in the app';
+
+  @override
+  String get cheatsheetsEdit => 'Edit note';
+
+  @override
+  String get cheatsheetsEditNote => 'Edit note';
+
+  @override
+  String get cheatsheetsDeleteTitle => 'Delete note?';
+
+  @override
+  String cheatsheetsDeleteMessage(String title) {
+    return 'Delete \"$title\"? This cannot be undone.';
+  }
+
+  @override
+  String get cheatsheetsTitleField => 'Title';
+
+  @override
+  String get cheatsheetsFolderField => 'Folder';
+
+  @override
+  String get cheatsheetsContentField => 'Content';
 
   @override
   String journalPage(int page, int total) {
@@ -2326,4 +2387,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get serverPasswordTooShort =>
       'Use at least 8 characters for the password.';
+
+  @override
+  String get actionClear => 'Clear';
+
+  @override
+  String get cheatsheetsShowPlainText => 'Show plain text';
+
+  @override
+  String get cheatsheetsShowFormatted => 'Show formatted Markdown';
+
+  @override
+  String get cheatsheetsReadAloud => 'Read aloud';
+
+  @override
+  String get cheatsheetsStopReading => 'Stop reading';
+
+  @override
+  String get cheatsheetsSpeechSpeed => 'Reading speed';
 }

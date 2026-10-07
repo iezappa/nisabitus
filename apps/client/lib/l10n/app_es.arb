@@ -1,1248 +1,1280 @@
 {
-  "@@locale": "es",
-  "appTitle": "Nisabitus",
-  "appTagline": "El esfuerzo que te eleva",
-  "tabDashboard": "Panel",
-  "tabHabits": "Hábitos",
-  "tabJournal": "Journal",
-  "tabSleep": "Sueño",
-  "tabPomodoro": "Pomodoro",
-  "tabTodo": "To-Do",
-  "habitsTitle": "Hábitos",
-  "habitsList": "Lista",
-  "habitsProgress": "Progreso",
-  "frequencyDaily": "Diario",
-  "frequencyWeekly": "Semanal",
-  "frequencyMonthly": "Mensual",
-  "frequencyYearly": "Anual",
-  "habitsEmpty": "Todavía no hay hábitos acá",
-  "habitsEmptyHint": "Creá el primero y empezá a sostenerlo",
-  "habitNew": "Nuevo hábito",
-  "habitDone": "Hecho",
-  "habitCancel": "Cancelar",
-  "habitCompleted": "Completado",
-  "habitCancelled": "Cancelado",
-  "habitFinishedOn": "Finalizado el {date}",
-  "@habitFinishedOn": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "habitTargetBadge": "{count}x",
-  "@habitTargetBadge": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "streaksTitle": "Rachas",
-  "streaksEmpty": "Todavía no hay rachas",
-  "streaksEmptyHint": "Una racha cuenta los días seguidos que sostenés algo",
-  "streakNew": "Nueva racha",
-  "streakDays": "días",
-  "streakRecord": "Récord: {count}",
-  "@streakRecord": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "streakIncrement": "+1",
-  "streakReset": "Reiniciar",
-  "streakMissedDay": "Marcar un día olvidado",
-  "actionSave": "Guardar",
-  "actionCancel": "Cancelar",
-  "actionDelete": "Borrar",
-  "actionExpand": "Mostrar",
-  "actionCollapse": "Ocultar",
-  "actionEdit": "Editar",
-  "fieldName": "Nombre",
-  "fieldDescription": "Descripción",
-  "fieldCategory": "Categoría",
-  "fieldFrequency": "Frecuencia",
-  "fieldTarget": "Objetivo por período",
-  "validationNameRequired": "El nombre es obligatorio",
-  "deleteConfirmTitle": "¿Borrar {name}?",
-  "@deleteConfirmTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "deleteConfirmBody": "Esta acción no se puede deshacer.",
-  "comingSoon": "En construcción",
-  "comingSoonHint": "Este módulo todavía no está implementado.",
-  "weekdayShortMonday": "L",
-  "weekdayShortTuesday": "M",
-  "weekdayShortWednesday": "X",
-  "weekdayShortThursday": "J",
-  "weekdayShortFriday": "V",
-  "weekdayShortSaturday": "S",
-  "weekdayShortSunday": "D",
-  "habitRepeatForever": "Repetir por siempre",
-  "habitEndDate": "Fecha de fin",
-  "habitRepeatDays": "Días de repetición",
-  "habitEdit": "Editar hábito",
-  "habitScheduledOn": "Programado: {days}",
-  "@habitScheduledOn": {
-    "placeholders": {
-      "days": {
-        "type": "String"
-      }
-    }
-  },
-  "habitRevert": "Volver a pendiente",
-  "habitsToday": "Progreso de hoy",
-  "habitsTodayCount": "{done} de {total}",
-  "@habitsTodayCount": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "streakCurrent": "Racha actual",
-  "streakLongest": "Récord",
-  "rangeDay": "Día",
-  "rangeWeek": "Semana",
-  "rangeMonth": "Mes",
-  "rangeYear": "Año",
-  "statsCompleted": "Completados",
-  "statsSuccessRate": "Tasa de éxito",
-  "statsPercent": "{value}%",
-  "statsRangeCaption": "Últimos {days} días",
-  "chartEmpty": "Sin datos en este rango",
-  "chartEmptyHint": "Resolvé algún hábito y el progreso aparece acá",
-  "chartStreaksEmptyHint": "Sumá a una racha y su evolución aparece acá",
-  "habitsCompletionsPerDay": "Cumplimientos por día",
-  "streaksEvolution": "Evolución",
-  "@statsPercent": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@statsRangeCaption": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "weekPrevious": "Semana anterior",
-  "weekNext": "Semana siguiente",
-  "sleepTitle": "Sueño",
-  "sleepLastNight": "Esa noche",
-  "sleepHours": "{hours} h",
-  "sleepNoRecord": "Sin registro",
-  "sleepNoRecordHint": "Anotá cuántas horas dormiste ese día",
-  "sleepQualityOptimal": "Óptimo",
-  "sleepQualityAcceptable": "Aceptable",
-  "sleepQualityPoor": "A mejorar",
-  "sleepLog": "Registrar sueño",
-  "sleepFieldHours": "Horas dormidas",
-  "sleepSave": "Registrar",
-  "sleepUpdate": "Actualizar",
-  "sleepHistory": "Historial",
-  "sleepAverage": "Promedio",
-  "sleepRecords": "Registros",
-  "sleepOptimalNights": "Noches óptimas",
-  "sleepRange": "Rango",
-  "sleepRangeValue": "{min} – {max} h",
-  "sleepInsights": "Bienestar",
-  "sleepInsightAverageGood": "Tu promedio está en la franja recomendada. Sostenelo.",
-  "sleepInsightAverageLow": "Estás durmiendo por debajo de lo recomendado.",
-  "sleepInsightAverageHigh": "Estás durmiendo por encima de lo habitual.",
-  "sleepInsightConsistency": "Consistencia",
-  "sleepInsightConsistencySteady": "Tus noches son parejas.",
-  "sleepInsightConsistencyErratic": "Tus horas varían bastante de una noche a otra.",
-  "sleepValidationHours": "Ingresá un número entre 0 y 24",
-  "@sleepHours": {
-    "placeholders": {
-      "hours": {
-        "type": "String"
-      }
-    }
-  },
-  "@sleepRangeValue": {
-    "placeholders": {
-      "min": {
-        "type": "String"
-      },
-      "max": {
-        "type": "String"
-      }
-    }
-  },
-  "journalTitle": "Journal",
-  "journalMood": "Estado emocional",
-  "journalMoodHint": "¿Cómo te sentiste?",
-  "journalEnergy": "Energía",
-  "journalEnergyLow": "Baja",
-  "journalEnergyMedium": "Media",
-  "journalEnergyHigh": "Alta",
-  "journalGratitude": "Gratitud",
-  "journalGratitudeHint": "¿Qué agradecés de hoy?",
-  "journalFocus": "Foco del día",
-  "journalFocusHint": "¿En qué pusiste tu atención?",
-  "journalReflection": "Reflexión",
-  "journalReflectionHint": "Escribí lo que quieras. Sin apuro.",
-  "journalIntention": "Intención para mañana",
-  "journalIntentionHint": "¿Con qué querés empezar mañana?",
-  "journalSave": "Guardar",
-  "journalUpdate": "Actualizar",
-  "journalSaved": "Guardado",
-  "journalEntry": "Entrada del día",
-  "journalHistory": "Entradas anteriores",
-  "journalHistoryEmpty": "Todavía no hay entradas",
-  "journalHistoryEmptyHint": "Lo que escribas va a aparecer acá",
-  "journalNoPreview": "Sin contenido",
-  "journalPage": "{page} de {total}",
-  "journalDeleteTitle": "¿Borrar la entrada?",
-  "@journalPage": {
-    "placeholders": {
-      "page": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "supportTitle": "Apoyar el proyecto",
-  "supportBody": "Nisabitus es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.",
-  "supportCafecito": "Cafecito",
-  "supportPatreon": "Patreon",
-  "supportLinkFailed": "No se pudo abrir el enlace",
-  "settingsTitle": "Configuración",
-  "settingsAppearance": "Apariencia",
-  "settingsAccent": "Color de acento",
-  "settingsTabs": "Pestañas visibles",
-  "settingsTabsHint": "Elegí qué secciones querés ver. Siempre queda al menos una.",
-  "settingsProfile": "Perfil",
-  "settingsProfileName": "Tu nombre",
-  "settingsTutorial": "Ver el tutorial",
-  "settingsAbout": "Acerca de",
-  "accentForest": "Bosque",
-  "accentGold": "Dorado",
-  "accentClay": "Arcilla",
-  "accentIndigo": "Índigo",
-  "accentPlum": "Ciruela",
-  "accentSlate": "Pizarra",
-  "tabSettings": "Ajustes",
-  "tutorialSkip": "Saltar",
-  "tutorialNext": "Siguiente",
-  "tutorialDone": "Empezar",
-  "tutorialBack": "Atrás",
-  "onboardingWelcome": "Bienvenido a Nisabitus",
-  "onboardingWelcomeBody": "El esfuerzo que te eleva.",
-  "onboardingNameTitle": "¿Cómo te llamamos?",
-  "onboardingNameBody": "¿Cómo te llamamos?",
-  "onboardingTabsTitle": "¿Qué querés ver?",
-  "onboardingTabsBody": "¿Qué querés ver?",
-  "tutorialHabitsTitle": "Hábitos y rachas",
-  "tutorialHabitsBody": "Sostener, no arrancar.",
-  "tutorialTrackTitle": "Sueño y journal",
-  "tutorialTrackBody": "Registrar es entenderse.",
-  "tutorialFocusTitle": "Foco y tareas",
-  "tutorialFocusBody": "Una cosa a la vez.",
-  "pomodoroTitle": "Pomodoro",
-  "pomodoroSessions": "Sesiones",
-  "pomodoroNew": "Nueva sesión",
-  "pomodoroEdit": "Editar sesión",
-  "pomodoroEmpty": "Todavía no hay sesiones",
-  "pomodoroEmptyHint": "Creá una y entrá en modo foco",
-  "pomodoroStatePending": "Pendiente",
-  "pomodoroStateInProgress": "En progreso",
-  "pomodoroStateCompleted": "Completada",
-  "pomodoroStateCancelled": "Cancelada",
-  "pomodoroCycles": "Ciclos",
-  "pomodoroFocusMinutes": "Minutos de foco",
-  "pomodoroBreakMinutes": "Minutos de descanso",
-  "pomodoroPurpose": "Propósito",
-  "pomodoroCurrentSession": "Sesión actual",
-  "pomodoroPhaseFocus": "Foco",
-  "pomodoroPhaseRest": "Descanso",
-  "pomodoroCycleOf": "Ciclo {done} de {total}",
-  "pomodoroStart": "Iniciar",
-  "pomodoroPause": "Pausar",
-  "pomodoroSkip": "Siguiente fase",
-  "pomodoroFinish": "Finalizar",
-  "pomodoroCancel": "Cancelar sesión",
-  "pomodoroClose": "Cerrar sin guardar",
-  "pomodoroStats": "Estadísticas",
-  "pomodoroTotalFocus": "Foco total",
-  "pomodoroTotalCycles": "Ciclos completados",
-  "pomodoroByCategory": "Por categoría",
-  "pomodoroMinutesPerDay": "Minutos por día",
-  "pomodoroMinutes": "{minutes} min",
-  "pomodoroHoursMinutes": "{hours} h {minutes} min",
-  "pomodoroValidationRange": "Entre {min} y {max}",
-  "@pomodoroCycleOf": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "@pomodoroMinutes": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "@pomodoroHoursMinutes": {
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      },
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "@pomodoroValidationRange": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "todoTitle": "To-Do",
-  "todoProjects": "Proyectos",
-  "todoNewProject": "Nuevo proyecto",
-  "todoNewSubproject": "Nuevo subproyecto",
-  "todoNoProjects": "Todavía no hay proyectos",
-  "todoNoProjectsHint": "Creá uno para empezar a organizar tus tareas",
-  "todoPickProject": "Elegí un proyecto",
-  "todoPickProjectHint": "Sus tareas van a aparecer acá",
-  "todoIncludeSubprojects": "Incluir subproyectos",
-  "todoViewKanban": "Tablero",
-  "todoViewList": "Lista",
-  "todoNewTask": "Nueva tarea",
-  "todoEditTask": "Editar tarea",
-  "todoNoTasks": "Sin tareas",
-  "todoNoTasksHint": "Agregá la primera con el botón de abajo",
-  "todoStatusTodo": "Por hacer",
-  "todoStatusInProgress": "En curso",
-  "todoStatusDone": "Hecho",
-  "todoPriorityLow": "Baja",
-  "todoPriorityMedium": "Media",
-  "todoPriorityHigh": "Alta",
-  "todoPriorityUrgent": "Urgente",
-  "todoDueOverdue": "Vencida",
-  "todoDueToday": "Vence hoy",
-  "todoDueUpcoming": "Próxima",
-  "todoFieldTitle": "Título",
-  "todoFieldDescription": "Descripción",
-  "todoFieldDue": "Vencimiento",
-  "todoFieldPriority": "Prioridad",
-  "todoFieldStatus": "Estado",
-  "todoComments": "Avances",
-  "todoCommentHint": "Anotá un avance",
-  "todoNoComments": "Sin avances todavía",
-  "todoFilters": "Filtros",
-  "todoFilterCategory": "Categoría contiene",
-  "todoFilterClear": "Limpiar",
-  "todoTaskCount": "{count} tareas",
-  "todoMoveNotAllowed": "Ese movimiento rompería el árbol de proyectos",
-  "@todoTaskCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardGreeting": "Hola, {name}",
-  "dashboardGreetingAnonymous": "Hola",
-  "dashboardSubtitle": "Esto es lo de hoy.",
-  "dashboardRefresh": "Actualizar",
-  "dashboardPendingTasks": "Tareas pendientes",
-  "dashboardOverdue": "{count} vencidas",
-  "dashboardNoOverdue": "Ninguna vencida",
-  "dashboardHabitsToday": "Hábitos de hoy",
-  "dashboardHabitsRatio": "{done} de {total}",
-  "dashboardFocus": "Foco",
-  "dashboardFocusEmpty": "Nada pendiente. Disfrutalo.",
-  "dashboardHealth": "Salud y journal",
-  "dashboardSleepToday": "Sueño de hoy",
-  "dashboardJournalReady": "Listo",
-  "dashboardJournalPending": "Pendiente",
-  "dashboardNoJournal": "Sin entrada",
-  "dashboardQuickActions": "Accesos rápidos",
-  "dashboardNoDue": "Sin fecha",
-  "@dashboardGreeting": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "@dashboardOverdue": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@dashboardHabitsRatio": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "tutorialPageOf": "{page} de {total}",
-  "onboardingWelcomeDetail": "Nisabitus reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.",
-  "tutorialHabitsDetail": "Definí lo que querés repetir y resolvelo cada día con un toque. Elegí si es diario, semanal, mensual o anual, y en qué días esperás cumplirlo.\n\nLas rachas cuentan aparte: llevan los días seguidos de algo y guardan tu récord, aunque después vuelvas a cero.",
-  "tutorialTrackDetail": "Anotá cuántas horas dormiste y la app te dice cómo estuvo la noche, saca tu promedio y te muestra la tendencia.\n\nEl journal te propone seis campos cortos para cerrar el día: cómo estuviste, qué agradecés, en qué pusiste el foco y con qué querés empezar mañana.\n\nLa tira semanal te deja completar días que te salteaste.",
-  "tutorialFocusDetail": "El pomodoro parte tu trabajo en ciclos de foco y descanso, y lleva la cuenta de los minutos que realmente concentraste.\n\nEl To-Do organiza tus tareas en proyectos con hasta tres niveles, y las movés entre Por hacer, En curso y Hecho arrastrándolas por el tablero.",
-  "onboardingNameDetail": "Solo lo usamos para saludarte en el panel. No sale de este dispositivo y podés cambiarlo o borrarlo cuando quieras.",
-  "onboardingTabsDetail": "Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.",
-  "@tutorialPageOf": {
-    "placeholders": {
-      "page": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "settingsTheme": "Tema",
-  "themeSystem": "Sistema",
-  "themeLight": "Claro",
-  "themeDark": "Oscuro",
-  "settingsLanguage": "Idioma",
-  "languageSpanish": "Español",
-  "languageEnglish": "English",
-  "languageSystem": "Sistema",
-  "tabHealth": "Salud",
-  "healthSleep": "Sueño",
-  "healthNutrition": "Alimentación",
-  "healthExercise": "Ejercicio",
-  "nutritionGoals": "Objetivos diarios",
-  "nutritionEditGoals": "Editar objetivos",
-  "nutritionCalories": "Calorías",
-  "nutritionProtein": "Proteínas",
-  "nutritionCarbs": "Carbohidratos",
-  "nutritionFat": "Grasas",
-  "nutritionGrams": "{value} g",
-  "nutritionKcal": "{value} kcal",
-  "nutritionOfTarget": "{value} de {target}",
-  "nutritionRemaining": "Te quedan {value} kcal",
-  "nutritionOver": "Te pasaste por {value} kcal",
-  "nutritionToday": "Lo que comiste",
-  "nutritionEmpty": "Sin registros ese día",
-  "nutritionEmptyHint": "Anotá lo que comiste y se suma solo",
-  "nutritionAdd": "Agregar alimento",
-  "nutritionEditEntry": "Editar alimento",
-  "nutritionPortion": "Porción",
-  "nutritionPortionHint": "150 g, 1 plato, 2 unidades",
-  "meditationTitle": "Meditación",
-  "meditationToday": "Lo que sentaste",
-  "meditationEmpty": "Ese día no anotaste nada",
-  "meditationEmptyHint": "Anotá cuánto sentaste y cómo te fue",
-  "meditationAdd": "Anotar sesión",
-  "meditationEdit": "Editar sesión",
-  "meditationMinutes": "{value} min",
-  "meditationDayTotal": "{value} min ese día",
-  "meditationDuration": "Duración",
-  "meditationNote": "Cómo te fue",
-  "meditationNoteHint": "Costó arrancar, me dormí, quedé tranquilo…",
-  "meditationValidationMinutes": "Ingresá un número entre 1 y {max}",
-  "meditationMinutesPerDay": "Minutos por día",
-  "meditationAverageDaily": "Promedio diario",
-  "meditationDaysPractised": "Días que sentaste",
-  "meditationLongestStreak": "Racha más larga",
-  "hydration": "Hidratación",
-  "hydrationTarget": "Objetivo diario",
-  "hydrationEditTarget": "Editar objetivo",
-  "hydrationMillilitres": "{value} ml",
-  "hydrationRemaining": "Te faltan {value} ml",
-  "hydrationReached": "Llegaste al objetivo",
-  "hydrationToday": "Lo que tomaste",
-  "hydrationEmpty": "Sin registros ese día",
-  "hydrationEmptyHint": "Anotá cada vaso y se suma solo",
-  "hydrationAdd": "Agregar",
-  "hydrationCustom": "Otra cantidad",
-  "hydrationAmount": "Cantidad",
-  "hydrationValidationAmount": "Ingresá un número entre 1 y {max}",
-  "hydrationPerDay": "Mililitros por día",
-  "hydrationAverageDaily": "Promedio diario",
-  "hydrationDaysOnTarget": "Días en objetivo",
-  "nutritionMeal": "Comida",
-  "nutritionMealBreakfast": "Desayuno",
-  "nutritionMealLunch": "Almuerzo",
-  "nutritionMealSnack": "Merienda",
-  "nutritionMealDinner": "Cena",
-  "nutritionMealNone": "Sin comida",
-  "nutritionUnassigned": "Sin asignar",
-  "nutritionFoodDatabase": "Base de alimentos",
-  "nutritionFoodDatabaseHint": "Elegí un alimento y decí cuánto pesó",
-  "nutritionFoodSearch": "Buscar un alimento",
-  "nutritionFoodNone": "No hay nada que coincida",
-  "nutritionFoodNew": "Alimento nuevo",
-  "nutritionFoodEdit": "Editar alimento",
-  "nutritionFoodMine": "Tuyo",
-  "nutritionFoodDeleteBody": "Solo sale de la base de alimentos. Lo que ya comiste queda tal cual lo anotaste.",
-  "nutritionPer100g": "{value} kcal cada 100 g",
-  "nutritionPer100gLabel": "Cada 100 g",
-  "nutritionWeight": "Peso",
-  "nutritionWeightHint": "Los valores se ajustan a lo que pesaste",
-  "nutritionValidationGrams": "Ingresá un peso entre 0 y {max} g",
-  "nutritionValidationNumber": "Ingresá un número entre 0 y {max}",
-  "discipline": "Disciplinas",
-  "disciplineHint": "Natación, correr, bici — lo que se mide en tiempo, no en series",
-  "disciplineEmpty": "Nada practicado ese día",
-  "disciplineAdd": "Anotar disciplina",
-  "disciplineEdit": "Editar disciplina",
-  "disciplineName": "Qué practicaste",
-  "disciplineNameHint": "Natación, Correr, Bici, Yoga…",
-  "disciplineDuration": "Duración",
-  "disciplineDistance": "Distancia",
-  "disciplineMinutes": "{value} min",
-  "disciplineKm": "{value} km",
-  "disciplineNotes": "Notas",
-  "disciplineCompleteTitle": "¿Cómo te fue?",
-  "disciplineCompleteHint": "Anotá el tiempo y la distancia reales. Lo que dejes en blanco queda como estaba planeado.",
-  "disciplineValidationMinutes": "Ingresá un número entre 1 y {max}",
-  "disciplineValidationDistance": "Ingresá un número entre 0 y {max}",
-  "plan": "Plan",
-  "planToday": "Rutina de gimnasio",
-  "planEmpty": "Nada anotado para ese día",
-  "planEmptyHint": "Anotá un ejercicio y, si se repite, decí en qué días",
-  "planAdd": "Anotar ejercicio",
-  "planEdit": "Editar ejercicio",
-  "planSetsReps": "{sets}x{reps}",
-  "planWeight": "{weight} kg",
-  "planRpe": "RPE {value}",
-  "planComments": "Indicaciones",
-  "planCommentsHint": "Bajar hasta paralelo, sin rebote…",
-  "planFeedback": "Cómo te fue",
-  "planFeedbackHint": "La última salió fea, pesó más de lo esperado…",
-  "planDone": "Hecho",
-  "planReopen": "Volver a pendiente",
-  "planComplete": "Marcar como hecho",
-  "planCompleteTitle": "¿Cómo te fue?",
-  "planCompleteHint": "Anotá el peso y el esfuerzo reales. Lo que dejes en blanco queda como estaba planeado.",
-  "planRepeat": "Repetir",
-  "planRepeatDays": "Días",
-  "planRepeatUntilLabel": "Hasta cuándo",
-  "planRepeatWeeks": "Por semanas",
-  "planRepeatUntil": "Hasta una fecha",
-  "planRepeatForever": "Siempre",
-  "planRepeatWeeksValue": "Cantidad de semanas",
-  "planRepeatUntilValue": "Termina el",
-  "planRepeatSummary": "Se repite {days}",
-  "planStopRepeat": "Dejar de repetir",
-  "planStopRepeatTitle": "¿Dejar de repetir?",
-  "planStopRepeatBody": "Se borran los días siguientes que todavía no hiciste. Lo que ya entrenaste queda como está.",
-  "planValidationDays": "Elegí al menos un día",
-  "planValidationNumber": "Ingresá un número entre 1 y {max}",
-  "planValidationRpe": "El RPE va de 1 a 10",
-  "planValidationEndDate": "La repetición no puede terminar antes de empezar",
-  "exerciseVideo": "Video de referencia",
-  "exerciseVideoHint": "Link a un video que muestre el movimiento",
-  "exerciseOpenVideo": "Ver el video",
-  "exerciseNew": "Nuevo ejercicio",
-  "exerciseEdit": "Editar ejercicio",
-  "exerciseDeleteBody": "Borrar un ejercicio también borra todos los días en que lo anotaste, incluidos los pasados. No se puede deshacer.",
-  "exerciseMuscleGroup": "Grupo muscular",
-  "exerciseDescription": "Descripción",
-  "exerciseSets": "Series",
-  "exerciseReps": "Repeticiones",
-  "exerciseWeight": "Peso (kg)",
-  "exerciseBodyweight": "Peso corporal",
-  "exerciseTotalSets": "Series",
-  "exerciseTotalReps": "Repeticiones",
-  "exerciseVolume": "Volumen",
-  "exerciseVolumeValue": "{value} kg",
-  "exercisePickOne": "Elegí un ejercicio",
-  "@planSetsReps": {
-    "placeholders": {
-      "sets": {
-        "type": "int"
-      },
-      "reps": {
-        "type": "int"
-      }
-    }
-  },
-  "@planWeight": {
-    "placeholders": {
-      "weight": {
-        "type": "String"
-      }
-    }
-  },
-  "@planRpe": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@planRepeatSummary": {
-    "placeholders": {
-      "days": {
-        "type": "String"
-      }
-    }
-  },
-  "@planValidationNumber": {
-    "placeholders": {
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "@disciplineMinutes": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@disciplineKm": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "@disciplineValidationMinutes": {
-    "placeholders": {
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "@disciplineValidationDistance": {
-    "placeholders": {
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionGrams": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionKcal": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionOfTarget": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      },
-      "target": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionRemaining": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionOver": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionValidationNumber": {
-    "placeholders": {
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionPer100g": {
-    "placeholders": {
-      "value": {
-        "type": "int"
-      }
-    }
-  },
-  "@nutritionValidationGrams": {
-    "placeholders": {
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "@exerciseVolumeValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "disclaimerTitle": "Esto es un registro, no un consejo médico",
-  "disclaimerBody": "Nisabitus no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.",
-  "disclaimerAction": "Entendido",
-  "disclaimerTooltip": "Sobre estos datos",
-  "healthMeds": "Medicación",
-  "medsTitle": "Medicación y suplementos",
-  "medsToday": "Para ese día",
-  "medsCatalogue": "Lo que tomás",
-  "medsNew": "Agregar",
-  "medsEdit": "Editar",
-  "medsEmpty": "Todavía no cargaste nada",
-  "medsEmptyHint": "Agregá lo que tomás y marcalo cada día",
-  "medsKind": "Tipo",
-  "medsKindMedication": "Medicación",
-  "medsKindSupplement": "Suplemento",
-  "medsDose": "Dosis",
-  "medsDoseHint": "500 mg, 2 cápsulas, 10 gotas",
-  "medsSchedule": "Cuándo",
-  "medsScheduleHint": "Mañana, cada 8 h, con la cena",
-  "medsNotes": "Notas",
-  "medsActive": "Activo",
-  "medsInactiveHint": "Lo pausado no aparece en el día",
-  "medsTakenCount": "{done} de {total}",
-  "medsNoneActive": "Nada activo para marcar",
-  "medsNoneActiveHint": "Activá algo de la lista de abajo",
-  "@medsTakenCount": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "progressEntries": "Registros",
-  "progressPerDay": "Por día",
-  "nutritionCaloriesPerDay": "Calorías por día",
-  "nutritionAverageDaily": "Promedio diario",
-  "nutritionDaysLogged": "Días registrados",
-  "exerciseVolumePerDay": "Volumen por día",
-  "exerciseDaysTrained": "Días entrenados",
-  "medsAdherence": "Cumplimiento",
-  "medsAdherencePerDay": "Cumplimiento por día",
-  "medsDaysComplete": "Días completos",
-  "journalEntriesWritten": "Entradas escritas",
-  "journalCoverage": "Cobertura",
-  "journalLongestRun": "Racha más larga",
-  "journalPerDay": "Entradas por día",
-  "todoProgress": "Progreso",
-  "todoCompletedPerDay": "Tareas completadas por día",
-  "todoCompleted": "Completadas",
-  "todoOpen": "Abiertas",
-  "todoOverdue": "Vencidas",
-  "sleepHoursPerNight": "Horas por noche",
-  "progressDays": "{count, plural, =1{1 día} other{{count} días}}",
-  "todoProgressEmptyHint": "Completá una tarea y aparece acá",
-  "@progressDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "settingsBackup": "Copia de seguridad",
-  "settingsYourData": "Tus datos",
-  "settingsSupport": "Soporte",
-  "backupExport": "Exportar",
-  "backupImport": "Importar",
-  "backupReplaceWarning": "Importar reemplaza todo lo que tenés ahora.",
-  "backupConfirmTitle": "¿Reemplazar todos tus datos?",
-  "backupConfirmBody": "Se borra lo que hay ahora y queda lo que traiga el archivo. No se puede deshacer, así que exportá antes si tenés dudas.",
-  "backupConfirmAction": "Reemplazar",
-  "backupExported": "{count, plural, =1{Copia guardada: 1 registro} other{Copia guardada: {count} registros}}",
-  "backupImported": "{count, plural, =1{Datos restaurados: 1 registro} other{Datos restaurados: {count} registros}}",
-  "backupSomeIgnored": "Parte del archivo viene de una versión anterior y no se pudo restaurar.",
-  "backupNotABackup": "Ese archivo no es una copia de Nisabitus",
-  "backupNewerVersion": "La copia viene de una versión más nueva de Nisabitus",
-  "backupCorrupt": "La copia está dañada y no se puede leer",
-  "backupFailed": "No se pudo completar la operación",
-  "settingsReleaseNotes": "Novedades",
-  "releaseNotesWhatsNew": "Novedades",
-  "releaseNotesHistory": "Historial de novedades",
-  "releaseNotesVersion": "Versión {version}",
-  "releaseNotesClose": "Entendido",
-  "@releaseNotesVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "@backupExported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@backupImported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "storageDegradedWarning": "Este navegador guarda tus datos en un almacenamiento que puede perderse al recargar o al borrar los datos del navegador. Exportá una copia ahora.",
-  "storageVolatileWarning": "Este navegador no puede guardar tus datos: todo lo que anotes se pierde al cerrar esta pestaña. Exportá una copia antes de irte.",
-  "storageExportNow": "Exportar ahora",
-  "storageWarningDismiss": "Ocultar",
-  "recoveryTitle": "No se pudo abrir la base de datos local",
-  "recoveryBody": "Los datos guardados en este dispositivo no se pudieron leer, así que la app no puede arrancar normalmente. Podés restaurar una copia de seguridad o empezar de cero con una base vacía.",
-  "recoveryImport": "Importar una copia",
-  "recoveryReset": "Restablecer la base de datos local",
-  "recoveryImportConfirmTitle": "¿Importar una copia?",
-  "recoveryImportConfirmBody": "La base ilegible de este dispositivo se borra para siempre y queda lo que traiga el archivo de copia. No se puede deshacer.",
-  "recoveryResetConfirmTitle": "¿Restablecer la base de datos local?",
-  "recoveryResetConfirmBody": "Todo lo guardado en este dispositivo se borra para siempre y la app arranca vacía. No se puede deshacer.",
-  "recoveryResetConfirmAction": "Restablecer",
-  "backupNoticeTitle": "Tus datos viven solo en este dispositivo",
-  "backupNoticeLead": "Ningún servidor guarda una copia.",
-  "backupNoticeOnboarding": "No guardamos tus datos en nuestros servidores. Si desinstalás la app, perdés o reseteás el dispositivo o borrás los datos del navegador, se pierden. Exportá seguido desde Ajustes → Tus datos → Exportar y guardá el archivo en un lugar seguro.",
-  "backupNoticeAccept": "Entendido, voy a hacer copias",
-  "backupNoticeSettings": "Tus datos no se guardan en nuestros servidores. Exportá seguido y guardá el archivo fuera de este dispositivo.",
-  "backupReminderNever": "Todavía no hiciste una copia de tus datos.",
-  "backupReminderOverdue": "Tu última copia fue hace {days} días.",
-  "@backupReminderOverdue": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "backupReminderAction": "Exportar",
-  "backupReminderDismiss": "Ahora no",
-  "eraseAllData": "Borrar todos mis datos",
-  "eraseAllTitle": "¿Borrar todos tus datos?",
-  "eraseAllBody": "Se borra todo lo registrado en este dispositivo, junto con tu perfil y tus ajustes; solo se conservan el idioma y la apariencia. Después la app vuelve a empezar desde la bienvenida. No se puede deshacer y no existe ninguna copia en otro lado: exportá antes si podrías querer algo de vuelta.",
-  "eraseAllConfirmWord": "BORRAR",
-  "eraseAllTypeToConfirm": "Escribí {word} para confirmar",
-  "@eraseAllTypeToConfirm": {
-    "placeholders": {
-      "word": {
-        "type": "String"
-      }
-    }
-  },
-  "eraseAllExportFirst": "Exportar antes",
-  "eraseAllAction": "Borrar todo",
-  "privacyPolicy": "Política de privacidad",
-  "termsOfUse": "Términos de uso",
-  "developerContact": "Contacto",
-  "developerContactBody": "{developer} · reportes y consultas en GitHub",
-  "@developerContactBody": {
-    "placeholders": {
-      "developer": {
-        "type": "String"
-      }
-    }
-  },
-  "openSourceLicenses": "Licencias",
-  "backupExportCsv": "Exportar CSV",
-  "backupCsvHint": "El CSV es para leer tus datos en una planilla; no se puede importar. Para respaldar usá Exportar.",
-  "backupCsvExported": "{count, plural, =1{CSV guardado: 1 registro} other{CSV guardado: {count} registros}}",
-  "@backupCsvExported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "updateAvailableTitle": "Hay una versión nueva",
-  "updateAvailableBody": "La versión {version} está disponible.",
-  "@updateAvailableBody": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "updateAvailableBackupHint": "Esta versión cambia cómo se guardan tus datos. Exportá un respaldo antes de actualizar.",
-  "updateUnsupportedPath": "Tu versión es muy antigua para actualizar directo. Exportá un respaldo y consultá las instrucciones.",
-  "updateActionReload": "Actualizar",
-  "updateActionDownload": "Descargar",
-  "updateActionExport": "Exportar",
-  "updateActionDismiss": "Ahora no",
-  "saveFailed": "No se pudo guardar. Intentá de nuevo.",
-  "deleteFailed": "No se pudo borrar. Intentá de nuevo.",
-  "staleStoreTitle": "Hay otra pestaña con una versión anterior",
-  "staleStoreBody": "Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página.",
-  "todoColumns": "Columnas",
-  "todoEditColumns": "Editar columnas",
-  "todoNewColumn": "Nueva columna",
-  "todoColumnName": "Nombre de la columna",
-  "todoColumnCountsAsDone": "Cuenta como terminada",
-  "todoColumnCountsAsDoneHint": "Las tareas que caen acá dejan de estar vencidas y cuentan como completadas en el progreso.",
-  "todoColumnHoldsTasks": "Esta columna todavía tiene {count} tarea(s). Movelas antes de eliminarla.",
-  "@todoColumnHoldsTasks": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoColumnLastOne": "El tablero necesita al menos una columna.",
-  "todoColumnMoveLeft": "Mover a la izquierda",
-  "todoColumnMoveRight": "Mover a la derecha",
-  "todoTaskDetail": "Detalle de la tarea",
-  "todoNoDescription": "Sin descripción",
-  "todoFieldColumn": "Columna",
-  "todoUpdates": "Novedades",
-  "todoAddUpdate": "Agregar una novedad",
-  "todoProjectAllDone": "Todo hecho",
-  "todoProjectOverdue": "Con tareas vencidas",
-  "todoProjectDueToday": "Con tareas para hoy",
-  "todoProjectOpen": "Con tareas abiertas",
-  "todoProjectEmpty": "Sin tareas",
-  "todoProjectProgress": "{done} de {total} terminadas",
-  "@todoProjectProgress": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "actionClose": "Cerrar",
-  "todoChecklist": "Checklist",
-  "todoAddChecklistItem": "Agregar un ítem",
-  "todoChecklistProgress": "{done} de {total}",
-  "@todoChecklistProgress": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "todoInColumn": "en la columna",
-  "todoDetails": "Detalles",
-  "todoNoUpdates": "Sin novedades todavía",
-  "todoBoardOf": "Tablero de {project}",
-  "@todoBoardOf": {
-    "placeholders": {
-      "project": {
-        "type": "String"
-      }
-    }
-  },
-  "nutritionComposition": "Composición",
-  "nutritionComposedHint": "Sumá alimentos con su peso y los macros se calculan solos. Podés corregirlos a mano después.",
-  "nutritionSaveAsDish": "Guardar la combinación como plato",
-  "nutritionSaveAsDishHint": "Queda en tu base de alimentos para elegirlo de una próxima vez.",
-  "nutritionDishSaved": "Plato guardado en tu base",
-  "nutritionTotal": "Total",
-  "nutritionRemoveFood": "Quitar",
-  "nutritionHowMuch": "¿Cuánto pesa?",
-  "nutritionPartOf": "{name}, {grams} g",
-  "@nutritionPartOf": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      },
-      "grams": {
-        "type": "int"
-      }
-    }
-  },
-  "habitsAllCategories": "Todas",
-  "habitsFilterByCategory": "Filtrar por categoría",
-  "habitsNoCategory": "Sin categoría",
-  "habitsNewCategory": "Nueva categoría…",
-  "planVideo": "Ver el video",
-  "planVideoTitle": "Video del ejercicio",
-  "planVideoOpen": "Abrir afuera",
-  "planVideoExternalOnly": "Este enlace no se puede mostrar acá adentro. Se abre en tu navegador.",
-  "planVideoNotice": "El video se carga desde su sitio; eso es la única cosa que sale del dispositivo.",
-  "steps": "Pasos",
-  "stepsToday": "Pasos del día",
-  "stepsNone": "Todavía no anotaste los pasos de este día.",
-  "stepsRecord": "Anotar pasos",
-  "stepsEdit": "Corregir",
-  "stepsClear": "Borrar el registro",
-  "stepsCount": "{steps} pasos",
-  "@stepsCount": {
-    "placeholders": {
-      "steps": {
-        "type": "String"
-      }
-    }
-  },
-  "stepsGoal": "Meta diaria",
-  "stepsGoalEdit": "Cambiar la meta",
-  "stepsGoalReached": "Meta alcanzada",
-  "stepsOfGoal": "{walked} de {goal}",
-  "@stepsOfGoal": {
-    "placeholders": {
-      "walked": {
-        "type": "String"
-      },
-      "goal": {
-        "type": "String"
-      }
-    }
-  },
-  "stepsAverage": "Promedio por día",
-  "stepsBest": "Mejor día",
-  "stepsDaysLogged": "Días anotados",
-  "stepsGoalDays": "Días con la meta",
-  "stepsPerDay": "Pasos por día",
-  "stepsEmptyHint": "Anotá los pasos de un día y acá vas a ver cómo viene la semana.",
-  "stepsValidation": "Poné un número entre 0 y {max}.",
-  "@stepsValidation": {
-    "placeholders": {
-      "max": {
-        "type": "String"
-      }
-    }
-  },
-  "stepsAveragedOverLogged": "Promediado sobre los días que anotaste, no sobre los {days} de la ventana.",
-  "@stepsAveragedOverLogged": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardActivity": "Actividad",
-  "dashboardActivityCaption": "Últimas {weeks} semanas",
-  "@dashboardActivityCaption": {
-    "placeholders": {
-      "weeks": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardActivityEmpty": "Todavía no hay nada anotado. Cada cosa que registres pinta un cuadradito.",
-  "dashboardActivityLess": "Menos",
-  "dashboardActivityMore": "Más",
-  "dashboardActivityDays": "{days} días con actividad",
-  "@dashboardActivityDays": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardActivityRun": "Racha más larga: {days} días",
-  "@dashboardActivityRun": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardActivityTotal": "{count} registros",
-  "@dashboardActivityTotal": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardActivityCell": "{date}: {count} registros",
-  "@dashboardActivityCell": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardActivityCellEmpty": "{date}: nada anotado",
-  "@dashboardActivityCellEmpty": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "settingsVacation": "Modo vacaciones",
-  "settingsVacationHint": "Pausá los hábitos y las rachas mientras estés afuera. Un día en pausa no corta una racha ni te cuenta como incumplido.",
-  "vacationSwitch": "Estoy de vacaciones",
-  "vacationSwitchHint": "Se pausa desde hoy hasta que lo apagues.",
-  "vacationActiveSince": "En pausa desde el {date}",
-  "@vacationActiveSince": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "vacationEnd": "Terminar",
-  "vacationAdd": "Agregar período",
-  "vacationEditTitle": "Período de pausa",
-  "vacationEmpty": "Todavía no anotaste ningún período.",
-  "vacationRange": "Del {start} al {end}",
-  "@vacationRange": {
-    "placeholders": {
-      "start": {
-        "type": "String"
-      },
-      "end": {
-        "type": "String"
-      }
-    }
-  },
-  "vacationOpenRange": "Desde el {date}, sin cerrar",
-  "@vacationOpenRange": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "vacationLength": "{days} días",
-  "@vacationLength": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "vacationFrom": "Desde",
-  "vacationUntil": "Hasta",
-  "vacationUntilOpen": "Sin definir",
-  "vacationNote": "Nota (opcional)",
-  "vacationNoteHint": "Viaje, gripe, mudanza…",
-  "vacationDelete": "Eliminar período",
-  "vacationBackwards": "El final no puede ser anterior al inicio.",
-  "vacationPausedToday": "Hoy está en pausa: los hábitos y las rachas no se cortan.",
-  "dashboardHabitsPaused": "En pausa",
-  "pomodoroHistory": "Historial",
-  "pomodoroIdle": "Sin pomodoro en curso",
-  "pomodoroIdleHint": "Elegí uno del historial o creá uno nuevo.",
-  "audioTrack": "Sonido",
-  "audioTrackNone": "Sin sonido",
-  "audioTrackAdd": "Agregar sonido",
-  "audioTrackEdit": "Editar sonido",
-  "audioTrackName": "Nombre",
-  "audioTrackNameHint": "Lluvia, ruido blanco, lo-fi…",
-  "audioTrackUrl": "Link de YouTube",
-  "audioTrackUrlHint": "Pegá el link del video que querés escuchar.",
-  "audioTrackInvalid": "Ese link no se puede reproducir acá adentro.",
-  "audioTrackLibraryEmpty": "Todavía no agregaste ningún sonido.",
-  "audioTrackNotice": "El video se carga desde YouTube; eso es lo único que sale del dispositivo.",
-  "audioTrackPlayHint": "Dale play cuando arranques: el navegador no deja que empiece solo.",
-  "meditationSound": "Audio para meditar",
-  "todoFilterOwner": "Propietario",
-  "todoFieldOwner": "Propietario",
-  "todoOwnerHint": "De quién es la tarea. Vacío significa tuya.",
-  "todoOwnerMine": "Mía",
-  "autoBackupTitle": "Copia semanal automática",
-  "autoBackupHint": "Una vez por semana, al abrir la app, se guarda una copia en la carpeta que elijas. Nada sale del dispositivo.",
-  "autoBackupChoose": "Elegir carpeta",
-  "autoBackupChange": "Cambiar carpeta",
-  "autoBackupFolder": "Carpeta: {folder}",
-  "@autoBackupFolder": {
-    "placeholders": {
-      "folder": {
-        "type": "String"
-      }
-    }
-  },
-  "autoBackupNever": "Todavía no se guardó ninguna.",
-  "autoBackupLastRun": "Última copia: {date}",
-  "@autoBackupLastRun": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "autoBackupRunNow": "Guardar una ahora",
-  "autoBackupSaved": "Copia guardada en la carpeta.",
-  "autoBackupFolderGone": "No se encuentra la carpeta. Elegí una de nuevo.",
-  "autoBackupNeedsPermission": "El navegador pide permiso otra vez para escribir en esa carpeta.",
-  "autoBackupFailed": "No se pudo guardar la copia.",
-  "autoBackupUnsupported": "Este navegador no permite escribir en una carpeta. Usá la app de escritorio, o exportá a mano cuando quieras.",
-  "autoBackupWhileOpen": "Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.",
-  "serverAccountTitle": "Cuenta en servidor",
-  "serverAccountHint": "Opcional: conectá tu propio servidor Nisabitus para backup con cuenta. El modo local sigue disponible sin login.",
-  "serverUrl": "URL del servidor",
-  "serverUsername": "Usuario",
-  "serverPassword": "Contraseña",
-  "serverConnect": "Conectar",
-  "serverReconnect": "Reconectar",
-  "serverDisconnect": "Desconectar",
-  "serverConnected": "Conectado al servidor.",
-  "serverDisconnected": "Desconectado del servidor. Los datos locales quedan en este dispositivo.",
-  "serverConnectedAs": "Conectado como {username} en {server}",
-  "@serverConnectedAs": {
-    "placeholders": {
-      "username": {
-        "type": "String"
-      },
-      "server": {
-        "type": "String"
-      }
-    }
-  },
-  "serverManualSyncHint": "Backup manual del servidor. Subir copia este dispositivo a la cuenta; Descargar reemplaza este dispositivo con el backup de la cuenta.",
-  "serverUpload": "Subir a la cuenta",
-  "serverDownload": "Descargar de la cuenta",
-  "serverUploaded": "{count, plural, =1{Se subió 1 registro a la cuenta} other{Se subieron {count} registros a la cuenta}}",
-  "@serverUploaded": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "serverDownloaded": "{count, plural, =1{Se descargó 1 registro de la cuenta} other{Se descargaron {count} registros de la cuenta}}",
-  "@serverDownloaded": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "serverDownloadConfirmBody": "Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.",
-  "serverFamilyAccounts": "Cuentas familiares",
-  "serverFamilyAccountsHint": "Solo admin: creá cuentas para familiares. Van a entrar con su propio usuario y contraseña.",
-  "serverNewUsername": "Nuevo usuario",
-  "serverNewPassword": "Nueva contraseña",
-  "serverCreateUser": "Crear cuenta",
-  "serverUserCreated": "Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona.",
-  "serverUsernameRequired": "Ingresá un usuario.",
-  "serverPasswordTooShort": "Usá al menos 8 caracteres para la contraseña."
+   "@@locale": "es",
+   "appTitle": "Nisabitus",
+   "appTagline": "El esfuerzo que te eleva",
+   "tabDashboard": "Panel",
+   "tabHabits": "Hábitos",
+   "tabJournal": "Journal",
+   "tabSleep": "Sueño",
+   "tabPomodoro": "Pomodoro",
+   "tabTodo": "To-Do",
+   "tabCheatsheets": "Estudio",
+   "habitsTitle": "Hábitos",
+   "habitsList": "Lista",
+   "habitsProgress": "Progreso",
+   "frequencyDaily": "Diario",
+   "frequencyWeekly": "Semanal",
+   "frequencyMonthly": "Mensual",
+   "frequencyYearly": "Anual",
+   "habitsEmpty": "Todavía no hay hábitos acá",
+   "habitsEmptyHint": "Creá el primero y empezá a sostenerlo",
+   "habitNew": "Nuevo hábito",
+   "habitDone": "Hecho",
+   "habitCancel": "Cancelar",
+   "habitCompleted": "Completado",
+   "habitCancelled": "Cancelado",
+   "habitFinishedOn": "Finalizado el {date}",
+   "@habitFinishedOn": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
+      }
+   },
+   "habitTargetBadge": "{count}x",
+   "@habitTargetBadge": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "streaksTitle": "Rachas",
+   "streaksEmpty": "Todavía no hay rachas",
+   "streaksEmptyHint": "Una racha cuenta los días seguidos que sostenés algo",
+   "streakNew": "Nueva racha",
+   "streakDays": "días",
+   "streakRecord": "Récord: {count}",
+   "@streakRecord": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "streakIncrement": "+1",
+   "streakReset": "Reiniciar",
+   "streakMissedDay": "Marcar un día olvidado",
+   "actionSave": "Guardar",
+   "actionCancel": "Cancelar",
+   "actionDelete": "Borrar",
+   "actionExpand": "Mostrar",
+   "actionCollapse": "Ocultar",
+   "actionEdit": "Editar",
+   "fieldName": "Nombre",
+   "fieldDescription": "Descripción",
+   "fieldCategory": "Categoría",
+   "fieldFrequency": "Frecuencia",
+   "fieldTarget": "Objetivo por período",
+   "validationNameRequired": "El nombre es obligatorio",
+   "deleteConfirmTitle": "¿Borrar {name}?",
+   "@deleteConfirmTitle": {
+      "placeholders": {
+         "name": {
+            "type": "String"
+         }
+      }
+   },
+   "deleteConfirmBody": "Esta acción no se puede deshacer.",
+   "comingSoon": "En construcción",
+   "comingSoonHint": "Este módulo todavía no está implementado.",
+   "weekdayShortMonday": "L",
+   "weekdayShortTuesday": "M",
+   "weekdayShortWednesday": "X",
+   "weekdayShortThursday": "J",
+   "weekdayShortFriday": "V",
+   "weekdayShortSaturday": "S",
+   "weekdayShortSunday": "D",
+   "habitRepeatForever": "Repetir por siempre",
+   "habitEndDate": "Fecha de fin",
+   "habitRepeatDays": "Días de repetición",
+   "habitEdit": "Editar hábito",
+   "habitScheduledOn": "Programado: {days}",
+   "@habitScheduledOn": {
+      "placeholders": {
+         "days": {
+            "type": "String"
+         }
+      }
+   },
+   "habitRevert": "Volver a pendiente",
+   "habitsToday": "Progreso de hoy",
+   "habitsTodayCount": "{done} de {total}",
+   "@habitsTodayCount": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "streakCurrent": "Racha actual",
+   "streakLongest": "Récord",
+   "rangeDay": "Día",
+   "rangeWeek": "Semana",
+   "rangeMonth": "Mes",
+   "rangeYear": "Año",
+   "statsCompleted": "Completados",
+   "statsSuccessRate": "Tasa de éxito",
+   "statsPercent": "{value}%",
+   "statsRangeCaption": "Últimos {days} días",
+   "chartEmpty": "Sin datos en este rango",
+   "chartEmptyHint": "Resolvé algún hábito y el progreso aparece acá",
+   "chartStreaksEmptyHint": "Sumá a una racha y su evolución aparece acá",
+   "habitsCompletionsPerDay": "Cumplimientos por día",
+   "streaksEvolution": "Evolución",
+   "@statsPercent": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@statsRangeCaption": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
+      }
+   },
+   "weekPrevious": "Semana anterior",
+   "weekNext": "Semana siguiente",
+   "sleepTitle": "Sueño",
+   "sleepLastNight": "Esa noche",
+   "sleepHours": "{hours} h",
+   "sleepNoRecord": "Sin registro",
+   "sleepNoRecordHint": "Anotá cuántas horas dormiste ese día",
+   "sleepQualityOptimal": "Óptimo",
+   "sleepQualityAcceptable": "Aceptable",
+   "sleepQualityPoor": "A mejorar",
+   "sleepLog": "Registrar sueño",
+   "sleepFieldHours": "Horas dormidas",
+   "sleepSave": "Registrar",
+   "sleepUpdate": "Actualizar",
+   "sleepHistory": "Historial",
+   "sleepAverage": "Promedio",
+   "sleepRecords": "Registros",
+   "sleepOptimalNights": "Noches óptimas",
+   "sleepRange": "Rango",
+   "sleepRangeValue": "{min} – {max} h",
+   "sleepInsights": "Bienestar",
+   "sleepInsightAverageGood": "Tu promedio está en la franja recomendada. Sostenelo.",
+   "sleepInsightAverageLow": "Estás durmiendo por debajo de lo recomendado.",
+   "sleepInsightAverageHigh": "Estás durmiendo por encima de lo habitual.",
+   "sleepInsightConsistency": "Consistencia",
+   "sleepInsightConsistencySteady": "Tus noches son parejas.",
+   "sleepInsightConsistencyErratic": "Tus horas varían bastante de una noche a otra.",
+   "sleepValidationHours": "Ingresá un número entre 0 y 24",
+   "@sleepHours": {
+      "placeholders": {
+         "hours": {
+            "type": "String"
+         }
+      }
+   },
+   "@sleepRangeValue": {
+      "placeholders": {
+         "min": {
+            "type": "String"
+         },
+         "max": {
+            "type": "String"
+         }
+      }
+   },
+   "journalTitle": "Journal",
+   "journalMood": "Estado emocional",
+   "journalMoodHint": "¿Cómo te sentiste?",
+   "journalEnergy": "Energía",
+   "journalEnergyLow": "Baja",
+   "journalEnergyMedium": "Media",
+   "journalEnergyHigh": "Alta",
+   "journalGratitude": "Gratitud",
+   "journalGratitudeHint": "¿Qué agradecés de hoy?",
+   "journalFocus": "Foco del día",
+   "journalFocusHint": "¿En qué pusiste tu atención?",
+   "journalReflection": "Reflexión",
+   "journalReflectionHint": "Escribí lo que quieras. Sin apuro.",
+   "journalIntention": "Intención para mañana",
+   "journalIntentionHint": "¿Con qué querés empezar mañana?",
+   "journalSave": "Guardar",
+   "journalUpdate": "Actualizar",
+   "journalSaved": "Guardado",
+   "journalEntry": "Entrada del día",
+   "journalHistory": "Entradas anteriores",
+   "journalHistoryEmpty": "Todavía no hay entradas",
+   "journalHistoryEmptyHint": "Lo que escribas va a aparecer acá",
+   "journalNoPreview": "Sin contenido",
+   "cheatsheetsTitle": "Estudio",
+   "cheatsheetsImport": "Importar notas",
+   "cheatsheetsSearch": "Buscar notas",
+   "cheatsheetsEmpty": "Todavía no hay apuntes",
+   "cheatsheetsEmptyHint": "Importá notas Markdown o de texto para tenerlas cerca",
+   "cheatsheetsNoResults": "No hay notas que coincidan",
+   "cheatsheetsNoResultsHint": "Buscá por título o contenido",
+   "cheatsheetsDetailEmpty": "Elegí una nota",
+   "cheatsheetsDetailEmptyHint": "Abrí una nota importada para leerla acá",
+   "cheatsheetsNewNote": "Nueva nota",
+   "cheatsheetsCreatedInApp": "Creada en la app",
+   "cheatsheetsEdit": "Editar nota",
+   "cheatsheetsEditNote": "Editar nota",
+   "cheatsheetsDeleteTitle": "¿Borrar nota?",
+   "cheatsheetsDeleteMessage": "¿Borrar \"{title}\"? Esto no se puede deshacer.",
+   "@cheatsheetsDeleteMessage": {
+      "placeholders": {
+         "title": {
+            "type": "String"
+         }
+      }
+   },
+   "cheatsheetsTitleField": "Título",
+   "cheatsheetsFolderField": "Carpeta",
+   "cheatsheetsContentField": "Contenido",
+   "journalPage": "{page} de {total}",
+   "journalDeleteTitle": "¿Borrar la entrada?",
+   "@journalPage": {
+      "placeholders": {
+         "page": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "supportTitle": "Apoyar el proyecto",
+   "supportBody": "Nisabitus es gratis, sin cuentas y sin publicidad. Si te sirve, podés colaborar para que siga así.",
+   "supportCafecito": "Cafecito",
+   "supportPatreon": "Patreon",
+   "supportLinkFailed": "No se pudo abrir el enlace",
+   "settingsTitle": "Configuración",
+   "settingsAppearance": "Apariencia",
+   "settingsAccent": "Color de acento",
+   "settingsTabs": "Pestañas visibles",
+   "settingsTabsHint": "Elegí qué secciones querés ver. Siempre queda al menos una.",
+   "settingsProfile": "Perfil",
+   "settingsProfileName": "Tu nombre",
+   "settingsTutorial": "Ver el tutorial",
+   "settingsAbout": "Acerca de",
+   "accentForest": "Bosque",
+   "accentGold": "Dorado",
+   "accentClay": "Arcilla",
+   "accentIndigo": "Índigo",
+   "accentPlum": "Ciruela",
+   "accentSlate": "Pizarra",
+   "tabSettings": "Ajustes",
+   "tutorialSkip": "Saltar",
+   "tutorialNext": "Siguiente",
+   "tutorialDone": "Empezar",
+   "tutorialBack": "Atrás",
+   "onboardingWelcome": "Bienvenido a Nisabitus",
+   "onboardingWelcomeBody": "El esfuerzo que te eleva.",
+   "onboardingNameTitle": "¿Cómo te llamamos?",
+   "onboardingNameBody": "¿Cómo te llamamos?",
+   "onboardingTabsTitle": "¿Qué querés ver?",
+   "onboardingTabsBody": "¿Qué querés ver?",
+   "tutorialHabitsTitle": "Hábitos y rachas",
+   "tutorialHabitsBody": "Sostener, no arrancar.",
+   "tutorialTrackTitle": "Sueño y journal",
+   "tutorialTrackBody": "Registrar es entenderse.",
+   "tutorialFocusTitle": "Foco y tareas",
+   "tutorialFocusBody": "Una cosa a la vez.",
+   "pomodoroTitle": "Pomodoro",
+   "pomodoroSessions": "Sesiones",
+   "pomodoroNew": "Nueva sesión",
+   "pomodoroEdit": "Editar sesión",
+   "pomodoroEmpty": "Todavía no hay sesiones",
+   "pomodoroEmptyHint": "Creá una y entrá en modo foco",
+   "pomodoroStatePending": "Pendiente",
+   "pomodoroStateInProgress": "En progreso",
+   "pomodoroStateCompleted": "Completada",
+   "pomodoroStateCancelled": "Cancelada",
+   "pomodoroCycles": "Ciclos",
+   "pomodoroFocusMinutes": "Minutos de foco",
+   "pomodoroBreakMinutes": "Minutos de descanso",
+   "pomodoroPurpose": "Propósito",
+   "pomodoroCurrentSession": "Sesión actual",
+   "pomodoroPhaseFocus": "Foco",
+   "pomodoroPhaseRest": "Descanso",
+   "pomodoroCycleOf": "Ciclo {done} de {total}",
+   "pomodoroStart": "Iniciar",
+   "pomodoroPause": "Pausar",
+   "pomodoroSkip": "Siguiente fase",
+   "pomodoroFinish": "Finalizar",
+   "pomodoroCancel": "Cancelar sesión",
+   "pomodoroClose": "Cerrar sin guardar",
+   "pomodoroStats": "Estadísticas",
+   "pomodoroTotalFocus": "Foco total",
+   "pomodoroTotalCycles": "Ciclos completados",
+   "pomodoroByCategory": "Por categoría",
+   "pomodoroMinutesPerDay": "Minutos por día",
+   "pomodoroMinutes": "{minutes} min",
+   "pomodoroHoursMinutes": "{hours} h {minutes} min",
+   "pomodoroValidationRange": "Entre {min} y {max}",
+   "@pomodoroCycleOf": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "@pomodoroMinutes": {
+      "placeholders": {
+         "minutes": {
+            "type": "int"
+         }
+      }
+   },
+   "@pomodoroHoursMinutes": {
+      "placeholders": {
+         "hours": {
+            "type": "int"
+         },
+         "minutes": {
+            "type": "int"
+         }
+      }
+   },
+   "@pomodoroValidationRange": {
+      "placeholders": {
+         "min": {
+            "type": "int"
+         },
+         "max": {
+            "type": "int"
+         }
+      }
+   },
+   "todoTitle": "To-Do",
+   "todoProjects": "Proyectos",
+   "todoNewProject": "Nuevo proyecto",
+   "todoNewSubproject": "Nuevo subproyecto",
+   "todoNoProjects": "Todavía no hay proyectos",
+   "todoNoProjectsHint": "Creá uno para empezar a organizar tus tareas",
+   "todoPickProject": "Elegí un proyecto",
+   "todoPickProjectHint": "Sus tareas van a aparecer acá",
+   "todoIncludeSubprojects": "Incluir subproyectos",
+   "todoViewKanban": "Tablero",
+   "todoViewList": "Lista",
+   "todoNewTask": "Nueva tarea",
+   "todoEditTask": "Editar tarea",
+   "todoNoTasks": "Sin tareas",
+   "todoNoTasksHint": "Agregá la primera con el botón de abajo",
+   "todoStatusTodo": "Por hacer",
+   "todoStatusInProgress": "En curso",
+   "todoStatusDone": "Hecho",
+   "todoPriorityLow": "Baja",
+   "todoPriorityMedium": "Media",
+   "todoPriorityHigh": "Alta",
+   "todoPriorityUrgent": "Urgente",
+   "todoDueOverdue": "Vencida",
+   "todoDueToday": "Vence hoy",
+   "todoDueUpcoming": "Próxima",
+   "todoFieldTitle": "Título",
+   "todoFieldDescription": "Descripción",
+   "todoFieldDue": "Vencimiento",
+   "todoFieldPriority": "Prioridad",
+   "todoFieldStatus": "Estado",
+   "todoComments": "Avances",
+   "todoCommentHint": "Anotá un avance",
+   "todoNoComments": "Sin avances todavía",
+   "todoFilters": "Filtros",
+   "todoFilterCategory": "Categoría contiene",
+   "todoFilterClear": "Limpiar",
+   "todoTaskCount": "{count} tareas",
+   "todoMoveNotAllowed": "Ese movimiento rompería el árbol de proyectos",
+   "@todoTaskCount": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardGreeting": "Hola, {name}",
+   "dashboardGreetingAnonymous": "Hola",
+   "dashboardSubtitle": "Esto es lo de hoy.",
+   "dashboardRefresh": "Actualizar",
+   "dashboardPendingTasks": "Tareas pendientes",
+   "dashboardOverdue": "{count} vencidas",
+   "dashboardNoOverdue": "Ninguna vencida",
+   "dashboardHabitsToday": "Hábitos de hoy",
+   "dashboardHabitsRatio": "{done} de {total}",
+   "dashboardFocus": "Foco",
+   "dashboardFocusEmpty": "Nada pendiente. Disfrutalo.",
+   "dashboardHealth": "Salud y journal",
+   "dashboardSleepToday": "Sueño de hoy",
+   "dashboardJournalReady": "Listo",
+   "dashboardJournalPending": "Pendiente",
+   "dashboardNoJournal": "Sin entrada",
+   "dashboardQuickActions": "Accesos rápidos",
+   "dashboardNoDue": "Sin fecha",
+   "@dashboardGreeting": {
+      "placeholders": {
+         "name": {
+            "type": "String"
+         }
+      }
+   },
+   "@dashboardOverdue": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "@dashboardHabitsRatio": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "tutorialPageOf": "{page} de {total}",
+   "onboardingWelcomeDetail": "Nisabitus reúne hábitos, rachas, sueño, diario y tareas en un solo lugar que vive en tu dispositivo. Sin cuentas, sin nube, sin telemetría: tus datos no salen de tu equipo, y la app funciona igual sin conexión.",
+   "tutorialHabitsDetail": "Definí lo que querés repetir y resolvelo cada día con un toque. Elegí si es diario, semanal, mensual o anual, y en qué días esperás cumplirlo.\n\nLas rachas cuentan aparte: llevan los días seguidos de algo y guardan tu récord, aunque después vuelvas a cero.",
+   "tutorialTrackDetail": "Anotá cuántas horas dormiste y la app te dice cómo estuvo la noche, saca tu promedio y te muestra la tendencia.\n\nEl journal te propone seis campos cortos para cerrar el día: cómo estuviste, qué agradecés, en qué pusiste el foco y con qué querés empezar mañana.\n\nLa tira semanal te deja completar días que te salteaste.",
+   "tutorialFocusDetail": "El pomodoro parte tu trabajo en ciclos de foco y descanso, y lleva la cuenta de los minutos que realmente concentraste.\n\nEl To-Do organiza tus tareas en proyectos con hasta tres niveles, y las movés entre Por hacer, En curso y Hecho arrastrándolas por el tablero.",
+   "onboardingNameDetail": "Solo lo usamos para saludarte en el panel. No sale de este dispositivo y podés cambiarlo o borrarlo cuando quieras.",
+   "onboardingTabsDetail": "Elegí las secciones que te sirven y dejá afuera las que no. Podés cambiarlo en cualquier momento desde Configuración, que siempre está a mano arriba a la izquierda.",
+   "@tutorialPageOf": {
+      "placeholders": {
+         "page": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "settingsTheme": "Tema",
+   "themeSystem": "Sistema",
+   "themeLight": "Claro",
+   "themeDark": "Oscuro",
+   "settingsLanguage": "Idioma",
+   "languageSpanish": "Español",
+   "languageEnglish": "English",
+   "languageSystem": "Sistema",
+   "tabHealth": "Salud",
+   "healthSleep": "Sueño",
+   "healthNutrition": "Alimentación",
+   "healthExercise": "Ejercicio",
+   "nutritionGoals": "Objetivos diarios",
+   "nutritionEditGoals": "Editar objetivos",
+   "nutritionCalories": "Calorías",
+   "nutritionProtein": "Proteínas",
+   "nutritionCarbs": "Carbohidratos",
+   "nutritionFat": "Grasas",
+   "nutritionGrams": "{value} g",
+   "nutritionKcal": "{value} kcal",
+   "nutritionOfTarget": "{value} de {target}",
+   "nutritionRemaining": "Te quedan {value} kcal",
+   "nutritionOver": "Te pasaste por {value} kcal",
+   "nutritionToday": "Lo que comiste",
+   "nutritionEmpty": "Sin registros ese día",
+   "nutritionEmptyHint": "Anotá lo que comiste y se suma solo",
+   "nutritionAdd": "Agregar alimento",
+   "nutritionEditEntry": "Editar alimento",
+   "nutritionPortion": "Porción",
+   "nutritionPortionHint": "150 g, 1 plato, 2 unidades",
+   "meditationTitle": "Meditación",
+   "meditationToday": "Lo que sentaste",
+   "meditationEmpty": "Ese día no anotaste nada",
+   "meditationEmptyHint": "Anotá cuánto sentaste y cómo te fue",
+   "meditationAdd": "Anotar sesión",
+   "meditationEdit": "Editar sesión",
+   "meditationMinutes": "{value} min",
+   "meditationDayTotal": "{value} min ese día",
+   "meditationDuration": "Duración",
+   "meditationNote": "Cómo te fue",
+   "meditationNoteHint": "Costó arrancar, me dormí, quedé tranquilo…",
+   "meditationValidationMinutes": "Ingresá un número entre 1 y {max}",
+   "meditationMinutesPerDay": "Minutos por día",
+   "meditationAverageDaily": "Promedio diario",
+   "meditationDaysPractised": "Días que sentaste",
+   "meditationLongestStreak": "Racha más larga",
+   "hydration": "Hidratación",
+   "hydrationTarget": "Objetivo diario",
+   "hydrationEditTarget": "Editar objetivo",
+   "hydrationMillilitres": "{value} ml",
+   "hydrationRemaining": "Te faltan {value} ml",
+   "hydrationReached": "Llegaste al objetivo",
+   "hydrationToday": "Lo que tomaste",
+   "hydrationEmpty": "Sin registros ese día",
+   "hydrationEmptyHint": "Anotá cada vaso y se suma solo",
+   "hydrationAdd": "Agregar",
+   "hydrationCustom": "Otra cantidad",
+   "hydrationAmount": "Cantidad",
+   "hydrationValidationAmount": "Ingresá un número entre 1 y {max}",
+   "hydrationPerDay": "Mililitros por día",
+   "hydrationAverageDaily": "Promedio diario",
+   "hydrationDaysOnTarget": "Días en objetivo",
+   "nutritionMeal": "Comida",
+   "nutritionMealBreakfast": "Desayuno",
+   "nutritionMealLunch": "Almuerzo",
+   "nutritionMealSnack": "Merienda",
+   "nutritionMealDinner": "Cena",
+   "nutritionMealNone": "Sin comida",
+   "nutritionUnassigned": "Sin asignar",
+   "nutritionFoodDatabase": "Base de alimentos",
+   "nutritionFoodDatabaseHint": "Elegí un alimento y decí cuánto pesó",
+   "nutritionFoodSearch": "Buscar un alimento",
+   "nutritionFoodNone": "No hay nada que coincida",
+   "nutritionFoodNew": "Alimento nuevo",
+   "nutritionFoodEdit": "Editar alimento",
+   "nutritionFoodMine": "Tuyo",
+   "nutritionFoodDeleteBody": "Solo sale de la base de alimentos. Lo que ya comiste queda tal cual lo anotaste.",
+   "nutritionPer100g": "{value} kcal cada 100 g",
+   "nutritionPer100gLabel": "Cada 100 g",
+   "nutritionWeight": "Peso",
+   "nutritionWeightHint": "Los valores se ajustan a lo que pesaste",
+   "nutritionValidationGrams": "Ingresá un peso entre 0 y {max} g",
+   "nutritionValidationNumber": "Ingresá un número entre 0 y {max}",
+   "discipline": "Disciplinas",
+   "disciplineHint": "Natación, correr, bici — lo que se mide en tiempo, no en series",
+   "disciplineEmpty": "Nada practicado ese día",
+   "disciplineAdd": "Anotar disciplina",
+   "disciplineEdit": "Editar disciplina",
+   "disciplineName": "Qué practicaste",
+   "disciplineNameHint": "Natación, Correr, Bici, Yoga…",
+   "disciplineDuration": "Duración",
+   "disciplineDistance": "Distancia",
+   "disciplineMinutes": "{value} min",
+   "disciplineKm": "{value} km",
+   "disciplineNotes": "Notas",
+   "disciplineCompleteTitle": "¿Cómo te fue?",
+   "disciplineCompleteHint": "Anotá el tiempo y la distancia reales. Lo que dejes en blanco queda como estaba planeado.",
+   "disciplineValidationMinutes": "Ingresá un número entre 1 y {max}",
+   "disciplineValidationDistance": "Ingresá un número entre 0 y {max}",
+   "plan": "Plan",
+   "planToday": "Rutina de gimnasio",
+   "planEmpty": "Nada anotado para ese día",
+   "planEmptyHint": "Anotá un ejercicio y, si se repite, decí en qué días",
+   "planAdd": "Anotar ejercicio",
+   "planEdit": "Editar ejercicio",
+   "planSetsReps": "{sets}x{reps}",
+   "planWeight": "{weight} kg",
+   "planRpe": "RPE {value}",
+   "planComments": "Indicaciones",
+   "planCommentsHint": "Bajar hasta paralelo, sin rebote…",
+   "planFeedback": "Cómo te fue",
+   "planFeedbackHint": "La última salió fea, pesó más de lo esperado…",
+   "planDone": "Hecho",
+   "planReopen": "Volver a pendiente",
+   "planComplete": "Marcar como hecho",
+   "planCompleteTitle": "¿Cómo te fue?",
+   "planCompleteHint": "Anotá el peso y el esfuerzo reales. Lo que dejes en blanco queda como estaba planeado.",
+   "planRepeat": "Repetir",
+   "planRepeatDays": "Días",
+   "planRepeatUntilLabel": "Hasta cuándo",
+   "planRepeatWeeks": "Por semanas",
+   "planRepeatUntil": "Hasta una fecha",
+   "planRepeatForever": "Siempre",
+   "planRepeatWeeksValue": "Cantidad de semanas",
+   "planRepeatUntilValue": "Termina el",
+   "planRepeatSummary": "Se repite {days}",
+   "planStopRepeat": "Dejar de repetir",
+   "planStopRepeatTitle": "¿Dejar de repetir?",
+   "planStopRepeatBody": "Se borran los días siguientes que todavía no hiciste. Lo que ya entrenaste queda como está.",
+   "planValidationDays": "Elegí al menos un día",
+   "planValidationNumber": "Ingresá un número entre 1 y {max}",
+   "planValidationRpe": "El RPE va de 1 a 10",
+   "planValidationEndDate": "La repetición no puede terminar antes de empezar",
+   "exerciseVideo": "Video de referencia",
+   "exerciseVideoHint": "Link a un video que muestre el movimiento",
+   "exerciseOpenVideo": "Ver el video",
+   "exerciseNew": "Nuevo ejercicio",
+   "exerciseEdit": "Editar ejercicio",
+   "exerciseDeleteBody": "Borrar un ejercicio también borra todos los días en que lo anotaste, incluidos los pasados. No se puede deshacer.",
+   "exerciseMuscleGroup": "Grupo muscular",
+   "exerciseDescription": "Descripción",
+   "exerciseSets": "Series",
+   "exerciseReps": "Repeticiones",
+   "exerciseWeight": "Peso (kg)",
+   "exerciseBodyweight": "Peso corporal",
+   "exerciseTotalSets": "Series",
+   "exerciseTotalReps": "Repeticiones",
+   "exerciseVolume": "Volumen",
+   "exerciseVolumeValue": "{value} kg",
+   "exercisePickOne": "Elegí un ejercicio",
+   "@planSetsReps": {
+      "placeholders": {
+         "sets": {
+            "type": "int"
+         },
+         "reps": {
+            "type": "int"
+         }
+      }
+   },
+   "@planWeight": {
+      "placeholders": {
+         "weight": {
+            "type": "String"
+         }
+      }
+   },
+   "@planRpe": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@planRepeatSummary": {
+      "placeholders": {
+         "days": {
+            "type": "String"
+         }
+      }
+   },
+   "@planValidationNumber": {
+      "placeholders": {
+         "max": {
+            "type": "int"
+         }
+      }
+   },
+   "@disciplineMinutes": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@disciplineKm": {
+      "placeholders": {
+         "value": {
+            "type": "String"
+         }
+      }
+   },
+   "@disciplineValidationMinutes": {
+      "placeholders": {
+         "max": {
+            "type": "int"
+         }
+      }
+   },
+   "@disciplineValidationDistance": {
+      "placeholders": {
+         "max": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionGrams": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionKcal": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionOfTarget": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         },
+         "target": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionRemaining": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionOver": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionValidationNumber": {
+      "placeholders": {
+         "max": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionPer100g": {
+      "placeholders": {
+         "value": {
+            "type": "int"
+         }
+      }
+   },
+   "@nutritionValidationGrams": {
+      "placeholders": {
+         "max": {
+            "type": "int"
+         }
+      }
+   },
+   "@exerciseVolumeValue": {
+      "placeholders": {
+         "value": {
+            "type": "String"
+         }
+      }
+   },
+   "disclaimerTitle": "Esto es un registro, no un consejo médico",
+   "disclaimerBody": "Nisabitus no es una aplicación médica ni nutricional. Es un registro: guarda lo que vos anotás y te lo devuelve ordenado.\n\nNo diagnostica, no interpreta síntomas, no calcula dosis y no recomienda tratamientos, dietas ni rutinas. Los objetivos que definas son tuyos, no una indicación profesional.\n\nAntes de empezar, cambiar o suspender una medicación, un suplemento, una dieta o un plan de entrenamiento, hablá con un profesional de la salud. Ante cualquier síntoma que te preocupe, consultá sin demora.",
+   "disclaimerAction": "Entendido",
+   "disclaimerTooltip": "Sobre estos datos",
+   "healthMeds": "Medicación",
+   "medsTitle": "Medicación y suplementos",
+   "medsToday": "Para ese día",
+   "medsCatalogue": "Lo que tomás",
+   "medsNew": "Agregar",
+   "medsEdit": "Editar",
+   "medsEmpty": "Todavía no cargaste nada",
+   "medsEmptyHint": "Agregá lo que tomás y marcalo cada día",
+   "medsKind": "Tipo",
+   "medsKindMedication": "Medicación",
+   "medsKindSupplement": "Suplemento",
+   "medsDose": "Dosis",
+   "medsDoseHint": "500 mg, 2 cápsulas, 10 gotas",
+   "medsSchedule": "Cuándo",
+   "medsScheduleHint": "Mañana, cada 8 h, con la cena",
+   "medsNotes": "Notas",
+   "medsActive": "Activo",
+   "medsInactiveHint": "Lo pausado no aparece en el día",
+   "medsTakenCount": "{done} de {total}",
+   "medsNoneActive": "Nada activo para marcar",
+   "medsNoneActiveHint": "Activá algo de la lista de abajo",
+   "@medsTakenCount": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "progressEntries": "Registros",
+   "progressPerDay": "Por día",
+   "nutritionCaloriesPerDay": "Calorías por día",
+   "nutritionAverageDaily": "Promedio diario",
+   "nutritionDaysLogged": "Días registrados",
+   "exerciseVolumePerDay": "Volumen por día",
+   "exerciseDaysTrained": "Días entrenados",
+   "medsAdherence": "Cumplimiento",
+   "medsAdherencePerDay": "Cumplimiento por día",
+   "medsDaysComplete": "Días completos",
+   "journalEntriesWritten": "Entradas escritas",
+   "journalCoverage": "Cobertura",
+   "journalLongestRun": "Racha más larga",
+   "journalPerDay": "Entradas por día",
+   "todoProgress": "Progreso",
+   "todoCompletedPerDay": "Tareas completadas por día",
+   "todoCompleted": "Completadas",
+   "todoOpen": "Abiertas",
+   "todoOverdue": "Vencidas",
+   "sleepHoursPerNight": "Horas por noche",
+   "progressDays": "{count, plural, =1{1 día} other{{count} días}}",
+   "todoProgressEmptyHint": "Completá una tarea y aparece acá",
+   "@progressDays": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "settingsBackup": "Copia de seguridad",
+   "settingsYourData": "Tus datos",
+   "settingsSupport": "Soporte",
+   "backupExport": "Exportar",
+   "backupImport": "Importar",
+   "backupReplaceWarning": "Importar reemplaza todo lo que tenés ahora.",
+   "backupConfirmTitle": "¿Reemplazar todos tus datos?",
+   "backupConfirmBody": "Se borra lo que hay ahora y queda lo que traiga el archivo. No se puede deshacer, así que exportá antes si tenés dudas.",
+   "backupConfirmAction": "Reemplazar",
+   "backupExported": "{count, plural, =1{Copia guardada: 1 registro} other{Copia guardada: {count} registros}}",
+   "backupImported": "{count, plural, =1{Datos restaurados: 1 registro} other{Datos restaurados: {count} registros}}",
+   "backupSomeIgnored": "Parte del archivo viene de una versión anterior y no se pudo restaurar.",
+   "backupNotABackup": "Ese archivo no es una copia de Nisabitus",
+   "backupNewerVersion": "La copia viene de una versión más nueva de Nisabitus",
+   "backupCorrupt": "La copia está dañada y no se puede leer",
+   "backupFailed": "No se pudo completar la operación",
+   "settingsReleaseNotes": "Novedades",
+   "releaseNotesWhatsNew": "Novedades",
+   "releaseNotesHistory": "Historial de novedades",
+   "releaseNotesVersion": "Versión {version}",
+   "releaseNotesClose": "Entendido",
+   "@releaseNotesVersion": {
+      "placeholders": {
+         "version": {
+            "type": "String"
+         }
+      }
+   },
+   "@backupExported": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "@backupImported": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "storageDegradedWarning": "Este navegador guarda tus datos en un almacenamiento que puede perderse al recargar o al borrar los datos del navegador. Exportá una copia ahora.",
+   "storageVolatileWarning": "Este navegador no puede guardar tus datos: todo lo que anotes se pierde al cerrar esta pestaña. Exportá una copia antes de irte.",
+   "storageExportNow": "Exportar ahora",
+   "storageWarningDismiss": "Ocultar",
+   "recoveryTitle": "No se pudo abrir la base de datos local",
+   "recoveryBody": "Los datos guardados en este dispositivo no se pudieron leer, así que la app no puede arrancar normalmente. Podés restaurar una copia de seguridad o empezar de cero con una base vacía.",
+   "recoveryImport": "Importar una copia",
+   "recoveryReset": "Restablecer la base de datos local",
+   "recoveryImportConfirmTitle": "¿Importar una copia?",
+   "recoveryImportConfirmBody": "La base ilegible de este dispositivo se borra para siempre y queda lo que traiga el archivo de copia. No se puede deshacer.",
+   "recoveryResetConfirmTitle": "¿Restablecer la base de datos local?",
+   "recoveryResetConfirmBody": "Todo lo guardado en este dispositivo se borra para siempre y la app arranca vacía. No se puede deshacer.",
+   "recoveryResetConfirmAction": "Restablecer",
+   "backupNoticeTitle": "Tus datos viven solo en este dispositivo",
+   "backupNoticeLead": "Ningún servidor guarda una copia.",
+   "backupNoticeOnboarding": "No guardamos tus datos en nuestros servidores. Si desinstalás la app, perdés o reseteás el dispositivo o borrás los datos del navegador, se pierden. Exportá seguido desde Ajustes → Tus datos → Exportar y guardá el archivo en un lugar seguro.",
+   "backupNoticeAccept": "Entendido, voy a hacer copias",
+   "backupNoticeSettings": "Tus datos no se guardan en nuestros servidores. Exportá seguido y guardá el archivo fuera de este dispositivo.",
+   "backupReminderNever": "Todavía no hiciste una copia de tus datos.",
+   "backupReminderOverdue": "Tu última copia fue hace {days} días.",
+   "@backupReminderOverdue": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
+      }
+   },
+   "backupReminderAction": "Exportar",
+   "backupReminderDismiss": "Ahora no",
+   "eraseAllData": "Borrar todos mis datos",
+   "eraseAllTitle": "¿Borrar todos tus datos?",
+   "eraseAllBody": "Se borra todo lo registrado en este dispositivo, junto con tu perfil y tus ajustes; solo se conservan el idioma y la apariencia. Después la app vuelve a empezar desde la bienvenida. No se puede deshacer y no existe ninguna copia en otro lado: exportá antes si podrías querer algo de vuelta.",
+   "eraseAllConfirmWord": "BORRAR",
+   "eraseAllTypeToConfirm": "Escribí {word} para confirmar",
+   "@eraseAllTypeToConfirm": {
+      "placeholders": {
+         "word": {
+            "type": "String"
+         }
+      }
+   },
+   "eraseAllExportFirst": "Exportar antes",
+   "eraseAllAction": "Borrar todo",
+   "privacyPolicy": "Política de privacidad",
+   "termsOfUse": "Términos de uso",
+   "developerContact": "Contacto",
+   "developerContactBody": "{developer} · reportes y consultas en GitHub",
+   "@developerContactBody": {
+      "placeholders": {
+         "developer": {
+            "type": "String"
+         }
+      }
+   },
+   "openSourceLicenses": "Licencias",
+   "backupExportCsv": "Exportar CSV",
+   "backupCsvHint": "El CSV es para leer tus datos en una planilla; no se puede importar. Para respaldar usá Exportar.",
+   "backupCsvExported": "{count, plural, =1{CSV guardado: 1 registro} other{CSV guardado: {count} registros}}",
+   "@backupCsvExported": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "updateAvailableTitle": "Hay una versión nueva",
+   "updateAvailableBody": "La versión {version} está disponible.",
+   "@updateAvailableBody": {
+      "placeholders": {
+         "version": {
+            "type": "String"
+         }
+      }
+   },
+   "updateAvailableBackupHint": "Esta versión cambia cómo se guardan tus datos. Exportá un respaldo antes de actualizar.",
+   "updateUnsupportedPath": "Tu versión es muy antigua para actualizar directo. Exportá un respaldo y consultá las instrucciones.",
+   "updateActionReload": "Actualizar",
+   "updateActionDownload": "Descargar",
+   "updateActionExport": "Exportar",
+   "updateActionDismiss": "Ahora no",
+   "saveFailed": "No se pudo guardar. Intentá de nuevo.",
+   "deleteFailed": "No se pudo borrar. Intentá de nuevo.",
+   "staleStoreTitle": "Hay otra pestaña con una versión anterior",
+   "staleStoreBody": "Nisabitus está abierto en otra pestaña o ventana con una versión anterior, y mientras siga abierta esta no puede guardar nada. Tus datos están intactos. Cerrá todas las demás pestañas de Nisabitus y volvé a cargar esta página.",
+   "todoColumns": "Columnas",
+   "todoEditColumns": "Editar columnas",
+   "todoNewColumn": "Nueva columna",
+   "todoColumnName": "Nombre de la columna",
+   "todoColumnCountsAsDone": "Cuenta como terminada",
+   "todoColumnCountsAsDoneHint": "Las tareas que caen acá dejan de estar vencidas y cuentan como completadas en el progreso.",
+   "todoColumnHoldsTasks": "Esta columna todavía tiene {count} tarea(s). Movelas antes de eliminarla.",
+   "@todoColumnHoldsTasks": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "todoColumnLastOne": "El tablero necesita al menos una columna.",
+   "todoColumnMoveLeft": "Mover a la izquierda",
+   "todoColumnMoveRight": "Mover a la derecha",
+   "todoTaskDetail": "Detalle de la tarea",
+   "todoNoDescription": "Sin descripción",
+   "todoFieldColumn": "Columna",
+   "todoUpdates": "Novedades",
+   "todoAddUpdate": "Agregar una novedad",
+   "todoProjectAllDone": "Todo hecho",
+   "todoProjectOverdue": "Con tareas vencidas",
+   "todoProjectDueToday": "Con tareas para hoy",
+   "todoProjectOpen": "Con tareas abiertas",
+   "todoProjectEmpty": "Sin tareas",
+   "todoProjectProgress": "{done} de {total} terminadas",
+   "@todoProjectProgress": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "actionClose": "Cerrar",
+   "todoChecklist": "Checklist",
+   "todoAddChecklistItem": "Agregar un ítem",
+   "todoChecklistProgress": "{done} de {total}",
+   "@todoChecklistProgress": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
+      }
+   },
+   "todoInColumn": "en la columna",
+   "todoDetails": "Detalles",
+   "todoNoUpdates": "Sin novedades todavía",
+   "todoBoardOf": "Tablero de {project}",
+   "@todoBoardOf": {
+      "placeholders": {
+         "project": {
+            "type": "String"
+         }
+      }
+   },
+   "nutritionComposition": "Composición",
+   "nutritionComposedHint": "Sumá alimentos con su peso y los macros se calculan solos. Podés corregirlos a mano después.",
+   "nutritionSaveAsDish": "Guardar la combinación como plato",
+   "nutritionSaveAsDishHint": "Queda en tu base de alimentos para elegirlo de una próxima vez.",
+   "nutritionDishSaved": "Plato guardado en tu base",
+   "nutritionTotal": "Total",
+   "nutritionRemoveFood": "Quitar",
+   "nutritionHowMuch": "¿Cuánto pesa?",
+   "nutritionPartOf": "{name}, {grams} g",
+   "@nutritionPartOf": {
+      "placeholders": {
+         "name": {
+            "type": "String"
+         },
+         "grams": {
+            "type": "int"
+         }
+      }
+   },
+   "habitsAllCategories": "Todas",
+   "habitsFilterByCategory": "Filtrar por categoría",
+   "habitsNoCategory": "Sin categoría",
+   "habitsNewCategory": "Nueva categoría…",
+   "planVideo": "Ver el video",
+   "planVideoTitle": "Video del ejercicio",
+   "planVideoOpen": "Abrir afuera",
+   "planVideoExternalOnly": "Este enlace no se puede mostrar acá adentro. Se abre en tu navegador.",
+   "planVideoNotice": "El video se carga desde su sitio; eso es la única cosa que sale del dispositivo.",
+   "steps": "Pasos",
+   "stepsToday": "Pasos del día",
+   "stepsNone": "Todavía no anotaste los pasos de este día.",
+   "stepsRecord": "Anotar pasos",
+   "stepsEdit": "Corregir",
+   "stepsClear": "Borrar el registro",
+   "stepsCount": "{steps} pasos",
+   "@stepsCount": {
+      "placeholders": {
+         "steps": {
+            "type": "String"
+         }
+      }
+   },
+   "stepsGoal": "Meta diaria",
+   "stepsGoalEdit": "Cambiar la meta",
+   "stepsGoalReached": "Meta alcanzada",
+   "stepsOfGoal": "{walked} de {goal}",
+   "@stepsOfGoal": {
+      "placeholders": {
+         "walked": {
+            "type": "String"
+         },
+         "goal": {
+            "type": "String"
+         }
+      }
+   },
+   "stepsAverage": "Promedio por día",
+   "stepsBest": "Mejor día",
+   "stepsDaysLogged": "Días anotados",
+   "stepsGoalDays": "Días con la meta",
+   "stepsPerDay": "Pasos por día",
+   "stepsEmptyHint": "Anotá los pasos de un día y acá vas a ver cómo viene la semana.",
+   "stepsValidation": "Poné un número entre 0 y {max}.",
+   "@stepsValidation": {
+      "placeholders": {
+         "max": {
+            "type": "String"
+         }
+      }
+   },
+   "stepsAveragedOverLogged": "Promediado sobre los días que anotaste, no sobre los {days} de la ventana.",
+   "@stepsAveragedOverLogged": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardActivity": "Actividad",
+   "dashboardActivityCaption": "Últimas {weeks} semanas",
+   "@dashboardActivityCaption": {
+      "placeholders": {
+         "weeks": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardActivityEmpty": "Todavía no hay nada anotado. Cada cosa que registres pinta un cuadradito.",
+   "dashboardActivityLess": "Menos",
+   "dashboardActivityMore": "Más",
+   "dashboardActivityDays": "{days} días con actividad",
+   "@dashboardActivityDays": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardActivityRun": "Racha más larga: {days} días",
+   "@dashboardActivityRun": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardActivityTotal": "{count} registros",
+   "@dashboardActivityTotal": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardActivityCell": "{date}: {count} registros",
+   "@dashboardActivityCell": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         },
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "dashboardActivityCellEmpty": "{date}: nada anotado",
+   "@dashboardActivityCellEmpty": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
+      }
+   },
+   "settingsVacation": "Modo vacaciones",
+   "settingsVacationHint": "Pausá los hábitos y las rachas mientras estés afuera. Un día en pausa no corta una racha ni te cuenta como incumplido.",
+   "vacationSwitch": "Estoy de vacaciones",
+   "vacationSwitchHint": "Se pausa desde hoy hasta que lo apagues.",
+   "vacationActiveSince": "En pausa desde el {date}",
+   "@vacationActiveSince": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
+      }
+   },
+   "vacationEnd": "Terminar",
+   "vacationAdd": "Agregar período",
+   "vacationEditTitle": "Período de pausa",
+   "vacationEmpty": "Todavía no anotaste ningún período.",
+   "vacationRange": "Del {start} al {end}",
+   "@vacationRange": {
+      "placeholders": {
+         "start": {
+            "type": "String"
+         },
+         "end": {
+            "type": "String"
+         }
+      }
+   },
+   "vacationOpenRange": "Desde el {date}, sin cerrar",
+   "@vacationOpenRange": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
+      }
+   },
+   "vacationLength": "{days} días",
+   "@vacationLength": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
+      }
+   },
+   "vacationFrom": "Desde",
+   "vacationUntil": "Hasta",
+   "vacationUntilOpen": "Sin definir",
+   "vacationNote": "Nota (opcional)",
+   "vacationNoteHint": "Viaje, gripe, mudanza…",
+   "vacationDelete": "Eliminar período",
+   "vacationBackwards": "El final no puede ser anterior al inicio.",
+   "vacationPausedToday": "Hoy está en pausa: los hábitos y las rachas no se cortan.",
+   "dashboardHabitsPaused": "En pausa",
+   "pomodoroHistory": "Historial",
+   "pomodoroIdle": "Sin pomodoro en curso",
+   "pomodoroIdleHint": "Elegí uno del historial o creá uno nuevo.",
+   "audioTrack": "Sonido",
+   "audioTrackNone": "Sin sonido",
+   "audioTrackAdd": "Agregar sonido",
+   "audioTrackEdit": "Editar sonido",
+   "audioTrackName": "Nombre",
+   "audioTrackNameHint": "Lluvia, ruido blanco, lo-fi…",
+   "audioTrackUrl": "Link de YouTube",
+   "audioTrackUrlHint": "Pegá el link del video que querés escuchar.",
+   "audioTrackInvalid": "Ese link no se puede reproducir acá adentro.",
+   "audioTrackLibraryEmpty": "Todavía no agregaste ningún sonido.",
+   "audioTrackNotice": "El video se carga desde YouTube; eso es lo único que sale del dispositivo.",
+   "audioTrackPlayHint": "Dale play cuando arranques: el navegador no deja que empiece solo.",
+   "meditationSound": "Audio para meditar",
+   "todoFilterOwner": "Propietario",
+   "todoFieldOwner": "Propietario",
+   "todoOwnerHint": "De quién es la tarea. Vacío significa tuya.",
+   "todoOwnerMine": "Mía",
+   "autoBackupTitle": "Copia semanal automática",
+   "autoBackupHint": "Una vez por semana, al abrir la app, se guarda una copia en la carpeta que elijas. Nada sale del dispositivo.",
+   "autoBackupChoose": "Elegir carpeta",
+   "autoBackupChange": "Cambiar carpeta",
+   "autoBackupFolder": "Carpeta: {folder}",
+   "@autoBackupFolder": {
+      "placeholders": {
+         "folder": {
+            "type": "String"
+         }
+      }
+   },
+   "autoBackupNever": "Todavía no se guardó ninguna.",
+   "autoBackupLastRun": "Última copia: {date}",
+   "@autoBackupLastRun": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
+      }
+   },
+   "autoBackupRunNow": "Guardar una ahora",
+   "autoBackupSaved": "Copia guardada en la carpeta.",
+   "autoBackupFolderGone": "No se encuentra la carpeta. Elegí una de nuevo.",
+   "autoBackupNeedsPermission": "El navegador pide permiso otra vez para escribir en esa carpeta.",
+   "autoBackupFailed": "No se pudo guardar la copia.",
+   "autoBackupUnsupported": "Este navegador no permite escribir en una carpeta. Usá la app de escritorio, o exportá a mano cuando quieras.",
+   "autoBackupWhileOpen": "Solo ocurre con la app abierta: nada corre por detrás cuando está cerrada.",
+   "serverAccountTitle": "Cuenta en servidor",
+   "serverAccountHint": "Opcional: conectá tu propio servidor Nisabitus para backup con cuenta. El modo local sigue disponible sin login.",
+   "serverUrl": "URL del servidor",
+   "serverUsername": "Usuario",
+   "serverPassword": "Contraseña",
+   "serverConnect": "Conectar",
+   "serverReconnect": "Reconectar",
+   "serverDisconnect": "Desconectar",
+   "serverConnected": "Conectado al servidor.",
+   "serverDisconnected": "Desconectado del servidor. Los datos locales quedan en este dispositivo.",
+   "serverConnectedAs": "Conectado como {username} en {server}",
+   "@serverConnectedAs": {
+      "placeholders": {
+         "username": {
+            "type": "String"
+         },
+         "server": {
+            "type": "String"
+         }
+      }
+   },
+   "serverManualSyncHint": "Backup manual del servidor. Subir copia este dispositivo a la cuenta; Descargar reemplaza este dispositivo con el backup de la cuenta.",
+   "serverUpload": "Subir a la cuenta",
+   "serverDownload": "Descargar de la cuenta",
+   "serverUploaded": "{count, plural, =1{Se subió 1 registro a la cuenta} other{Se subieron {count} registros a la cuenta}}",
+   "@serverUploaded": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "serverDownloaded": "{count, plural, =1{Se descargó 1 registro de la cuenta} other{Se descargaron {count} registros de la cuenta}}",
+   "@serverDownloaded": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "serverDownloadConfirmBody": "Los datos de este dispositivo se van a borrar y reemplazar por el backup de la cuenta. Subí o exportá primero si no estás seguro.",
+   "serverFamilyAccounts": "Cuentas familiares",
+   "serverFamilyAccountsHint": "Solo admin: creá cuentas para familiares. Van a entrar con su propio usuario y contraseña.",
+   "serverNewUsername": "Nuevo usuario",
+   "serverNewPassword": "Nueva contraseña",
+   "serverCreateUser": "Crear cuenta",
+   "serverUserCreated": "Cuenta creada. Compartí la URL del servidor, el usuario y la contraseña con esa persona.",
+   "serverUsernameRequired": "Ingresá un usuario.",
+   "serverPasswordTooShort": "Usá al menos 8 caracteres para la contraseña.",
+   "actionClear": "Limpiar",
+   "cheatsheetsShowPlainText": "Ver texto plano",
+   "cheatsheetsShowFormatted": "Ver Markdown con formato",
+   "cheatsheetsReadAloud": "Leer en voz alta",
+   "cheatsheetsStopReading": "Detener lectura",
+   "cheatsheetsSpeechSpeed": "Velocidad de lectura"
 }

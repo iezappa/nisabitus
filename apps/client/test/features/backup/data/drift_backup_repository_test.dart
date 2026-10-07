@@ -4,6 +4,8 @@ import 'package:nisabitus/core/database/app_database.dart';
 import 'package:nisabitus/features/backup/data/drift_backup_repository.dart';
 import 'package:nisabitus/features/backup/domain/backup_document.dart';
 import 'package:nisabitus/features/backup/domain/backup_repository.dart';
+import 'package:nisabitus/features/cheatsheets/data/drift_cheatsheet_repository.dart';
+import 'package:nisabitus/features/cheatsheets/domain/cheatsheet_note.dart';
 import 'package:nisabitus/features/habits/data/drift_habit_repository.dart';
 import 'package:nisabitus/features/habits/domain/habit_draft.dart';
 import 'package:nisabitus/features/habits/domain/habit_frequency.dart';
@@ -33,6 +35,15 @@ void main() {
       TaskDraft(title: 'Exportar', projectId: project.id),
     );
     await todo.addComment(task.id, 'En ello');
+
+    await DriftCheatsheetRepository(db).importMany([
+      const CheatsheetImportDraft(
+        title: 'Atajos',
+        content: 'Ctrl+K',
+        sourceName: 'atajos.txt',
+        format: CheatsheetFormat.text,
+      ),
+    ]);
   }
 
   group('export', () {
@@ -62,6 +73,7 @@ void main() {
       expect(document.tables['projects'], hasLength(1));
       expect(document.tables['todo_tasks'], hasLength(1));
       expect(document.tables['task_comments'], hasLength(1));
+      expect(document.tables['cheatsheet_notes'], hasLength(1));
     });
 
     test('survives a round trip through its own text', () async {
@@ -85,6 +97,7 @@ void main() {
       await repository.restore(document);
 
       expect(await db.select(db.habits).get(), hasLength(1));
+      expect(await db.select(db.cheatsheetNotes).get(), hasLength(1));
     });
 
     test('replaces what is there rather than merging into it', () async {

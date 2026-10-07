@@ -146,6 +146,12 @@ abstract class AppLocalizations {
   /// **'To-Do'**
   String get tabTodo;
 
+  /// No description provided for @tabCheatsheets.
+  ///
+  /// In es, this message translates to:
+  /// **'Estudio'**
+  String get tabCheatsheets;
+
   /// No description provided for @habitsTitle.
   ///
   /// In es, this message translates to:
@@ -877,6 +883,114 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sin contenido'**
   String get journalNoPreview;
+
+  /// No description provided for @cheatsheetsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Estudio'**
+  String get cheatsheetsTitle;
+
+  /// No description provided for @cheatsheetsImport.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar notas'**
+  String get cheatsheetsImport;
+
+  /// No description provided for @cheatsheetsSearch.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar notas'**
+  String get cheatsheetsSearch;
+
+  /// No description provided for @cheatsheetsEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay apuntes'**
+  String get cheatsheetsEmpty;
+
+  /// No description provided for @cheatsheetsEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Importá notas Markdown o de texto para tenerlas cerca'**
+  String get cheatsheetsEmptyHint;
+
+  /// No description provided for @cheatsheetsNoResults.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay notas que coincidan'**
+  String get cheatsheetsNoResults;
+
+  /// No description provided for @cheatsheetsNoResultsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscá por título o contenido'**
+  String get cheatsheetsNoResultsHint;
+
+  /// No description provided for @cheatsheetsDetailEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegí una nota'**
+  String get cheatsheetsDetailEmpty;
+
+  /// No description provided for @cheatsheetsDetailEmptyHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrí una nota importada para leerla acá'**
+  String get cheatsheetsDetailEmptyHint;
+
+  /// No description provided for @cheatsheetsNewNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva nota'**
+  String get cheatsheetsNewNote;
+
+  /// No description provided for @cheatsheetsCreatedInApp.
+  ///
+  /// In es, this message translates to:
+  /// **'Creada en la app'**
+  String get cheatsheetsCreatedInApp;
+
+  /// No description provided for @cheatsheetsEdit.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar nota'**
+  String get cheatsheetsEdit;
+
+  /// No description provided for @cheatsheetsEditNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar nota'**
+  String get cheatsheetsEditNote;
+
+  /// No description provided for @cheatsheetsDeleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Borrar nota?'**
+  String get cheatsheetsDeleteTitle;
+
+  /// No description provided for @cheatsheetsDeleteMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Borrar \"{title}\"? Esto no se puede deshacer.'**
+  String cheatsheetsDeleteMessage(String title);
+
+  /// No description provided for @cheatsheetsTitleField.
+  ///
+  /// In es, this message translates to:
+  /// **'Título'**
+  String get cheatsheetsTitleField;
+
+  /// No description provided for @cheatsheetsFolderField.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta'**
+  String get cheatsheetsFolderField;
+
+  /// No description provided for @cheatsheetsContentField.
+  ///
+  /// In es, this message translates to:
+  /// **'Contenido'**
+  String get cheatsheetsContentField;
 
   /// No description provided for @journalPage.
   ///
@@ -4219,6 +4333,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Usá al menos 8 caracteres para la contraseña.'**
   String get serverPasswordTooShort;
+
+  /// No description provided for @actionClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar'**
+  String get actionClear;
+
+  /// No description provided for @cheatsheetsShowPlainText.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver texto plano'**
+  String get cheatsheetsShowPlainText;
+
+  /// No description provided for @cheatsheetsShowFormatted.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver Markdown con formato'**
+  String get cheatsheetsShowFormatted;
+
+  /// No description provided for @cheatsheetsReadAloud.
+  ///
+  /// In es, this message translates to:
+  /// **'Leer en voz alta'**
+  String get cheatsheetsReadAloud;
+
+  /// No description provided for @cheatsheetsStopReading.
+  ///
+  /// In es, this message translates to:
+  /// **'Detener lectura'**
+  String get cheatsheetsStopReading;
+
+  /// No description provided for @cheatsheetsSpeechSpeed.
+  ///
+  /// In es, this message translates to:
+  /// **'Velocidad de lectura'**
+  String get cheatsheetsSpeechSpeed;
 }
 
 class _AppLocalizationsDelegate

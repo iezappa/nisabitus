@@ -1,942 +1,974 @@
 {
-  "@@locale": "en",
-  "appTitle": "Nisabitus",
-  "appTagline": "The effort that lifts you up",
-  "tabDashboard": "Panel",
-  "tabHabits": "Habits",
-  "tabJournal": "Journal",
-  "tabSleep": "Sleep",
-  "tabPomodoro": "Pomodoro",
-  "tabTodo": "To-Do",
-  "habitsTitle": "Habits",
-  "habitsList": "List",
-  "habitsProgress": "Progress",
-  "frequencyDaily": "Daily",
-  "frequencyWeekly": "Weekly",
-  "frequencyMonthly": "Monthly",
-  "frequencyYearly": "Yearly",
-  "habitsEmpty": "No habits here yet",
-  "habitsEmptyHint": "Create your first one and start keeping it",
-  "habitNew": "New habit",
-  "habitDone": "Done",
-  "habitCancel": "Cancel",
-  "habitCompleted": "Completed",
-  "habitCancelled": "Cancelled",
-  "habitFinishedOn": "Ended on {date}",
-  "habitTargetBadge": "{count}x",
-  "streaksTitle": "Streaks",
-  "streaksEmpty": "No streaks yet",
-  "streaksEmptyHint": "A streak counts the days in a row you keep something up",
-  "streakNew": "New streak",
-  "streakDays": "days",
-  "streakRecord": "Record: {count}",
-  "streakIncrement": "+1",
-  "streakReset": "Reset",
-  "streakMissedDay": "Mark a day I forgot",
-  "actionSave": "Save",
-  "actionCancel": "Cancel",
-  "actionDelete": "Delete",
-  "actionExpand": "Show",
-  "actionCollapse": "Hide",
-  "actionEdit": "Edit",
-  "fieldName": "Name",
-  "fieldDescription": "Description",
-  "fieldCategory": "Category",
-  "fieldFrequency": "Frequency",
-  "fieldTarget": "Target per period",
-  "validationNameRequired": "The name is required",
-  "deleteConfirmTitle": "Delete {name}?",
-  "deleteConfirmBody": "This cannot be undone.",
-  "comingSoon": "Under construction",
-  "comingSoonHint": "This module is not implemented yet.",
-  "weekdayShortMonday": "M",
-  "weekdayShortTuesday": "T",
-  "weekdayShortWednesday": "W",
-  "weekdayShortThursday": "T",
-  "weekdayShortFriday": "F",
-  "weekdayShortSaturday": "S",
-  "weekdayShortSunday": "S",
-  "habitRepeatForever": "Repeat forever",
-  "habitEndDate": "End date",
-  "habitRepeatDays": "Repeat on",
-  "habitEdit": "Edit habit",
-  "habitScheduledOn": "Scheduled: {days}",
-  "habitRevert": "Back to pending",
-  "habitsToday": "Today's progress",
-  "habitsTodayCount": "{done} of {total}",
-  "streakCurrent": "Current streak",
-  "streakLongest": "Record",
-  "rangeDay": "Day",
-  "rangeWeek": "Week",
-  "rangeMonth": "Month",
-  "rangeYear": "Year",
-  "statsCompleted": "Completed",
-  "statsSuccessRate": "Success rate",
-  "statsPercent": "{value}%",
-  "statsRangeCaption": "Last {days} days",
-  "chartEmpty": "No data in this range",
-  "chartEmptyHint": "Tick off a habit and your progress shows up here",
-  "chartStreaksEmptyHint": "Add to a streak and its evolution shows up here",
-  "habitsCompletionsPerDay": "Completions per day",
-  "streaksEvolution": "Evolution",
-  "weekPrevious": "Previous week",
-  "weekNext": "Next week",
-  "sleepTitle": "Sleep",
-  "sleepLastNight": "That night",
-  "sleepHours": "{hours} h",
-  "sleepNoRecord": "No record",
-  "sleepNoRecordHint": "Note how many hours you slept that day",
-  "sleepQualityOptimal": "Optimal",
-  "sleepQualityAcceptable": "Acceptable",
-  "sleepQualityPoor": "Could be better",
-  "sleepLog": "Log sleep",
-  "sleepFieldHours": "Hours slept",
-  "sleepSave": "Log",
-  "sleepUpdate": "Update",
-  "sleepHistory": "History",
-  "sleepAverage": "Average",
-  "sleepRecords": "Records",
-  "sleepOptimalNights": "Optimal nights",
-  "sleepRange": "Range",
-  "sleepRangeValue": "{min} – {max} h",
-  "sleepInsights": "Wellbeing",
-  "sleepInsightAverageGood": "Your average sits in the recommended band. Keep it up.",
-  "sleepInsightAverageLow": "You are sleeping below what is recommended.",
-  "sleepInsightAverageHigh": "You are sleeping more than usual.",
-  "sleepInsightConsistency": "Consistency",
-  "sleepInsightConsistencySteady": "Your nights are steady.",
-  "sleepInsightConsistencyErratic": "Your hours swing quite a bit from night to night.",
-  "sleepValidationHours": "Enter a number between 0 and 24",
-  "journalTitle": "Journal",
-  "journalMood": "Mood",
-  "journalMoodHint": "How did you feel?",
-  "journalEnergy": "Energy",
-  "journalEnergyLow": "Low",
-  "journalEnergyMedium": "Medium",
-  "journalEnergyHigh": "High",
-  "journalGratitude": "Gratitude",
-  "journalGratitudeHint": "What are you grateful for today?",
-  "journalFocus": "Focus of the day",
-  "journalFocusHint": "Where did you put your attention?",
-  "journalReflection": "Reflection",
-  "journalReflectionHint": "Write whatever you like. No rush.",
-  "journalIntention": "Intention for tomorrow",
-  "journalIntentionHint": "What do you want to start with tomorrow?",
-  "journalSave": "Save",
-  "journalUpdate": "Update",
-  "journalSaved": "Saved",
-  "journalEntry": "Today's entry",
-  "journalHistory": "Earlier entries",
-  "journalHistoryEmpty": "No entries yet",
-  "journalHistoryEmptyHint": "What you write will show up here",
-  "journalNoPreview": "No content",
-  "journalPage": "{page} of {total}",
-  "journalDeleteTitle": "Delete the entry?",
-  "supportTitle": "Support the project",
-  "supportBody": "Nisabitus is free, account-free and ad-free. If it helps you, you can chip in to keep it that way.",
-  "supportCafecito": "Cafecito",
-  "supportPatreon": "Patreon",
-  "supportLinkFailed": "Could not open the link",
-  "settingsTitle": "Settings",
-  "settingsAppearance": "Appearance",
-  "settingsAccent": "Accent colour",
-  "settingsTabs": "Visible tabs",
-  "settingsTabsHint": "Pick the sections you want to see. At least one always stays.",
-  "settingsProfile": "Profile",
-  "settingsProfileName": "Your name",
-  "settingsTutorial": "See the tutorial",
-  "settingsAbout": "About",
-  "accentForest": "Forest",
-  "accentGold": "Gold",
-  "accentClay": "Clay",
-  "accentIndigo": "Indigo",
-  "accentPlum": "Plum",
-  "accentSlate": "Slate",
-  "tabSettings": "Settings",
-  "tutorialSkip": "Skip",
-  "tutorialNext": "Next",
-  "tutorialDone": "Get started",
-  "tutorialBack": "Back",
-  "onboardingWelcome": "Welcome to Nisabitus",
-  "onboardingWelcomeBody": "The effort that lifts you up.",
-  "onboardingNameTitle": "What should we call you?",
-  "onboardingNameBody": "What should we call you?",
-  "onboardingTabsTitle": "What do you want to see?",
-  "onboardingTabsBody": "What do you want to see?",
-  "tutorialHabitsTitle": "Habits and streaks",
-  "tutorialHabitsBody": "Keeping up, not starting over.",
-  "tutorialTrackTitle": "Sleep and journal",
-  "tutorialTrackBody": "Tracking is understanding yourself.",
-  "tutorialFocusTitle": "Focus and tasks",
-  "tutorialFocusBody": "One thing at a time.",
-  "pomodoroTitle": "Pomodoro",
-  "pomodoroSessions": "Sessions",
-  "pomodoroNew": "New session",
-  "pomodoroEdit": "Edit session",
-  "pomodoroEmpty": "No sessions yet",
-  "pomodoroEmptyHint": "Create one and go into focus mode",
-  "pomodoroStatePending": "Pending",
-  "pomodoroStateInProgress": "In progress",
-  "pomodoroStateCompleted": "Completed",
-  "pomodoroStateCancelled": "Cancelled",
-  "pomodoroCycles": "Cycles",
-  "pomodoroFocusMinutes": "Focus minutes",
-  "pomodoroBreakMinutes": "Break minutes",
-  "pomodoroPurpose": "Purpose",
-  "pomodoroCurrentSession": "Current session",
-  "pomodoroPhaseFocus": "Focus",
-  "pomodoroPhaseRest": "Break",
-  "pomodoroCycleOf": "Cycle {done} of {total}",
-  "pomodoroStart": "Start",
-  "pomodoroPause": "Pause",
-  "pomodoroSkip": "Next phase",
-  "pomodoroFinish": "Finish",
-  "pomodoroCancel": "Cancel session",
-  "pomodoroClose": "Close without saving",
-  "pomodoroStats": "Statistics",
-  "pomodoroTotalFocus": "Total focus",
-  "pomodoroTotalCycles": "Cycles completed",
-  "pomodoroByCategory": "By category",
-  "pomodoroMinutesPerDay": "Minutes per day",
-  "pomodoroMinutes": "{minutes} min",
-  "pomodoroHoursMinutes": "{hours} h {minutes} min",
-  "pomodoroValidationRange": "Between {min} and {max}",
-  "todoTitle": "To-Do",
-  "todoProjects": "Projects",
-  "todoNewProject": "New project",
-  "todoNewSubproject": "New subproject",
-  "todoNoProjects": "No projects yet",
-  "todoNoProjectsHint": "Create one to start organising your tasks",
-  "todoPickProject": "Pick a project",
-  "todoPickProjectHint": "Its tasks will show up here",
-  "todoIncludeSubprojects": "Include subprojects",
-  "todoViewKanban": "Board",
-  "todoViewList": "List",
-  "todoNewTask": "New task",
-  "todoEditTask": "Edit task",
-  "todoNoTasks": "No tasks",
-  "todoNoTasksHint": "Add the first one with the button below",
-  "todoStatusTodo": "To do",
-  "todoStatusInProgress": "In progress",
-  "todoStatusDone": "Done",
-  "todoPriorityLow": "Low",
-  "todoPriorityMedium": "Medium",
-  "todoPriorityHigh": "High",
-  "todoPriorityUrgent": "Urgent",
-  "todoDueOverdue": "Overdue",
-  "todoDueToday": "Due today",
-  "todoDueUpcoming": "Upcoming",
-  "todoFieldTitle": "Title",
-  "todoFieldDescription": "Description",
-  "todoFieldDue": "Due date",
-  "todoFieldPriority": "Priority",
-  "todoFieldStatus": "Status",
-  "todoComments": "Progress notes",
-  "todoCommentHint": "Note some progress",
-  "todoNoComments": "No notes yet",
-  "todoFilters": "Filters",
-  "todoFilterCategory": "Category contains",
-  "todoFilterClear": "Clear",
-  "todoTaskCount": "{count} tasks",
-  "todoMoveNotAllowed": "That move would break the project tree",
-  "dashboardGreeting": "Hello, {name}",
-  "dashboardGreetingAnonymous": "Hello",
-  "dashboardSubtitle": "Here is today.",
-  "dashboardRefresh": "Refresh",
-  "dashboardPendingTasks": "Open tasks",
-  "dashboardOverdue": "{count} overdue",
-  "dashboardNoOverdue": "None overdue",
-  "dashboardHabitsToday": "Today's habits",
-  "dashboardHabitsRatio": "{done} of {total}",
-  "dashboardFocus": "Focus",
-  "dashboardFocusEmpty": "Nothing pending. Enjoy it.",
-  "dashboardHealth": "Health and journal",
-  "dashboardSleepToday": "Sleep today",
-  "dashboardJournalReady": "Done",
-  "dashboardJournalPending": "Pending",
-  "dashboardNoJournal": "No entry",
-  "dashboardQuickActions": "Quick actions",
-  "dashboardNoDue": "No date",
-  "tutorialPageOf": "{page} of {total}",
-  "onboardingWelcomeDetail": "Nisabitus brings habits, streaks, sleep, journal and tasks together in one place that lives on your device. No accounts, no cloud, no telemetry: your data never leaves your machine, and the app works just the same offline.",
-  "tutorialHabitsDetail": "Define what you want to repeat and settle it each day with one tap. Choose whether it is daily, weekly, monthly or yearly, and which days you expect to keep it.\n\nStreaks count separately: they track the days in a row of something and hold on to your record, even after you go back to zero.",
-  "tutorialTrackDetail": "Note how many hours you slept and the app tells you how the night went, works out your average and shows you the trend.\n\nThe journal offers six short fields to close the day: how you were, what you are grateful for, where you put your focus and what you want to start with tomorrow.\n\nThe week strip lets you fill in days you skipped.",
-  "tutorialFocusDetail": "The pomodoro splits your work into focus and break cycles, and keeps count of the minutes you actually concentrated.\n\nTo-Do organises your tasks into projects up to three levels deep, and you move them between To do, In progress and Done by dragging them across the board.",
-  "onboardingNameDetail": "We only use it to greet you on the panel. It never leaves this device, and you can change or clear it whenever you like.",
-  "onboardingTabsDetail": "Pick the sections that serve you and leave out the ones that do not. You can change this any time from Settings, which is always within reach at the top left.",
-  "settingsTheme": "Theme",
-  "themeSystem": "System",
-  "themeLight": "Light",
-  "themeDark": "Dark",
-  "settingsLanguage": "Language",
-  "languageSpanish": "Español",
-  "languageEnglish": "English",
-  "languageSystem": "System",
-  "tabHealth": "Health",
-  "healthSleep": "Sleep",
-  "healthNutrition": "Nutrition",
-  "healthExercise": "Exercise",
-  "nutritionGoals": "Daily targets",
-  "nutritionEditGoals": "Edit targets",
-  "nutritionCalories": "Calories",
-  "nutritionProtein": "Protein",
-  "nutritionCarbs": "Carbs",
-  "nutritionFat": "Fat",
-  "nutritionGrams": "{value} g",
-  "nutritionKcal": "{value} kcal",
-  "nutritionOfTarget": "{value} of {target}",
-  "nutritionRemaining": "{value} kcal left",
-  "nutritionOver": "{value} kcal over",
-  "nutritionToday": "What you ate",
-  "nutritionEmpty": "Nothing logged that day",
-  "nutritionEmptyHint": "Note what you ate and it adds itself up",
-  "nutritionAdd": "Add food",
-  "nutritionEditEntry": "Edit food",
-  "nutritionPortion": "Portion",
-  "nutritionPortionHint": "150 g, 1 plate, 2 units",
-  "meditationTitle": "Meditation",
-  "meditationToday": "What you sat",
-  "meditationEmpty": "Nothing logged that day",
-  "meditationEmptyHint": "Log how long you sat and how it went",
-  "meditationAdd": "Log a session",
-  "meditationEdit": "Edit session",
-  "meditationMinutes": "{value} min",
-  "meditationDayTotal": "{value} min that day",
-  "meditationDuration": "Duration",
-  "meditationNote": "How it went",
-  "meditationNoteHint": "Hard to start, fell asleep, came out calm…",
-  "meditationValidationMinutes": "Enter a number between 1 and {max}",
-  "meditationMinutesPerDay": "Minutes per day",
-  "meditationAverageDaily": "Daily average",
-  "meditationDaysPractised": "Days practised",
-  "meditationLongestStreak": "Longest streak",
-  "hydration": "Hydration",
-  "hydrationTarget": "Daily target",
-  "hydrationEditTarget": "Edit target",
-  "hydrationMillilitres": "{value} ml",
-  "hydrationRemaining": "{value} ml to go",
-  "hydrationReached": "Target reached",
-  "hydrationToday": "What you drank",
-  "hydrationEmpty": "Nothing logged that day",
-  "hydrationEmptyHint": "Log each glass and it adds itself up",
-  "hydrationAdd": "Add",
-  "hydrationCustom": "Another amount",
-  "hydrationAmount": "Amount",
-  "hydrationValidationAmount": "Enter a number between 1 and {max}",
-  "hydrationPerDay": "Millilitres per day",
-  "hydrationAverageDaily": "Daily average",
-  "hydrationDaysOnTarget": "Days on target",
-  "nutritionMeal": "Meal",
-  "nutritionMealBreakfast": "Breakfast",
-  "nutritionMealLunch": "Lunch",
-  "nutritionMealSnack": "Snack",
-  "nutritionMealDinner": "Dinner",
-  "nutritionMealNone": "No meal",
-  "nutritionUnassigned": "Unassigned",
-  "nutritionFoodDatabase": "Food database",
-  "nutritionFoodDatabaseHint": "Pick a food and say what it weighed",
-  "nutritionFoodSearch": "Search a food",
-  "nutritionFoodNone": "Nothing matches that",
-  "nutritionFoodNew": "New food",
-  "nutritionFoodEdit": "Edit food",
-  "nutritionFoodMine": "Yours",
-  "nutritionFoodDeleteBody": "It only leaves the food database. What you already ate stays exactly as it was logged.",
-  "nutritionPer100g": "{value} kcal per 100 g",
-  "nutritionPer100gLabel": "Per 100 g",
-  "nutritionWeight": "Weight",
-  "nutritionWeightHint": "The figures scale to what you weighed",
-  "nutritionValidationGrams": "Enter a weight between 0 and {max} g",
-  "nutritionValidationNumber": "Enter a number between 0 and {max}",
-  "discipline": "Disciplines",
-  "disciplineHint": "Swimming, running, cycling — what is measured in time, not sets",
-  "disciplineEmpty": "Nothing practised that day",
-  "disciplineAdd": "Log a discipline",
-  "disciplineEdit": "Edit discipline",
-  "disciplineName": "What you practised",
-  "disciplineNameHint": "Swimming, Running, Cycling, Yoga…",
-  "disciplineDuration": "Duration",
-  "disciplineDistance": "Distance",
-  "disciplineMinutes": "{value} min",
-  "disciplineKm": "{value} km",
-  "disciplineNotes": "Notes",
-  "disciplineCompleteTitle": "How did it go?",
-  "disciplineCompleteHint": "Record the time and distance you actually did. Anything left blank stays as planned.",
-  "disciplineValidationMinutes": "Enter a number between 1 and {max}",
-  "disciplineValidationDistance": "Enter a number between 0 and {max}",
-  "plan": "Plan",
-  "planToday": "Gym Routine",
-  "planEmpty": "Nothing logged for that day",
-  "planEmptyHint": "Write an exercise down and, if it repeats, say on which days",
-  "planAdd": "Log an exercise",
-  "planEdit": "Edit exercise",
-  "planSetsReps": "{sets}x{reps}",
-  "planWeight": "{weight} kg",
-  "planRpe": "RPE {value}",
-  "planComments": "Cues",
-  "planCommentsHint": "Down to parallel, no bounce…",
-  "planFeedback": "How it went",
-  "planFeedbackHint": "Last rep was ugly, felt heavier than expected…",
-  "planDone": "Done",
-  "planReopen": "Back to pending",
-  "planComplete": "Mark as done",
-  "planCompleteTitle": "How did it go?",
-  "planCompleteHint": "Record the weight and effort you actually hit. Anything left blank stays as planned.",
-  "planRepeat": "Repeat",
-  "planRepeatDays": "Days",
-  "planRepeatUntilLabel": "How long for",
-  "planRepeatWeeks": "For weeks",
-  "planRepeatUntil": "Until a date",
-  "planRepeatForever": "Always",
-  "planRepeatWeeksValue": "Number of weeks",
-  "planRepeatUntilValue": "Ends on",
-  "planRepeatSummary": "Repeats {days}",
-  "planStopRepeat": "Stop repeating",
-  "planStopRepeatTitle": "Stop repeating?",
-  "planStopRepeatBody": "The later days you have not done yet are removed. What you already trained stays as it is.",
-  "planValidationDays": "Pick at least one day",
-  "planValidationNumber": "Enter a number between 1 and {max}",
-  "planValidationRpe": "RPE runs from 1 to 10",
-  "planValidationEndDate": "A repetition cannot end before it starts",
-  "exerciseVideo": "Reference video",
-  "exerciseVideoHint": "Link to a video showing the movement",
-  "exerciseOpenVideo": "Watch the video",
-  "exerciseNew": "New exercise",
-  "exerciseEdit": "Edit exercise",
-  "exerciseDeleteBody": "Deleting an exercise also deletes every day it was written down on, past ones included. This cannot be undone.",
-  "exerciseMuscleGroup": "Muscle group",
-  "exerciseDescription": "Description",
-  "exerciseSets": "Sets",
-  "exerciseReps": "Reps",
-  "exerciseWeight": "Weight (kg)",
-  "exerciseBodyweight": "Bodyweight",
-  "exerciseTotalSets": "Sets",
-  "exerciseTotalReps": "Reps",
-  "exerciseVolume": "Volume",
-  "exerciseVolumeValue": "{value} kg",
-  "exercisePickOne": "Pick an exercise",
-  "disclaimerTitle": "This is a log, not medical advice",
-  "disclaimerBody": "Nisabitus is not a medical or nutritional application. It is a log: it keeps what you write down and hands it back to you in order.\n\nIt does not diagnose, interpret symptoms, calculate doses, or recommend treatments, diets or routines. The targets you set are your own, not a professional instruction.\n\nBefore starting, changing or stopping a medication, a supplement, a diet or a training plan, talk to a health professional. If any symptom worries you, seek advice without delay.",
-  "disclaimerAction": "Understood",
-  "disclaimerTooltip": "About this data",
-  "healthMeds": "Medication",
-  "medsTitle": "Medication and supplements",
-  "medsToday": "For that day",
-  "medsCatalogue": "What you take",
-  "medsNew": "Add",
-  "medsEdit": "Edit",
-  "medsEmpty": "Nothing added yet",
-  "medsEmptyHint": "Add what you take and tick it off each day",
-  "medsKind": "Kind",
-  "medsKindMedication": "Medication",
-  "medsKindSupplement": "Supplement",
-  "medsDose": "Dose",
-  "medsDoseHint": "500 mg, 2 capsules, 10 drops",
-  "medsSchedule": "When",
-  "medsScheduleHint": "Morning, every 8 h, with dinner",
-  "medsNotes": "Notes",
-  "medsActive": "Active",
-  "medsInactiveHint": "Anything paused stays out of the day",
-  "medsTakenCount": "{done} of {total}",
-  "medsNoneActive": "Nothing active to tick off",
-  "medsNoneActiveHint": "Activate something from the list below",
-  "progressEntries": "Records",
-  "progressPerDay": "Per day",
-  "nutritionCaloriesPerDay": "Calories per day",
-  "nutritionAverageDaily": "Daily average",
-  "nutritionDaysLogged": "Days logged",
-  "exerciseVolumePerDay": "Volume per day",
-  "exerciseDaysTrained": "Days trained",
-  "medsAdherence": "Adherence",
-  "medsAdherencePerDay": "Adherence per day",
-  "medsDaysComplete": "Complete days",
-  "journalEntriesWritten": "Entries written",
-  "journalCoverage": "Coverage",
-  "journalLongestRun": "Longest run",
-  "journalPerDay": "Entries per day",
-  "todoProgress": "Progress",
-  "todoCompletedPerDay": "Tasks completed per day",
-  "todoCompleted": "Completed",
-  "todoOpen": "Open",
-  "todoOverdue": "Overdue",
-  "sleepHoursPerNight": "Hours per night",
-  "progressDays": "{count, plural, =1{1 day} other{{count} days}}",
-  "todoProgressEmptyHint": "Finish a task and it shows up here",
-  "@progressDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   "@@locale": "en",
+   "appTitle": "Nisabitus",
+   "appTagline": "The effort that lifts you up",
+   "tabDashboard": "Panel",
+   "tabHabits": "Habits",
+   "tabJournal": "Journal",
+   "tabSleep": "Sleep",
+   "tabPomodoro": "Pomodoro",
+   "tabTodo": "To-Do",
+   "tabCheatsheets": "Study",
+   "habitsTitle": "Habits",
+   "habitsList": "List",
+   "habitsProgress": "Progress",
+   "frequencyDaily": "Daily",
+   "frequencyWeekly": "Weekly",
+   "frequencyMonthly": "Monthly",
+   "frequencyYearly": "Yearly",
+   "habitsEmpty": "No habits here yet",
+   "habitsEmptyHint": "Create your first one and start keeping it",
+   "habitNew": "New habit",
+   "habitDone": "Done",
+   "habitCancel": "Cancel",
+   "habitCompleted": "Completed",
+   "habitCancelled": "Cancelled",
+   "habitFinishedOn": "Ended on {date}",
+   "habitTargetBadge": "{count}x",
+   "streaksTitle": "Streaks",
+   "streaksEmpty": "No streaks yet",
+   "streaksEmptyHint": "A streak counts the days in a row you keep something up",
+   "streakNew": "New streak",
+   "streakDays": "days",
+   "streakRecord": "Record: {count}",
+   "streakIncrement": "+1",
+   "streakReset": "Reset",
+   "streakMissedDay": "Mark a day I forgot",
+   "actionSave": "Save",
+   "actionCancel": "Cancel",
+   "actionDelete": "Delete",
+   "actionExpand": "Show",
+   "actionCollapse": "Hide",
+   "actionEdit": "Edit",
+   "fieldName": "Name",
+   "fieldDescription": "Description",
+   "fieldCategory": "Category",
+   "fieldFrequency": "Frequency",
+   "fieldTarget": "Target per period",
+   "validationNameRequired": "The name is required",
+   "deleteConfirmTitle": "Delete {name}?",
+   "deleteConfirmBody": "This cannot be undone.",
+   "comingSoon": "Under construction",
+   "comingSoonHint": "This module is not implemented yet.",
+   "weekdayShortMonday": "M",
+   "weekdayShortTuesday": "T",
+   "weekdayShortWednesday": "W",
+   "weekdayShortThursday": "T",
+   "weekdayShortFriday": "F",
+   "weekdayShortSaturday": "S",
+   "weekdayShortSunday": "S",
+   "habitRepeatForever": "Repeat forever",
+   "habitEndDate": "End date",
+   "habitRepeatDays": "Repeat on",
+   "habitEdit": "Edit habit",
+   "habitScheduledOn": "Scheduled: {days}",
+   "habitRevert": "Back to pending",
+   "habitsToday": "Today's progress",
+   "habitsTodayCount": "{done} of {total}",
+   "streakCurrent": "Current streak",
+   "streakLongest": "Record",
+   "rangeDay": "Day",
+   "rangeWeek": "Week",
+   "rangeMonth": "Month",
+   "rangeYear": "Year",
+   "statsCompleted": "Completed",
+   "statsSuccessRate": "Success rate",
+   "statsPercent": "{value}%",
+   "statsRangeCaption": "Last {days} days",
+   "chartEmpty": "No data in this range",
+   "chartEmptyHint": "Tick off a habit and your progress shows up here",
+   "chartStreaksEmptyHint": "Add to a streak and its evolution shows up here",
+   "habitsCompletionsPerDay": "Completions per day",
+   "streaksEvolution": "Evolution",
+   "weekPrevious": "Previous week",
+   "weekNext": "Next week",
+   "sleepTitle": "Sleep",
+   "sleepLastNight": "That night",
+   "sleepHours": "{hours} h",
+   "sleepNoRecord": "No record",
+   "sleepNoRecordHint": "Note how many hours you slept that day",
+   "sleepQualityOptimal": "Optimal",
+   "sleepQualityAcceptable": "Acceptable",
+   "sleepQualityPoor": "Could be better",
+   "sleepLog": "Log sleep",
+   "sleepFieldHours": "Hours slept",
+   "sleepSave": "Log",
+   "sleepUpdate": "Update",
+   "sleepHistory": "History",
+   "sleepAverage": "Average",
+   "sleepRecords": "Records",
+   "sleepOptimalNights": "Optimal nights",
+   "sleepRange": "Range",
+   "sleepRangeValue": "{min} – {max} h",
+   "sleepInsights": "Wellbeing",
+   "sleepInsightAverageGood": "Your average sits in the recommended band. Keep it up.",
+   "sleepInsightAverageLow": "You are sleeping below what is recommended.",
+   "sleepInsightAverageHigh": "You are sleeping more than usual.",
+   "sleepInsightConsistency": "Consistency",
+   "sleepInsightConsistencySteady": "Your nights are steady.",
+   "sleepInsightConsistencyErratic": "Your hours swing quite a bit from night to night.",
+   "sleepValidationHours": "Enter a number between 0 and 24",
+   "journalTitle": "Journal",
+   "journalMood": "Mood",
+   "journalMoodHint": "How did you feel?",
+   "journalEnergy": "Energy",
+   "journalEnergyLow": "Low",
+   "journalEnergyMedium": "Medium",
+   "journalEnergyHigh": "High",
+   "journalGratitude": "Gratitude",
+   "journalGratitudeHint": "What are you grateful for today?",
+   "journalFocus": "Focus of the day",
+   "journalFocusHint": "Where did you put your attention?",
+   "journalReflection": "Reflection",
+   "journalReflectionHint": "Write whatever you like. No rush.",
+   "journalIntention": "Intention for tomorrow",
+   "journalIntentionHint": "What do you want to start with tomorrow?",
+   "journalSave": "Save",
+   "journalUpdate": "Update",
+   "journalSaved": "Saved",
+   "journalEntry": "Today's entry",
+   "journalHistory": "Earlier entries",
+   "journalHistoryEmpty": "No entries yet",
+   "journalHistoryEmptyHint": "What you write will show up here",
+   "journalNoPreview": "No content",
+   "cheatsheetsTitle": "Study",
+   "cheatsheetsImport": "Import notes",
+   "cheatsheetsSearch": "Search notes",
+   "cheatsheetsEmpty": "No cheatsheets yet",
+   "cheatsheetsEmptyHint": "Import Markdown or text notes to keep them nearby",
+   "cheatsheetsNoResults": "No matching notes",
+   "cheatsheetsNoResultsHint": "Search by title or content",
+   "cheatsheetsDetailEmpty": "Choose a note",
+   "cheatsheetsDetailEmptyHint": "Open an imported note to read it here",
+   "cheatsheetsNewNote": "New note",
+   "cheatsheetsCreatedInApp": "Created in the app",
+   "cheatsheetsEdit": "Edit note",
+   "cheatsheetsEditNote": "Edit note",
+   "cheatsheetsDeleteTitle": "Delete note?",
+   "cheatsheetsDeleteMessage": "Delete \"{title}\"? This cannot be undone.",
+   "@cheatsheetsDeleteMessage": {
+      "placeholders": {
+         "title": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "settingsBackup": "Backup",
-  "settingsYourData": "Your data",
-  "settingsSupport": "Support",
-  "backupExport": "Export",
-  "backupImport": "Import",
-  "backupReplaceWarning": "Importing replaces everything you have now.",
-  "backupConfirmTitle": "Replace everything you have?",
-  "backupConfirmBody": "What is stored now is deleted and replaced by whatever the file holds. It cannot be undone, so export first if you are unsure.",
-  "backupConfirmAction": "Replace",
-  "backupExported": "{count, plural, =1{Backup saved: 1 record} other{Backup saved: {count} records}}",
-  "backupImported": "{count, plural, =1{Data restored: 1 record} other{Data restored: {count} records}}",
-  "backupSomeIgnored": "Part of the file comes from an older version and could not be restored.",
-  "backupNotABackup": "That file is not a Nisabitus backup",
-  "backupNewerVersion": "The backup comes from a newer version of Nisabitus",
-  "backupCorrupt": "The backup is damaged and cannot be read",
-  "backupFailed": "It could not be completed",
-  "settingsReleaseNotes": "What's new",
-  "releaseNotesWhatsNew": "What's new",
-  "releaseNotesHistory": "Release history",
-  "releaseNotesVersion": "Version {version}",
-  "releaseNotesClose": "Got it",
-  "@releaseNotesVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
+   },
+   "cheatsheetsTitleField": "Title",
+   "cheatsheetsFolderField": "Folder",
+   "cheatsheetsContentField": "Content",
+   "journalPage": "{page} of {total}",
+   "journalDeleteTitle": "Delete the entry?",
+   "supportTitle": "Support the project",
+   "supportBody": "Nisabitus is free, account-free and ad-free. If it helps you, you can chip in to keep it that way.",
+   "supportCafecito": "Cafecito",
+   "supportPatreon": "Patreon",
+   "supportLinkFailed": "Could not open the link",
+   "settingsTitle": "Settings",
+   "settingsAppearance": "Appearance",
+   "settingsAccent": "Accent colour",
+   "settingsTabs": "Visible tabs",
+   "settingsTabsHint": "Pick the sections you want to see. At least one always stays.",
+   "settingsProfile": "Profile",
+   "settingsProfileName": "Your name",
+   "settingsTutorial": "See the tutorial",
+   "settingsAbout": "About",
+   "accentForest": "Forest",
+   "accentGold": "Gold",
+   "accentClay": "Clay",
+   "accentIndigo": "Indigo",
+   "accentPlum": "Plum",
+   "accentSlate": "Slate",
+   "tabSettings": "Settings",
+   "tutorialSkip": "Skip",
+   "tutorialNext": "Next",
+   "tutorialDone": "Get started",
+   "tutorialBack": "Back",
+   "onboardingWelcome": "Welcome to Nisabitus",
+   "onboardingWelcomeBody": "The effort that lifts you up.",
+   "onboardingNameTitle": "What should we call you?",
+   "onboardingNameBody": "What should we call you?",
+   "onboardingTabsTitle": "What do you want to see?",
+   "onboardingTabsBody": "What do you want to see?",
+   "tutorialHabitsTitle": "Habits and streaks",
+   "tutorialHabitsBody": "Keeping up, not starting over.",
+   "tutorialTrackTitle": "Sleep and journal",
+   "tutorialTrackBody": "Tracking is understanding yourself.",
+   "tutorialFocusTitle": "Focus and tasks",
+   "tutorialFocusBody": "One thing at a time.",
+   "pomodoroTitle": "Pomodoro",
+   "pomodoroSessions": "Sessions",
+   "pomodoroNew": "New session",
+   "pomodoroEdit": "Edit session",
+   "pomodoroEmpty": "No sessions yet",
+   "pomodoroEmptyHint": "Create one and go into focus mode",
+   "pomodoroStatePending": "Pending",
+   "pomodoroStateInProgress": "In progress",
+   "pomodoroStateCompleted": "Completed",
+   "pomodoroStateCancelled": "Cancelled",
+   "pomodoroCycles": "Cycles",
+   "pomodoroFocusMinutes": "Focus minutes",
+   "pomodoroBreakMinutes": "Break minutes",
+   "pomodoroPurpose": "Purpose",
+   "pomodoroCurrentSession": "Current session",
+   "pomodoroPhaseFocus": "Focus",
+   "pomodoroPhaseRest": "Break",
+   "pomodoroCycleOf": "Cycle {done} of {total}",
+   "pomodoroStart": "Start",
+   "pomodoroPause": "Pause",
+   "pomodoroSkip": "Next phase",
+   "pomodoroFinish": "Finish",
+   "pomodoroCancel": "Cancel session",
+   "pomodoroClose": "Close without saving",
+   "pomodoroStats": "Statistics",
+   "pomodoroTotalFocus": "Total focus",
+   "pomodoroTotalCycles": "Cycles completed",
+   "pomodoroByCategory": "By category",
+   "pomodoroMinutesPerDay": "Minutes per day",
+   "pomodoroMinutes": "{minutes} min",
+   "pomodoroHoursMinutes": "{hours} h {minutes} min",
+   "pomodoroValidationRange": "Between {min} and {max}",
+   "todoTitle": "To-Do",
+   "todoProjects": "Projects",
+   "todoNewProject": "New project",
+   "todoNewSubproject": "New subproject",
+   "todoNoProjects": "No projects yet",
+   "todoNoProjectsHint": "Create one to start organising your tasks",
+   "todoPickProject": "Pick a project",
+   "todoPickProjectHint": "Its tasks will show up here",
+   "todoIncludeSubprojects": "Include subprojects",
+   "todoViewKanban": "Board",
+   "todoViewList": "List",
+   "todoNewTask": "New task",
+   "todoEditTask": "Edit task",
+   "todoNoTasks": "No tasks",
+   "todoNoTasksHint": "Add the first one with the button below",
+   "todoStatusTodo": "To do",
+   "todoStatusInProgress": "In progress",
+   "todoStatusDone": "Done",
+   "todoPriorityLow": "Low",
+   "todoPriorityMedium": "Medium",
+   "todoPriorityHigh": "High",
+   "todoPriorityUrgent": "Urgent",
+   "todoDueOverdue": "Overdue",
+   "todoDueToday": "Due today",
+   "todoDueUpcoming": "Upcoming",
+   "todoFieldTitle": "Title",
+   "todoFieldDescription": "Description",
+   "todoFieldDue": "Due date",
+   "todoFieldPriority": "Priority",
+   "todoFieldStatus": "Status",
+   "todoComments": "Progress notes",
+   "todoCommentHint": "Note some progress",
+   "todoNoComments": "No notes yet",
+   "todoFilters": "Filters",
+   "todoFilterCategory": "Category contains",
+   "todoFilterClear": "Clear",
+   "todoTaskCount": "{count} tasks",
+   "todoMoveNotAllowed": "That move would break the project tree",
+   "dashboardGreeting": "Hello, {name}",
+   "dashboardGreetingAnonymous": "Hello",
+   "dashboardSubtitle": "Here is today.",
+   "dashboardRefresh": "Refresh",
+   "dashboardPendingTasks": "Open tasks",
+   "dashboardOverdue": "{count} overdue",
+   "dashboardNoOverdue": "None overdue",
+   "dashboardHabitsToday": "Today's habits",
+   "dashboardHabitsRatio": "{done} of {total}",
+   "dashboardFocus": "Focus",
+   "dashboardFocusEmpty": "Nothing pending. Enjoy it.",
+   "dashboardHealth": "Health and journal",
+   "dashboardSleepToday": "Sleep today",
+   "dashboardJournalReady": "Done",
+   "dashboardJournalPending": "Pending",
+   "dashboardNoJournal": "No entry",
+   "dashboardQuickActions": "Quick actions",
+   "dashboardNoDue": "No date",
+   "tutorialPageOf": "{page} of {total}",
+   "onboardingWelcomeDetail": "Nisabitus brings habits, streaks, sleep, journal and tasks together in one place that lives on your device. No accounts, no cloud, no telemetry: your data never leaves your machine, and the app works just the same offline.",
+   "tutorialHabitsDetail": "Define what you want to repeat and settle it each day with one tap. Choose whether it is daily, weekly, monthly or yearly, and which days you expect to keep it.\n\nStreaks count separately: they track the days in a row of something and hold on to your record, even after you go back to zero.",
+   "tutorialTrackDetail": "Note how many hours you slept and the app tells you how the night went, works out your average and shows you the trend.\n\nThe journal offers six short fields to close the day: how you were, what you are grateful for, where you put your focus and what you want to start with tomorrow.\n\nThe week strip lets you fill in days you skipped.",
+   "tutorialFocusDetail": "The pomodoro splits your work into focus and break cycles, and keeps count of the minutes you actually concentrated.\n\nTo-Do organises your tasks into projects up to three levels deep, and you move them between To do, In progress and Done by dragging them across the board.",
+   "onboardingNameDetail": "We only use it to greet you on the panel. It never leaves this device, and you can change or clear it whenever you like.",
+   "onboardingTabsDetail": "Pick the sections that serve you and leave out the ones that do not. You can change this any time from Settings, which is always within reach at the top left.",
+   "settingsTheme": "Theme",
+   "themeSystem": "System",
+   "themeLight": "Light",
+   "themeDark": "Dark",
+   "settingsLanguage": "Language",
+   "languageSpanish": "Español",
+   "languageEnglish": "English",
+   "languageSystem": "System",
+   "tabHealth": "Health",
+   "healthSleep": "Sleep",
+   "healthNutrition": "Nutrition",
+   "healthExercise": "Exercise",
+   "nutritionGoals": "Daily targets",
+   "nutritionEditGoals": "Edit targets",
+   "nutritionCalories": "Calories",
+   "nutritionProtein": "Protein",
+   "nutritionCarbs": "Carbs",
+   "nutritionFat": "Fat",
+   "nutritionGrams": "{value} g",
+   "nutritionKcal": "{value} kcal",
+   "nutritionOfTarget": "{value} of {target}",
+   "nutritionRemaining": "{value} kcal left",
+   "nutritionOver": "{value} kcal over",
+   "nutritionToday": "What you ate",
+   "nutritionEmpty": "Nothing logged that day",
+   "nutritionEmptyHint": "Note what you ate and it adds itself up",
+   "nutritionAdd": "Add food",
+   "nutritionEditEntry": "Edit food",
+   "nutritionPortion": "Portion",
+   "nutritionPortionHint": "150 g, 1 plate, 2 units",
+   "meditationTitle": "Meditation",
+   "meditationToday": "What you sat",
+   "meditationEmpty": "Nothing logged that day",
+   "meditationEmptyHint": "Log how long you sat and how it went",
+   "meditationAdd": "Log a session",
+   "meditationEdit": "Edit session",
+   "meditationMinutes": "{value} min",
+   "meditationDayTotal": "{value} min that day",
+   "meditationDuration": "Duration",
+   "meditationNote": "How it went",
+   "meditationNoteHint": "Hard to start, fell asleep, came out calm…",
+   "meditationValidationMinutes": "Enter a number between 1 and {max}",
+   "meditationMinutesPerDay": "Minutes per day",
+   "meditationAverageDaily": "Daily average",
+   "meditationDaysPractised": "Days practised",
+   "meditationLongestStreak": "Longest streak",
+   "hydration": "Hydration",
+   "hydrationTarget": "Daily target",
+   "hydrationEditTarget": "Edit target",
+   "hydrationMillilitres": "{value} ml",
+   "hydrationRemaining": "{value} ml to go",
+   "hydrationReached": "Target reached",
+   "hydrationToday": "What you drank",
+   "hydrationEmpty": "Nothing logged that day",
+   "hydrationEmptyHint": "Log each glass and it adds itself up",
+   "hydrationAdd": "Add",
+   "hydrationCustom": "Another amount",
+   "hydrationAmount": "Amount",
+   "hydrationValidationAmount": "Enter a number between 1 and {max}",
+   "hydrationPerDay": "Millilitres per day",
+   "hydrationAverageDaily": "Daily average",
+   "hydrationDaysOnTarget": "Days on target",
+   "nutritionMeal": "Meal",
+   "nutritionMealBreakfast": "Breakfast",
+   "nutritionMealLunch": "Lunch",
+   "nutritionMealSnack": "Snack",
+   "nutritionMealDinner": "Dinner",
+   "nutritionMealNone": "No meal",
+   "nutritionUnassigned": "Unassigned",
+   "nutritionFoodDatabase": "Food database",
+   "nutritionFoodDatabaseHint": "Pick a food and say what it weighed",
+   "nutritionFoodSearch": "Search a food",
+   "nutritionFoodNone": "Nothing matches that",
+   "nutritionFoodNew": "New food",
+   "nutritionFoodEdit": "Edit food",
+   "nutritionFoodMine": "Yours",
+   "nutritionFoodDeleteBody": "It only leaves the food database. What you already ate stays exactly as it was logged.",
+   "nutritionPer100g": "{value} kcal per 100 g",
+   "nutritionPer100gLabel": "Per 100 g",
+   "nutritionWeight": "Weight",
+   "nutritionWeightHint": "The figures scale to what you weighed",
+   "nutritionValidationGrams": "Enter a weight between 0 and {max} g",
+   "nutritionValidationNumber": "Enter a number between 0 and {max}",
+   "discipline": "Disciplines",
+   "disciplineHint": "Swimming, running, cycling — what is measured in time, not sets",
+   "disciplineEmpty": "Nothing practised that day",
+   "disciplineAdd": "Log a discipline",
+   "disciplineEdit": "Edit discipline",
+   "disciplineName": "What you practised",
+   "disciplineNameHint": "Swimming, Running, Cycling, Yoga…",
+   "disciplineDuration": "Duration",
+   "disciplineDistance": "Distance",
+   "disciplineMinutes": "{value} min",
+   "disciplineKm": "{value} km",
+   "disciplineNotes": "Notes",
+   "disciplineCompleteTitle": "How did it go?",
+   "disciplineCompleteHint": "Record the time and distance you actually did. Anything left blank stays as planned.",
+   "disciplineValidationMinutes": "Enter a number between 1 and {max}",
+   "disciplineValidationDistance": "Enter a number between 0 and {max}",
+   "plan": "Plan",
+   "planToday": "Gym Routine",
+   "planEmpty": "Nothing logged for that day",
+   "planEmptyHint": "Write an exercise down and, if it repeats, say on which days",
+   "planAdd": "Log an exercise",
+   "planEdit": "Edit exercise",
+   "planSetsReps": "{sets}x{reps}",
+   "planWeight": "{weight} kg",
+   "planRpe": "RPE {value}",
+   "planComments": "Cues",
+   "planCommentsHint": "Down to parallel, no bounce…",
+   "planFeedback": "How it went",
+   "planFeedbackHint": "Last rep was ugly, felt heavier than expected…",
+   "planDone": "Done",
+   "planReopen": "Back to pending",
+   "planComplete": "Mark as done",
+   "planCompleteTitle": "How did it go?",
+   "planCompleteHint": "Record the weight and effort you actually hit. Anything left blank stays as planned.",
+   "planRepeat": "Repeat",
+   "planRepeatDays": "Days",
+   "planRepeatUntilLabel": "How long for",
+   "planRepeatWeeks": "For weeks",
+   "planRepeatUntil": "Until a date",
+   "planRepeatForever": "Always",
+   "planRepeatWeeksValue": "Number of weeks",
+   "planRepeatUntilValue": "Ends on",
+   "planRepeatSummary": "Repeats {days}",
+   "planStopRepeat": "Stop repeating",
+   "planStopRepeatTitle": "Stop repeating?",
+   "planStopRepeatBody": "The later days you have not done yet are removed. What you already trained stays as it is.",
+   "planValidationDays": "Pick at least one day",
+   "planValidationNumber": "Enter a number between 1 and {max}",
+   "planValidationRpe": "RPE runs from 1 to 10",
+   "planValidationEndDate": "A repetition cannot end before it starts",
+   "exerciseVideo": "Reference video",
+   "exerciseVideoHint": "Link to a video showing the movement",
+   "exerciseOpenVideo": "Watch the video",
+   "exerciseNew": "New exercise",
+   "exerciseEdit": "Edit exercise",
+   "exerciseDeleteBody": "Deleting an exercise also deletes every day it was written down on, past ones included. This cannot be undone.",
+   "exerciseMuscleGroup": "Muscle group",
+   "exerciseDescription": "Description",
+   "exerciseSets": "Sets",
+   "exerciseReps": "Reps",
+   "exerciseWeight": "Weight (kg)",
+   "exerciseBodyweight": "Bodyweight",
+   "exerciseTotalSets": "Sets",
+   "exerciseTotalReps": "Reps",
+   "exerciseVolume": "Volume",
+   "exerciseVolumeValue": "{value} kg",
+   "exercisePickOne": "Pick an exercise",
+   "disclaimerTitle": "This is a log, not medical advice",
+   "disclaimerBody": "Nisabitus is not a medical or nutritional application. It is a log: it keeps what you write down and hands it back to you in order.\n\nIt does not diagnose, interpret symptoms, calculate doses, or recommend treatments, diets or routines. The targets you set are your own, not a professional instruction.\n\nBefore starting, changing or stopping a medication, a supplement, a diet or a training plan, talk to a health professional. If any symptom worries you, seek advice without delay.",
+   "disclaimerAction": "Understood",
+   "disclaimerTooltip": "About this data",
+   "healthMeds": "Medication",
+   "medsTitle": "Medication and supplements",
+   "medsToday": "For that day",
+   "medsCatalogue": "What you take",
+   "medsNew": "Add",
+   "medsEdit": "Edit",
+   "medsEmpty": "Nothing added yet",
+   "medsEmptyHint": "Add what you take and tick it off each day",
+   "medsKind": "Kind",
+   "medsKindMedication": "Medication",
+   "medsKindSupplement": "Supplement",
+   "medsDose": "Dose",
+   "medsDoseHint": "500 mg, 2 capsules, 10 drops",
+   "medsSchedule": "When",
+   "medsScheduleHint": "Morning, every 8 h, with dinner",
+   "medsNotes": "Notes",
+   "medsActive": "Active",
+   "medsInactiveHint": "Anything paused stays out of the day",
+   "medsTakenCount": "{done} of {total}",
+   "medsNoneActive": "Nothing active to tick off",
+   "medsNoneActiveHint": "Activate something from the list below",
+   "progressEntries": "Records",
+   "progressPerDay": "Per day",
+   "nutritionCaloriesPerDay": "Calories per day",
+   "nutritionAverageDaily": "Daily average",
+   "nutritionDaysLogged": "Days logged",
+   "exerciseVolumePerDay": "Volume per day",
+   "exerciseDaysTrained": "Days trained",
+   "medsAdherence": "Adherence",
+   "medsAdherencePerDay": "Adherence per day",
+   "medsDaysComplete": "Complete days",
+   "journalEntriesWritten": "Entries written",
+   "journalCoverage": "Coverage",
+   "journalLongestRun": "Longest run",
+   "journalPerDay": "Entries per day",
+   "todoProgress": "Progress",
+   "todoCompletedPerDay": "Tasks completed per day",
+   "todoCompleted": "Completed",
+   "todoOpen": "Open",
+   "todoOverdue": "Overdue",
+   "sleepHoursPerNight": "Hours per night",
+   "progressDays": "{count, plural, =1{1 day} other{{count} days}}",
+   "todoProgressEmptyHint": "Finish a task and it shows up here",
+   "@progressDays": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "@backupExported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "settingsBackup": "Backup",
+   "settingsYourData": "Your data",
+   "settingsSupport": "Support",
+   "backupExport": "Export",
+   "backupImport": "Import",
+   "backupReplaceWarning": "Importing replaces everything you have now.",
+   "backupConfirmTitle": "Replace everything you have?",
+   "backupConfirmBody": "What is stored now is deleted and replaced by whatever the file holds. It cannot be undone, so export first if you are unsure.",
+   "backupConfirmAction": "Replace",
+   "backupExported": "{count, plural, =1{Backup saved: 1 record} other{Backup saved: {count} records}}",
+   "backupImported": "{count, plural, =1{Data restored: 1 record} other{Data restored: {count} records}}",
+   "backupSomeIgnored": "Part of the file comes from an older version and could not be restored.",
+   "backupNotABackup": "That file is not a Nisabitus backup",
+   "backupNewerVersion": "The backup comes from a newer version of Nisabitus",
+   "backupCorrupt": "The backup is damaged and cannot be read",
+   "backupFailed": "It could not be completed",
+   "settingsReleaseNotes": "What's new",
+   "releaseNotesWhatsNew": "What's new",
+   "releaseNotesHistory": "Release history",
+   "releaseNotesVersion": "Version {version}",
+   "releaseNotesClose": "Got it",
+   "@releaseNotesVersion": {
+      "placeholders": {
+         "version": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "@backupImported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "@backupExported": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "storageDegradedWarning": "This browser keeps your data in storage that may be lost on a reload or when browser data is cleared. Export a backup now.",
-  "storageVolatileWarning": "This browser cannot store your data: everything you record will be lost when you close this tab. Export a backup before you leave.",
-  "storageExportNow": "Export now",
-  "storageWarningDismiss": "Dismiss",
-  "recoveryTitle": "The local database could not be opened",
-  "recoveryBody": "The data stored on this device could not be read, so the app cannot start normally. You can restore a backup file, or start over with an empty database.",
-  "recoveryImport": "Import a backup",
-  "recoveryReset": "Reset local database",
-  "recoveryImportConfirmTitle": "Import a backup?",
-  "recoveryImportConfirmBody": "The unreadable database on this device will be permanently deleted and replaced by what the backup file holds. It cannot be undone.",
-  "recoveryResetConfirmTitle": "Reset the local database?",
-  "recoveryResetConfirmBody": "Everything stored on this device will be permanently deleted and the app will start empty. It cannot be undone.",
-  "recoveryResetConfirmAction": "Reset",
-  "backupNoticeTitle": "Your data lives only on this device",
-  "backupNoticeLead": "No server keeps a copy.",
-  "backupNoticeOnboarding": "We don't store your data on our servers. If you uninstall the app, lose or reset your device, or clear your browser data, it will be lost. Export regularly from Settings → Your data → Export and keep the file somewhere safe.",
-  "backupNoticeAccept": "Got it, I'll back up",
-  "backupNoticeSettings": "Your data isn't stored on our servers. Export regularly and keep the file off this device.",
-  "backupReminderNever": "You haven't backed up your data yet.",
-  "backupReminderOverdue": "Your last backup was {days} days ago.",
-  "@backupReminderOverdue": {
-    "placeholders": {
-      "days": {
-        "type": "int"
+   },
+   "@backupImported": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "backupReminderAction": "Export",
-  "backupReminderDismiss": "Not now",
-  "eraseAllData": "Delete all my data",
-  "eraseAllTitle": "Delete all your data?",
-  "eraseAllBody": "Every record on this device is deleted, along with your profile and settings; only the language and the appearance are kept. The app then starts over from the welcome screens. It cannot be undone, and no copy exists anywhere else: export first if you might want any of it back.",
-  "eraseAllConfirmWord": "DELETE",
-  "eraseAllTypeToConfirm": "Type {word} to confirm",
-  "@eraseAllTypeToConfirm": {
-    "placeholders": {
-      "word": {
-        "type": "String"
+   },
+   "storageDegradedWarning": "This browser keeps your data in storage that may be lost on a reload or when browser data is cleared. Export a backup now.",
+   "storageVolatileWarning": "This browser cannot store your data: everything you record will be lost when you close this tab. Export a backup before you leave.",
+   "storageExportNow": "Export now",
+   "storageWarningDismiss": "Dismiss",
+   "recoveryTitle": "The local database could not be opened",
+   "recoveryBody": "The data stored on this device could not be read, so the app cannot start normally. You can restore a backup file, or start over with an empty database.",
+   "recoveryImport": "Import a backup",
+   "recoveryReset": "Reset local database",
+   "recoveryImportConfirmTitle": "Import a backup?",
+   "recoveryImportConfirmBody": "The unreadable database on this device will be permanently deleted and replaced by what the backup file holds. It cannot be undone.",
+   "recoveryResetConfirmTitle": "Reset the local database?",
+   "recoveryResetConfirmBody": "Everything stored on this device will be permanently deleted and the app will start empty. It cannot be undone.",
+   "recoveryResetConfirmAction": "Reset",
+   "backupNoticeTitle": "Your data lives only on this device",
+   "backupNoticeLead": "No server keeps a copy.",
+   "backupNoticeOnboarding": "We don't store your data on our servers. If you uninstall the app, lose or reset your device, or clear your browser data, it will be lost. Export regularly from Settings → Your data → Export and keep the file somewhere safe.",
+   "backupNoticeAccept": "Got it, I'll back up",
+   "backupNoticeSettings": "Your data isn't stored on our servers. Export regularly and keep the file off this device.",
+   "backupReminderNever": "You haven't backed up your data yet.",
+   "backupReminderOverdue": "Your last backup was {days} days ago.",
+   "@backupReminderOverdue": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "eraseAllExportFirst": "Export first",
-  "eraseAllAction": "Delete everything",
-  "privacyPolicy": "Privacy policy",
-  "termsOfUse": "Terms of use",
-  "developerContact": "Contact",
-  "developerContactBody": "{developer} · reports and questions on GitHub",
-  "@developerContactBody": {
-    "placeholders": {
-      "developer": {
-        "type": "String"
+   },
+   "backupReminderAction": "Export",
+   "backupReminderDismiss": "Not now",
+   "eraseAllData": "Delete all my data",
+   "eraseAllTitle": "Delete all your data?",
+   "eraseAllBody": "Every record on this device is deleted, along with your profile and settings; only the language and the appearance are kept. The app then starts over from the welcome screens. It cannot be undone, and no copy exists anywhere else: export first if you might want any of it back.",
+   "eraseAllConfirmWord": "DELETE",
+   "eraseAllTypeToConfirm": "Type {word} to confirm",
+   "@eraseAllTypeToConfirm": {
+      "placeholders": {
+         "word": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "openSourceLicenses": "Licenses",
-  "backupExportCsv": "Export CSV",
-  "backupCsvHint": "The CSV is for reading your data in a spreadsheet; it cannot be imported. To back up, use Export.",
-  "backupCsvExported": "{count, plural, =1{CSV saved: 1 record} other{CSV saved: {count} records}}",
-  "@backupCsvExported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "eraseAllExportFirst": "Export first",
+   "eraseAllAction": "Delete everything",
+   "privacyPolicy": "Privacy policy",
+   "termsOfUse": "Terms of use",
+   "developerContact": "Contact",
+   "developerContactBody": "{developer} · reports and questions on GitHub",
+   "@developerContactBody": {
+      "placeholders": {
+         "developer": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "updateAvailableTitle": "A new version is available",
-  "updateAvailableBody": "Version {version} is available.",
-  "@updateAvailableBody": {
-    "placeholders": {
-      "version": {
-        "type": "String"
+   },
+   "openSourceLicenses": "Licenses",
+   "backupExportCsv": "Export CSV",
+   "backupCsvHint": "The CSV is for reading your data in a spreadsheet; it cannot be imported. To back up, use Export.",
+   "backupCsvExported": "{count, plural, =1{CSV saved: 1 record} other{CSV saved: {count} records}}",
+   "@backupCsvExported": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "updateAvailableBackupHint": "This version changes how your data is stored. Export a backup before updating.",
-  "updateUnsupportedPath": "Your version is too old to update directly. Export a backup and check the instructions.",
-  "updateActionReload": "Update",
-  "updateActionDownload": "Download",
-  "updateActionExport": "Export",
-  "updateActionDismiss": "Not now",
-  "saveFailed": "Couldn't save. Please try again.",
-  "deleteFailed": "Couldn't delete. Please try again.",
-  "staleStoreTitle": "Another tab is running an older version",
-  "staleStoreBody": "Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page.",
-  "todoColumns": "Columns",
-  "todoEditColumns": "Edit columns",
-  "todoNewColumn": "New column",
-  "todoColumnName": "Column name",
-  "todoColumnCountsAsDone": "Counts as finished",
-  "todoColumnCountsAsDoneHint": "Tasks landing here stop being overdue and count as completed in the progress figures.",
-  "todoColumnHoldsTasks": "This column still holds {count} task(s). Move them before deleting it.",
-  "@todoColumnHoldsTasks": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "updateAvailableTitle": "A new version is available",
+   "updateAvailableBody": "Version {version} is available.",
+   "@updateAvailableBody": {
+      "placeholders": {
+         "version": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "todoColumnLastOne": "The board needs at least one column.",
-  "todoColumnMoveLeft": "Move left",
-  "todoColumnMoveRight": "Move right",
-  "todoTaskDetail": "Task detail",
-  "todoNoDescription": "No description",
-  "todoFieldColumn": "Column",
-  "todoUpdates": "Updates",
-  "todoAddUpdate": "Add an update",
-  "todoProjectAllDone": "All done",
-  "todoProjectOverdue": "Has overdue tasks",
-  "todoProjectDueToday": "Has tasks due today",
-  "todoProjectOpen": "Has open tasks",
-  "todoProjectEmpty": "No tasks",
-  "todoProjectProgress": "{done} of {total} finished",
-  "@todoProjectProgress": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
+   },
+   "updateAvailableBackupHint": "This version changes how your data is stored. Export a backup before updating.",
+   "updateUnsupportedPath": "Your version is too old to update directly. Export a backup and check the instructions.",
+   "updateActionReload": "Update",
+   "updateActionDownload": "Download",
+   "updateActionExport": "Export",
+   "updateActionDismiss": "Not now",
+   "saveFailed": "Couldn't save. Please try again.",
+   "deleteFailed": "Couldn't delete. Please try again.",
+   "staleStoreTitle": "Another tab is running an older version",
+   "staleStoreBody": "Nisabitus is open in another tab or window with an older version, and while it stays open this one cannot save anything. Your data is intact. Close every other Nisabitus tab, then reload this page.",
+   "todoColumns": "Columns",
+   "todoEditColumns": "Edit columns",
+   "todoNewColumn": "New column",
+   "todoColumnName": "Column name",
+   "todoColumnCountsAsDone": "Counts as finished",
+   "todoColumnCountsAsDoneHint": "Tasks landing here stop being overdue and count as completed in the progress figures.",
+   "todoColumnHoldsTasks": "This column still holds {count} task(s). Move them before deleting it.",
+   "@todoColumnHoldsTasks": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "actionClose": "Close",
-  "todoChecklist": "Checklist",
-  "todoAddChecklistItem": "Add an item",
-  "todoChecklistProgress": "{done} of {total}",
-  "@todoChecklistProgress": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
+   },
+   "todoColumnLastOne": "The board needs at least one column.",
+   "todoColumnMoveLeft": "Move left",
+   "todoColumnMoveRight": "Move right",
+   "todoTaskDetail": "Task detail",
+   "todoNoDescription": "No description",
+   "todoFieldColumn": "Column",
+   "todoUpdates": "Updates",
+   "todoAddUpdate": "Add an update",
+   "todoProjectAllDone": "All done",
+   "todoProjectOverdue": "Has overdue tasks",
+   "todoProjectDueToday": "Has tasks due today",
+   "todoProjectOpen": "Has open tasks",
+   "todoProjectEmpty": "No tasks",
+   "todoProjectProgress": "{done} of {total} finished",
+   "@todoProjectProgress": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "todoInColumn": "in list",
-  "todoDetails": "Details",
-  "todoNoUpdates": "No updates yet",
-  "todoBoardOf": "{project} board",
-  "@todoBoardOf": {
-    "placeholders": {
-      "project": {
-        "type": "String"
+   },
+   "actionClose": "Close",
+   "todoChecklist": "Checklist",
+   "todoAddChecklistItem": "Add an item",
+   "todoChecklistProgress": "{done} of {total}",
+   "@todoChecklistProgress": {
+      "placeholders": {
+         "done": {
+            "type": "int"
+         },
+         "total": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "nutritionComposition": "What it is made of",
-  "nutritionComposedHint": "Add foods with their weight and the macros work themselves out. You can still correct them by hand.",
-  "nutritionSaveAsDish": "Keep this combination as a dish",
-  "nutritionSaveAsDishHint": "It joins your food database, so you can pick it next time.",
-  "nutritionDishSaved": "Dish saved to your database",
-  "nutritionTotal": "Total",
-  "nutritionRemoveFood": "Remove",
-  "nutritionHowMuch": "How much does it weigh?",
-  "nutritionPartOf": "{name}, {grams} g",
-  "@nutritionPartOf": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      },
-      "grams": {
-        "type": "int"
+   },
+   "todoInColumn": "in list",
+   "todoDetails": "Details",
+   "todoNoUpdates": "No updates yet",
+   "todoBoardOf": "{project} board",
+   "@todoBoardOf": {
+      "placeholders": {
+         "project": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "habitsAllCategories": "All",
-  "habitsFilterByCategory": "Filter by category",
-  "habitsNoCategory": "No category",
-  "habitsNewCategory": "New category…",
-  "planVideo": "Watch the video",
-  "planVideoTitle": "Exercise video",
-  "planVideoOpen": "Open outside",
-  "planVideoExternalOnly": "This link cannot be shown in here. It opens in your browser.",
-  "planVideoNotice": "The video loads from its own site; that is the one thing here that leaves the device.",
-  "steps": "Steps",
-  "stepsToday": "Steps for the day",
-  "stepsNone": "No steps written down for this day yet.",
-  "stepsRecord": "Write down steps",
-  "stepsEdit": "Correct",
-  "stepsClear": "Remove the entry",
-  "stepsCount": "{steps} steps",
-  "@stepsCount": {
-    "placeholders": {
-      "steps": {
-        "type": "String"
+   },
+   "nutritionComposition": "What it is made of",
+   "nutritionComposedHint": "Add foods with their weight and the macros work themselves out. You can still correct them by hand.",
+   "nutritionSaveAsDish": "Keep this combination as a dish",
+   "nutritionSaveAsDishHint": "It joins your food database, so you can pick it next time.",
+   "nutritionDishSaved": "Dish saved to your database",
+   "nutritionTotal": "Total",
+   "nutritionRemoveFood": "Remove",
+   "nutritionHowMuch": "How much does it weigh?",
+   "nutritionPartOf": "{name}, {grams} g",
+   "@nutritionPartOf": {
+      "placeholders": {
+         "name": {
+            "type": "String"
+         },
+         "grams": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "stepsGoal": "Daily target",
-  "stepsGoalEdit": "Change the target",
-  "stepsGoalReached": "Target reached",
-  "stepsOfGoal": "{walked} of {goal}",
-  "@stepsOfGoal": {
-    "placeholders": {
-      "walked": {
-        "type": "String"
-      },
-      "goal": {
-        "type": "String"
+   },
+   "habitsAllCategories": "All",
+   "habitsFilterByCategory": "Filter by category",
+   "habitsNoCategory": "No category",
+   "habitsNewCategory": "New category…",
+   "planVideo": "Watch the video",
+   "planVideoTitle": "Exercise video",
+   "planVideoOpen": "Open outside",
+   "planVideoExternalOnly": "This link cannot be shown in here. It opens in your browser.",
+   "planVideoNotice": "The video loads from its own site; that is the one thing here that leaves the device.",
+   "steps": "Steps",
+   "stepsToday": "Steps for the day",
+   "stepsNone": "No steps written down for this day yet.",
+   "stepsRecord": "Write down steps",
+   "stepsEdit": "Correct",
+   "stepsClear": "Remove the entry",
+   "stepsCount": "{steps} steps",
+   "@stepsCount": {
+      "placeholders": {
+         "steps": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "stepsAverage": "Average per day",
-  "stepsBest": "Best day",
-  "stepsDaysLogged": "Days written down",
-  "stepsGoalDays": "Days on target",
-  "stepsPerDay": "Steps per day",
-  "stepsEmptyHint": "Write down a day's steps and the week shows up here.",
-  "stepsValidation": "Enter a number between 0 and {max}.",
-  "@stepsValidation": {
-    "placeholders": {
-      "max": {
-        "type": "String"
+   },
+   "stepsGoal": "Daily target",
+   "stepsGoalEdit": "Change the target",
+   "stepsGoalReached": "Target reached",
+   "stepsOfGoal": "{walked} of {goal}",
+   "@stepsOfGoal": {
+      "placeholders": {
+         "walked": {
+            "type": "String"
+         },
+         "goal": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "stepsAveragedOverLogged": "Averaged over the days you wrote down, not over the {days} in the window.",
-  "@stepsAveragedOverLogged": {
-    "placeholders": {
-      "days": {
-        "type": "int"
+   },
+   "stepsAverage": "Average per day",
+   "stepsBest": "Best day",
+   "stepsDaysLogged": "Days written down",
+   "stepsGoalDays": "Days on target",
+   "stepsPerDay": "Steps per day",
+   "stepsEmptyHint": "Write down a day's steps and the week shows up here.",
+   "stepsValidation": "Enter a number between 0 and {max}.",
+   "@stepsValidation": {
+      "placeholders": {
+         "max": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "dashboardActivity": "Activity",
-  "dashboardActivityCaption": "Last {weeks} weeks",
-  "@dashboardActivityCaption": {
-    "placeholders": {
-      "weeks": {
-        "type": "int"
+   },
+   "stepsAveragedOverLogged": "Averaged over the days you wrote down, not over the {days} in the window.",
+   "@stepsAveragedOverLogged": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "dashboardActivityEmpty": "Nothing written down yet. Everything you record fills in a square.",
-  "dashboardActivityLess": "Less",
-  "dashboardActivityMore": "More",
-  "dashboardActivityDays": "{days} days with activity",
-  "@dashboardActivityDays": {
-    "placeholders": {
-      "days": {
-        "type": "int"
+   },
+   "dashboardActivity": "Activity",
+   "dashboardActivityCaption": "Last {weeks} weeks",
+   "@dashboardActivityCaption": {
+      "placeholders": {
+         "weeks": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "dashboardActivityRun": "Longest run: {days} days",
-  "@dashboardActivityRun": {
-    "placeholders": {
-      "days": {
-        "type": "int"
+   },
+   "dashboardActivityEmpty": "Nothing written down yet. Everything you record fills in a square.",
+   "dashboardActivityLess": "Less",
+   "dashboardActivityMore": "More",
+   "dashboardActivityDays": "{days} days with activity",
+   "@dashboardActivityDays": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "dashboardActivityTotal": "{count} records",
-  "@dashboardActivityTotal": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "dashboardActivityRun": "Longest run: {days} days",
+   "@dashboardActivityRun": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "dashboardActivityCell": "{date}: {count} records",
-  "@dashboardActivityCell": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
+   },
+   "dashboardActivityTotal": "{count} records",
+   "@dashboardActivityTotal": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "dashboardActivityCellEmpty": "{date}: nothing written down",
-  "@dashboardActivityCellEmpty": {
-    "placeholders": {
-      "date": {
-        "type": "String"
+   },
+   "dashboardActivityCell": "{date}: {count} records",
+   "@dashboardActivityCell": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         },
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "settingsVacation": "Holiday mode",
-  "settingsVacationHint": "Pause habits and streaks while you are away. A paused day neither breaks a streak nor counts against you.",
-  "vacationSwitch": "I am on holiday",
-  "vacationSwitchHint": "Paused from today until you switch it off.",
-  "vacationActiveSince": "Paused since {date}",
-  "@vacationActiveSince": {
-    "placeholders": {
-      "date": {
-        "type": "String"
+   },
+   "dashboardActivityCellEmpty": "{date}: nothing written down",
+   "@dashboardActivityCellEmpty": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "vacationEnd": "End",
-  "vacationAdd": "Add a period",
-  "vacationEditTitle": "Paused period",
-  "vacationEmpty": "No periods written down yet.",
-  "vacationRange": "{start} to {end}",
-  "@vacationRange": {
-    "placeholders": {
-      "start": {
-        "type": "String"
-      },
-      "end": {
-        "type": "String"
+   },
+   "settingsVacation": "Holiday mode",
+   "settingsVacationHint": "Pause habits and streaks while you are away. A paused day neither breaks a streak nor counts against you.",
+   "vacationSwitch": "I am on holiday",
+   "vacationSwitchHint": "Paused from today until you switch it off.",
+   "vacationActiveSince": "Paused since {date}",
+   "@vacationActiveSince": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "vacationOpenRange": "From {date}, still open",
-  "@vacationOpenRange": {
-    "placeholders": {
-      "date": {
-        "type": "String"
+   },
+   "vacationEnd": "End",
+   "vacationAdd": "Add a period",
+   "vacationEditTitle": "Paused period",
+   "vacationEmpty": "No periods written down yet.",
+   "vacationRange": "{start} to {end}",
+   "@vacationRange": {
+      "placeholders": {
+         "start": {
+            "type": "String"
+         },
+         "end": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "vacationLength": "{days} days",
-  "@vacationLength": {
-    "placeholders": {
-      "days": {
-        "type": "int"
+   },
+   "vacationOpenRange": "From {date}, still open",
+   "@vacationOpenRange": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "vacationFrom": "From",
-  "vacationUntil": "Until",
-  "vacationUntilOpen": "Open",
-  "vacationNote": "Note (optional)",
-  "vacationNoteHint": "Trip, flu, moving house…",
-  "vacationDelete": "Delete period",
-  "vacationBackwards": "The end cannot come before the start.",
-  "vacationPausedToday": "Today is paused: habits and streaks will not break.",
-  "dashboardHabitsPaused": "Paused",
-  "pomodoroHistory": "History",
-  "pomodoroIdle": "No session running",
-  "pomodoroIdleHint": "Pick one from the history, or create a new one.",
-  "audioTrack": "Sound",
-  "audioTrackNone": "No sound",
-  "audioTrackAdd": "Add a sound",
-  "audioTrackEdit": "Edit sound",
-  "audioTrackName": "Name",
-  "audioTrackNameHint": "Rain, white noise, lo-fi…",
-  "audioTrackUrl": "YouTube link",
-  "audioTrackUrlHint": "Paste the link of the video you want to hear.",
-  "audioTrackInvalid": "That link cannot be played in here.",
-  "audioTrackLibraryEmpty": "No sounds added yet.",
-  "audioTrackNotice": "The video loads from YouTube; that is the only thing that leaves the device.",
-  "audioTrackPlayHint": "Press play when you start: the browser will not start it on its own.",
-  "meditationSound": "Meditation audio",
-  "todoFilterOwner": "Owner",
-  "todoFieldOwner": "Owner",
-  "todoOwnerHint": "Whose task this is. Empty means yours.",
-  "todoOwnerMine": "Mine",
-  "autoBackupTitle": "Weekly automatic copy",
-  "autoBackupHint": "Once a week, when you open the app, a copy is written to the folder you choose. Nothing leaves the device.",
-  "autoBackupChoose": "Choose a folder",
-  "autoBackupChange": "Change folder",
-  "autoBackupFolder": "Folder: {folder}",
-  "@autoBackupFolder": {
-    "placeholders": {
-      "folder": {
-        "type": "String"
+   },
+   "vacationLength": "{days} days",
+   "@vacationLength": {
+      "placeholders": {
+         "days": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "autoBackupNever": "None written yet.",
-  "autoBackupLastRun": "Last copy: {date}",
-  "@autoBackupLastRun": {
-    "placeholders": {
-      "date": {
-        "type": "String"
+   },
+   "vacationFrom": "From",
+   "vacationUntil": "Until",
+   "vacationUntilOpen": "Open",
+   "vacationNote": "Note (optional)",
+   "vacationNoteHint": "Trip, flu, moving house…",
+   "vacationDelete": "Delete period",
+   "vacationBackwards": "The end cannot come before the start.",
+   "vacationPausedToday": "Today is paused: habits and streaks will not break.",
+   "dashboardHabitsPaused": "Paused",
+   "pomodoroHistory": "History",
+   "pomodoroIdle": "No session running",
+   "pomodoroIdleHint": "Pick one from the history, or create a new one.",
+   "audioTrack": "Sound",
+   "audioTrackNone": "No sound",
+   "audioTrackAdd": "Add a sound",
+   "audioTrackEdit": "Edit sound",
+   "audioTrackName": "Name",
+   "audioTrackNameHint": "Rain, white noise, lo-fi…",
+   "audioTrackUrl": "YouTube link",
+   "audioTrackUrlHint": "Paste the link of the video you want to hear.",
+   "audioTrackInvalid": "That link cannot be played in here.",
+   "audioTrackLibraryEmpty": "No sounds added yet.",
+   "audioTrackNotice": "The video loads from YouTube; that is the only thing that leaves the device.",
+   "audioTrackPlayHint": "Press play when you start: the browser will not start it on its own.",
+   "meditationSound": "Meditation audio",
+   "todoFilterOwner": "Owner",
+   "todoFieldOwner": "Owner",
+   "todoOwnerHint": "Whose task this is. Empty means yours.",
+   "todoOwnerMine": "Mine",
+   "autoBackupTitle": "Weekly automatic copy",
+   "autoBackupHint": "Once a week, when you open the app, a copy is written to the folder you choose. Nothing leaves the device.",
+   "autoBackupChoose": "Choose a folder",
+   "autoBackupChange": "Change folder",
+   "autoBackupFolder": "Folder: {folder}",
+   "@autoBackupFolder": {
+      "placeholders": {
+         "folder": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "autoBackupRunNow": "Write one now",
-  "autoBackupSaved": "Copy written to the folder.",
-  "autoBackupFolderGone": "The folder cannot be found. Choose one again.",
-  "autoBackupNeedsPermission": "The browser is asking for permission to write to that folder again.",
-  "autoBackupFailed": "The copy could not be written.",
-  "autoBackupUnsupported": "This browser cannot write to a folder. Use the desktop app, or export by hand whenever you like.",
-  "autoBackupWhileOpen": "Only while the app is open: nothing runs behind it when it is closed.",
-  "serverAccountTitle": "Server account",
-  "serverAccountHint": "Optional: connect to your own Nisabitus server for account backup. Local mode stays available without login.",
-  "serverUrl": "Server URL",
-  "serverUsername": "Username",
-  "serverPassword": "Password",
-  "serverConnect": "Connect",
-  "serverReconnect": "Reconnect",
-  "serverDisconnect": "Disconnect",
-  "serverConnected": "Connected to server.",
-  "serverDisconnected": "Disconnected from server. Local data stays on this device.",
-  "serverConnectedAs": "Connected as {username} on {server}",
-  "@serverConnectedAs": {
-    "placeholders": {
-      "username": {
-        "type": "String"
-      },
-      "server": {
-        "type": "String"
+   },
+   "autoBackupNever": "None written yet.",
+   "autoBackupLastRun": "Last copy: {date}",
+   "@autoBackupLastRun": {
+      "placeholders": {
+         "date": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "serverManualSyncHint": "Manual server backup. Upload copies this device to the account; Download replaces this device with the account backup.",
-  "serverUpload": "Upload to account",
-  "serverDownload": "Download from account",
-  "serverUploaded": "{count, plural, =1{Uploaded 1 record to the account} other{Uploaded {count} records to the account}}",
-  "@serverUploaded": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "autoBackupRunNow": "Write one now",
+   "autoBackupSaved": "Copy written to the folder.",
+   "autoBackupFolderGone": "The folder cannot be found. Choose one again.",
+   "autoBackupNeedsPermission": "The browser is asking for permission to write to that folder again.",
+   "autoBackupFailed": "The copy could not be written.",
+   "autoBackupUnsupported": "This browser cannot write to a folder. Use the desktop app, or export by hand whenever you like.",
+   "autoBackupWhileOpen": "Only while the app is open: nothing runs behind it when it is closed.",
+   "serverAccountTitle": "Server account",
+   "serverAccountHint": "Optional: connect to your own Nisabitus server for account backup. Local mode stays available without login.",
+   "serverUrl": "Server URL",
+   "serverUsername": "Username",
+   "serverPassword": "Password",
+   "serverConnect": "Connect",
+   "serverReconnect": "Reconnect",
+   "serverDisconnect": "Disconnect",
+   "serverConnected": "Connected to server.",
+   "serverDisconnected": "Disconnected from server. Local data stays on this device.",
+   "serverConnectedAs": "Connected as {username} on {server}",
+   "@serverConnectedAs": {
+      "placeholders": {
+         "username": {
+            "type": "String"
+         },
+         "server": {
+            "type": "String"
+         }
       }
-    }
-  },
-  "serverDownloaded": "{count, plural, =1{Downloaded 1 record from the account} other{Downloaded {count} records from the account}}",
-  "@serverDownloaded": {
-    "placeholders": {
-      "count": {
-        "type": "int"
+   },
+   "serverManualSyncHint": "Manual server backup. Upload copies this device to the account; Download replaces this device with the account backup.",
+   "serverUpload": "Upload to account",
+   "serverDownload": "Download from account",
+   "serverUploaded": "{count, plural, =1{Uploaded 1 record to the account} other{Uploaded {count} records to the account}}",
+   "@serverUploaded": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
       }
-    }
-  },
-  "serverDownloadConfirmBody": "The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure.",
-  "serverFamilyAccounts": "Family accounts",
-  "serverFamilyAccountsHint": "Admin only: create accounts for family members. They will log in with their own username and password.",
-  "serverNewUsername": "New username",
-  "serverNewPassword": "New password",
-  "serverCreateUser": "Create account",
-  "serverUserCreated": "Account created. Share the server URL, username, and password with that person.",
-  "serverUsernameRequired": "Enter a username.",
-  "serverPasswordTooShort": "Use at least 8 characters for the password."
+   },
+   "serverDownloaded": "{count, plural, =1{Downloaded 1 record from the account} other{Downloaded {count} records from the account}}",
+   "@serverDownloaded": {
+      "placeholders": {
+         "count": {
+            "type": "int"
+         }
+      }
+   },
+   "serverDownloadConfirmBody": "The data on this device will be deleted and replaced by the account backup. Upload or export first if you are unsure.",
+   "serverFamilyAccounts": "Family accounts",
+   "serverFamilyAccountsHint": "Admin only: create accounts for family members. They will log in with their own username and password.",
+   "serverNewUsername": "New username",
+   "serverNewPassword": "New password",
+   "serverCreateUser": "Create account",
+   "serverUserCreated": "Account created. Share the server URL, username, and password with that person.",
+   "serverUsernameRequired": "Enter a username.",
+   "serverPasswordTooShort": "Use at least 8 characters for the password.",
+   "actionClear": "Clear",
+   "cheatsheetsShowPlainText": "Show plain text",
+   "cheatsheetsShowFormatted": "Show formatted Markdown",
+   "cheatsheetsReadAloud": "Read aloud",
+   "cheatsheetsStopReading": "Stop reading",
+   "cheatsheetsSpeechSpeed": "Reading speed"
 }

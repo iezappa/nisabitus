@@ -7,6 +7,7 @@ import '../../../core/database/database_provider.dart';
 import '../../../core/database/local_store.dart';
 import '../../../core/preferences/preferences.dart';
 import '../../../core/time/clock.dart';
+import '../../cheatsheets/presentation/cheatsheet_providers.dart';
 import '../../exercise/presentation/exercise_providers.dart';
 import '../../habits/presentation/habit_providers.dart';
 import '../../journal/presentation/journal_providers.dart';
@@ -165,6 +166,7 @@ class BackupActions {
       nutritionRevisionProvider,
       exerciseRevisionProvider,
       medicationRevisionProvider,
+      cheatsheetsRevisionProvider,
     ]) {
       _ref.read(revision.notifier).update((value) => value + 1);
     }
